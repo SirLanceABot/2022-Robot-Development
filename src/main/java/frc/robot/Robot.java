@@ -36,6 +36,7 @@ public class Robot extends TimedRobot
         kTest;
     }
 
+    
     private static Test test = new Test();
     private static Autonomous autonomous = new Autonomous();
     private static Disabled disabled = new Disabled();
