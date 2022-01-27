@@ -15,11 +15,9 @@ public class Robot extends TimedRobot
     // This block of code is run first when the class is loaded
     static
     {
-        System.out.println("Loading " + fullClassName);
-    }    
-    
-    // *** CLASS & INSTANCE VARIABLES ***
-
+        System.out.println("Loading: " + fullClassName);
+        robotState = RobotState.kNone;
+    }
 
     /**
      * This keeps track of the current state of the robot, from startup to auto, to teleop, etc.
@@ -27,40 +25,41 @@ public class Robot extends TimedRobot
     public enum RobotState
     {
         kNone,
-        kStartup,
-        kDisabledBeforeGame,
+        kRobotInit,
+        kDisabledAfterRobotInit,
         kAutonomous,
-        kDisabledBetweenAutonomousAndTeleop,
+        kDisabledAfterAutonomous,
         kTeleop,
-        kDisabledAfterGame,
+        kDisabledAfterTeleop,
         kTest;
     }
 
-    
-    private static Test test = new Test();
-    private static Autonomous autonomous = new Autonomous();
-    private static Disabled disabled = new Disabled();
-    private static Teleop teleop = new Teleop();
+    // *** CLASS & INSTANCE VARIABLES ***
+    private static final TestMode test = new TestMode();
+    private static final AutonomousMode autonomous = new AutonomousMode();
+    private static final DisabledMode disabled = new DisabledMode();
+    private static final TeleopMode teleop = new TeleopMode();
 
     private static RobotState robotState = RobotState.kNone;
 
-
+    // *** CLASS CONSTRUCTOR ***
     public Robot()
     {
-        robotState = RobotState.kStartup;
+        
     }
 
     /**
-     * This method is run when the robot is first started up and should be used for initialization code.
+     * This method runs when the robot first starts up.
      */
     @Override
     public void robotInit()
     {
         System.out.println("\n\n2022-Robot-Development\n\n");
+        robotState = RobotState.kRobotInit;
     }
 
     /**
-     * This method is called periodically.
+     * This method runs periodically (20ms) while the robot is powered on.
      */
     @Override
     public void robotPeriodic()
@@ -69,7 +68,7 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is run once each time the robot enters autonomous mode.
+     * This method runs one time when the robot enters autonomous mode.
      */
     @Override
     public void autonomousInit()
@@ -80,7 +79,7 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called periodically during autonomous.
+     * This method runs periodically (20ms) during autonomous mode.
      */
     @Override
     public void autonomousPeriodic()
@@ -89,7 +88,16 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called once each time the robot enters teleoperated mode.
+     * This method runs one time when the robot exits autonomous mode.
+     */
+    @Override
+    public void autonomousExit()
+    {
+        autonomous.exit();
+    }
+
+    /**
+     * This method runs one time when the robot enters teleop mode.
      */
     @Override
     public void teleopInit()
@@ -100,7 +108,7 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called periodically during teleoperated mode.
+     * This method runs periodically (20ms) during teleop mode.
      */
     @Override
     public void teleopPeriodic()
@@ -109,7 +117,16 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called once each time the robot enters test mode.
+     * This method runs one time when the robot exits teleop mode.
+     */
+    @Override
+    public void teleopExit()
+    {
+        teleop.exit();
+    }
+
+    /**
+     * This method runs one time when the robot enters test mode.
      */
     @Override
     public void testInit()
@@ -120,7 +137,7 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called periodically during test mode.
+     * This method runs periodically (20ms) during test mode.
      */
     @Override
     public void testPeriodic()
@@ -129,40 +146,57 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This method is called once each time the robot is disabled.
+     * This method runs one time when the robot exits test mode.
+     */
+    @Override
+    public void testExit()
+    {
+        test.exit();
+    }
+
+    /**
+     * This method runs one time when the robot enters disabled mode.
      */
     @Override
     public void disabledInit()
     {
-        if (robotState == RobotState.kStartup)
-            robotState = RobotState.kDisabledBeforeGame;
+        if (robotState == RobotState.kRobotInit)
+        {
+            robotState = RobotState.kDisabledAfterRobotInit;
+        }
         else if (robotState == RobotState.kAutonomous)
         {
-            robotState = RobotState.kDisabledBetweenAutonomousAndTeleop;
-            autonomous.end();
+            robotState = RobotState.kDisabledAfterAutonomous;
         }
         else if (robotState == RobotState.kTeleop)
         {
-            robotState = RobotState.kDisabledAfterGame;
-            teleop.end();
+            robotState = RobotState.kDisabledAfterTeleop;
         }
         else if (robotState == RobotState.kTest)
         {
-            robotState = RobotState.kDisabledBeforeGame;
-            test.end();
+            robotState = RobotState.kDisabledAfterRobotInit;
         }
 
         disabled.init();
     }
 
     /**
-     * This method is called periodically when the robot is disabled.
+     * This method runs periodically (20ms) during disabled mode.
      */
     @Override
     public void disabledPeriodic()
     {
         disabled.periodic();
     }
+
+    /**
+     * This method runs one time when the robot exits disabled mode.
+     */
+    @Override
+    public void disabledExit()
+    {
+        disabled.exit();
+    }    
 
     /**
      * This method returns the current state of the robot

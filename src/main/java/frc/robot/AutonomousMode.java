@@ -2,28 +2,29 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
-public class Autonomous 
+public class AutonomousMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-
-    // *** CLASS & INSTANCE VARIABLES ***
-
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
     static
     {
-        System.out.println("Loading " + fullClassName);
+        System.out.println("Loading: " + fullClassName);
     }
 
+    // *** CLASS & INSTANCE VARIABLES ***
+
+
+
     // *** CLASS CONSTRUCTOR ***
-    public Autonomous()
+    public AutonomousMode()
     {
 
     }
 
     /**
-     * The intializations run one time before autonomous.
+     * This method runs one time before the periodic() method.
      */
     public void init()
     {
@@ -31,7 +32,7 @@ public class Autonomous
     }
 
     /**
-     * The statements run periodically (every 20ms) during autonomous.
+     * This method runs periodically (every 20ms).
      */
     public void periodic()
     {
@@ -39,9 +40,9 @@ public class Autonomous
     }
 
     /**
-     * The statements run one time after autonomous.
+     * This method runs one time after the periodic() method.
      */
-    public void end()
+    public void exit()
     {
 
     }
