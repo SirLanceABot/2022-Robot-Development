@@ -4,95 +4,172 @@
 
 package frc.robot;
 
+import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
-public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+public class Robot extends TimedRobot
+{
+    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-  }
+    // *** STATIC INITIALIZATION BLOCK ***
+    // This block of code is run first when the class is loaded
+    static
+    {
+        System.out.println("Loading " + fullClassName);
+    }    
+    
+    // *** CLASS & INSTANCE VARIABLES ***
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {}
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select between different
-   * autonomous modes using the dashboard. The sendable chooser code works with the Java
-   * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
-   * uncomment the getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to the switch structure
-   * below with additional strings. If using the SendableChooser make sure to add them to the
-   * chooser code above as well.
-   */
-  @Override
-  public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
-  }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    /**
+     * This keeps track of the current state of the robot, from startup to auto, to teleop, etc.
+     */
+    public enum RobotState
+    {
+        kNone,
+        kStartup,
+        kDisabledBeforeGame,
+        kAutonomous,
+        kDisabledBetweenAutonomousAndTeleop,
+        kTeleop,
+        kDisabledAfterGame,
+        kTest;
     }
-  }
 
-  /** This function is called once when teleop is enabled. */
-  @Override
-  public void teleopInit() {}
+    private static Test test = new Test();
+    private static Autonomous autonomous = new Autonomous();
+    private static Disabled disabled = new Disabled();
+    private static Teleop teleop = new Teleop();
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
+    private static RobotState robotState = RobotState.kNone;
 
-  /** This function is called once when the robot is disabled. */
-  @Override
-  public void disabledInit() {}
 
-  /** This function is called periodically when disabled. */
-  @Override
-  public void disabledPeriodic() {}
+    public Robot()
+    {
+        robotState = RobotState.kStartup;
+    }
 
-  /** This function is called once when test mode is enabled. */
-  @Override
-  public void testInit() {}
+    /**
+     * This method is run when the robot is first started up and should be used for initialization code.
+     */
+    @Override
+    public void robotInit()
+    {
+        System.out.println("\n\n2022-Robot-Development\n\n");
+    }
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+    /**
+     * This method is called periodically.
+     */
+    @Override
+    public void robotPeriodic()
+    {
+
+    }
+
+    /**
+     * This method is run once each time the robot enters autonomous mode.
+     */
+    @Override
+    public void autonomousInit()
+    {
+        robotState = RobotState.kAutonomous;
+
+        autonomous.init();
+    }
+
+    /**
+     * This method is called periodically during autonomous.
+     */
+    @Override
+    public void autonomousPeriodic()
+    {
+        autonomous.periodic();
+    }
+
+    /**
+     * This method is called once each time the robot enters teleoperated mode.
+     */
+    @Override
+    public void teleopInit()
+    {
+        robotState = RobotState.kTeleop;
+
+        teleop.init();
+    }
+
+    /**
+     * This method is called periodically during teleoperated mode.
+     */
+    @Override
+    public void teleopPeriodic()
+    {
+        teleop.periodic();
+    }
+
+    /**
+     * This method is called once each time the robot enters test mode.
+     */
+    @Override
+    public void testInit()
+    {
+        robotState = RobotState.kTest;
+
+        test.init();
+    }
+
+    /**
+     * This method is called periodically during test mode.
+     */
+    @Override
+    public void testPeriodic()
+    {
+        test.periodic();
+    }
+
+    /**
+     * This method is called once each time the robot is disabled.
+     */
+    @Override
+    public void disabledInit()
+    {
+        if (robotState == RobotState.kStartup)
+            robotState = RobotState.kDisabledBeforeGame;
+        else if (robotState == RobotState.kAutonomous)
+        {
+            robotState = RobotState.kDisabledBetweenAutonomousAndTeleop;
+            autonomous.end();
+        }
+        else if (robotState == RobotState.kTeleop)
+        {
+            robotState = RobotState.kDisabledAfterGame;
+            teleop.end();
+        }
+        else if (robotState == RobotState.kTest)
+        {
+            robotState = RobotState.kDisabledBeforeGame;
+            test.end();
+        }
+
+        disabled.init();
+    }
+
+    /**
+     * This method is called periodically when the robot is disabled.
+     */
+    @Override
+    public void disabledPeriodic()
+    {
+        disabled.periodic();
+    }
+
+    /**
+     * This method returns the current state of the robot
+     * @return the robot state
+     * @see RobotState
+     */
+    public static RobotState getRobotState()
+    {
+        return robotState;
+    }
 }
