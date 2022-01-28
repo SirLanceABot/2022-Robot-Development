@@ -1,5 +1,6 @@
 package frc.components;
-import frc.constants.*;
+
+import frc.constants.Port;
 import com.revrobotics.CANSparkMax;
 
 import java.lang.invoke.MethodHandles;
@@ -30,7 +31,7 @@ public class Intake
         off
     }
 
-    private static CANSparkMax rollerMotor = CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private double armSolenoiod;
     private double armSensor;
     private double armUpSensor;
