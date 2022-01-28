@@ -2,6 +2,17 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANPIDController;
+
+import frc.constants.Port;
+
 public class Shuttle 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -14,6 +25,18 @@ public class Shuttle
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // initializing motors
+    private static CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax secondStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    // initializing sensors TODO
+    // private static SENSOR firstStageSensor = new SENSOR();
+    // private static SENSOR secondStageSensor = new SENSOR();
+
+    // initializing encoders
+    // private static CANEncoder firstEncoder = firstStageMotor.getEncoder();
+    // private static CANEncoder secondEncoder = secondStageMotor.getEncoder();
+
 
 
 
@@ -25,6 +48,40 @@ public class Shuttle
 
 
     // *** CLASS & INSTANCE METHODS ***
-
     
+
+    public void reversefirstStage()
+    {
+
+    }
+    
+    public void stopFirstStage()
+    {
+
+    }
+
+    public void forwardFirstStage()
+    {
+
+    }
+
+    public void reverseSecondStage()
+    {
+
+    }
+
+    public void stopSecondStage()
+    {
+
+    }
+
+    public void forwardSecondStage()
+    {
+
+    }
+    
+    public String toString()
+    {
+        return null;
+    }
 }
