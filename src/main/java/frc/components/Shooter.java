@@ -2,6 +2,7 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -32,11 +33,20 @@ public class Shooter
     private static final double SHORT_SHOT_SPEED = Constant.SHORT_SHOT_SPEED;
     private static final double DROP_SHOT_SPEED = Constant.DROP_SHOT_SPEED;
 
-    //TODO: Configure PID values
+    //TODO: Tune PID values
     private static final double kP = 0.4;
     private static final double kI = 0.000025;
     private static final double kD = 0.0000001;
     private static final double kF = 0.0;
+
+    private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
+    //TODO: Actual gear ratio goes here
+    private static final double FLYWHEEL_GEAR_RATIO = 1.0;
+
+    private static double desiredFlywheelSpeed = 0.0;
+
+    //flywheel.getSelectedSensorVelocity() returns ticks every 100ms by default, so we convert to ticks/ms, ticks/s, ticks/min, rot/min, and gear ratio
+    private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 4096.0) * FLYWHEEL_GEAR_RATIO;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -50,37 +60,41 @@ public class Shooter
     //speeds are all in rpm
     private void setFlywheelMotorSpeed(double speed)
     {
-
+        flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        desiredFlywheelSpeed = speed;
     }
 
-    // public double measureFlywheelSpeed()
-    // {
-
-    // }
+    //return value is in rpm
+    public double measureFlywheelSpeed()
+    {
+        return flywheelMotor.getSelectedSensorVelocity() * TICK_TO_RPM;
+    }
     
-    // public boolean isFlywheelReady()
-    // {
-
-    // }
+    public boolean isFlywheelReady()
+    {
+        double currentFlywheelSpeed = measureFlywheelSpeed();
+        return (Math.abs((desiredFlywheelSpeed - currentFlywheelSpeed) / desiredFlywheelSpeed) <= SHOOT_SPEED_THRESHOLD);
+    }
 
     public void startLongShot()
     {
-
+        setFlywheelMotorSpeed(LONG_SHOT_SPEED);
     }
 
     public void startShortShot()
     {
-
+        setFlywheelMotorSpeed(SHORT_SHOT_SPEED);
     }
 
     public void startDropShot()
     {
-
+        setFlywheelMotorSpeed(DROP_SHOT_SPEED);
     }
 
     public void stopFlywheel()
     {
-
+        flywheelMotor.set(ControlMode.PercentOutput, 0.0);
+        desiredFlywheelSpeed = 0.0;
     }
 
     private void configMotor()
@@ -105,12 +119,15 @@ public class Shooter
         flywheelMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
         flywheelMotor.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
 
-        flywheelMotor.configOpenloopRamp(0.5);
+        //comment out if using a PID
+        // flywheelMotor.configOpenloopRamp(0.5);
         flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+
+        //increase framerate for sensor velocity checks (currently at 100ms)
     }
 
-    // public String toString()
-    // {
-
-    // }
+    public String toString()
+    {
+        return "Desired Speed: " + String.format("%.4f", desiredFlywheelSpeed) + '\n' + "Current Speed: " + String.format("%.4f", measureFlywheelSpeed());
+    }
 }
