@@ -14,17 +14,22 @@ public class MainShuffleboard
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private DriverControllerTab driverControllerTab = new DriverControllerTab();
 
 
     // *** CLASS CONSTRUCTOR ***
     public MainShuffleboard()
     {
+        System.out.println(fullClassName + " : Constructor Started");
 
+        System.out.println(fullClassName + ": Constructor Finished");
     }
 
-
     // *** CLASS & INSTANCE METHODS ***
-
+    // DRIVER CONTROLLER TAB
+    public void setDriverControllerSettings()
+    {
+       driverControllerTab.setDriverControllerAxisSettings();
+    }
     
 }
