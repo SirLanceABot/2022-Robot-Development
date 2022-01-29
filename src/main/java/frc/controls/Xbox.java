@@ -1,13 +1,15 @@
 package frc.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Xbox extends Joystick
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-    private static final String Owen = "Owen is cool";
+    //private static final String Owen = "Owen is cool";
 
 
     // *** STATIC INITIALIZATION BLOCK ***
@@ -55,6 +57,25 @@ public class Xbox extends Joystick
         public boolean axisIsFlipped;
         public AxisScale axisScale;
     }
+    
+    public class RumbleEvent
+    {
+        public double startTime;
+        public double duration;
+        public double leftPower;
+        public double rightPower;
+
+        public RumbleEvent(double startTime, double duration, double leftPower, double rightPower)
+        {
+            this.startTime = startTime;
+            this.duration = duration;
+            this.leftPower = leftPower;
+            this.rightPower = rightPower;
+        }
+    }
+
+    private ArrayList<RumbleEvent> rumbleEvents = new ArrayList<RumbleEvent>();
+    private int rumbleCounter = 0;
 
     // set the default axis values
     private final double DEFAULT_DEADZONE = 0.1;
@@ -243,7 +264,41 @@ public class Xbox extends Joystick
         setAxisSettings(axis, axisSettings.axisDeadzone, axisSettings.axisMinOutput, axisSettings.axisMaxOutput, axisSettings.axisIsFlipped, axisSettings.axisScale);
         
     }
+   
+   
     
+    public void createRumbleEvent(double startTime, double duration, double leftPower, double rightPower)
+    {
+        rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
+    }
+
+    public void checkRumbleEvent()
+    {
+        if (rumbleEvents.size() > rumbleCounter)
+        {
+            double matchTime = DriverStation.getMatchTime();
+            double startTime = rumbleEvents.get(rumbleCounter).startTime;
+            double duration = rumbleEvents.get(rumbleCounter).duration;
+
+            if (startTime >= matchTime && matchTime >= startTime - duration)
+            {
+                setRumble(RumbleType.kLeftRumble, rumbleEvents.get(rumbleCounter).leftPower);
+                setRumble(RumbleType.kRightRumble, rumbleEvents.get(rumbleCounter).rightPower);
+            }
+            else if (matchTime < startTime - duration)
+            {
+                rumbleCounter++;
+                setRumble(RumbleType.kLeftRumble, 0.0);
+                setRumble(RumbleType.kRightRumble, 0.0); 
+            }
+        }
+    }
+
+    public void resetRumbleCounter()
+    {
+        rumbleCounter = 0;
+    }
+
     // @Override
     // public String toString()
     // {

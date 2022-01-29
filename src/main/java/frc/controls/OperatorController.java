@@ -4,6 +4,8 @@ import java.lang.invoke.MethodHandles;
 
 import frc.constants.Port;
 
+//import java.util.ArrayList;
+
 public class OperatorController extends Logitech
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -76,7 +78,7 @@ public class OperatorController extends Logitech
 
     private static OperatorController instance = new OperatorController(Port.Controller.OPERATOR);
 
-    private OperatorController(int port)
+    public OperatorController(int port)
     {
         super(port);
 
@@ -86,7 +88,7 @@ public class OperatorController extends Logitech
         {
             setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
         }
-
+        //createRumbleEvent(60.0, 1.0, 0.5, 0.5);
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
