@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Xbox extends Joystick
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-    private static final String Owen = "Owen is on";
+    private static final String Owen = "Owen is cool";
 
 
     // *** STATIC INITIALIZATION BLOCK ***
