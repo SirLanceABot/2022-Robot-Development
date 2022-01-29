@@ -8,6 +8,7 @@ import java.lang.invoke.MethodHandles;
 public class Intake 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    private static final String max = "max";
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
