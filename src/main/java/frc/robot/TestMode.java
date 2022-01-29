@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.components.Intake;
+
 public class TestMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -14,13 +16,13 @@ public class TestMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static final Intake intake = new Intake();
 
 
     // *** CLASS CONSTRUCTOR ***
     public TestMode()
     {
-
+        intake.TestRoller();
     }
 
     /**

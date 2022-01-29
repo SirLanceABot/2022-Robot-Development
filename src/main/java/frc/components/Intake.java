@@ -4,11 +4,12 @@ import frc.constants.Port;
 import com.revrobotics.CANSparkMax;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Intake 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-    private static final String max = "max";
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -27,9 +28,9 @@ public class Intake
 
     enum RollerDirection
     {
-        in,
-        out,
-        off
+        in, //positive
+        out, //nagative
+        off //zero 
     }
 
     private static CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -38,14 +39,16 @@ public class Intake
     private double armUpSensor;
     private double armDownSensor;
     private ArmPosition armPosition;
-    private RollerDirection rollerdirection;
+    private RollerDirection rollerDirection;
     private double desiredRollerSpeed;
     private double rollerSpeed;
+
+    private static final double IntakeSpeed = 1.0; //TODO change to constant.intakeSpeed
 
     // *** CLASS CONSTRUCTOR ***
     public Intake()
     {
-
+        System.out.println("Intake Created");
     }
 
     // *** CLASS & INSTANCE METHODS ***
@@ -57,58 +60,96 @@ public class Intake
 
     private RollerDirection getRollerDirection()
     {
-        return this.rollerdirection;
+        return this.rollerDirection;
     }
     //setters
     private void setRollerSpeed(RollerDirection rollerSpeed)
     {
-        this.rollerdirection = rollerSpeed;
+        this.rollerDirection = rollerSpeed;
     }
     //not getters and setters?
     public void outtakeRoller()
     {
-        
+        setRollerSpeed(RollerDirection.out);
+        rollerMotor.set(-1.0); //".set" sets the speed, it has to be between 1.0 and -1.0
+        System.out.println("Roller out");
     }
     
     public void intakeRoller()
     {
-
+        setRollerSpeed(RollerDirection.in);
+        rollerMotor.set(1.0);
+        System.out.println("Roller in");
     }
 
     public void turnOffRoller()
     {
-
+        setRollerSpeed(RollerDirection.off);
+        rollerMotor.set(0.0);
+        System.out.println("Roller Off");
     }
 
     public void moveArmUp()
     {
-
+        
     }
 
     public void moveArmDown()
     {
 
-    }
+    } 
 
     public void updateArmPosition(ArmPosition armPosition)
     {
-        this.armPosition = armPosition;
+        if(armPosition == ArmPosition.down)
+        {
+            moveArmDown();
+        }
+        else if(armPosition == ArmPosition.up)
+        {
+            moveArmUp();
+        }
     }
 
-    public double getRollerSpeed()
+    public RollerDirection getRollerSpeed()
     {
-        return(1.0); //roller speed
+        return(rollerDirection); //roller speed
     }
 
-    public void ToString()
+    public String toString()
     {
-        System.out.printf("%-20s%-20s%-20s%", "RollerMotor", "armSolenoid", "armPosition");
-        System.out.printf("%-20s%-20s%-20s%", this.rollerMotor, this.armSolenoiod, this.armPosition);
-        System.out.println("------------------------------------------------------------");
-        System.out.printf("%-20s%-20s%-20s%",  "ArmSensor", "ArmDownSensor", "ArmUpSensor");
-        System.out.printf("%-20s%-20s%-20s%", this.armSensor, this.armUpSensor, this.armDownSensor);
-        System.out.println("------------------------------------------------------------");
-        System.out.printf("%-20s%-20s%-20s%", "RollerDirection", "DesiredRollerSpeed", "RollerSpeed");
-        System.out.printf("%-20s%-20s%-20s%", this.rollerdirection, this.desiredRollerSpeed, this.rollerSpeed);
+        String thisthing = "";
+        thisthing += String.format("%-20s%-20s%-20s%", "RollerMotor", "armSolenoid", "armPosition\n");
+        thisthing += String.format("%-20s%-20s%-20s%", this.rollerMotor, this.armSolenoiod, this.armPosition+"\n");
+        thisthing += String.format("------------------------------------------------------------\n");
+        thisthing += String.format("%-20s%-20s%-20s%",  "ArmSensor", "ArmDownSensor", "ArmUpSensor\n");
+        thisthing += String.format("%-20s%-20s%-20s%", this.armSensor, this.armUpSensor, this.armDownSensor+"\n");
+        thisthing += String.format("------------------------------------------------------------\n");
+        thisthing += String.format("%-20s%-20s%-20s%", "RollerDirection", "DesiredRollerSpeed", "RollerSpeed\n");
+        thisthing += String.format("%-20s%-20s%-20s%", this.rollerDirection, this.desiredRollerSpeed, this.rollerSpeed+"\n");
+        return thisthing;
+    }
+
+    public void TestRoller() //I just wanted to test the motors bro
+    {//TODO try this code on monday
+        //you can find the motor in the red bins in the robotics room and then you need a robot in a box and a laptop
+        try
+        {
+            System.out.println("Starting");
+            TimeUnit.SECONDS.sleep(2);   
+            outtakeRoller();
+            TimeUnit.SECONDS.sleep(4);
+            turnOffRoller();
+            TimeUnit.SECONDS.sleep(2);
+            intakeRoller();
+            TimeUnit.SECONDS.sleep(4);
+            turnOffRoller();
+            System.out.println(this.toString());
+        }
+        catch(InterruptedException ex)
+        {
+            ex.printStackTrace();
+        }
+        
     }
 }
