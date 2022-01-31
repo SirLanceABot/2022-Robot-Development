@@ -19,6 +19,7 @@ public class Intake
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // testing this out
     private enum ArmPosition
     {
         up,
