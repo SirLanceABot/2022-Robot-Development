@@ -6,11 +6,12 @@ import frc.controls.DriverController;
 import frc.constants.Port;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+
 
 public class DriverControllerTab 
 {
@@ -41,8 +42,6 @@ public class DriverControllerTab
         createAxisWidgets(DriverController.Axis.kLeftY, "Left Y", leftYObjects, 5);
         createAxisWidgets(DriverController.Axis.kRightX, "Right X", rightXObjects, 10);
         createAxisWidgets(DriverController.Axis.kRightY, "Right Y", rightYObjects, 15);
-
-        // TODO: create the other widgets for the other axes
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
@@ -91,17 +90,19 @@ public class DriverControllerTab
     private NetworkTableEntry createTextBox(String title, String defaultValue, int column, int row, int width, int height)
     {
         return driverControllerTab.add(title, defaultValue)
-            .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(column, row)
-            .withSize(width, height)
-            .getEntry();
+            .withWidget(BuiltInWidgets.kTextView)   // specifies type of widget: "kTextView"
+            .withPosition(column, row)  // sets position of widget
+            .withSize(width, height)    // sets size of widget
+            .getEntry();    // TODO: ask what getEntry does
+
+            
     }
 
     private void createComboBox(SendableChooser<DriverController.AxisScale> comboBox, String title, DriverController.AxisScale defaultValue, int column, int row, int width, int height)
     {
-        // SendableRegistry.add(comboBox, title);
-        // SendableRegistry.setName(comboBox, title);
-        
+        SendableRegistry.add(comboBox, title);
+        SendableRegistry.setName(comboBox, title);
+
         for(DriverController.AxisScale axisScale: DriverController.AxisScale.values())
         {
             if(axisScale == defaultValue)
@@ -120,10 +121,10 @@ public class DriverControllerTab
             .withSize(width, height);
     }
 
-    private void createSplitButtonChooser(SendableChooser<Boolean> splitButtonChooser, String title, boolean defaultValue, int column, int row, int width, int height)
+    private void createSplitButtonChooser(SendableChooser<Boolean> splitButtonChooser, String title, boolean defaultValue, int column, int row, int width, int height)  // TODO: ask about this entire mehtod
     {
-        // SendableRegistry.add(splitButtonChooser, title);
-        // SendableRegistry.setName(splitButtonChooser, title);
+        SendableRegistry.add(splitButtonChooser, title);
+        SendableRegistry.setName(splitButtonChooser, title);
 
         splitButtonChooser.setDefaultOption((defaultValue ? "Yes" : "No"), defaultValue);
         splitButtonChooser.addOption((!defaultValue ? "Yes" : "No"), !defaultValue);
@@ -136,12 +137,12 @@ public class DriverControllerTab
 
     private DriverController.AxisSettings getAxisSettingsFromShuffleboard(AxisObjects axisObjects)
     {
-        DriverController.AxisSettings axisSettings = driverController.new AxisSettings();
+        DriverController.AxisSettings axisSettings = driverController.new AxisSettings();   // TODO: ask about ".new"
 
-        axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1"));
+        axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1")); // TODO: try getDouble
         axisSettings.axisMinOutput = Double.valueOf(axisObjects.minOutputEntry.getString("0.0"));
         axisSettings.axisMaxOutput = Double.valueOf(axisObjects.maxOutputEntry.getString("1.0"));
-        axisSettings.axisIsFlipped = axisObjects.isFlipped.getSelected();
+        axisSettings.axisIsFlipped = axisObjects.isFlipped.getSelected();   // TODO: ask what getSelected is doing here
         axisSettings.axisScale = axisObjects.axisScaleComboBox.getSelected();
 
         return axisSettings;
