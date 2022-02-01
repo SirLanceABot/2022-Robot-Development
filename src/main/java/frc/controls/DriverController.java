@@ -35,7 +35,7 @@ public class DriverController extends Xbox
 
         kReverseDirection(Button.kB),
 
-        
+
         kIntakeUp(Button.kY),
         kIntakeDown(Button.kX),
 
@@ -102,31 +102,6 @@ public class DriverController extends Xbox
         } 
     }
 
-    // public class RumbleEvent
-    // {
-    //     public double startTime;
-    //     public double duration;
-    //     public double leftPower;
-    //     public double rightPower;
-
-    //     public RumbleEvent(double startTime, double duration, double leftPower, double rightPower)
-    //     {
-    //         this.startTime = startTime;
-    //         this.duration = duration;
-    //         this.leftPower = leftPower;
-    //         this.rightPower = rightPower;
-    //     }
-    // }
-
-    // private ArrayList<RumbleEvent> rumbleEvents = new ArrayList<RumbleEvent>();
-    // private int rumbleCounter = 0;
-
-    
-        
-    
-
-    
-
     /**
      * Private constructor for driver controller
      */
@@ -152,37 +127,6 @@ public class DriverController extends Xbox
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
-
-    
-        
-    
-
-    // public void createRumbleEvent(double startTime, double duration, double leftPower, double rightPower)
-    // {
-    //     rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
-    // }
-
-    // public void checkRumbleEvent()
-    // {
-    //     if (rumbleEvents.size() > rumbleCounter)
-    //     {
-    //         double matchTime = DriverStation.getMatchTime();
-    //         double startTime = rumbleEvents.get(rumbleCounter).startTime;
-    //         double duration = rumbleEvents.get(rumbleCounter).duration;
-
-    //         if (startTime >= matchTime && matchTime >= startTime - duration)
-    //         {
-    //             setRumble(RumbleType.kLeftRumble, rumbleEvents.get(rumbleCounter).leftPower);
-    //             setRumble(RumbleType.kRightRumble, rumbleEvents.get(rumbleCounter).rightPower);
-    //         }
-    //         else if (matchTime < startTime - duration)
-    //         {
-    //             rumbleCounter++;
-    //             setRumble(RumbleType.kLeftRumble, 0.0);
-    //             setRumble(RumbleType.kRightRumble, 0.0); 
-    //         }
-    //     }
-    // }
 
     @Deprecated
     public double getRawAxis(Axis axis)

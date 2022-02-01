@@ -79,8 +79,6 @@ public class OperatorController extends Logitech
         }
     }
 
-    private static OperatorController instance = new OperatorController(Port.Controller.OPERATOR);
-
     public OperatorController(int port)
     {
         super(port);
@@ -93,11 +91,6 @@ public class OperatorController extends Logitech
         }
         //createRumbleEvent(60.0, 1.0, 0.5, 0.5);
         System.out.println(fullClassName + ": Constructor Finished");
-    }
-
-    public static OperatorController getInstance()
-    {
-        return instance;
     }
 
     @Deprecated
