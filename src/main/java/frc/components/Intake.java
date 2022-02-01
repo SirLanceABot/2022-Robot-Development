@@ -34,6 +34,8 @@ public class Intake
         off //zero 
     }
 
+    //private static CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // ^that fella is for when I'm testing with a boxbot
     private static CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private double armSolenoiod;
     private double armSensor;
@@ -44,7 +46,7 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double IntakeSpeed = 1.0; //TODO change to constant.intakeSpeed
+    private static final double IntakeSpeed = 0.5; //TODO change to constant.intakeSpeed
 
     // *** CLASS CONSTRUCTOR ***
     public Intake()
@@ -72,14 +74,14 @@ public class Intake
     public void outtakeRoller()
     {
         setRollerSpeed(RollerDirection.out);
-        rollerMotor.set(-1.0); //".set" sets the speed, it has to be between 1.0 and -1.0
+        rollerMotor.set(-0.5); //".set" sets the speed, it has to be between 1.0 and -1.0
         System.out.println("Roller out");
     }
     
     public void intakeRoller()
     {
         setRollerSpeed(RollerDirection.in);
-        rollerMotor.set(1.0);
+        rollerMotor.set(0.5);
         System.out.println("Roller in");
     }
 
@@ -120,8 +122,8 @@ public class Intake
     public String toString()
     {
         String thisthing = "";
-        thisthing += String.format("%-20s%-20s%-20s%", "RollerMotor", "armSolenoid", "armPosition\n");
-        thisthing += String.format("%-20s%-20s%-20s%", this.rollerMotor, this.armSolenoiod, this.armPosition+"\n");
+        thisthing += String.format("%-20s%-20s%-20s%", "armSolenoid", "armPosition\n");
+        thisthing += String.format("%-20s%-20s%-20s%", this.armSolenoiod, this.armPosition+"\n");
         thisthing += String.format("------------------------------------------------------------\n");
         thisthing += String.format("%-20s%-20s%-20s%",  "ArmSensor", "ArmDownSensor", "ArmUpSensor\n");
         thisthing += String.format("%-20s%-20s%-20s%", this.armSensor, this.armUpSensor, this.armDownSensor+"\n");
@@ -139,13 +141,13 @@ public class Intake
             System.out.println("Starting");
             TimeUnit.SECONDS.sleep(2);   
             outtakeRoller();
-            TimeUnit.SECONDS.sleep(4);
+            TimeUnit.SECONDS.sleep(2);
             turnOffRoller();
             TimeUnit.SECONDS.sleep(2);
             intakeRoller();
-            TimeUnit.SECONDS.sleep(4);
+            TimeUnit.SECONDS.sleep(2);
             turnOffRoller();
-            System.out.println(this.toString());
+            //System.out.println(this.toString());
         }
         catch(InterruptedException ex)
         {

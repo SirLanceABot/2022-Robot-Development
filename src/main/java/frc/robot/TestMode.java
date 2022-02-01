@@ -22,7 +22,7 @@ public class TestMode implements ModeTransition
     // *** CLASS CONSTRUCTOR ***
     public TestMode()
     {
-        intake.TestRoller();
+        
     }
 
     /**
@@ -38,7 +38,7 @@ public class TestMode implements ModeTransition
      */
     public void periodic()
     {
-
+        
     }
 
     /**
