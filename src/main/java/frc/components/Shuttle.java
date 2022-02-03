@@ -24,6 +24,7 @@ public class Shuttle
         System.out.println("Loading: " + fullClassName);
     }
 
+
     // *** CLASS & INSTANCE VARIABLES ***
     // initializing motors
     private static CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -41,6 +42,7 @@ public class Shuttle
 
 
     // *** CLASS CONSTRUCTOR ***
+    // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
     public Shuttle()
     {
 
@@ -48,6 +50,8 @@ public class Shuttle
 
 
     // *** CLASS & INSTANCE METHODS ***
+
+    // TODO: Create a configMotor() method to configure each motor
     
 
     public void reversefirstStage()

@@ -50,6 +50,7 @@ public class Shooter
 
 
     // *** CLASS CONSTRUCTOR ***
+    // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
     public Shooter()
     {
         configMotor();

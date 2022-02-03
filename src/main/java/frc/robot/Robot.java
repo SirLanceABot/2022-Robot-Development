@@ -22,7 +22,7 @@ public class Robot extends TimedRobot
     /**
      * This keeps track of the current state of the robot, from startup to auto, to teleop, etc.
      */
-    public enum RobotState
+    public static enum RobotState
     {
         kNone,
         kRobotInit,

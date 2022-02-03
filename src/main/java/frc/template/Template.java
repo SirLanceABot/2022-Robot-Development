@@ -13,6 +13,10 @@ public class Template
         System.out.println("Loading: " + fullClassName);
     }
 
+    // *** INNER ENUMS and INNER CLASSES ***
+
+    
+
     // *** CLASS & INSTANCE VARIABLES ***
 
 

@@ -3,6 +3,8 @@ package frc.shuffleboard;
 import java.lang.invoke.MethodHandles;
 
 import frc.controls.DriverController;
+
+// TODO: delete the following import
 import frc.constants.Port;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -12,6 +14,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+
+// TODO: import the following
+// import edu.wpi.first.util.sendable.SendableRegistry;
 
 public class DriverControllerTab 
 {
@@ -24,13 +29,30 @@ public class DriverControllerTab
         System.out.println("Loading: " + fullClassName);
     }
 
+
+    // *** INNER ENUMS and INNER CLASSES ***
+    private class AxisObjects
+    {
+        private NetworkTableEntry deadzoneEntry;
+        private NetworkTableEntry minOutputEntry;
+        private NetworkTableEntry maxOutputEntry;
+        private SendableChooser<Boolean> isFlipped = new SendableChooser<>();
+        private SendableChooser<DriverController.AxisScale> axisScaleComboBox = new SendableChooser<>();
+    }
+
+
     // *** CLASS & INSTANCE VARIABLES ***
+    // TODO: make the following final
     private AxisObjects leftXObjects = new AxisObjects();
     private AxisObjects leftYObjects = new AxisObjects();
     private AxisObjects rightXObjects = new AxisObjects();
     private AxisObjects rightYObjects = new AxisObjects();
 
+    // TODO: change the following 
     private DriverController driverController = new DriverController(Port.Controller.DRIVER);
+    // to this, note the change in name to all caps
+    // private final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+
     private ShuffleboardTab driverControllerTab = Shuffleboard.getTab("Driver Controller");
 
 
@@ -38,6 +60,8 @@ public class DriverControllerTab
     public DriverControllerTab()
     {
         System.out.println(fullClassName + " : Constructor Started");
+
+        // TODO: create an init() method and place the following in that method
         createAxisWidgets(DriverController.Axis.kLeftX, "Left X", leftXObjects, 0);
         createAxisWidgets(DriverController.Axis.kLeftY, "Left Y", leftYObjects, 5);
         createAxisWidgets(DriverController.Axis.kRightX, "Right X", rightXObjects, 10);
@@ -48,14 +72,8 @@ public class DriverControllerTab
 
 
     // *** CLASS & INSTANCE METHODS ***
-    private class AxisObjects
-    {
-        private NetworkTableEntry deadzoneEntry;
-        private NetworkTableEntry minOutputEntry;
-        private NetworkTableEntry maxOutputEntry;
-        private SendableChooser<Boolean> isFlipped = new SendableChooser<>();
-        private SendableChooser<DriverController.AxisScale> axisScaleComboBox = new SendableChooser<>();
-    }
+
+    // TODO: create the init() method here
 
     private void createAxisWidgets(DriverController.Axis axis, String name, AxisObjects axisObjects, int column)
     {
@@ -87,6 +105,10 @@ public class DriverControllerTab
         createComboBox(axisObjects.axisScaleComboBox, name + " Axis Scale", axisSettings.axisScale, column, row, width, height);
     }
 
+    /**
+    * Create a <b>Text Box</b>
+    * <p>Create an entry in the Network Table and add the Text Box to the Shuffleboard Tab
+    */
     private NetworkTableEntry createTextBox(String title, String defaultValue, int column, int row, int width, int height)
     {
         return driverControllerTab.add(title, defaultValue)
@@ -98,6 +120,10 @@ public class DriverControllerTab
             
     }
 
+    /**
+    * Create a <b>Combo Box</b>
+    * <p>Create an entry in the Network Table and add the Combo Box to the Shuffleboard Tab
+    */
     private void createComboBox(SendableChooser<DriverController.AxisScale> comboBox, String title, DriverController.AxisScale defaultValue, int column, int row, int width, int height)
     {
         SendableRegistry.add(comboBox, title);

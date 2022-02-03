@@ -18,25 +18,35 @@ public class Intake
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
-    // testing this out
+
+    // *** INNER ENUMS and INNER CLASSES ***
+    // TODO: make the following enum public and static
     private enum ArmPosition
     {
+        // TODO: use kUp, kMoving, kDown as the constant names
         up,
         moving, 
         down
     }
 
+    // TODO: Make this public and static
     enum RollerDirection
     {
+        // TODO: kIn, kOut, kOff
         in, //positive
         out, //nagative
         off //zero 
     }
 
+
+    // *** CLASS & INSTANCE VARIABLES ***
     //private static CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^that fella is for when I'm testing with a boxbot
+
+    // TODO: add the modifier final to the rollerMotor
     private static CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    // TODO: make the following static
     private double armSolenoiod;
     private double armSensor;
     private double armUpSensor;
@@ -48,7 +58,9 @@ public class Intake
 
     private static final double IntakeSpeed = 0.5; //TODO change to constant.intakeSpeed
 
+
     // *** CLASS CONSTRUCTOR ***
+    // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
     public Intake()
     {
         System.out.println("Intake Created");
@@ -56,20 +68,30 @@ public class Intake
 
     // *** CLASS & INSTANCE METHODS ***
     //getters
+    // TODO: should this method be public?
     private ArmPosition getArmPosition()
     {
         return this.armPosition;
     }
 
+    // TODO: create a configRollerMotor() method to configure the roller motor
+    // Call the configRollerMotor() method from the constructor
+
+
+    // TODO: should this method be public?
     private RollerDirection getRollerDirection()
     {
         return this.rollerDirection;
     }
+
     //setters
+    // TODO This looks like a setRollerDirection() method, should it be renamed
+    // The setRollerSpeed() method should call the set() method of the rollerMotor
     private void setRollerSpeed(RollerDirection rollerSpeed)
     {
         this.rollerDirection = rollerSpeed;
     }
+
     //not getters and setters?
     public void outtakeRoller()
     {

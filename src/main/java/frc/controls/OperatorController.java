@@ -2,6 +2,7 @@ package frc.controls;
 
 import java.lang.invoke.MethodHandles;
 
+// TODO: delete the following
 import frc.constants.Port;
 
 //import java.util.ArrayList;
@@ -17,17 +18,9 @@ public class OperatorController extends Logitech
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
 
-
-    
-
-    
-
-    // *** CLASS CONSTRUCTOR ***
-    
-
-    // *** CLASS & INSTANCE METHODS ***
+    // *** INNER ENUMS and INNER CLASSES ***
+    // TODO: make the following enums static
     public enum OperatorButtonAction
     {
         kShoot(Button.kTrigger),
@@ -85,13 +78,22 @@ public class OperatorController extends Logitech
 
         System.out.println(fullClassName + " : Constructor Started");
 
+        // TODO: Create an init() method and put the following loop and createRumbleEvent() in that method
+        // loop to set the defaults for every axis
         for(OperatorAxisAction action : OperatorAxisAction.values())
         {
             setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
         }
         //createRumbleEvent(60.0, 1.0, 0.5, 0.5);
+
         System.out.println(fullClassName + ": Constructor Finished");
     }
+
+
+    // *** CLASS & INSTANCE METHODS ***   
+
+     // TODO: create the init() method here, place the loop in here and call createRumbleEvent()
+
 
     @Deprecated
     public boolean getRawButton(Button button)

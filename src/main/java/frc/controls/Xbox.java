@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Xbox extends Joystick
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    // TODO: remove the following
     //private static final String Owen = "Owen is cool";
 
 
@@ -19,7 +20,9 @@ public class Xbox extends Joystick
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
+
+    // *** INNER ENUMS and INNER CLASSES ***
+    // TODO: make the following enums static
     public enum Button
     {
         kA(1), kB(2), kX(3), kY(4), kLeftBumper(5), kRightBumper(6), kBack(7), kStart(8), kLeftStick(9), kRightStick(10);
@@ -58,6 +61,9 @@ public class Xbox extends Joystick
         public AxisScale axisScale;
     }
     
+    // TODO: Implement the Comparable interface, so the array list can be sorted
+    // Sort first by startTime, then by duration
+    // Check this out for help - https://www.geeksforgeeks.org/java-program-to-sort-an-arraylist/
     public class RumbleEvent
     {
         public double startTime;
@@ -72,8 +78,15 @@ public class Xbox extends Joystick
             this.leftPower = leftPower;
             this.rightPower = rightPower;
         }
+
+        // TODO: Add the compareTo() method, first compare startTime, then duration
+
+        // TODO: Add a toString() method
     }
 
+
+    // *** CLASS & INSTANCE VARIABLES ***
+    // TODO: make the rumbleEvents final
     private ArrayList<RumbleEvent> rumbleEvents = new ArrayList<RumbleEvent>();
     private int rumbleCounter = 0;
 
@@ -84,12 +97,40 @@ public class Xbox extends Joystick
     private final boolean DEFAULT_IS_FLIPPED = false;
     private final AxisScale DEFAULT_AXIS_SCALE = AxisScale.kLinear;
 
-    //store the default axis values into their own array lists
+    // TODO: Add the "final" modifier so that these cannot change
+    // TODO: create an constanct NUMBER_OF_AXES, set it to 6 and use it in the following declarations
     private double[] axisDeadzone = new double[6];
     private double[] axisMinOutput = new double[6];
     private double[] axisMaxOutput = new double[6];
     private boolean[] axisIsFlipped = new boolean[6];
     private AxisScale[] axisScale = new AxisScale[6];
+
+
+    // *** CLASS CONSTRUCTOR ***
+    protected Xbox(int port)
+    {
+        super(port);
+
+        System.out.println(fullClassName + " : Constructor Started");
+
+        // TODO: Create an init() method and put the following loop in that method
+        // loop to set the defaults for every axis
+        for(int index = 0; index <= 5; index++)
+        {
+            axisDeadzone[index] = DEFAULT_DEADZONE;
+            axisMinOutput[index] = DEFAULT_MIN_OUTPUT;
+            axisMaxOutput[index] = DEFAULT_MAX_OUTPUT;
+            axisIsFlipped[index] = DEFAULT_IS_FLIPPED;
+            axisScale[index] = DEFAULT_AXIS_SCALE;
+        }
+
+        System.out.println(fullClassName + ": Constructor Finished"); 
+    }
+
+
+    // *** CLASS & INSTANCE METHODS *** 
+
+    // TODO: create the init() method here, place the loop in here and call resetRumbleCounter()
 
     public double getRawAxis(Axis axis)
     {
@@ -114,6 +155,7 @@ public class Xbox extends Joystick
         return axisSettings;
     }
 
+    // TODO: move the comment below up here
     public void setAxisSettings(Axis axis, double axisDeadzone, double axisMinOutput, double axisMaxOutput, boolean axisIsFlipped, AxisScale axisScale)
     {
         setAxisDeadzone(axis, axisDeadzone);
@@ -122,33 +164,6 @@ public class Xbox extends Joystick
         setAxisIsFlipped(axis, axisIsFlipped);
         setAxisScale(axis, axisScale);
     }
-
-
-
-
-
-    // *** CLASS CONSTRUCTOR ***
-    protected Xbox(int port)
-    {
-        super(port);
-
-        System.out.println(fullClassName + " : Constructor Started");
-
-        // loop to set the defaults for every axis
-        for(int index = 0; index <= 5; index++)
-        {
-            axisDeadzone[index] = DEFAULT_DEADZONE;
-            axisMinOutput[index] = DEFAULT_MIN_OUTPUT;
-            axisMaxOutput[index] = DEFAULT_MAX_OUTPUT;
-            axisIsFlipped[index] = DEFAULT_IS_FLIPPED;
-            axisScale[index] = DEFAULT_AXIS_SCALE;
-        }
-
-        System.out.println(fullClassName + ": Constructor Finished"); 
-    }
-
-
-    // *** CLASS & INSTANCE METHODS ***
 
     @Override
     /**
@@ -244,6 +259,7 @@ public class Xbox extends Joystick
         this.axisScale[axis.value] = axisScale;
     }
 
+    // TODO: This goes above the setAxisSettings() method
     /**
      * Public method to initialize the settings for one axis
      * @param axis
@@ -264,11 +280,14 @@ public class Xbox extends Joystick
         setAxisSettings(axis, axisSettings.axisDeadzone, axisSettings.axisMinOutput, axisSettings.axisMaxOutput, axisSettings.axisIsFlipped, axisSettings.axisScale);
         
     }
-   
-   
     
     public void createRumbleEvent(double startTime, double duration, double leftPower, double rightPower)
     {
+        // TODO: sort the array list in descending order after adding the event
+        // Check this out for help - https://www.geeksforgeeks.org/java-program-to-sort-an-arraylist/
+        // Add a loop to check that the new rumble event does not overlap any other events
+        // If there is no overlap, then create the rumble event
+
         rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
     }
 
@@ -280,11 +299,13 @@ public class Xbox extends Joystick
             double startTime = rumbleEvents.get(rumbleCounter).startTime;
             double duration = rumbleEvents.get(rumbleCounter).duration;
 
+            // TODO: change the second relational operator to >
             if (startTime >= matchTime && matchTime >= startTime - duration)
             {
                 setRumble(RumbleType.kLeftRumble, rumbleEvents.get(rumbleCounter).leftPower);
                 setRumble(RumbleType.kRightRumble, rumbleEvents.get(rumbleCounter).rightPower);
             }
+            // TODO: change the relational operator to <=
             else if (matchTime < startTime - duration)
             {
                 rumbleCounter++;
@@ -299,6 +320,7 @@ public class Xbox extends Joystick
         rumbleCounter = 0;
     }
 
+    // TODO: Fix this toString() method
     // @Override
     // public String toString()
     // {

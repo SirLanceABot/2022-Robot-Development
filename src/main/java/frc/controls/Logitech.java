@@ -15,17 +15,12 @@ public class Logitech extends Joystick
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
 
-
-
-    // *** CLASS CONSTRUCTOR ***
-   
-
-
-    // *** CLASS & INSTANCE METHODS ***
+    // *** INNER ENUMS and INNER CLASSES ***
+    // TODO: make the following enums static
     public enum Button
     {
+        // TODO: change these names. use k1, k2, etc.
         kTrigger(1), kHandleSide(2), kHandleBottomLeft(3), kHandleBottomRight(4), kHandleTopLeft(5), kHandleTopRight(6), 
         kOuterTop(7), kInnerTop(8), kOuterMiddle(9), kInnerMiddle(10), kOuterBottom(11), kInnerBottom(12);
 
@@ -63,12 +58,16 @@ public class Logitech extends Joystick
         public AxisScale axisScale;
     }
 
+
+    // *** CLASS & INSTANCE VARIABLES ***
     private final double DEFAULT_DEADZONE = 0.1;
     private final double DEFAULT_MAX_OUTPUT = 1.0;
     private final double DEFAULT_MIN_OUTPUT = 0.0;
     private final boolean DEFAULT_IS_FLIPPED = false;
     private final AxisScale DEFAULT_AXIS_SCALE = AxisScale.kLinear;
 
+    // TODO: Add the "final" modifier so that these cannot change
+    // TODO: create an constanct NUMBER_OF_AXES, set it to 6 and use it in the following declarations
     private double[] axisDeadzone = new double[4];
     private double[] axisMaxOutput = new double[4];
     private double[] axisMinOutput = new double[4];
@@ -76,12 +75,16 @@ public class Logitech extends Joystick
     private AxisScale[] axisScale = new AxisScale[4];
     private Button[] buttons = new Button[11];
 
+
+    // *** CLASS CONSTRUCTOR ***
     protected Logitech(int port)
     {
         super(port);
 
         System.out.println(fullClassName + " : Constructor Started");
 
+        // TODO: Create an init() method and put the following loop in that method
+        // loop to set the defaults for every axis
         for(int index = 0; index <= 3; index++)
             {
                 axisDeadzone[index] = DEFAULT_DEADZONE;
@@ -93,6 +96,11 @@ public class Logitech extends Joystick
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
+
+
+    // *** CLASS & INSTANCE METHODS *** 
+
+    // TODO: create the init() method here, place the loop in here and call resetRumbleCounter()
 
     /**
      * Returns the value of the specified axis
@@ -261,6 +269,7 @@ public class Logitech extends Joystick
         setAxisSettings(axis, axisSettings.axisDeadzone, axisSettings.axisMinOutput, axisSettings.axisMaxOutput, axisSettings.axisIsFlipped, axisSettings.axisScale);
     }
 
+    // TODO: Remove this method
     public void joystickTest()
     {
         for(int i = 1; i <= 12; i++)
@@ -341,6 +350,7 @@ public class Logitech extends Joystick
         }
     }
     
+    // TODO: Clean up the toString() method
     public String toString()
     {
         String str = "";
