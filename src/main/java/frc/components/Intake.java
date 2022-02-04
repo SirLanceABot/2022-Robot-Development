@@ -2,9 +2,16 @@ package frc.components;
 
 import frc.constants.Port;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+//import com.revrobotics.CANDigitalInput;
+//import com.revrobotics.CANEncoder;
+//import com.revrobotics.CANSparkMax;
+//import com.revrobotics.ControlType;
+//import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+//import com.revrobotics.CANPIDController;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Intake 
@@ -18,24 +25,44 @@ public class Intake
         System.out.println("Loading: " + fullClassName);
     }
 
-
     // *** INNER ENUMS and INNER CLASSES ***
-    // TODO: make the following enum public and static
-    private enum ArmPosition
+    public enum ArmPosition
     {
-        // TODO: use kUp, kMoving, kDown as the constant names
-        up,
-        moving, 
-        down
+        //these double values are the same as the 2021 values
+        kIn(Math.abs(intakeSpeed)), //is basically posotive speed
+        kOut(Math.abs(intakeSpeed)*-1.0), //is basically negative speed
+        kOff(0.0); //is zero
+
+        private final double position;
+
+        private ArmPosition(final double position)
+        {
+            this.position = position;
+        }
+
+        public double position()
+        {
+            return position;
+        }
     }
 
-    // TODO: Make this public and static
-    enum RollerDirection
+    public static enum RollerDirection
     {
-        // TODO: kIn, kOut, kOff
-        in, //positive
-        out, //nagative
-        off //zero 
+        kIn(Math.abs(intakeSpeed)), //is basically posotive speed
+        kOut(Math.abs(intakeSpeed)*-1.0), //is basically negative speed
+        kOff(0.0); //is zero
+
+        private final double position;
+
+        private RollerDirection(final double position)
+        {
+            this.position = position;
+        }
+
+        public double position()
+        {
+            return position;
+        }
     }
 
 
@@ -44,7 +71,8 @@ public class Intake
     // ^that fella is for when I'm testing with a boxbot
 
     // TODO: add the modifier final to the rollerMotor
-    private static CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
     // TODO: make the following static
     private double armSolenoiod;
@@ -56,30 +84,45 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double IntakeSpeed = 0.5; //TODO change to constant.intakeSpeed
+    private static final double intakeSpeed = 0.5; //TODO change to constant.intakeSpeed
 
 
     // *** CLASS CONSTRUCTOR ***
-    // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
-    public Intake()
+    Intake()
     {
         System.out.println("Intake Created");
+        configMotor(rollerMotor);
+        configMotor(armsMotor);
     }
 
     // *** CLASS & INSTANCE METHODS ***
     //getters
-    // TODO: should this method be public?
-    private ArmPosition getArmPosition()
+    public ArmPosition getArmPosition()
     {
         return this.armPosition;
     }
 
-    // TODO: create a configRollerMotor() method to configure the roller motor
-    // Call the configRollerMotor() method from the constructor
+    //create a configRollerMotor() method to configure the roller motor
+    //It has become configMotor() because there are two motors that need configuring
+    //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
+    public static void configMotor(CANSparkMax Motor)
+    {
+        System.out.println("configurating " + Motor);
+
+        Motor.restoreFactoryDefaults();
+        Motor.setInverted(true);
+        Motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+
+        Motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        Motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        Motor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        Motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+
+        System.out.println(Motor + "Configurated");
+    }
 
 
-    // TODO: should this method be public?
-    private RollerDirection getRollerDirection()
+    public RollerDirection getRollerDirection()
     {
         return this.rollerDirection;
     }
@@ -87,58 +130,49 @@ public class Intake
     //setters
     // TODO This looks like a setRollerDirection() method, should it be renamed
     // The setRollerSpeed() method should call the set() method of the rollerMotor
-    private void setRollerSpeed(RollerDirection rollerSpeed)
+    // we dont currenly need a setRollerSpeed() becuase IntakeSpeed is a constant
+    private void setRollerDirection(RollerDirection rollerSpeed)
     {
-        this.rollerDirection = rollerSpeed;
+        rollerMotor.set(rollerSpeed.position); //".set" sets the speed, it has to be between 1.0 and -1.0
     }
 
     //not getters and setters?
     public void outtakeRoller()
     {
-        setRollerSpeed(RollerDirection.out);
-        rollerMotor.set(-0.5); //".set" sets the speed, it has to be between 1.0 and -1.0
+        setRollerDirection(RollerDirection.kOut);
         System.out.println("Roller out");
     }
     
     public void intakeRoller()
     {
-        setRollerSpeed(RollerDirection.in);
-        rollerMotor.set(0.5);
+        setRollerDirection(RollerDirection.kIn);
         System.out.println("Roller in");
     }
 
     public void turnOffRoller()
     {
-        setRollerSpeed(RollerDirection.off);
-        rollerMotor.set(0.0);
+        setRollerDirection(RollerDirection.kOff);
         System.out.println("Roller Off");
     }
 
-    public void moveArmUp()
+    public void moveArmOut()
     {
         
     }
 
-    public void moveArmDown()
+    public void moveArmIn()
     {
 
     } 
 
     public void updateArmPosition(ArmPosition armPosition)
     {
-        if(armPosition == ArmPosition.down)
-        {
-            moveArmDown();
-        }
-        else if(armPosition == ArmPosition.up)
-        {
-            moveArmUp();
-        }
+        
     }
 
-    public RollerDirection getRollerSpeed()
+    public double MeasureRollerSpeed()
     {
-        return(rollerDirection); //roller speed
+        return(1); //find the rollers current speed and return it??
     }
 
     public String toString()
@@ -156,7 +190,7 @@ public class Intake
     }
 
     public void TestRoller() //I just wanted to test the motors bro
-    {//TODO try this code on monday
+    {
         //you can find the motor in the red bins in the robotics room and then you need a robot in a box and a laptop
         try
         {

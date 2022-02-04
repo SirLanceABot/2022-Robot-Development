@@ -16,7 +16,6 @@ public class TestMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final Intake intake = new Intake();
 
 
     // *** CLASS CONSTRUCTOR ***
