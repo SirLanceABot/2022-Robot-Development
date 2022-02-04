@@ -20,7 +20,8 @@ public class DriverController extends Xbox
 
     // *** INNER ENUMS and INNER CLASSES ***
     // TODO: make the following enums static
-    public enum DriverButtonAction
+    //Done
+    public static enum DriverButtonAction
     {
         // kRaiseArms(Button.kA),
         // kLowerArms(Button.kB),
@@ -165,9 +166,4 @@ public class DriverController extends Xbox
         return getPOV();
     }
 
-    // TODO: delete the following
-    // public void resetRumbleCounter()
-    // {
-    //     rumbleCounter = 0;
-    // }
 }

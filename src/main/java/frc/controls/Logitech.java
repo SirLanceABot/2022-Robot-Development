@@ -17,12 +17,10 @@ public class Logitech extends Joystick
 
 
     // *** INNER ENUMS and INNER CLASSES ***
-    // TODO: make the following enums static
-    public enum Button
+    public static enum Button
     {
-        // TODO: change these names. use k1, k2, etc.
-        kTrigger(1), kHandleSide(2), kHandleBottomLeft(3), kHandleBottomRight(4), kHandleTopLeft(5), kHandleTopRight(6), 
-        kOuterTop(7), kInnerTop(8), kOuterMiddle(9), kInnerMiddle(10), kOuterBottom(11), kInnerBottom(12);
+        k1(1), k2(2), k3(3), k4(4), k5(5), k6(6), 
+        k7(7), k8(8), k9(9), k10(10), k11(11), k12(12);
 
         public final int value;
 
@@ -32,7 +30,7 @@ public class Logitech extends Joystick
         }
     }
 
-    public enum Axis
+    public static enum Axis
     {
         kXAxis(0), kYAxis(1), kZAxis(2), kSlider(3);
 
@@ -44,7 +42,7 @@ public class Logitech extends Joystick
         }
     }
 
-    public enum AxisScale
+    public static enum AxisScale
     {
         kLinear, kSquared, kCubed;
     }
@@ -60,20 +58,19 @@ public class Logitech extends Joystick
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private final double DEFAULT_DEADZONE = 0.1;
-    private final double DEFAULT_MAX_OUTPUT = 1.0;
-    private final double DEFAULT_MIN_OUTPUT = 0.0;
-    private final boolean DEFAULT_IS_FLIPPED = false;
-    private final AxisScale DEFAULT_AXIS_SCALE = AxisScale.kLinear;
+    private static final double DEFAULT_DEADZONE = 0.1;
+    private static final double DEFAULT_MAX_OUTPUT = 1.0;
+    private static final double DEFAULT_MIN_OUTPUT = 0.0;
+    private static final boolean DEFAULT_IS_FLIPPED = false;
+    private static final AxisScale DEFAULT_AXIS_SCALE = AxisScale.kLinear;
 
-    // TODO: Add the "final" modifier so that these cannot change
-    // TODO: create an constanct NUMBER_OF_AXES, set it to 6 and use it in the following declarations
-    private double[] axisDeadzone = new double[4];
-    private double[] axisMaxOutput = new double[4];
-    private double[] axisMinOutput = new double[4];
-    private boolean[] axisIsFlipped = new boolean[4];
-    private AxisScale[] axisScale = new AxisScale[4];
-    private Button[] buttons = new Button[11];
+    private static final int NUMBER_OF_AXES = 4;
+    private final double[] axisDeadzone = new double[NUMBER_OF_AXES];
+    private final double[] axisMaxOutput = new double[NUMBER_OF_AXES];
+    private final double[] axisMinOutput = new double[NUMBER_OF_AXES];
+    private final boolean[] axisIsFlipped = new boolean[NUMBER_OF_AXES];
+    private final AxisScale[] axisScale = new AxisScale[NUMBER_OF_AXES];
+    private final Button[] buttons = new Button[11];
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -82,25 +79,25 @@ public class Logitech extends Joystick
         super(port);
 
         System.out.println(fullClassName + " : Constructor Started");
-
-        // TODO: Create an init() method and put the following loop in that method
-        // loop to set the defaults for every axis
-        for(int index = 0; index <= 3; index++)
-            {
-                axisDeadzone[index] = DEFAULT_DEADZONE;
-                axisMaxOutput[index] = DEFAULT_MAX_OUTPUT;
-                axisMaxOutput[index] = DEFAULT_MIN_OUTPUT;
-                axisIsFlipped[index] = DEFAULT_IS_FLIPPED;
-                axisScale[index] = DEFAULT_AXIS_SCALE;
-            }
+      
+        init();
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
 
     // *** CLASS & INSTANCE METHODS *** 
-
-    // TODO: create the init() method here, place the loop in here and call resetRumbleCounter()
+    public void init()
+    {
+        for(int index = 0; index <= NUMBER_OF_AXES - 1; index++)
+        {
+            axisDeadzone[index] = DEFAULT_DEADZONE;
+            axisMaxOutput[index] = DEFAULT_MAX_OUTPUT;
+            axisMaxOutput[index] = DEFAULT_MIN_OUTPUT;
+            axisIsFlipped[index] = DEFAULT_IS_FLIPPED;
+            axisScale[index] = DEFAULT_AXIS_SCALE;
+        }
+    }
 
     /**
      * Returns the value of the specified axis
@@ -113,7 +110,7 @@ public class Logitech extends Joystick
 
         if(axisIsFlipped[axis])
         {
-            value *= -1;
+            value *= -1; //value = value * -1;
         }
 
         if(axis == Axis.kSlider.value)
@@ -145,8 +142,9 @@ public class Logitech extends Joystick
     }
 
     /**
-     * @return the value of the specified axis
+     * This methods returns the value of the axis
      * @param axis
+     * @return the value of the specified axis
      */
     public double getRawAxis(Axis axis)
     {
@@ -154,14 +152,20 @@ public class Logitech extends Joystick
     }
 
     /**
+     * This methods returns whether the button is pressed or not
+     * @param button the button to return
      * @return whether or not the specified is button is being pressed
-     * @param button
      */
     public boolean getRawButton(Button button)
     {
         return super.getRawButton(button.value);
     }
 
+    /**
+     * This method returns the axis settings for 1 axis
+     * @param axis the axis to get the settings for 
+     * @return AxisSettings for the axis sent
+     */
     public AxisSettings getAxisSettings(Axis axis)
     {
         AxisSettings axisSettings = new AxisSettings();
@@ -269,86 +273,7 @@ public class Logitech extends Joystick
         setAxisSettings(axis, axisSettings.axisDeadzone, axisSettings.axisMinOutput, axisSettings.axisMaxOutput, axisSettings.axisIsFlipped, axisSettings.axisScale);
     }
 
-    // TODO: Remove this method
-    public void joystickTest()
-    {
-        for(int i = 1; i <= 12; i++)
-        switch(buttons[i])
-        {
-            case kTrigger:
-                if(getRawButton(Button.kTrigger))
-                {
-                    System.out.println("Trigger is pressed");
-                }
-                break;
-            case kHandleSide:
-                if(getRawButton(Button.kHandleSide))
-                {
-                    System.out.println("Side Button is pressed");
-                }
-                break;
-            case kHandleBottomLeft:
-                if(getRawButton(Button.kHandleBottomLeft))
-                {
-                    System.out.println("Bottom Left button on handle is pressed");
-                }
-                break;
-            case kHandleBottomRight:
-                if(getRawButton(Button.kHandleBottomRight))
-                {
-                    System.out.println("Bottom right button on handle is pressed");
-                }
-                break;
-            case kHandleTopLeft:
-                if(getRawButton(Button.kHandleTopLeft))
-                {
-                    System.out.println("Top Left button on handle is pressed");
-                }
-                break;
-            case kHandleTopRight:
-                if(getRawButton(Button.kHandleTopRight))
-                {
-                    System.out.println("Top Right button on handle is pressed");
-                }
-                break;
-            case kOuterTop:
-                if(getRawButton(Button.kOuterTop))
-                {
-                    System.out.println("Outer Top button is pressed");
-                }
-                break;
-            case kInnerTop:
-                if(getRawButton(Button.kInnerTop))
-                {
-                    System.out.println("Inner Top button is pressed");
-                }
-                break;
-            case kOuterMiddle:
-                if(getRawButton(Button.kOuterMiddle))
-                {
-                    System.out.println("Outer Middle button is pressed");
-                }
-                break;
-            case kInnerMiddle:
-                if(getRawButton(Button.kInnerMiddle))
-                {
-                    System.out.println("Inner Middle button is pressed");
-                }
-                break;
-            case kOuterBottom:
-                if(getRawButton(Button.kOuterBottom))
-                {
-                    System.out.println("Outer Bottom button is pressed");
-                }
-                break;
-            case kInnerBottom:
-                if(getRawButton(Button.kInnerBottom))
-                {
-                    System.out.println("Inner Bottom button is pressed");
-                }
-                break;
-        }
-    }
+    
     
     // TODO: Clean up the toString() method
     public String toString()

@@ -2,6 +2,9 @@ package frc.controls;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.lang.model.util.ElementScanner6;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -9,8 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Xbox extends Joystick
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-    // TODO: remove the following
-    //private static final String Owen = "Owen is cool";
+  
 
 
     // *** STATIC INITIALIZATION BLOCK ***
@@ -22,8 +24,7 @@ public class Xbox extends Joystick
 
 
     // *** INNER ENUMS and INNER CLASSES ***
-    // TODO: make the following enums static
-    public enum Button
+    public static enum Button
     {
         kA(1), kB(2), kX(3), kY(4), kLeftBumper(5), kRightBumper(6), kBack(7), kStart(8), kLeftStick(9), kRightStick(10);
 
@@ -35,7 +36,7 @@ public class Xbox extends Joystick
         }
     }
 
-    public enum Axis
+    public static enum Axis
     {
         kLeftX(0), kLeftY(1), kLeftTrigger(2), kRightTrigger(3), kRightX(4), kRightY(5);
 
@@ -47,7 +48,7 @@ public class Xbox extends Joystick
         }
     }
 
-    public enum AxisScale
+    public static enum AxisScale
     {
         kLinear, kSquared, kCubed;
     }
@@ -61,10 +62,7 @@ public class Xbox extends Joystick
         public AxisScale axisScale;
     }
     
-    // TODO: Implement the Comparable interface, so the array list can be sorted
-    // Sort first by startTime, then by duration
-    // Check this out for help - https://www.geeksforgeeks.org/java-program-to-sort-an-arraylist/
-    public class RumbleEvent
+    public class RumbleEvent implements Comparable<RumbleEvent>
     {
         public double startTime;
         public double duration;
@@ -79,15 +77,38 @@ public class Xbox extends Joystick
             this.rightPower = rightPower;
         }
 
-        // TODO: Add the compareTo() method, first compare startTime, then duration
+        public int compareTo(RumbleEvent rumbleEvent)
+        {
+            if (startTime > rumbleEvent.startTime)
+                return 1;
+            else if (startTime < rumbleEvent.startTime)
+                return -1;
+            else 
+            {
+                if (duration > rumbleEvent.duration)
+                    return 1;
+                else if (duration < rumbleEvent.duration)
+                    return -1;
+                else
+                    return 0;
+            }
+        }
+      
+        public String toString()
+        {
+            String str = "";
 
-        // TODO: Add a toString() method
+            str += startTime + " ";
+            str += duration + " ";
+            str += leftPower + " ";
+            str += rightPower;
+            return str;
+        }
     }
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // TODO: make the rumbleEvents final
-    private ArrayList<RumbleEvent> rumbleEvents = new ArrayList<RumbleEvent>();
+    private final ArrayList<RumbleEvent> rumbleEvents = new ArrayList<RumbleEvent>();
     private int rumbleCounter = 0;
 
     // set the default axis values
@@ -97,13 +118,12 @@ public class Xbox extends Joystick
     private final boolean DEFAULT_IS_FLIPPED = false;
     private final AxisScale DEFAULT_AXIS_SCALE = AxisScale.kLinear;
 
-    // TODO: Add the "final" modifier so that these cannot change
-    // TODO: create an constanct NUMBER_OF_AXES, set it to 6 and use it in the following declarations
-    private double[] axisDeadzone = new double[6];
-    private double[] axisMinOutput = new double[6];
-    private double[] axisMaxOutput = new double[6];
-    private boolean[] axisIsFlipped = new boolean[6];
-    private AxisScale[] axisScale = new AxisScale[6];
+    private static final int NUMBER_OF_AXES = 6;
+    private final double[] axisDeadzone = new double[NUMBER_OF_AXES];
+    private final double[] axisMinOutput = new double[NUMBER_OF_AXES];
+    private final double[] axisMaxOutput = new double[NUMBER_OF_AXES];
+    private final boolean[] axisIsFlipped = new boolean[NUMBER_OF_AXES];
+    private final AxisScale[] axisScale = new AxisScale[NUMBER_OF_AXES];
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -113,9 +133,16 @@ public class Xbox extends Joystick
 
         System.out.println(fullClassName + " : Constructor Started");
 
-        // TODO: Create an init() method and put the following loop in that method
-        // loop to set the defaults for every axis
-        for(int index = 0; index <= 5; index++)
+        init();
+       
+        System.out.println(fullClassName + ": Constructor Finished"); 
+    }
+
+    
+    // *** CLASS & INSTANCE METHODS *** 
+    public void init()
+    {
+        for(int index = 0; index <= NUMBER_OF_AXES - 1; index++)
         {
             axisDeadzone[index] = DEFAULT_DEADZONE;
             axisMinOutput[index] = DEFAULT_MIN_OUTPUT;
@@ -123,46 +150,6 @@ public class Xbox extends Joystick
             axisIsFlipped[index] = DEFAULT_IS_FLIPPED;
             axisScale[index] = DEFAULT_AXIS_SCALE;
         }
-
-        System.out.println(fullClassName + ": Constructor Finished"); 
-    }
-
-
-    // *** CLASS & INSTANCE METHODS *** 
-
-    // TODO: create the init() method here, place the loop in here and call resetRumbleCounter()
-
-    public double getRawAxis(Axis axis)
-    {
-        return getRawAxis(axis.value);
-    }
-
-    public boolean getRawButton(Button button)
-    {
-        return super.getRawButton(button.value);
-    }
-
-    public AxisSettings getAxisSettings(Axis axis)
-    {
-        AxisSettings axisSettings = new AxisSettings();
-
-        axisSettings.axisDeadzone = axisDeadzone[axis.value];
-        axisSettings.axisMinOutput = axisMinOutput[axis.value];
-        axisSettings.axisMaxOutput = axisMaxOutput[axis.value];
-        axisSettings.axisIsFlipped = axisIsFlipped[axis.value];
-        axisSettings.axisScale = axisScale[axis.value];
-
-        return axisSettings;
-    }
-
-    // TODO: move the comment below up here
-    public void setAxisSettings(Axis axis, double axisDeadzone, double axisMinOutput, double axisMaxOutput, boolean axisIsFlipped, AxisScale axisScale)
-    {
-        setAxisDeadzone(axis, axisDeadzone);
-        setAxisMinOutput(axis, axisMinOutput);
-        setAxisMaxOutput(axis, axisMaxOutput);
-        setAxisIsFlipped(axis, axisIsFlipped);
-        setAxisScale(axis, axisScale);
     }
 
     @Override
@@ -198,6 +185,44 @@ public class Xbox extends Joystick
             }
         }
         return value;
+    }
+
+     /**
+     * This methods returns the value of the axis
+     * @param axis
+     * @return the value of the specified axis
+     */
+    public double getRawAxis(Axis axis)
+    {
+        return getRawAxis(axis.value);
+    }
+    
+    /**
+     * This methods returns whether the button is pressed or not
+     * @param button the button to return
+     * @return whether or not the specified is button is being pressed
+     */
+    public boolean getRawButton(Button button)
+    {
+        return super.getRawButton(button.value);
+    }
+
+    /**
+     * This method returns the axis settings for 1 axis
+     * @param axis the axis to get the settings for 
+     * @return AxisSettings for the axis sent
+     */
+    public AxisSettings getAxisSettings(Axis axis)
+    {
+        AxisSettings axisSettings = new AxisSettings();
+
+        axisSettings.axisDeadzone = axisDeadzone[axis.value];
+        axisSettings.axisMinOutput = axisMinOutput[axis.value];
+        axisSettings.axisMaxOutput = axisMaxOutput[axis.value];
+        axisSettings.axisIsFlipped = axisIsFlipped[axis.value];
+        axisSettings.axisScale = axisScale[axis.value];
+
+        return axisSettings;
     }
 
      /**
@@ -259,7 +284,6 @@ public class Xbox extends Joystick
         this.axisScale[axis.value] = axisScale;
     }
 
-    // TODO: This goes above the setAxisSettings() method
     /**
      * Public method to initialize the settings for one axis
      * @param axis
@@ -269,8 +293,16 @@ public class Xbox extends Joystick
      * @param axisIsFlipped
      * @param axisScale
      */
+    public void setAxisSettings(Axis axis, double axisDeadzone, double axisMinOutput, double axisMaxOutput, boolean axisIsFlipped, AxisScale axisScale)
+    {
+        setAxisDeadzone(axis, axisDeadzone);
+        setAxisMinOutput(axis, axisMinOutput);
+        setAxisMaxOutput(axis, axisMaxOutput);
+        setAxisIsFlipped(axis, axisIsFlipped);
+        setAxisScale(axis, axisScale);
+    }
 
-      /**
+    /**
      * Public method to initialize the settings for one axis
      * @param axis
      * @param axisSettings
@@ -283,12 +315,32 @@ public class Xbox extends Joystick
     
     public void createRumbleEvent(double startTime, double duration, double leftPower, double rightPower)
     {
-        // TODO: sort the array list in descending order after adding the event
-        // Check this out for help - https://www.geeksforgeeks.org/java-program-to-sort-an-arraylist/
-        // Add a loop to check that the new rumble event does not overlap any other events
-        // If there is no overlap, then create the rumble event
+        boolean isNoOverlap = true;
+        double endTime = startTime - duration;
+        double reEndTime = 0;
 
-        rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
+        for (RumbleEvent rumbleEvent : rumbleEvents)
+        {
+            reEndTime = rumbleEvent.startTime - rumbleEvent.duration;
+            if (rumbleEvent.startTime >= startTime && startTime > reEndTime)
+                isNoOverlap = false;
+            else if (rumbleEvent.startTime >= endTime && endTime > reEndTime)
+                isNoOverlap = false;
+            else if (startTime >= rumbleEvent.startTime && rumbleEvent.startTime > endTime)
+                isNoOverlap = false;
+            else if (startTime >= reEndTime && reEndTime > endTime)
+                isNoOverlap = false;
+        }
+
+        if (isNoOverlap)
+        {
+            rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
+            Collections.sort(rumbleEvents, Collections.reverseOrder());
+        }
+        else 
+        {
+            System.out.println("Rumble Event Overlap: " + (new RumbleEvent(startTime, duration, leftPower, rightPower)));
+        }
     }
 
     public void checkRumbleEvent()
@@ -299,14 +351,12 @@ public class Xbox extends Joystick
             double startTime = rumbleEvents.get(rumbleCounter).startTime;
             double duration = rumbleEvents.get(rumbleCounter).duration;
 
-            // TODO: change the second relational operator to >
-            if (startTime >= matchTime && matchTime >= startTime - duration)
+            if (startTime >= matchTime && matchTime > startTime - duration)
             {
                 setRumble(RumbleType.kLeftRumble, rumbleEvents.get(rumbleCounter).leftPower);
                 setRumble(RumbleType.kRightRumble, rumbleEvents.get(rumbleCounter).rightPower);
             }
-            // TODO: change the relational operator to <=
-            else if (matchTime < startTime - duration)
+            else if (matchTime <= startTime - duration)
             {
                 rumbleCounter++;
                 setRumble(RumbleType.kLeftRumble, 0.0);
