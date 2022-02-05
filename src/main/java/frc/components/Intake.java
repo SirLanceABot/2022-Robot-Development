@@ -1,15 +1,21 @@
 package frc.components;
-
+import frc.constants.Constant;
 import frc.constants.Port;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 //import com.revrobotics.CANDigitalInput;
+import com.revrobotics.SparkMaxLimitSwitch;
 //import com.revrobotics.CANEncoder;
-//import com.revrobotics.CANSparkMax;
 //import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.ControlType;
 //import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 //import com.revrobotics.CANPIDController;
+import com.revrobotics.SparkMaxPIDController;
+//import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.RelativeEncoder;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
@@ -28,9 +34,8 @@ public class Intake
     // *** INNER ENUMS and INNER CLASSES ***
     public enum ArmPosition
     {
-        //these double values are the same as the 2021 values
-        kIn(Math.abs(intakeSpeed)), //is basically posotive speed
-        kOut(Math.abs(intakeSpeed)*-1.0), //is basically negative speed
+        kIn(Math.abs(intakeSpeed)), 
+        kOut(Math.abs(intakeSpeed)*-1.0), 
         kOff(0.0); //is zero
 
         private final double position;
@@ -74,6 +79,14 @@ public class Intake
     private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
+    /*private static CANEncoder armsEncoder = armsMotor.getEncoder();
+    private static CANDigitalInput armsForwardLimitSwitch;
+    private static CANDigitalInput armsReverseLimitSwitch;*/
+    private static RelativeEncoder armsEncoder = armsMotor.getEncoder();
+    private static SparkMaxLimitSwitch armsForwardLimitSwitch;
+    private static SparkMaxLimitSwitch armsBackwardLimitSwitch;
+
+
     // TODO: make the following static
     private double armSolenoiod;
     private double armSensor;
@@ -84,7 +97,7 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = 0.5; //TODO change to constant.intakeSpeed
+    private static final double intakeSpeed = Constant.INTAKE_SPEED;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -118,6 +131,24 @@ public class Intake
         Motor.setSoftLimit(SoftLimitDirection.kForward, 0);
         Motor.enableSoftLimit(SoftLimitDirection.kForward, false);
 
+        if(Motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
+        {
+            /*armsReverseLimitSwitch = Motor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+            armsReverseLimitSwitch.enableLimitSwitch(false);
+            armsForwardLimitSwitch = Motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+            armsForwardLimitSwitch.enableLimitSwitch(false);
+            armsEncoder.setPosition(0);*/
+            armsBackwardLimitSwitch = Motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsBackwardLimitSwitch.enableLimitSwitch(false);
+            armsForwardLimitSwitch = Motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsForwardLimitSwitch.enableLimitSwitch(false);
+            armsEncoder.setPosition(0);
+        }
+
+        Motor.setOpenLoopRampRate(0.1);
+        Motor.setSmartCurrentLimit(40);
+        
+
         System.out.println(Motor + "Configurated");
     }
 
@@ -131,48 +162,67 @@ public class Intake
     // TODO This looks like a setRollerDirection() method, should it be renamed
     // The setRollerSpeed() method should call the set() method of the rollerMotor
     // we dont currenly need a setRollerSpeed() becuase IntakeSpeed is a constant
-    private void setRollerDirection(RollerDirection rollerSpeed)
+    private void setDirection(CANSparkMax Motor, RollerDirection direction)
     {
-        rollerMotor.set(rollerSpeed.position); //".set" sets the speed, it has to be between 1.0 and -1.0
+        Motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
     }
 
     //not getters and setters?
     public void outtakeRoller()
     {
-        setRollerDirection(RollerDirection.kOut);
+        setDirection(rollerMotor, RollerDirection.kOut);
         System.out.println("Roller out");
     }
     
     public void intakeRoller()
     {
-        setRollerDirection(RollerDirection.kIn);
+        setDirection(rollerMotor, RollerDirection.kIn);
         System.out.println("Roller in");
     }
 
     public void turnOffRoller()
     {
-        setRollerDirection(RollerDirection.kOff);
+        setDirection(rollerMotor, RollerDirection.kOff);
         System.out.println("Roller Off");
     }
 
-    public void moveArmOut()
+    public void moveArmOut() //FELLA MOVES 8 INCHES
+    //The motor has a diameter of .49in and a circumference of 1.54in
+    //to move 8in it needs to spin roughly 5.2 times
     {
-        
+        //armsEncoder.setPositionConversionFactor();
+        System.out.println("Moving arms out...");
+        setDirection(armsMotor, RollerDirection.kIn);
+        while(armsEncoder.getPosition() <= 5.2) //Both getPostion and 5.1 SHOULD be in the unit of rotations
+        {
+            System.out.println("moving");
+        }
+        setDirection(armsMotor, RollerDirection.kOff);
+        System.out.println("Arms out!");
+        armPosition = ArmPosition.kOut;
     }
 
-    public void moveArmIn()
+    public void moveArmIn() //FELLA MOVES 8 INCHES
     {
-
+        System.out.println("Moving arms In...");
+        setDirection(armsMotor, RollerDirection.kOut);
+        while(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
+        {
+            System.out.println("moving");
+        }
+        setDirection(armsMotor, RollerDirection.kOff);
+        System.out.println("Arms in!");
+        armPosition = ArmPosition.kIn;
     } 
 
     public void updateArmPosition(ArmPosition armPosition)
     {
-        
+        //don't know how worthwile this is when I can just armPosition = ArmPosition.kIn;
     }
 
-    public double MeasureRollerSpeed()
+    public double MeasureMotorSpeed(CANSparkMax Motor)
     {
-        return(1); //find the rollers current speed and return it??
+        return(Motor.get()); 
     }
 
     public String toString()
@@ -203,12 +253,19 @@ public class Intake
             intakeRoller();
             TimeUnit.SECONDS.sleep(2);
             turnOffRoller();
-            //System.out.println(this.toString());
         }
         catch(InterruptedException ex)
         {
             ex.printStackTrace();
         }
         
+    }
+
+    public void TestArms()
+    {
+        System.out.println("Starting");
+        moveArmOut();
+        moveArmIn();
+        System.out.println("Complete");
     }
 }
