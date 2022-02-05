@@ -17,33 +17,24 @@ public class OperatorController extends Logitech
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
-
-
     
-
-    
-
-    // *** CLASS CONSTRUCTOR ***
-    
-
-    // *** CLASS & INSTANCE METHODS ***
-    public enum OperatorButtonAction
+    // *** INNER ENUMS and INNER CLASSES ***
+    public static enum OperatorButtonAction
     {
         kShoot(Button.k1),
-        // kAutoAim(Button.kHandleSide),
+        // kAutoAim(Button.k2),
 
-        // kOffTarget(Button.kHandleBottomLeft),
-        // kOnTarget(Button.kHandleBottomRight),
-        // // kNoAction(Button.kHandleTopLeft),
-        // // kNoAction(Button.kHandleTopRight),
+        // kOffTarget(Button.k3),
+        // kOnTarget(Button.k4),
+        // // kNoAction(Button.k5),
+        // // kNoAction(Button.k6),
 
-        // // kNoAction(Button.kOuterTop),
-        // // kNoAction(Button.kInnerTop),
-        // kFlywheelOverride(Button.kOuterMiddle),
-        // kShooterOverride(Button.kInnerMiddle),
-        // kWinch(Button.kOuterBottom),
-        // kShuttleOverride(Button.kInnerBottom) 
+        // // kNoAction(Button.k7),
+        // // kNoAction(Button.k8),
+        // kFlywheelOverride(Button.k9),
+        // kShooterOverride(Button.k10),
+        // kWinch(Button.k11),
+        // kShuttleOverride(Button.k12) 
         ;
 
         public final Button button;
@@ -54,7 +45,7 @@ public class OperatorController extends Logitech
         }
     }
 
-    public enum OperatorAxisAction
+    public static enum OperatorAxisAction
     {
         // kNoAction(Axis.kXAxis, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         kShroud(Axis.kYAxis, 0.2, 0.0, 1.0, true, AxisScale.kLinear),
@@ -79,18 +70,26 @@ public class OperatorController extends Logitech
         }
     }
 
+    // *** CLASS CONSTRUCTOR ***
     public OperatorController(int port)
     {
         super(port);
 
         System.out.println(fullClassName + " : Constructor Started");
 
+        init();
+        
+        System.out.println(fullClassName + ": Constructor Finished");
+    }
+
+    // *** CLASS & INSTANCE METHODS ***
+    public void init()
+    {
         for(OperatorAxisAction action : OperatorAxisAction.values())
         {
             setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
         }
         //createRumbleEvent(60.0, 1.0, 0.5, 0.5);
-        System.out.println(fullClassName + ": Constructor Finished");
     }
 
     @Deprecated

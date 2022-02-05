@@ -19,8 +19,6 @@ public class DriverController extends Xbox
     
 
     // *** INNER ENUMS and INNER CLASSES ***
-    // TODO: make the following enums static
-    //Done
     public static enum DriverButtonAction
     {
         // kRaiseArms(Button.kA),
@@ -51,7 +49,7 @@ public class DriverController extends Xbox
         }
     }
     
-    public enum DriverAxisAction
+    public static enum DriverAxisAction
     {
         // kNoAction(Axis.kLeftX, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         kMove(Axis.kLeftY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
@@ -81,7 +79,7 @@ public class DriverController extends Xbox
         } 
     }
 
-    public enum DriverPOVAction
+    public static enum DriverPOVAction
     {
         kShiftingDown(180),
         kShiftingUp(0)
@@ -102,8 +100,16 @@ public class DriverController extends Xbox
         super(port);
 
         System.out.println(fullClassName + " : Constructor Started");
+        
+        init();
 
-        // TODO: Create an init() method and put the following loop and createRumbleEvent() in that method
+        System.out.println(fullClassName + ": Constructor Finished");
+    }
+
+    // *** CLASS & INSTANCE METHODS *** 
+
+    public void init()
+    {
         // loop to set the defaults for every axis
         for(DriverAxisAction action : DriverAxisAction.values())
         {
@@ -118,14 +124,8 @@ public class DriverController extends Xbox
         createRumbleEvent(3.0, 0.25, 1.0, 1.0);
         createRumbleEvent(2.0, 0.25, 1.0, 1.0);
         createRumbleEvent(1.0, 0.25, 1.0, 1.0);
-
-        System.out.println(fullClassName + ": Constructor Finished");
-    }
-
-    // *** CLASS & INSTANCE METHODS ***   
-
-    // TODO: create the init() method here, place the loop in here and call createRumbleEvent()
-
+    }  
+   
 
     @Deprecated
     public double getRawAxis(Axis axis)
