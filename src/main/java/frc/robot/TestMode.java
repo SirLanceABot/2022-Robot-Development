@@ -2,8 +2,6 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.components.Intake;
-
 public class TestMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();

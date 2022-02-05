@@ -101,14 +101,14 @@ public class DriverController extends Xbox
 
         System.out.println(fullClassName + " : Constructor Started");
         
-        init();
+        initDriverController();
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
     // *** CLASS & INSTANCE METHODS *** 
 
-    public void init()
+    public void initDriverController()
     {
         // loop to set the defaults for every axis
         for(DriverAxisAction action : DriverAxisAction.values())

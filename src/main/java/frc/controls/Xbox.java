@@ -4,8 +4,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -133,14 +131,14 @@ public class Xbox extends Joystick
 
         System.out.println(fullClassName + " : Constructor Started");
 
-        init();
+        initXbox();
        
         System.out.println(fullClassName + ": Constructor Finished"); 
     }
 
     
     // *** CLASS & INSTANCE METHODS *** 
-    public void init()
+    public void initXbox()
     {
         for(int index = 0; index <= NUMBER_OF_AXES - 1; index++)
         {
@@ -318,28 +316,43 @@ public class Xbox extends Joystick
         boolean isNoOverlap = true;
         double endTime = startTime - duration;
         double reEndTime = 0;
+        int fail = 0;
 
         for (RumbleEvent rumbleEvent : rumbleEvents)
         {
             reEndTime = rumbleEvent.startTime - rumbleEvent.duration;
             if (rumbleEvent.startTime >= startTime && startTime > reEndTime)
+            {   
                 isNoOverlap = false;
-            else if (rumbleEvent.startTime >= endTime && endTime > reEndTime)
+                fail = 1;
+            }    
+            else if (rumbleEvent.startTime > endTime && endTime > reEndTime)
+            {   
                 isNoOverlap = false;
+                fail = 2;
+            }  
             else if (startTime >= rumbleEvent.startTime && rumbleEvent.startTime > endTime)
+            {   
                 isNoOverlap = false;
-            else if (startTime >= reEndTime && reEndTime > endTime)
+                fail = 3;
+            }  
+            else if (startTime > reEndTime && reEndTime > endTime)
+            {   
                 isNoOverlap = false;
+                fail = 4;
+            }  
         }
 
         if (isNoOverlap)
         {
             rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
+            rumbleCounter++;
             Collections.sort(rumbleEvents, Collections.reverseOrder());
+            System.out.println("Rumble Event Created: " + fail + " " + startTime + " " + duration + " " + leftPower + " " + rightPower);
         }
         else 
         {
-            System.out.println("Rumble Event Overlap: " + (new RumbleEvent(startTime, duration, leftPower, rightPower)));
+            System.out.println("Rumble Event Overlap: " + fail + " " + startTime + " " + duration + " " + leftPower + " " + rightPower);
         }
     }
 

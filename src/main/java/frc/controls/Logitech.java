@@ -70,7 +70,7 @@ public class Logitech extends Joystick
     private final double[] axisMinOutput = new double[NUMBER_OF_AXES];
     private final boolean[] axisIsFlipped = new boolean[NUMBER_OF_AXES];
     private final AxisScale[] axisScale = new AxisScale[NUMBER_OF_AXES];
-    private final Button[] buttons = new Button[11];
+    //private final Button[] buttons = new Button[11];
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -80,14 +80,14 @@ public class Logitech extends Joystick
 
         System.out.println(fullClassName + " : Constructor Started");
       
-        init();
+        initLogitech();
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
 
     // *** CLASS & INSTANCE METHODS *** 
-    public void init()
+    public void initLogitech()
     {
         for(int index = 0; index <= NUMBER_OF_AXES - 1; index++)
         {

@@ -2,10 +2,6 @@ package frc.controls;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.constants.Port;
-
-//import java.util.ArrayList;
-
 public class OperatorController extends Logitech
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -77,13 +73,13 @@ public class OperatorController extends Logitech
 
         System.out.println(fullClassName + " : Constructor Started");
 
-        init();
+        initOperatorController();
         
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
     // *** CLASS & INSTANCE METHODS ***
-    public void init()
+    public void initOperatorController()
     {
         for(OperatorAxisAction action : OperatorAxisAction.values())
         {

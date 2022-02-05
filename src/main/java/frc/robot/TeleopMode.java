@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.controls.DriverController;
+
 public class TeleopMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -14,7 +16,7 @@ public class TeleopMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -28,7 +30,7 @@ public class TeleopMode implements ModeTransition
      */
     public void init()
     {
-
+        DRIVER_CONTROLLER.resetRumbleCounter();
     }
 
     /**
@@ -36,7 +38,7 @@ public class TeleopMode implements ModeTransition
      */
     public void periodic()
     {
-
+        DRIVER_CONTROLLER.checkRumbleEvent();
     }
 
     /**
