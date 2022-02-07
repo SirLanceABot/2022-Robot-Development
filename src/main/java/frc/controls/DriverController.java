@@ -52,7 +52,8 @@ public class DriverController extends Xbox
     public static enum DriverAxisAction
     {
         // kNoAction(Axis.kLeftX, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
-        kMove(Axis.kLeftY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
+        kMoveY(Axis.kLeftY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
+        kMoveX (Axis.kLeftX, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
         kRotate(Axis.kRightX, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),

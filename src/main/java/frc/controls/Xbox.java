@@ -384,26 +384,26 @@ public class Xbox extends Joystick
     }
 
     // TODO: Fix this toString() method
-    // @Override
-    // public String toString()
-    // {
-    //     String str = "";
+    @Override
+    public String toString()
+    {
+        String str = "";
 
-    //     for (int index = 1; index <= 10; index++)
-    //     { 
-    //         if (getRawButton(index)) 
-    //             str = str + "1 ";
-    //         else
-    //             str = str + "0 ";
-    //     }
+        str = str + "A" + " " + (getRawButton(Button.kA) ? " 1" : " 0") + "\n";
+        str = str + "B" + " " + (getRawButton(Button.kB) ? " 1" : " 0") + "\n";
+        str = str + "X" + " " + (getRawButton(Button.kX) ? " 1" : " 0") + "\n";
+        str = str + "Y" + " " + (getRawButton(Button.kY) ? " 1" : " 0") + "\n";
+        str = str + "Left Bumper" + " " + (getRawButton(Button.kLeftBumper) ? " 1" : " 0") + "\n";
+        str = str + "Right Bumper" + " " + (getRawButton(Button.kRightBumper) ? " 1" : " 0") + "\n";
+        str = str + "Back" + " " + (getRawButton(Button.kBack) ? " 1" : " 0") + "\n";
+        str = str + "Start" + " " + (getRawButton(Button.kStart) ? " 1" : " 0") + "\n";
+        str = str + "Left Stick" + " " + (getRawButton(Button.kLeftStick) ? " 1" : " 0") + "\n";
+        str = str + "Right Stick" + " " + (getRawButton(Button.kRightStick) ? " 11" : " 0") + "\n";
 
-    //     for (int index = 0; index <= 5; index++)
-    //     {
-    //         str = str + getRawAxis(index);
-    //     }
+        
 
-    //     return str;
-    // }
+        return str;
+    }
 
     
     
