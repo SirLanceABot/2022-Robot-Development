@@ -118,38 +118,38 @@ public class Intake
     //create a configRollerMotor() method to configure the roller motor
     //It has become configMotor() because there are two motors that need configuring
     //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
-    public static void configMotor(CANSparkMax Motor)
+    public static void configMotor(CANSparkMax motor)
     {
-        System.out.println("configurating " + Motor);
+        System.out.println("configurating " + motor);
 
-        Motor.restoreFactoryDefaults();
-        Motor.setInverted(true);
-        Motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+        motor.restoreFactoryDefaults();
+        motor.setInverted(true);
+        motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
 
-        Motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        Motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        Motor.setSoftLimit(SoftLimitDirection.kForward, 0);
-        Motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+        motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        motor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        motor.enableSoftLimit(SoftLimitDirection.kForward, false);
 
-        if(Motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
+        if(motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
         {
             /*armsReverseLimitSwitch = Motor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
             armsReverseLimitSwitch.enableLimitSwitch(false);
             armsForwardLimitSwitch = Motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
             armsForwardLimitSwitch.enableLimitSwitch(false);
             armsEncoder.setPosition(0);*/
-            armsBackwardLimitSwitch = Motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsBackwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
             armsBackwardLimitSwitch.enableLimitSwitch(false);
-            armsForwardLimitSwitch = Motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsForwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
             armsForwardLimitSwitch.enableLimitSwitch(false);
             armsEncoder.setPosition(0);
         }
 
-        Motor.setOpenLoopRampRate(0.1);
-        Motor.setSmartCurrentLimit(40);
+        motor.setOpenLoopRampRate(0.1);
+        motor.setSmartCurrentLimit(40);
         
 
-        System.out.println(Motor + "Configurated");
+        System.out.println(motor + "Configurated");
     }
 
 
@@ -162,12 +162,13 @@ public class Intake
     // TODO This looks like a setRollerDirection() method, should it be renamed
     // The setRollerSpeed() method should call the set() method of the rollerMotor
     // we dont currenly need a setRollerSpeed() becuase IntakeSpeed is a constant
-    private void setDirection(CANSparkMax Motor, RollerDirection direction)
+    private void setDirection(CANSparkMax motor, RollerDirection direction)
     {
-        Motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
+        motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
     }
 
     //not getters and setters?
+    //7:1 gearbox
     public void outtakeRoller()
     {
         setDirection(rollerMotor, RollerDirection.kOut);
@@ -187,13 +188,14 @@ public class Intake
     }
 
     public void moveArmOut() //FELLA MOVES 8 INCHES
+    //10:1 gear ratio, pulley system 40:24 gear teeth, total gear ratio is 50:3
     //The motor has a diameter of .49in and a circumference of 1.54in
-    //to move 8in it needs to spin roughly 5.2 times
+    //to move 8in it needs to spin 5.19480519481 times
     {
         //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
-        setDirection(armsMotor, RollerDirection.kIn);
-        while(armsEncoder.getPosition() <= 5.2) //Both getPostion and 5.1 SHOULD be in the unit of rotations
+        setDirection(armsMotor, RollerDirection.kOut);
+        while(armsEncoder.getPosition() <= 5.19480519481*50/3) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
             System.out.println("moving");
         }
@@ -205,7 +207,7 @@ public class Intake
     public void moveArmIn() //FELLA MOVES 8 INCHES
     {
         System.out.println("Moving arms In...");
-        setDirection(armsMotor, RollerDirection.kOut);
+        setDirection(armsMotor, RollerDirection.kIn);
         while(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
         {
             System.out.println("moving");
@@ -220,9 +222,9 @@ public class Intake
         //don't know how worthwile this is when I can just armPosition = ArmPosition.kIn;
     }
 
-    public double MeasureMotorSpeed(CANSparkMax Motor)
+    public double MeasureMotorSpeed(CANSparkMax motor)
     {
-        return(Motor.get()); 
+        return(motor.get()); 
     }
 
     public String toString()
