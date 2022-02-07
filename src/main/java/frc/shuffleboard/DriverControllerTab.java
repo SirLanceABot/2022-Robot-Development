@@ -3,9 +3,7 @@ package frc.shuffleboard;
 import java.lang.invoke.MethodHandles;
 
 import frc.controls.DriverController;
-
-// TODO: delete the following import
-import frc.constants.Port;
+import frc.robot.RobotContainer;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -13,10 +11,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-
-// TODO: import the following
-// import edu.wpi.first.util.sendable.SendableRegistry;
 
 public class DriverControllerTab 
 {
@@ -42,16 +36,12 @@ public class DriverControllerTab
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // TODO: make the following final
-    private AxisObjects leftXObjects = new AxisObjects();
-    private AxisObjects leftYObjects = new AxisObjects();
-    private AxisObjects rightXObjects = new AxisObjects();
-    private AxisObjects rightYObjects = new AxisObjects();
+    private final AxisObjects leftXObjects = new AxisObjects();
+    private final AxisObjects leftYObjects = new AxisObjects();
+    private final AxisObjects rightXObjects = new AxisObjects();
+    private final AxisObjects rightYObjects = new AxisObjects();
 
-    // TODO: change the following 
-    private DriverController driverController = new DriverController(Port.Controller.DRIVER);
-    // to this, note the change in name to all caps
-    // private final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+    private final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
 
     private ShuffleboardTab driverControllerTab = Shuffleboard.getTab("Driver Controller");
 
@@ -61,29 +51,29 @@ public class DriverControllerTab
     {
         System.out.println(fullClassName + " : Constructor Started");
 
-        // TODO: create an init() method and place the following in that method
-        createAxisWidgets(DriverController.Axis.kLeftX, "Left X", leftXObjects, 0);
-        createAxisWidgets(DriverController.Axis.kLeftY, "Left Y", leftYObjects, 5);
-        createAxisWidgets(DriverController.Axis.kRightX, "Right X", rightXObjects, 10);
-        createAxisWidgets(DriverController.Axis.kRightY, "Right Y", rightYObjects, 15);
+        initDriverControllerTab();
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
-
     // *** CLASS & INSTANCE METHODS ***
+    private void initDriverControllerTab()
+    {
+        //createAxisWidgets(DriverController.DriverAxisAction.kMoveY, "Left X", leftXObjects, 0);
+       // createAxisWidgets(DriverController.DriverAxisAction.kMoveX, "Left Y", leftYObjects, 5);
+        createAxisWidgets(DriverController.DriverAxisAction.kRotate, "Right X", rightXObjects, 10);
+        // createAxisWidgets(DriverController.DriverAxisAction.kRightY, "Right Y", rightYObjects, 15);
+    }
 
-    // TODO: create the init() method here
-
-    private void createAxisWidgets(DriverController.Axis axis, String name, AxisObjects axisObjects, int column)
+    private void createAxisWidgets(DriverController.DriverAxisAction axis, String name, AxisObjects axisObjects, int column)
     {
         int row = 0;
         int width = 4;
         int height = 2;
 
         // Get the current axis settings on the Driver Controller for the given axis
-        DriverController.AxisSettings axisSettings = driverController.new AxisSettings();
-        axisSettings = driverController.getAxisSettings(axis);
+        DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
+        //axisSettings = DRIVER_CONTROLLER.getAxisSettings(axis);
 
         // Create the text box to set the deadzone of the axis
         axisObjects.deadzoneEntry = createTextBox(name + " Deadzone", Double.toString(axisSettings.axisDeadzone), column, row, width, height);
@@ -115,9 +105,7 @@ public class DriverControllerTab
             .withWidget(BuiltInWidgets.kTextView)   // specifies type of widget: "kTextView"
             .withPosition(column, row)  // sets position of widget
             .withSize(width, height)    // sets size of widget
-            .getEntry();    // TODO: ask what getEntry does
-
-            
+            .getEntry();
     }
 
     /**
@@ -147,7 +135,7 @@ public class DriverControllerTab
             .withSize(width, height);
     }
 
-    private void createSplitButtonChooser(SendableChooser<Boolean> splitButtonChooser, String title, boolean defaultValue, int column, int row, int width, int height)  // TODO: ask about this entire mehtod
+    private void createSplitButtonChooser(SendableChooser<Boolean> splitButtonChooser, String title, boolean defaultValue, int column, int row, int width, int height)
     {
         SendableRegistry.add(splitButtonChooser, title);
         SendableRegistry.setName(splitButtonChooser, title);
@@ -163,12 +151,21 @@ public class DriverControllerTab
 
     private DriverController.AxisSettings getAxisSettingsFromShuffleboard(AxisObjects axisObjects)
     {
-        DriverController.AxisSettings axisSettings = driverController.new AxisSettings();   // TODO: ask about ".new"
+        DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
 
-        axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1")); // TODO: try getDouble
-        axisSettings.axisMinOutput = Double.valueOf(axisObjects.minOutputEntry.getString("0.0"));
-        axisSettings.axisMaxOutput = Double.valueOf(axisObjects.maxOutputEntry.getString("1.0"));
-        axisSettings.axisIsFlipped = axisObjects.isFlipped.getSelected();   // TODO: ask what getSelected is doing here
+        // axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1")); // TODO: try getDouble
+
+        axisSettings.axisDeadzone = axisObjects.deadzoneEntry.getDouble(0.1);
+
+        // axisSettings.axisMinOutput = Double.valueOf(axisObjects.minOutputEntry.getString("0.0"));
+
+        axisSettings.axisMinOutput = axisObjects.minOutputEntry.getDouble(0.0);
+
+        // axisSettings.axisMaxOutput = Double.valueOf(axisObjects.maxOutputEntry.getString("1.0"));
+
+        axisSettings.axisMaxOutput = axisObjects.maxOutputEntry.getDouble(1.0);
+
+        axisSettings.axisIsFlipped = axisObjects.isFlipped.getSelected();
         axisSettings.axisScale = axisObjects.axisScaleComboBox.getSelected();
 
         return axisSettings;
@@ -176,18 +173,18 @@ public class DriverControllerTab
 
     public void setDriverControllerAxisSettings()
     {
-        DriverController.AxisSettings axisSettings = driverController.new AxisSettings();
+        DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
 
         axisSettings = getAxisSettingsFromShuffleboard(leftXObjects);
-        driverController.setAxisSettings(DriverController.Axis.kLeftX, axisSettings);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kLeftX, axisSettings);
 
         axisSettings = getAxisSettingsFromShuffleboard(leftYObjects);
-        driverController.setAxisSettings(DriverController.Axis.kLeftY, axisSettings);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kLeftY, axisSettings);
 
         axisSettings = getAxisSettingsFromShuffleboard(rightXObjects);
-        driverController.setAxisSettings(DriverController.Axis.kRightX, axisSettings);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kRightX, axisSettings);
 
         axisSettings = getAxisSettingsFromShuffleboard(rightYObjects);
-        driverController.setAxisSettings(DriverController.Axis.kRightY, axisSettings);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kRightY, axisSettings);
     }
 }

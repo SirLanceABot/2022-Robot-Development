@@ -14,11 +14,9 @@ public class MainShuffleboard
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // TODO: remove the following
-    private DriverControllerTab driverControllerTab = new DriverControllerTab();
-    
-    // TODO: instead use the following statement, notice the new name is all caps
-    // private static final DriverControllerTab DRIVER_CONTROLLER_TAB = RobotContainer.DRIVER_CONTROLLER_TAB;
+    private static final DriverControllerTab DRIVER_CONTROLLER_TAB = new DriverControllerTab();
+    private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = new OperatorControllerTab();
+
 
     
     // *** CLASS CONSTRUCTOR ***
@@ -34,7 +32,11 @@ public class MainShuffleboard
     // DRIVER CONTROLLER TAB
     public void setDriverControllerSettings()
     {
-       driverControllerTab.setDriverControllerAxisSettings();
+       DRIVER_CONTROLLER_TAB.setDriverControllerAxisSettings();
     }
     
+    public void setOperatorControllerSettings()
+    {
+        OPERATOR_CONTROLLER_TAB.setOperatorControllerAxisSettings();
+    }
 }
