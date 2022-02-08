@@ -26,11 +26,11 @@ public class OperatorController extends Logitech
         // // kNoAction(Button.k6),
 
         // // kNoAction(Button.k7),
-        // // kNoAction(Button.k8),
-        // kFlywheelOverride(Button.k9),
-        // kShooterOverride(Button.k10),
-        // kWinch(Button.k11),
-        // kShuttleOverride(Button.k12) 
+        kShuttle2ndStage(Button.k4),
+        kShuttle1stStage(Button.k3),
+        kClimbOverride(Button.k9),
+        kAutoClimb(Button.k12),
+        kShuttleOverride(Button.k11) 
         ;
 
         public final Button button;
@@ -45,7 +45,7 @@ public class OperatorController extends Logitech
     {
         // kNoAction(Axis.kXAxis, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         kShroud(Axis.kYAxis, 0.2, 0.0, 1.0, true, AxisScale.kLinear),
-        kTurret(Axis.kZAxis, 0.25, 0.0, 1.0, false, AxisScale.kLinear),
+        //kTurret(Axis.kZAxis, 0.25, 0.0, 1.0, false, AxisScale.kLinear),
         kShooterPower(Axis.kSlider, 0.1, 0.0, 1.0, true, AxisScale.kLinear);
 
         public final Axis axis;

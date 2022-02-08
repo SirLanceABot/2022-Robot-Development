@@ -275,44 +275,30 @@ public class Logitech extends Joystick
 
     
     
-    // TODO: Clean up the toString() method
+
     public String toString()
     {
         String str = "";
 
-        // Concatenates the button values to the string
-        str = str + (getRawButton(1) ? " 1" : " 0");
-        str = str + (getRawButton(2) ? " 1" : " 0");
-        str = str + (getRawButton(3) ? " 1" : " 0");
-        str = str + (getRawButton(4) ? " 1" : " 0");
-        str = str + (getRawButton(5) ? " 1" : " 0");
-        str = str + (getRawButton(6) ? " 1" : " 0");
-        str = str + (getRawButton(7) ? " 1" : " 0");
-        str = str + (getRawButton(8) ? " 1" : " 0");
-        str = str + (getRawButton(9) ? " 1" : " 0");
-        str = str + (getRawButton(10) ? " 1" : " 0");
-        str = str + (getRawButton(11) ? " 1" : " 0");
-        str = str + (getRawButton(12) ? " 1" : " 0");
-     
-        // for(Button button: Button.values())
-        // {
-        //     if(getRawButton(button))
-        //     {
-        //         str = str + " 1";
-        //     }
-        //     else
-        //     {
-        //         str = str + " 0";
-        //     }
-        // }
-        
-        // Concatenates the axis values to the stirng
-        str = str + String.format(" % 3.2f % 3.2f % 3.2f % 3.2f", getRawAxis(0), getRawAxis(1), getRawAxis(2), getRawAxis(3));
+        //Buttons
+        str = str + "Button 1" + " " + (getRawButton(Button.k1) ? " 1" : " 0") + "\n";
+        str = str + "Button 2" + " " + (getRawButton(Button.k2) ? " 1" : " 0") + "\n";
+        str = str + "Button 3" + " " + (getRawButton(Button.k3) ? " 1" : " 0") + "\n";
+        str = str + "Button 4" + " " + (getRawButton(Button.k4) ? " 1" : " 0") + "\n";
+        str = str + "Button 5" + " " + (getRawButton(Button.k5) ? " 1" : " 0") + "\n";
+        str = str + "Button 6" + " " + (getRawButton(Button.k6) ? " 1" : " 0") + "\n";
+        str = str + "Button 7" + " " + (getRawButton(Button.k7) ? " 1" : " 0") + "\n";
+        str = str + "Button 8" + " " + (getRawButton(Button.k8) ? " 1" : " 0") + "\n";
+        str = str + "Button 9" + " " + (getRawButton(Button.k9) ? " 1" : " 0") + "\n";
+        str = str + "Button 10" + " " + (getRawButton(Button.k10) ? " 1" : " 0") + "\n";
+        str = str + "Button 11" + " " + (getRawButton(Button.k11) ? " 1" : " 0") + "\n";
+        str = str + "Button 12" + " " + (getRawButton(Button.k12) ? " 1" : " 0") + "\n";
 
-        // for(Axis axis: Axis.values())
-        // {
-        //     str = str + String.format("% 3.2f", getRawAxis(axis));
-        // }
+        //Axis
+        str = str + "X Axis" + " " + String.format("%3.2f", getRawAxis(Axis.kXAxis)) + "\n";
+        str = str + "Y Axis" + " " + String.format("%3.2f", getRawAxis(Axis.kYAxis)) + "\n";
+        str = str + "Z Axis" + " " + String.format("%3.2f", getRawAxis(Axis.kZAxis)) + "\n";
+        str = str + "Slider" + " " + String.format("%3.2f", getRawAxis(Axis.kSlider)) + "\n";
 
         return str;
     }

@@ -21,23 +21,25 @@ public class DriverController extends Xbox
     // *** INNER ENUMS and INNER CLASSES ***
     public static enum DriverButtonAction
     {
+        // kTurnOnRobot(Button.kStart)
         // kRaiseArms(Button.kA),
         // kLowerArms(Button.kB),
 
-        kReverseDirection(Button.kB),
+        // kReverseDirection(Button.kB),
 
 
-        kIntakeUp(Button.kY),
-        kIntakeDown(Button.kX),
+        // kIntakeUp(Button.kY),
+        // kIntakeDown(Button.kX),
 
-        kIntakeReverse(Button.kLeftBumper),
-        kIntakeO(Button.kRightBumper),
+
+        kIntakeReverse(Button.kRightBumper),
+        kIntakeOn(Button.kLeftBumper),
 
         // kNoAction(Button.kBack),
         // kNoAction(Button.kStart),
 
-        kDriveBoost(Button.kLeftStick),
-        kShiftingUp(Button.kRightStick)
+        // kDriveBoost(Button.kLeftStick),
+        kExtendIntake(Button.kRightStick)
         // kNoAction(Button.kRightStick),
         ;
 
@@ -58,8 +60,8 @@ public class DriverController extends Xbox
         kRotate(Axis.kRightX, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
-        kUnspoolWinch(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
-        kSpoolWinch(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
+        // kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
+        kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
         ;
 
         public final Axis axis;

@@ -383,12 +383,12 @@ public class Xbox extends Joystick
         rumbleCounter = 0;
     }
 
-    // TODO: Fix this toString() method
     @Override
     public String toString()
     {
         String str = "";
 
+        //buttons
         str = str + "A" + " " + (getRawButton(Button.kA) ? " 1" : " 0") + "\n";
         str = str + "B" + " " + (getRawButton(Button.kB) ? " 1" : " 0") + "\n";
         str = str + "X" + " " + (getRawButton(Button.kX) ? " 1" : " 0") + "\n";
@@ -398,9 +398,15 @@ public class Xbox extends Joystick
         str = str + "Back" + " " + (getRawButton(Button.kBack) ? " 1" : " 0") + "\n";
         str = str + "Start" + " " + (getRawButton(Button.kStart) ? " 1" : " 0") + "\n";
         str = str + "Left Stick" + " " + (getRawButton(Button.kLeftStick) ? " 1" : " 0") + "\n";
-        str = str + "Right Stick" + " " + (getRawButton(Button.kRightStick) ? " 11" : " 0") + "\n";
+        str = str + "Right Stick" + " " + (getRawButton(Button.kRightStick) ? " 1" : " 0") + "\n";
 
-        
+        //axis
+        str = str + "Left X" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftX)) + "\n";
+        str = str + "Left Y" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftY)) + "\n";
+        str = str + "Left Trigger" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftTrigger)) + "\n";
+        str = str + "Right Trigger" + " " + String.format("%3.2f", getRawAxis(Axis.kRightTrigger)) + "\n";
+        str = str + "Right X" + " " + String.format("%3.2f", getRawAxis(Axis.kRightX)) + "\n";
+        str = str + "Right Y" + " " + String.format("%3.2f", getRawAxis(Axis.kRightY)) + "\n";
 
         return str;
     }
