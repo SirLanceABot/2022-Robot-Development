@@ -8,6 +8,7 @@ import frc.components.Intake;
 import frc.constants.Port;
 import frc.controls.DriverController;
 import frc.controls.OperatorController;
+import frc.shuffleboard.MainShuffleboard;
 
 public class RobotContainer 
 {
@@ -29,7 +30,7 @@ public class RobotContainer
     public static DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
     public static OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
 
-
+    public static MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
 
     // *** CLASS CONSTRUCTOR ***
     private RobotContainer()

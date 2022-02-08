@@ -3,6 +3,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import frc.controls.DriverController;
+import frc.shuffleboard.MainShuffleboard;
 
 public class TeleopMode implements ModeTransition
 {
@@ -18,6 +19,7 @@ public class TeleopMode implements ModeTransition
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
 
+    private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
 
     // *** CLASS CONSTRUCTOR ***
     public TeleopMode()
