@@ -72,11 +72,11 @@ public class Intake
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    //private static CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rollerMotor = new CANSparkMax(2, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^that fella is for when I'm testing with a boxbot
 
     // TODO: add the modifier final to the rollerMotor
-    private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    //private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
     /*private static CANEncoder armsEncoder = armsMotor.getEncoder();
@@ -101,7 +101,7 @@ public class Intake
 
 
     // *** CLASS CONSTRUCTOR ***
-    Intake()
+    public Intake()
     {
         System.out.println("Intake Created");
         configMotor(rollerMotor);
@@ -194,10 +194,12 @@ public class Intake
     {
         //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
-        setDirection(armsMotor, RollerDirection.kOut);
+        setDirection(armsMotor, RollerDirection.kIn);
         while(armsEncoder.getPosition() <= 5.19480519481*50/3) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
-            System.out.println("moving");
+            
+            System.out.println(armsEncoder.getPosition());
+            System.out.println("moving out");
         }
         setDirection(armsMotor, RollerDirection.kOff);
         System.out.println("Arms out!");
@@ -210,7 +212,9 @@ public class Intake
         setDirection(armsMotor, RollerDirection.kIn);
         while(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
         {
-            System.out.println("moving");
+            
+            System.out.println(armsEncoder.getPosition());
+            System.out.println("moving in");
         }
         setDirection(armsMotor, RollerDirection.kOff);
         System.out.println("Arms in!");

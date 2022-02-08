@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.CargoManager;
 import frc.components.Drivetrain;
+import frc.components.Intake;
 import frc.constants.Port;
 import frc.controls.DriverController;
 import frc.controls.OperatorController;
@@ -23,6 +24,7 @@ public class RobotContainer
     // *** CLASS & INSTANCE VARIABLES ***
     public static Drivetrain DRIVETRAIN = new Drivetrain();
     public static CargoManager CARGO_MANAGER = new CargoManager();
+    public static Intake INTAKE = new Intake();
     
     public static DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
     public static OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
