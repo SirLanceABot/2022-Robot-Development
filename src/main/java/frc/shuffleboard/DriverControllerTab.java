@@ -36,10 +36,10 @@ public class DriverControllerTab
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private final AxisObjects leftXObjects = new AxisObjects();
-    private final AxisObjects leftYObjects = new AxisObjects();
+    private final AxisObjects moveXObjects = new AxisObjects();
+    private final AxisObjects moveYObjects = new AxisObjects();
     private final AxisObjects rightXObjects = new AxisObjects();
-    private final AxisObjects rightYObjects = new AxisObjects();
+    // private final AxisObjects rightYObjects = new AxisObjects();
 
     private final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
 
@@ -59,10 +59,10 @@ public class DriverControllerTab
     // *** CLASS & INSTANCE METHODS ***
     private void initDriverControllerTab()
     {
-        //createAxisWidgets(DriverController.DriverAxisAction.kMoveY, "Left X", leftXObjects, 0);
-       // createAxisWidgets(DriverController.DriverAxisAction.kMoveX, "Left Y", leftYObjects, 5);
-        createAxisWidgets(DriverController.DriverAxisAction.kRotate, "Right X", rightXObjects, 10);
-        // createAxisWidgets(DriverController.DriverAxisAction.kRightY, "Right Y", rightYObjects, 15);
+        createAxisWidgets(DriverController.DriverAxisAction.kMoveX, "Move X", moveXObjects, 0);
+        createAxisWidgets(DriverController.DriverAxisAction.kMoveY, "Move Y", moveYObjects, 5);
+        createAxisWidgets(DriverController.DriverAxisAction.kRotate, "Rotate", rightXObjects, 10);
+        // createAxisWidgets(DriverController.DriverAxisAction.kRightY, "", rightYObjects, 15);
     }
 
     private void createAxisWidgets(DriverController.DriverAxisAction axis, String name, AxisObjects axisObjects, int column)
@@ -73,7 +73,7 @@ public class DriverControllerTab
 
         // Get the current axis settings on the Driver Controller for the given axis
         DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
-        //axisSettings = DRIVER_CONTROLLER.getAxisSettings(axis);
+        axisSettings = DRIVER_CONTROLLER.getAxisSettings(axis.axis);
 
         // Create the text box to set the deadzone of the axis
         axisObjects.deadzoneEntry = createTextBox(name + " Deadzone", Double.toString(axisSettings.axisDeadzone), column, row, width, height);
@@ -175,16 +175,16 @@ public class DriverControllerTab
     {
         DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
 
-        axisSettings = getAxisSettingsFromShuffleboard(leftXObjects);
-        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kLeftX, axisSettings);
+        axisSettings = getAxisSettingsFromShuffleboard(moveXObjects);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.DriverAxisAction.kMoveX.axis, axisSettings);
 
-        axisSettings = getAxisSettingsFromShuffleboard(leftYObjects);
-        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kLeftY, axisSettings);
+        axisSettings = getAxisSettingsFromShuffleboard(moveYObjects);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.DriverAxisAction.kMoveY.axis, axisSettings);
 
         axisSettings = getAxisSettingsFromShuffleboard(rightXObjects);
-        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kRightX, axisSettings);
+        DRIVER_CONTROLLER.setAxisSettings(DriverController.DriverAxisAction.kRotate.axis, axisSettings);
 
-        axisSettings = getAxisSettingsFromShuffleboard(rightYObjects);
-        DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kRightY, axisSettings);
+        // axisSettings = getAxisSettingsFromShuffleboard(rightYObjects);
+        // DRIVER_CONTROLLER.setAxisSettings(DriverController.Axis.kRightY, axisSettings);
     }
 }
