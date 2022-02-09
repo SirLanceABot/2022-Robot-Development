@@ -99,7 +99,7 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = Constant.INTAKE_SPEED;
+    private static final double intakeSpeed = /*Constant.INTAKE_SPEED*/.1;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -197,7 +197,7 @@ public class Intake
         //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
         setDirection(armsMotor, RollerDirection.kIn);
-        if(armsEncoder.getPosition() <= 5.19480519481*50/3) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        while(armsEncoder.getPosition() < 10/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
             
             System.out.println(armsEncoder.getPosition());

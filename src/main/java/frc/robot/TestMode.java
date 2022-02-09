@@ -21,6 +21,7 @@ public class TestMode implements ModeTransition
     // *** CLASS CONSTRUCTOR ***
     public TestMode()
     {
+
     }
 
     /**
@@ -28,7 +29,7 @@ public class TestMode implements ModeTransition
      */
     public void init()
     {
-
+        INTAKE.moveArmOut();
     }
 
     /**
@@ -36,7 +37,7 @@ public class TestMode implements ModeTransition
      */
     public void periodic()
     {
-        INTAKE.TestArms();
+        
     }
 
     /**
