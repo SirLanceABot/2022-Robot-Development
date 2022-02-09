@@ -21,7 +21,7 @@ public class DriverController extends Xbox
     // *** INNER ENUMS and INNER CLASSES ***
     public static enum DriverButtonAction
     {
-        // kTurnOnRobot(Button.kStart)
+        kTurnOnRobot(Button.kStart),
         // kRaiseArms(Button.kA),
         // kLowerArms(Button.kB),
 
@@ -34,12 +34,12 @@ public class DriverController extends Xbox
 
         kIntakeReverse(Button.kRightBumper),
         kIntakeOn(Button.kLeftBumper),
+        kExtendIntake(Button.kRightStick),
 
         // kNoAction(Button.kBack),
         // kNoAction(Button.kStart),
 
         // kDriveBoost(Button.kLeftStick),
-        kExtendIntake(Button.kRightStick)
         // kNoAction(Button.kRightStick),
         ;
 
