@@ -203,8 +203,8 @@ public class Xbox extends Joystick
      */
     public boolean getRawButton(Button button)
     {
-        if (button == Button.kLeftTrigger || button == Button.kRightTrigger)
-            return getRawAxis(button.value - 10);
+        //if (button == Button.kLeftTrigger || button == Button.kRightTrigger)
+           // return getRawAxis(button.value - 10);
         return super.getRawButton(button.value);
     }
 
