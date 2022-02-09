@@ -41,6 +41,10 @@ public class DriverController extends Xbox
 
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
+
+        // kNoAction(Button.kLeftTrigger),
+        kNoAction(Button.kRightTrigger),
+
         ;
 
         public final Button button;
@@ -105,6 +109,20 @@ public class DriverController extends Xbox
         System.out.println(fullClassName + " : Constructor Started");
         
         initDriverController();
+
+        for(DriverButtonAction dba : DriverButtonAction.values())
+        {
+            if(dba.button == Button.kLeftTrigger || dba.button == Button.kRightTrigger)
+            {
+                for(DriverAxisAction daa : DriverAxisAction.values())
+                {
+                    if(daa.axis == Axis.kLeftTrigger && dba.button == Button.kLeftTrigger)
+                        System.out.println("ERROR - Left Trigger is button and axis");
+                    if(daa.axis == Axis.kRightTrigger && dba.button == Button.kRightTrigger)
+                        System.out.println("ERROR - Right Trigger is button and axis");
+                }
+            }
+        }
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
