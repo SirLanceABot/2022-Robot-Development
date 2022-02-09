@@ -197,7 +197,7 @@ public class Intake
         //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
         setDirection(armsMotor, RollerDirection.kIn);
-        while(armsEncoder.getPosition() <= 5.19480519481*50/3) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        if(armsEncoder.getPosition() <= 5.19480519481*50/3) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
             
             System.out.println(armsEncoder.getPosition());
@@ -212,7 +212,7 @@ public class Intake
     {
         System.out.println("Moving arms In...");
         setDirection(armsMotor, RollerDirection.kIn);
-        while(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
+        if(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
         {
             
             System.out.println(armsEncoder.getPosition());
