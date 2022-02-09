@@ -10,7 +10,7 @@ import frc.controls.DriverController;
 import frc.controls.OperatorController;
 import frc.shuffleboard.MainShuffleboard;
 
-public class RobotContainer 
+public final class RobotContainer 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
@@ -23,19 +23,20 @@ public class RobotContainer
 
     
     // *** CLASS & INSTANCE VARIABLES ***
-    public static Drivetrain DRIVETRAIN = new Drivetrain();
-    public static CargoManager CARGO_MANAGER = new CargoManager();
-    public static Intake INTAKE = new Intake();
+    public static final Drivetrain DRIVETRAIN = new Drivetrain();
+    public static final CargoManager CARGO_MANAGER = new CargoManager();
+    public static final Intake INTAKE = new Intake();
     
-    public static DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
-    public static OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
+    public static final DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
+    public static final OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
 
-    public static MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
+    public static final MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
 
+    
     // *** CLASS CONSTRUCTOR ***
     private RobotContainer()
     {
-  
+        throw new UnsupportedOperationException("This is a utility class!");
     }
 
 
