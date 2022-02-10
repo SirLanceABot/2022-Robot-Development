@@ -197,15 +197,17 @@ public class Intake
         //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
         setDirection(armsMotor, RollerDirection.kIn);
-        while(armsEncoder.getPosition() < 10/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        //double thing = 0;
+        while(armsEncoder.getPosition() < 10.0/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
-            
+            //thing = armsEncoder.getPosition();
             System.out.println(armsEncoder.getPosition());
             System.out.println("moving out");
         }
         setDirection(armsMotor, RollerDirection.kOff);
         System.out.println("Arms out!");
         armPosition = ArmPosition.kOut;
+        System.out.println("Final position: " + armsEncoder.getPosition());
     }
 
     public void moveArmIn() //FELLA MOVES 8 INCHES
