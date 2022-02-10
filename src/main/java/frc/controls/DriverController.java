@@ -2,6 +2,8 @@ package frc.controls;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 //import frc.constants.Port;
 
 //import edu.wpi.first.wpilibj.DriverStation;
@@ -42,8 +44,8 @@ public class DriverController extends Xbox
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
 
-        // kNoAction(Button.kLeftTrigger),
-        kNoAction(Button.kRightTrigger),
+        kNoAction(Button.kLeftTrigger),
+        kNoAction2(Button.kRightTrigger),
 
         ;
 
@@ -64,8 +66,8 @@ public class DriverController extends Xbox
         kRotate(Axis.kRightX, 0.1, 0.0, 1.0, false, AxisScale.kLinear),
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
-        // kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
-        kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
+        //kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
+        //kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
         ;
 
         public final Axis axis;
@@ -117,9 +119,9 @@ public class DriverController extends Xbox
                 for(DriverAxisAction daa : DriverAxisAction.values())
                 {
                     if(daa.axis == Axis.kLeftTrigger && dba.button == Button.kLeftTrigger)
-                        System.out.println("ERROR - Left Trigger is button and axis");
+                        DriverStation.reportWarning("ERROR - Left Trigger is button and axis", false);
                     if(daa.axis == Axis.kRightTrigger && dba.button == Button.kRightTrigger)
-                        System.out.println("ERROR - Right Trigger is button and axis");
+                        DriverStation.reportWarning("ERROR - Right Trigger is button and axis", false);
                 }
             }
         }
@@ -148,29 +150,29 @@ public class DriverController extends Xbox
     }  
    
 
-    @Deprecated
-    public double getRawAxis(Axis axis)
-    {
-        return super.getRawAxis(axis);
-    }
+    // @Deprecated
+    // public double getRawAxis(Axis axis)
+    // {
+    //     return super.getRawAxis(axis);
+    // }
 
-    @Deprecated
-    public double getRawAxis(int axis)
-    {
-        return super.getRawAxis(axis);
-    }
+    // @Deprecated
+    // public double getRawAxis(int axis)
+    // {
+    //     return super.getRawAxis(axis);
+    // }
 
-    @Deprecated
-    public boolean getRawButton(Button button)
-    {
-        return super.getRawButton(button);
-    }
+    // @Deprecated
+    // public boolean getRawButton(Button button)
+    // {
+    //     return super.getRawButton(button);
+    // }
 
-    @Deprecated
-    public boolean getRawButton(int button)
-    {
-        return super.getRawButton(button);
-    }
+    // @Deprecated
+    // public boolean getRawButton(int button)
+    // {
+    //     return super.getRawButton(button);
+    // }
 
     public boolean getAction(DriverButtonAction buttonAction)
     {

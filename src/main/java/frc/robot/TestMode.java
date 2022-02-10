@@ -29,7 +29,7 @@ public class TestMode implements ModeTransition
      */
     public void init()
     {
-        INTAKE.moveArmOut();
+        //INTAKE.moveArmOut();
     }
 
     /**
