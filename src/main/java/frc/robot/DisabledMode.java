@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.shuffleboard.MainShuffleboard;
+
 public class DisabledMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -14,7 +16,7 @@ public class DisabledMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -44,6 +46,6 @@ public class DisabledMode implements ModeTransition
      */
     public void exit()
     {
-
+        System.out.println(MAIN_SHUFFLEBOARD.getAutonomousTabData());
     }
 }

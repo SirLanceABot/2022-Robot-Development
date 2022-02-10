@@ -2,6 +2,8 @@ package frc.shuffleboard;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.shuffleboard.AutonomousTab.AutonomousTabData;
+
 public class MainShuffleboard 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -16,6 +18,7 @@ public class MainShuffleboard
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverControllerTab DRIVER_CONTROLLER_TAB = new DriverControllerTab();
     private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = new OperatorControllerTab();
+    private static final AutonomousTab AUTONOMOUS_TAB = new AutonomousTab();
 
 
     
@@ -29,14 +32,29 @@ public class MainShuffleboard
 
     
     // *** CLASS & INSTANCE METHODS ***
+    //-------------------------------------------------------------------//
     // DRIVER CONTROLLER TAB
     public void setDriverControllerSettings()
     {
        DRIVER_CONTROLLER_TAB.setDriverControllerAxisSettings();
     }
-    
+
+    //-------------------------------------------------------------------//
+    // OPERATOR CONTROLLER TAB
     public void setOperatorControllerSettings()
     {
         OPERATOR_CONTROLLER_TAB.setOperatorControllerAxisSettings();
+    }
+
+    //-------------------------------------------------------------------//
+    // AUTONOMOUS TAB
+    public AutonomousTabData getAutonomousTabData()
+    {
+        return AUTONOMOUS_TAB.getAutonomousTabData();
+    }
+
+    public void checkForNewAutonomousTabData()
+    {
+        AUTONOMOUS_TAB.checkForNewAutonomousTabData();
     }
 }
