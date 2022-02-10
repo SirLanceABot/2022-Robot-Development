@@ -34,6 +34,7 @@ public class DisabledMode implements ModeTransition
     public void init()
     {
         // TODO @Joel - we have use the current state of the robot to determine if we try to get new auto data
+        // Get the current state from the Robot class, assign to robotState.
 
     }
 
