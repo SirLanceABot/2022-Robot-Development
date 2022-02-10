@@ -3,11 +3,11 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import frc.components.CargoManager;
-import frc.components.Drivetrain;
 import frc.components.Intake;
 import frc.constants.Port;
 import frc.controls.DriverController;
 import frc.controls.OperatorController;
+import frc.drivetrain.Drivetrain;
 import frc.shuffleboard.MainShuffleboard;
 
 public final class RobotContainer 

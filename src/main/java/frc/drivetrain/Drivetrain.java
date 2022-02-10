@@ -1,8 +1,8 @@
-package frc.components;
+package frc.drivetrain;
 
 import java.lang.invoke.MethodHandles;
 
-public class SwerveModule 
+public class Drivetrain 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
@@ -18,7 +18,7 @@ public class SwerveModule
 
 
     // *** CLASS CONSTRUCTOR ***
-    public SwerveModule()
+    public Drivetrain()
     {
 
     }
@@ -26,5 +26,5 @@ public class SwerveModule
 
     // *** CLASS & INSTANCE METHODS ***
 
-    
+     
 }
