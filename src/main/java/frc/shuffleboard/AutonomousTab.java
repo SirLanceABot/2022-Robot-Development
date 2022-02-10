@@ -32,6 +32,9 @@ public class AutonomousTab
     public static enum StartingLocation
     {
         kUpper, kMiddle, kLower;
+        // TODO @Joel - Not sure what these mean. What is upper vs lower?
+        // Think about it as if you were standing at the the driver station looking out at the field.
+        // I would suggest kLeft and kRight instead.
     }
 
     //-------------------------------------------------------------------//
@@ -39,6 +42,7 @@ public class AutonomousTab
     public static enum OrderOfOperations
     {
         kShootFirst, kMoveFirst;
+        // TODO @Joel - Does this need to have a kDoNothing option? Or is that handled another way.
     }
 
     //-------------------------------------------------------------------//
@@ -73,6 +77,7 @@ public class AutonomousTab
     }
 
     // Create a class to hold the data on the Shuffleboard tab
+    // TODO @Joel - I don't think this can be static
     protected static class AutonomousTabData
     {
         public StartingLocation startingLocation = StartingLocation.kMiddle;
@@ -392,6 +397,9 @@ public class AutonomousTab
         {
             previousStateOfSendButton = true;
 
+            // TODO @Joel - We talked about this, and it seems like this should not happen if the data is invalid
+            // But the isDataValid() method is checking the data that is in autonomousTabData variable.
+            // There is probably a better way to do this.
             // Get values from the Boxes
             updateAutonomousTabData();
 

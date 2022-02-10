@@ -17,6 +17,9 @@ public class DisabledMode implements ModeTransition
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
+    
+    // TODO @Joel - Add a robotState class variable here
+    // See the 2020 Robot Development code on github for help
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -30,6 +33,7 @@ public class DisabledMode implements ModeTransition
      */
     public void init()
     {
+        // TODO @Joel - we have use the current state of the robot to determine if we try to get new auto data
 
     }
 
@@ -38,6 +42,9 @@ public class DisabledMode implements ModeTransition
      */
     public void periodic()
     {
+        // TODO @Joel - Write an if statement to check for new auto data if it is still pregame
+        // Maybe the checkForNewAutoTabData() should return a boolean, indicating if new data is available
+        // Then if there is new data, call the getAutoTabData() method and store it.
 
     }
 
@@ -46,6 +53,8 @@ public class DisabledMode implements ModeTransition
      */
     public void exit()
     {
+        // TODO @Joel - Delete these statements. Add them the to if statement in the periodic() method.
+        // The checkForNewAutonomousTabData() already prints out the data sent, so the output is not needed here.
         MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
         System.out.println(MAIN_SHUFFLEBOARD.getAutonomousTabData());
     }
