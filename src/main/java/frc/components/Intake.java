@@ -36,20 +36,27 @@ public class Intake
     // *** INNER ENUMS and INNER CLASSES ***
     public enum ArmPosition
     {
-        kIn(Math.abs(intakeSpeed)), 
-        kOut(Math.abs(intakeSpeed)*-1.0), 
+        kIn,
+        kOut,
+        kOff
+    }
+
+    public enum ArmDirection
+    {
+        kIn(1), 
+        kOut(-1.0), 
         kOff(0.0); //is zero
 
-        private final double position;
+        private final double direction;
 
-        private ArmPosition(final double position)
+        private ArmDirection(final double direction)
         {
-            this.position = position;
+            this.direction = direction;
         }
 
-        public double position()
+        public double direction()
         {
-            return position;
+            return direction;
         }
     }
 
@@ -164,67 +171,71 @@ public class Intake
     // TODO This looks like a setRollerDirection() method, should it be renamed
     // The setRollerSpeed() method should call the set() method of the rollerMotor
     // we dont currenly need a setRollerSpeed() becuase IntakeSpeed is a constant
-    private void setDirection(CANSparkMax motor, RollerDirection direction)
+    private void setRollerDirection(CANSparkMax motor, RollerDirection direction)
     {
         motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
+    }
+
+    private void setArmSpeed(double speed)
+    {
+        armsMotor.set(speed);
     }
 
     //not getters and setters?
     //7:1 gearbox
     public void outtakeRoller()
     {
-        setDirection(rollerMotor, RollerDirection.kOut);
+        setRollerDirection(rollerMotor, RollerDirection.kOut);
         System.out.println("Roller out");
     }
     
     public void intakeRoller()
     {
-        setDirection(rollerMotor, RollerDirection.kIn);
+        setRollerDirection(rollerMotor, RollerDirection.kIn);
         System.out.println("Roller in");
     }
 
     public void turnOffRoller()
     {
-        setDirection(rollerMotor, RollerDirection.kOff);
+        setRollerDirection(rollerMotor, RollerDirection.kOff);
         System.out.println("Roller Off");
     }
 
-    public void moveArmOut() //FELLA MOVES 8 INCHES
+    public void moveArmOut(double desiredPosition) //FELLA MOVES 8 INCHES
     //10:1 gear ratio, pulley system 40:24 gear teeth, total gear ratio is 50:3
     //The motor has a diameter of .49in and a circumference of 1.54in
     //to move 8in it needs to spin 5.19480519481 times
     {
-        //armsEncoder.setPositionConversionFactor();
         System.out.println("Moving arms out...");
-        setDirection(armsMotor, RollerDirection.kIn);
-        //double thing = 0;
-        while(armsEncoder.getPosition() < 10.0/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        setArmSpeed(.5);
+        while(armsEncoder.getPosition() < desiredPosition/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
-            //thing = armsEncoder.getPosition();
             System.out.println(armsEncoder.getPosition());
             System.out.println("moving out");
+            setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);       
         }
-        setDirection(armsMotor, RollerDirection.kOff);
+        setArmSpeed(0.0);
         System.out.println("Arms out!");
         armPosition = ArmPosition.kOut;
         System.out.println("Final position: " + armsEncoder.getPosition());
     }
-
-    public void moveArmIn() //FELLA MOVES 8 INCHES
+    
+    public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
     {
         System.out.println("Moving arms In...");
-        setDirection(armsMotor, RollerDirection.kIn);
+        setArmSpeed(-0.5);
         if(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
         {
             
             System.out.println(armsEncoder.getPosition());
             System.out.println("moving in");
+            setArmSpeed(-1*((desiredPosition-armsEncoder.getPosition())/desiredPosition));
         }
-        setDirection(armsMotor, RollerDirection.kOff);
+        setArmSpeed(0.0);
         System.out.println("Arms in!");
         armPosition = ArmPosition.kIn;
     } 
-
+    
     public void updateArmPosition(ArmPosition armPosition)
     {
         //don't know how worthwile this is when I can just armPosition = ArmPosition.kIn;
@@ -274,8 +285,8 @@ public class Intake
     public void TestArms()
     {
         System.out.println("Starting");
-        moveArmOut();
-        moveArmIn();
+        moveArmOut(10);
+        //moveArmIn();
         System.out.println("Complete");
     }
 }
