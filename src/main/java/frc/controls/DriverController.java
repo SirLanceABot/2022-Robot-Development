@@ -44,8 +44,8 @@ public class DriverController extends Xbox
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
 
-        kNoAction(Button.kLeftTrigger),
-        kNoAction2(Button.kRightTrigger),
+        //kNoAction(Button.kLeftTrigger),
+        //kNoAction2(Button.kRightTrigger),
 
         ;
 
@@ -67,7 +67,7 @@ public class DriverController extends Xbox
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
         //kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
-        //kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
+        kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
         ;
 
         public final Axis axis;
