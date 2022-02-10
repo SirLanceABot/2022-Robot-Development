@@ -18,9 +18,9 @@ public class OperatorController extends Logitech
     public static enum OperatorButtonAction
     {
         kShoot(Button.k1),
-        kShooterOveride(Button.k2),
+        kShooterOveride(Button.k10),
         kTurnOnShooter(Button.k7),
-        kShootBall(Button.k8),
+        kShootBall(Button.k2),
         
 
         kShuttleOverride(Button.k11), 
@@ -34,8 +34,24 @@ public class OperatorController extends Logitech
 
         // kOffTarget(Button.k3),
         // kOnTarget(Button.k4),
-
         // // kNoAction(Button.k7),
+
+        //IF XBOX CONTROLLER IS USED BY OPERATOR
+        // kShoot(Button.kRightTrigger),
+        // kShooterOveride(Button.kA),
+        // kTurnOnShooter(Button.kLeftArrow),
+        // kShootBall(Button.kRightArrow),
+        
+
+        // kShuttleOverride(Button.kB), 
+        // kShuttle1stStage(Button.kLeftBumper),
+        // kShuttle2ndStage(Button.kRightBumper),
+
+        // kAutoClimb(Button.kLeftTrigger),
+        // kClimbOverride(Button.kX),
+        // kExtendClimbArm(Button.kUpArrow),
+        // kShrinkClimbArm(Button.kDownArrow),
+
        
        
        
@@ -55,6 +71,10 @@ public class OperatorController extends Logitech
         kShroud(Axis.kYAxis, 0.2, 0.0, 1.0, true, AxisScale.kLinear),
         //kTurret(Axis.kZAxis, 0.25, 0.0, 1.0, false, AxisScale.kLinear),
         kShooterPower(Axis.kSlider, 0.1, 0.0, 1.0, true, AxisScale.kLinear);
+
+        //iF XBOX CONTROLLER IS USED BY XBOX
+        //Shroud(Axis.kLeftY, 0.25, 0.0, 1.0, false, AxisScale.kLinear),
+        //kShooterPower(Axis.kLeftX, 0.25, 0.0, 1.0, false, AxisScale.kLinear),
 
         public final Axis axis;
         public final double axisDeadzone;

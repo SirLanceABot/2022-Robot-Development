@@ -37,6 +37,7 @@ public class DriverController extends Xbox
         kIntakeReverse(Button.kRightBumper),
         kIntakeOn(Button.kLeftBumper),
         kExtendIntake(Button.kRightStick),
+        //kIntake(Button.kRightBumper),
 
         // kNoAction(Button.kBack),
         // kNoAction(Button.kStart),
@@ -47,6 +48,10 @@ public class DriverController extends Xbox
         //kNoAction(Button.kLeftTrigger),
         //kNoAction2(Button.kRightTrigger),
 
+        //If logitech used by driver
+        // kIntakeReverse(Button.k5),
+        // kIntakeOn(Button.k3),
+        // kExtendIntake(Button.k4),
         ;
 
         public final Button button;
@@ -68,6 +73,12 @@ public class DriverController extends Xbox
 
         //kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
         kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
+
+        //If logitech used by driver
+        //kMoveY(Axis.kYAxis, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
+        //kMoveX(Axis.kXAxis, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
+        //kRotate(Axis.kZAxis, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
+        //kDriverBoost(Axis.kSlider, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
         ;
 
         public final Axis axis;

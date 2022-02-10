@@ -24,7 +24,7 @@ public class Xbox extends Joystick
     // *** INNER ENUMS and INNER CLASSES ***
     public static enum Button
     {
-        kA(1), kB(2), kX(3), kY(4), kLeftBumper(5), kRightBumper(6), kBack(7), kStart(8), kLeftStick(9), kRightStick(10), kLeftTrigger(12), kRightTrigger(13);
+        kA(1), kB(2), kX(3), kY(4), kLeftBumper(5), kRightBumper(6), kBack(7), kStart(8), kLeftStick(9), kRightStick(10), kLeftTrigger(12), kRightTrigger(13), kLeftArrow(14), kRightArrow(15), kUpArrow(16), kDownArrow(17);
 
         public final int value;
 
