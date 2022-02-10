@@ -46,6 +46,7 @@ public class DisabledMode implements ModeTransition
      */
     public void exit()
     {
+        MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
         System.out.println(MAIN_SHUFFLEBOARD.getAutonomousTabData());
     }
 }
