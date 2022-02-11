@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
 import frc.components.CargoManager;
 import frc.components.Intake;
@@ -8,6 +9,7 @@ import frc.constants.Port;
 import frc.controls.DriverController;
 import frc.controls.OperatorController;
 import frc.drivetrain.Drivetrain;
+import frc.shuffleboard.AutonomousTab.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
 
 public final class RobotContainer 
@@ -31,6 +33,10 @@ public final class RobotContainer
     public static final OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
 
     public static final MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
+
+    public static final AutonomousTabData AUTONOMOUS_TAB_DATA = new AutonomousTabData();
+    // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
+    public static final ArrayList<String> AUTOMOMOUS_COMMANDS = new ArrayList<>();
 
     
     // *** CLASS CONSTRUCTOR ***

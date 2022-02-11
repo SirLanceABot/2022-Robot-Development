@@ -13,6 +13,23 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
+
+// TODO @Joel - Look for these TODO comments in this class and in the DisableMode.java class. They have a blue mark on the scroll bar.
+// Here is the basic idea.
+// 1. The RobotContainer.java class has the following:
+//    a. An AUTONOMOUS_TAB_DATA variable that will store the auto selection (not sure if this is needed)
+//    b. An AUTONOMOUS_COMMANDS ArrayList that will contain the list of commands we want to complete in autonomous
+// 2. Change the checkForNewAutoTabData() so that it returns a boolean, and you may want to rename it isThereNewAutoTabData() or something like that
+// 3. In the DisabledMode.java, add the following:
+//    a. Create a variable for the robotState
+//    b. Initialize the robotState in the init() method
+//    c. Add an if statement in the periodic() method that checks if the robot is in kDisabledAfterRobotInit mode
+//       1. Then call the check...() method to see if there is new auto tab data
+//       2. If there is new data, then store the data in the RobotContainer AUTONOMOUS_TAB_DATA
+//       3. Build the ArrayList that creates the list of commands we want to do in autonomous
+//       4. We want this all done while the robot is disabled, it should not being wasting time in autonomous fetching data or building a command list
+//    d. Remove the statements from the exit() method.
+// 4. In the AutonomousMode.java class, use a loop to go thru the ArrayList to complete the desired tasks in auto.
 public class AutonomousTab 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -77,8 +94,8 @@ public class AutonomousTab
     }
 
     // Create a class to hold the data on the Shuffleboard tab
-    // TODO @Joel - I don't think this can be static
-    protected static class AutonomousTabData
+    // TODO @Joel - Don't make this static, there will be at least 2 of these
+    public static class AutonomousTabData
     {
         public StartingLocation startingLocation = StartingLocation.kMiddle;
 
