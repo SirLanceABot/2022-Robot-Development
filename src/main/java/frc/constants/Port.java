@@ -23,11 +23,12 @@ public class Port
         public static final int CLIMBER_STAGE_TWO = 0;
 
         public static final int SHOOTER_FLYWHEEL = 0;
+        public static final int SHOOTER_SHROUD = 0;
     }
 
     public class Sensor
     {
-
+        public static final int SHOOTER_SHROUD = 0;
     }
 
     public class Controller
