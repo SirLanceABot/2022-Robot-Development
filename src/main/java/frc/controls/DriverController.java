@@ -34,8 +34,8 @@ public class DriverController extends Xbox
         // kIntakeDown(Button.kX),
 
 
-        kIntakeReverse(Button.kRightBumper),
-        kIntakeOn(Button.kLeftBumper),
+        kIntakeToggleDirection(Button.kRightBumper),
+        kIntakeToggleOnOff(Button.kLeftBumper),
         kExtendIntake(Button.kRightStick),
         //kIntake(Button.kRightBumper),
 
@@ -120,9 +120,38 @@ public class DriverController extends Xbox
         super(port);
 
         System.out.println(fullClassName + " : Constructor Started");
-        
-        initDriverController();
 
+        createRumbleEvents();
+        initAxes();
+        checkForTriggerConflict();
+
+        System.out.println(fullClassName + ": Constructor Finished");
+    }
+
+    // *** CLASS & INSTANCE METHODS *** 
+
+    public void createRumbleEvents()
+    {
+        createRumbleEvent(30.0, 2.0, 0.75, 0.75);
+        createRumbleEvent(10.0, 1.0, 1.0, 1.0);
+        createRumbleEvent(5.0, 0.25, 1.0, 1.0);
+        createRumbleEvent(4.0, 0.25, 1.0, 1.0);
+        createRumbleEvent(3.0, 0.25, 1.0, 1.0);
+        createRumbleEvent(2.0, 0.25, 1.0, 1.0);
+        createRumbleEvent(1.0, 0.25, 1.0, 1.0);
+    }
+
+    public void initAxes()
+    {
+        // loop to set the defaults for every axis
+        for(DriverAxisAction action : DriverAxisAction.values())
+        {
+            setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
+        }
+    }  
+
+    public void checkForTriggerConflict()
+    {
         for(DriverButtonAction dba : DriverButtonAction.values())
         {
             if(dba.button == Button.kLeftTrigger || dba.button == Button.kRightTrigger)
@@ -136,54 +165,7 @@ public class DriverController extends Xbox
                 }
             }
         }
-
-        System.out.println(fullClassName + ": Constructor Finished");
     }
-
-    // *** CLASS & INSTANCE METHODS *** 
-
-    public void initDriverController()
-    {
-        // loop to set the defaults for every axis
-        for(DriverAxisAction action : DriverAxisAction.values())
-        {
-            setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
-        }
-
-            
-        createRumbleEvent(30.0, 2.0, 0.75, 0.75);
-        createRumbleEvent(10.0, 1.0, 1.0, 1.0);
-        createRumbleEvent(5.0, 0.25, 1.0, 1.0);
-        createRumbleEvent(4.0, 0.25, 1.0, 1.0);
-        createRumbleEvent(3.0, 0.25, 1.0, 1.0);
-        createRumbleEvent(2.0, 0.25, 1.0, 1.0);
-        createRumbleEvent(1.0, 0.25, 1.0, 1.0);
-    }  
-   
-
-    // @Deprecated
-    // public double getRawAxis(Axis axis)
-    // {
-    //     return super.getRawAxis(axis);
-    // }
-
-    // @Deprecated
-    // public double getRawAxis(int axis)
-    // {
-    //     return super.getRawAxis(axis);
-    // }
-
-    // @Deprecated
-    // public boolean getRawButton(Button button)
-    // {
-    //     return super.getRawButton(button);
-    // }
-
-    // @Deprecated
-    // public boolean getRawButton(int button)
-    // {
-    //     return super.getRawButton(button);
-    // }
 
     public boolean getAction(DriverButtonAction buttonAction)
     {

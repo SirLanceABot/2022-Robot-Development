@@ -39,13 +39,13 @@ public class OperatorController extends Logitech
         //IF XBOX CONTROLLER IS USED BY OPERATOR
         // kShoot(Button.kRightTrigger),
         // kShooterOveride(Button.kA),
-        // kTurnOnShooter(Button.kLeftArrow),
-        // kShootBall(Button.kRightArrow),
+        // kTurnOnShooter(Button.kLeftBumper,
+        // kShootBall(Button.kRightBumper),
         
 
         // kShuttleOverride(Button.kB), 
-        // kShuttle1stStage(Button.kLeftBumper),
-        // kShuttle2ndStage(Button.kRightBumper),
+        // kShuttle1stStage(Button.kLeftArrow),
+        // kShuttle2ndStage(Button.kRightArrow),
 
         // kAutoClimb(Button.kLeftTrigger),
         // kClimbOverride(Button.kX),
@@ -101,43 +101,19 @@ public class OperatorController extends Logitech
 
         System.out.println(fullClassName + " : Constructor Started");
 
-        initOperatorController();
+        initAxes();
         
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
     // *** CLASS & INSTANCE METHODS ***
-    public void initOperatorController()
+    public void initAxes()
     {
         for(OperatorAxisAction action : OperatorAxisAction.values())
         {
             setAxisSettings(action.axis, action.axisDeadzone, action.axisMinOutput, action.axisMaxOutput, action.axisIsFlipped, action.axisScale);
         }
         //createRumbleEvent(60.0, 1.0, 0.5, 0.5);
-    }
-
-    @Deprecated
-    public boolean getRawButton(Button button)
-    {
-        return super.getRawButton(button);
-    }
-
-    @Deprecated
-    public boolean getRawButton(int button)
-    {
-        return super.getRawButton(button);
-    }
-
-    @Deprecated
-    public double getRawAxis(Axis axis)
-    {
-        return super.getRawAxis(axis);
-    }
-
-    @Deprecated
-    public double getRawAxis(int axis)
-    {
-        return super.getRawAxis(axis);
     }
 
     public boolean getAction(OperatorButtonAction buttonAction)

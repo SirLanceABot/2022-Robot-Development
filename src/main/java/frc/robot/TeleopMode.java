@@ -2,7 +2,9 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.components.Intake;
 import frc.controls.DriverController;
+import frc.controls.DriverController.DriverButtonAction;
 import frc.shuffleboard.MainShuffleboard;
 
 public class TeleopMode implements ModeTransition
@@ -18,6 +20,8 @@ public class TeleopMode implements ModeTransition
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+
+    private static final Intake INTAKE = RobotContainer.INTAKE;
 
     private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
 
@@ -41,6 +45,31 @@ public class TeleopMode implements ModeTransition
     public void periodic()
     {
         DRIVER_CONTROLLER.checkRumbleEvent();
+
+        // Running the intake
+        if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+        {
+            if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
+            {
+                INTAKE.intakeRoller();
+            }
+            else
+            {
+                INTAKE.turnOffRoller();
+            }
+        }
+        else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+        {
+            if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+            {
+                INTAKE.outtakeRoller();
+            }
+            else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+            {
+                INTAKE.intakeRoller();
+            }
+        }
+
     }
 
     /**
