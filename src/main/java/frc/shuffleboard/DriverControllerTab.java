@@ -153,15 +153,9 @@ public class DriverControllerTab
     {
         DriverController.AxisSettings axisSettings = DRIVER_CONTROLLER.new AxisSettings();
 
-        // axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1")); // TODO: try getDouble
-
         axisSettings.axisDeadzone = axisObjects.deadzoneEntry.getDouble(0.1);
 
-        // axisSettings.axisMinOutput = Double.valueOf(axisObjects.minOutputEntry.getString("0.0"));
-
         axisSettings.axisMinOutput = axisObjects.minOutputEntry.getDouble(0.0);
-
-        // axisSettings.axisMaxOutput = Double.valueOf(axisObjects.maxOutputEntry.getString("1.0"));
 
         axisSettings.axisMaxOutput = axisObjects.maxOutputEntry.getDouble(1.0);
 

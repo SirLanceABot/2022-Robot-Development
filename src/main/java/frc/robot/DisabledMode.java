@@ -1,7 +1,11 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
+import frc.robot.Robot.RobotState;
+import frc.shuffleboard.AutonomousTab;
+import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
 
 public class DisabledMode implements ModeTransition
@@ -17,10 +21,10 @@ public class DisabledMode implements ModeTransition
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
+    private static final AutonomousTabData AUTONOMOUS_TAB_DATA = RobotContainer.AUTONOMOUS_TAB_DATA;
+    private static final ArrayList<String> AUTONOMOUS_COMMANDS = RobotContainer.AUTONOMOUS_COMMANDS;
     
-    // TODO @Joel - Add a robotState class variable here
-    // See the 2020 Robot Development code on github for help
-
+    private RobotState robotState;
 
     // *** CLASS CONSTRUCTOR ***
     public DisabledMode()
@@ -33,9 +37,7 @@ public class DisabledMode implements ModeTransition
      */
     public void init()
     {
-        // TODO @Joel - we have use the current state of the robot to determine if we try to get new auto data
-        // Get the current state from the Robot class, assign to robotState.
-
+        robotState = Robot.getRobotState();
     }
 
     /**
@@ -43,10 +45,23 @@ public class DisabledMode implements ModeTransition
      */
     public void periodic()
     {
-        // TODO @Joel - Write an if statement to check for new auto data if it is still pregame
-        // Maybe the checkForNewAutoTabData() should return a boolean, indicating if new data is available
-        // Then if there is new data, call the getAutoTabData() method and store it.
+        if (robotState == RobotState.kDisabledAfterRobotInit)
+        {
+            boolean isNewData = MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
 
+            if (isNewData)
+            {
+                AUTONOMOUS_TAB_DATA.updateData(MAIN_SHUFFLEBOARD.getAutonomousTabData());
+
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.startingLocation.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.orderOfOperations.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.shootCargo.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.shootDelay.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.moveOffTarmac.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.moveDelay.toString());
+                AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.pickUpCargo.toString());
+            }
+        }
     }
 
     /**
@@ -54,9 +69,6 @@ public class DisabledMode implements ModeTransition
      */
     public void exit()
     {
-        // TODO @Joel - Delete these statements. Add them the to if statement in the periodic() method.
-        // The checkForNewAutonomousTabData() already prints out the data sent, so the output is not needed here.
-        MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
-        System.out.println(MAIN_SHUFFLEBOARD.getAutonomousTabData());
+     
     }
 }

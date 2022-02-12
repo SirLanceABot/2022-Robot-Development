@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
+import frc.shuffleboard.AutonomousTabData;
 
 // TODO @Joel - Look for these TODO comments in this class and in the DisableMode.java class. They have a blue mark on the scroll bar.
 // Here is the basic idea.
@@ -42,93 +43,6 @@ public class AutonomousTab
         System.out.println("Loading: " + fullClassName);
     }
 
-
-    // *** INNER CLASS & INNER ENUMS ***
-    // Create enumerated types for each Box
-    //-------------------------------------------------------------------//
-    public static enum StartingLocation
-    {
-        kUpper, kMiddle, kLower;
-        // TODO @Joel - Not sure what these mean. What is upper vs lower?
-        // Think about it as if you were standing at the the driver station looking out at the field.
-        // I would suggest kLeft and kRight instead.
-    }
-
-    //-------------------------------------------------------------------//
-
-    public static enum OrderOfOperations
-    {
-        kShootFirst, kMoveFirst;
-        // TODO @Joel - Does this need to have a kDoNothing option? Or is that handled another way.
-    }
-
-    //-------------------------------------------------------------------//
-
-    public static enum ShootCargo
-    {
-        k0, k1, k2;
-    }
-
-    public static enum ShootDelay
-    {
-        k0, k1, k2, k3, k4, k5;
-    }
-
-    //-------------------------------------------------------------------//
-
-    public static enum MoveOffTarmac
-    {
-        kYes, kNo;
-    }
-
-    public static enum MoveDelay
-    {
-        k0, k1, k2, k3, k4, k5;
-    }
-
-    //-------------------------------------------------------------------//
-
-    public static enum PickUpCargo
-    {
-        kYes, kNo;
-    }
-
-    // Create a class to hold the data on the Shuffleboard tab
-    // TODO @Joel - Don't make this static, there will be at least 2 of these
-    public static class AutonomousTabData
-    {
-        public StartingLocation startingLocation = StartingLocation.kMiddle;
-
-        public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
-
-        public ShootCargo shootCargo = ShootCargo.k0;
-        public ShootDelay shootDelay = ShootDelay.k0;
-
-        public MoveOffTarmac moveOffTarmac = MoveOffTarmac.kYes;
-        public MoveDelay moveDelay = MoveDelay.k0;
-
-        public PickUpCargo pickUpCargo = PickUpCargo.kYes;
-
-        @Override
-        public String toString()
-        {
-            String str = "";
-
-            str += " \n";
-            str += "*****  AUTONOMOUS SELECTION  *****\n";
-            str += "Starting Location     : "  + startingLocation   + "\n";
-            str += "Order of Operations   : "  + orderOfOperations  + "\n";
-            str += "Shoot Cargo           : "  + shootCargo         + "\n";
-            str += "Shoot Delay           : "  + shootDelay         + "\n";
-            str += "Move Off Tarmac       : "  + moveOffTarmac      + "\n";
-            str += "Move Delay            : "  + moveDelay          + "\n";
-            str += "Pick Up Cargo         : "  + pickUpCargo        + "\n";
-
-            return str;
-        }
-    }
-
-
     // *** CLASS & INSTANCE VARIABLES ***
     // Create a Shuffleboard Tab
     private ShuffleboardTab autonomousTab = Shuffleboard.getTab("Autonomous");
@@ -137,17 +51,17 @@ public class AutonomousTab
     private AutonomousTabData autonomousTabData = new AutonomousTabData();
   
     // Create the Box objects
-    private SendableChooser<StartingLocation> startingLocationBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.StartingLocation> startingLocationBox = new SendableChooser<>();
  
-    private SendableChooser<OrderOfOperations> orderOfOperationsBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.OrderOfOperations> orderOfOperationsBox = new SendableChooser<>();
  
-    private SendableChooser<ShootCargo> shootCargoBox = new SendableChooser<>();
-    private SendableChooser<ShootDelay> shootDelayBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.ShootCargo> shootCargoBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.ShootDelay> shootDelayBox = new SendableChooser<>();
      
-    private SendableChooser<MoveOffTarmac> moveOffTarmacBox = new SendableChooser<>();
-    private SendableChooser<MoveDelay> moveDelayBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.MoveOffTarmac> moveOffTarmacBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.MoveDelay> moveDelayBox = new SendableChooser<>();
  
-    private SendableChooser<PickUpCargo> pickUpCargoBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.PickUpCargo> pickUpCargoBox = new SendableChooser<>();
      
     private NetworkTableEntry goodToGo;
  
@@ -197,9 +111,9 @@ public class AutonomousTab
         SendableRegistry.setName(startingLocationBox, "Starting Location");
         
         //add options to  Box
-        startingLocationBox.setDefaultOption("Upper", StartingLocation.kUpper);
-        startingLocationBox.addOption("Middle", StartingLocation.kMiddle);
-        startingLocationBox.addOption("Lower", StartingLocation.kLower);
+        startingLocationBox.setDefaultOption("Left", AutonomousTabData.StartingLocation.kLeft);
+        startingLocationBox.addOption("Middle", AutonomousTabData.StartingLocation.kMiddle);
+        startingLocationBox.addOption("Right", AutonomousTabData.StartingLocation.kRight);
 
         //put the widget on the shuffleboard
         autonomousTab.add(startingLocationBox)
@@ -219,8 +133,9 @@ public class AutonomousTab
         SendableRegistry.setName(orderOfOperationsBox, "Order of Operations");
 
         //add options to box
-        orderOfOperationsBox.setDefaultOption("Shoot First", OrderOfOperations.kShootFirst);
-        orderOfOperationsBox.addOption("Move First", OrderOfOperations.kMoveFirst);
+        orderOfOperationsBox.setDefaultOption("Shoot First", AutonomousTabData.OrderOfOperations.kShootFirst);
+        orderOfOperationsBox.addOption("Move First", AutonomousTabData.OrderOfOperations.kMoveFirst);
+        orderOfOperationsBox.addOption("Do Nothing", AutonomousTabData.OrderOfOperations.kDoNothing);
 
         //put the widget on the Shuffleboard
         autonomousTab.add(orderOfOperationsBox)
@@ -240,9 +155,9 @@ public class AutonomousTab
         SendableRegistry.setName(shootCargoBox, "Shoot Cargo");
 
         //add options to Box
-        shootCargoBox.setDefaultOption("0", ShootCargo.k0);
-        shootCargoBox.addOption("1", ShootCargo.k1);
-        shootCargoBox.addOption("2", ShootCargo.k2);
+        shootCargoBox.setDefaultOption("0", AutonomousTabData.ShootCargo.k0);
+        shootCargoBox.addOption("1", AutonomousTabData.ShootCargo.k1);
+        shootCargoBox.addOption("2", AutonomousTabData.ShootCargo.k2);
 
         //put the widget on the shuffleboard
         autonomousTab.add(shootCargoBox)
@@ -262,12 +177,12 @@ public class AutonomousTab
         SendableRegistry.setName(shootDelayBox, "Shoot Delay (Seconds)");
 
         //add options to Box
-        shootDelayBox.setDefaultOption("0", ShootDelay.k0);
-        shootDelayBox.addOption("1", ShootDelay.k1);
-        shootDelayBox.addOption("2", ShootDelay.k2);
-        shootDelayBox.addOption("3", ShootDelay.k3);
-        shootDelayBox.addOption("4", ShootDelay.k4);
-        shootDelayBox.addOption("5", ShootDelay.k5);
+        shootDelayBox.setDefaultOption("0", AutonomousTabData.ShootDelay.k0);
+        shootDelayBox.addOption("1", AutonomousTabData.ShootDelay.k1);
+        shootDelayBox.addOption("2", AutonomousTabData.ShootDelay.k2);
+        shootDelayBox.addOption("3", AutonomousTabData.ShootDelay.k3);
+        shootDelayBox.addOption("4", AutonomousTabData.ShootDelay.k4);
+        shootDelayBox.addOption("5", AutonomousTabData.ShootDelay.k5);
 
         //put the widget on the shuffleboard
         autonomousTab.add(shootDelayBox)
@@ -287,8 +202,8 @@ public class AutonomousTab
         SendableRegistry.setName(moveOffTarmacBox, "Move Off Tarmac");
 
         //add options to Box
-        moveOffTarmacBox.setDefaultOption("Yes", MoveOffTarmac.kYes);
-        moveOffTarmacBox.addOption("No", MoveOffTarmac.kNo);
+        moveOffTarmacBox.setDefaultOption("Yes", AutonomousTabData.MoveOffTarmac.kYes);
+        moveOffTarmacBox.addOption("No", AutonomousTabData.MoveOffTarmac.kNo);
 
         //put the widget on the shuffleboard
         autonomousTab.add(moveOffTarmacBox)
@@ -308,12 +223,12 @@ public class AutonomousTab
         SendableRegistry.setName(moveDelayBox, "Move Delay (Seconds)");
 
         //add options to Box
-        moveDelayBox.setDefaultOption("0", MoveDelay.k0);
-        moveDelayBox.addOption("1", MoveDelay.k1);
-        moveDelayBox.addOption("2", MoveDelay.k2);
-        moveDelayBox.addOption("3", MoveDelay.k3);
-        moveDelayBox.addOption("4", MoveDelay.k4);
-        moveDelayBox.addOption("5", MoveDelay.k5);
+        moveDelayBox.setDefaultOption("0", AutonomousTabData.MoveDelay.k0);
+        moveDelayBox.addOption("1", AutonomousTabData.MoveDelay.k1);
+        moveDelayBox.addOption("2", AutonomousTabData.MoveDelay.k2);
+        moveDelayBox.addOption("3", AutonomousTabData.MoveDelay.k3);
+        moveDelayBox.addOption("4", AutonomousTabData.MoveDelay.k4);
+        moveDelayBox.addOption("5", AutonomousTabData.MoveDelay.k5);
 
         //put the widget on the shuffleboard
         autonomousTab.add(moveDelayBox)
@@ -333,8 +248,8 @@ public class AutonomousTab
         SendableRegistry.setName(pickUpCargoBox, "Pick Up Cargo");
 
         //add options to Box
-        pickUpCargoBox.setDefaultOption("Yes", PickUpCargo.kYes);
-        pickUpCargoBox.addOption("No", PickUpCargo.kNo);
+        pickUpCargoBox.setDefaultOption("Yes", AutonomousTabData.PickUpCargo.kYes);
+        pickUpCargoBox.addOption("No", AutonomousTabData.PickUpCargo.kNo);
 
         //put the widget on the shuffleboard
         autonomousTab.add(pickUpCargoBox)
@@ -406,36 +321,35 @@ public class AutonomousTab
         autonomousTabData.pickUpCargo = pickUpCargoBox.getSelected();
     }
 
-    public void checkForNewAutonomousTabData()
+    public boolean isThereNewAutonomousTabData()
     {
+        boolean isNewData = false;
         boolean isSendDataButtonPressed = sendDataButton.getSelected();
 
         if(isSendDataButtonPressed && !previousStateOfSendButton)
         {
             previousStateOfSendButton = true;
+            isNewData = true;
 
-            // TODO @Joel - We talked about this, and it seems like this should not happen if the data is invalid
-            // But the isDataValid() method is checking the data that is in autonomousTabData variable.
-            // There is probably a better way to do this.
-            // Get values from the Boxes
-            updateAutonomousTabData();
-
-            System.out.println(autonomousTabData);
-            
             if(isDataValid())
             {
-                goodToGo.setBoolean(true);   
+                goodToGo.setBoolean(true);
+                updateAutonomousTabData();
             }
             else
             {
                 goodToGo.setBoolean(false);
             }
+
+            System.out.println(autonomousTabData);
         }
         
         if (!isSendDataButtonPressed && previousStateOfSendButton)
         {
             previousStateOfSendButton = false;
         }
+
+        return isNewData;
     }
 
     public AutonomousTabData getAutonomousTabData()
@@ -447,14 +361,16 @@ public class AutonomousTab
     {
         boolean isValid = true;
 
-        boolean isPickUpCargo = (autonomousTabData.pickUpCargo == PickUpCargo.kYes);
-        boolean isMoveOffTarmac = (autonomousTabData.moveOffTarmac == MoveOffTarmac.kYes);
+        boolean isPickUpCargo = (pickUpCargoBox.getSelected() == AutonomousTabData.PickUpCargo.kYes);
+        boolean isMoveOffTarmac = (moveOffTarmacBox.getSelected() == AutonomousTabData.MoveOffTarmac.kYes);
 
-        boolean isMoveDelay = (autonomousTabData.moveDelay != MoveDelay.k0);
-        boolean isShootDelay = (autonomousTabData.shootDelay != ShootDelay.k0);
-        boolean isShootCargo = (autonomousTabData.shootCargo != ShootCargo.k0);
+        boolean isMoveDelay = (moveDelayBox.getSelected() != AutonomousTabData.MoveDelay.k0);
+        boolean isShootDelay = (shootDelayBox.getSelected() != AutonomousTabData.ShootDelay.k0);
+        boolean isShootCargo = (shootCargoBox.getSelected() != AutonomousTabData.ShootCargo.k0);
 
-        boolean isShootTwo = (autonomousTabData.shootCargo == ShootCargo.k2);
+        boolean isShootTwo = (shootCargoBox.getSelected() == AutonomousTabData.ShootCargo.k2);
+
+        boolean isDoNothing = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kDoNothing);
 
         // if trying to pick up cargo without moving off tarmac
         if(isPickUpCargo && !isMoveOffTarmac)
@@ -472,10 +388,20 @@ public class AutonomousTab
             DriverStation.reportWarning("Cannot Set A Delay For An Action Not Taken", false);
         }
 
+        // if trying to shoot two cargo without picking up cargo
         if(isShootTwo && !isPickUpCargo)
         {
             isValid = false;
+
             DriverStation.reportWarning("Cannot Shoot Two Cargo Wihtout Picking Up Cargo", false);
+        }
+
+        // if selecting do nothing and trying to move
+        if (isDoNothing && isMoveOffTarmac)
+        {
+            isValid = false;
+            
+            DriverStation.reportWarning("Cannot Move Off Tarmac And Do Nothing", false);
         }
 
         return isValid;

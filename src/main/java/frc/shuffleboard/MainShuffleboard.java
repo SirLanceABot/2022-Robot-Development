@@ -2,7 +2,7 @@ package frc.shuffleboard;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.shuffleboard.AutonomousTab.AutonomousTabData;
+import frc.shuffleboard.AutonomousTabData;
 
 public class MainShuffleboard 
 {
@@ -53,8 +53,10 @@ public class MainShuffleboard
         return AUTONOMOUS_TAB.getAutonomousTabData();
     }
 
-    public void checkForNewAutonomousTabData()
+    public boolean checkForNewAutonomousTabData()
     {
-        AUTONOMOUS_TAB.checkForNewAutonomousTabData();
+        return AUTONOMOUS_TAB.isThereNewAutonomousTabData();
     }
+
+
 }
