@@ -18,19 +18,21 @@ public class OperatorController extends Logitech
     public static enum OperatorButtonAction
     {
         kShoot(Button.k1),
-        kShooterOveride(Button.k10),
-        kTurnOnShooter(Button.k7),
-        kShootBall(Button.k2),
+        kShooterOverride(Button.k7),
+        kTurnOnShooterToggle(Button.k8),
+        kShootBallToggle(Button.k2),
         
 
-        kShuttleOverride(Button.k11), 
-        kShuttle1stStage(Button.k3),
-        kShuttle2ndStage(Button.k4),
+        kShuttleOverride(Button.k9), 
+        kShuttle1stStageToggle(Button.k3),
+        kShuttle2ndStageToggle(Button.k4),
+        kShuttle1stStageReverse(Button.k5),
+        kShuttle2ndStageReverse(Button.k6),
 
-        kAutoClimb(Button.k9),
-        kClimbOverride(Button.k12),
-        kExtendClimbArm(Button.k5),
-        kShrinkClimbArm(Button.k6),
+        kAutoClimb(Button.k10),
+        kClimbOverride(Button.k11),
+        kMoveClimbToggle(Button.k12),
+        
 
         // kOffTarget(Button.k3),
         // kOnTarget(Button.k4),
