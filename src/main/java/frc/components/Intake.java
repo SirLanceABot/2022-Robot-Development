@@ -81,7 +81,7 @@ public class Intake
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static CANSparkMax rollerMotor = new CANSparkMax(2, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax rollerMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^that fella is for when I'm testing with a boxbot
 
     // TODO: add the modifier final to the rollerMotor
@@ -206,18 +206,39 @@ public class Intake
     //The motor has a diameter of .49in and a circumference of 1.54in
     //to move 8in it needs to spin 5.19480519481 times
     {
+        //TODO counter the force quit issue using c variable
+        desiredPosition -= .05;
         System.out.println("Moving arms out...");
-        setArmSpeed(.5);
-        while(armsEncoder.getPosition() < desiredPosition/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        setArmSpeed(.09);
+        double p = armsEncoder.getPosition();
+        int c = 0;
+        while(armsEncoder.getPosition() < desiredPosition || c < 10/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
-            System.out.println(armsEncoder.getPosition());
-            System.out.println("moving out");
-            setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);       
+            if(p != armsEncoder.getPosition())
+            {
+                c = 0;
+                p = armsEncoder.getPosition();
+                System.out.println("moving out, position of: " + armsEncoder.getPosition());
+                System.out.println("Speed is: " + (desiredPosition-armsEncoder.getPosition())/desiredPosition);
+            }
+            else
+            {
+                c++;
+            }
+            if(armsEncoder.getPosition() > desiredPosition-.80)
+            {
+                setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
+            }
+        }
+        if(c >= 10)
+        {
+            System.out.println("Force quit");
         }
         setArmSpeed(0.0);
-        System.out.println("Arms out!");
-        armPosition = ArmPosition.kOut;
         System.out.println("Final position: " + armsEncoder.getPosition());
+        System.out.println("Arms are out!");
+        armPosition = ArmPosition.kOut;
+        
     }
     
     public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
