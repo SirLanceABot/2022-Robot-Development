@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
 import frc.components.CargoManager;
+import frc.components.Climber;
 import frc.components.Intake;
 import frc.components.Shooter;
 import frc.components.Shuttle;
@@ -30,8 +31,9 @@ public final class RobotContainer
     public static final Drivetrain DRIVETRAIN = new Drivetrain();
     public static final CargoManager CARGO_MANAGER = new CargoManager();
     public static final Intake INTAKE = new Intake();
-    // public static final Shooter SHOOTER = new Shooter();
+    public static final Shooter SHOOTER = new Shooter();
     public static final Shuttle SHUTTLE = new Shuttle();
+    public static final Climber CLIMBER = new Climber();
 
     public static final DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
     public static final OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
