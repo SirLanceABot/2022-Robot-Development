@@ -212,7 +212,8 @@ public class Intake
         setArmSpeed(.09);
         double p = armsEncoder.getPosition();
         int c = 0;
-        while(armsEncoder.getPosition() < desiredPosition || c < 10/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
+        boolean forceQuit = false;
+        while(armsEncoder.getPosition() < desiredPosition && forceQuit == false/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
         {
             if(p != armsEncoder.getPosition())
             {
@@ -229,11 +230,13 @@ public class Intake
             {
                 setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
             }
+            if(c >= 10 && armsEncoder.getPosition() >= desiredPosition-.5)
+            {
+                System.out.println("Force quit");
+                forceQuit = true;
+            }
         }
-        if(c >= 10 && armsEncoder.getPosition() >= desiredPosition-2)
-        {
-            System.out.println("Force quit");
-        }
+        
         setArmSpeed(0.0);
         System.out.println("Final position: " + armsEncoder.getPosition());
         System.out.println("Arms are out!");
