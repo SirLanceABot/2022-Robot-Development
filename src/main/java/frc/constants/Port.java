@@ -16,8 +16,8 @@ public class Port
 
         public static final int INTAKE_ROLLER = 0;
 
-        public static final int SHUTTLE_STAGE_ONE = 0;
-        public static final int SHUTTLE_STAGE_TWO = 0;
+        public static final int SHUTTLE_STAGE_ONE = 1;
+        public static final int SHUTTLE_STAGE_TWO = 5;
 
         public static final int CLIMBER_STAGE_ONE = 0;
         public static final int CLIMBER_STAGE_TWO = 0;
@@ -29,6 +29,9 @@ public class Port
     public class Sensor
     {
         public static final int SHOOTER_SHROUD = 0;
+        public static final int INTAKE_SENSOR = 0;
+        public static final int FIRST_STAGE_SENSOR = 1;
+        public static final int SECOND_STAGE_SENSOR = 2;
     }
 
     public class Controller
