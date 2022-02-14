@@ -9,6 +9,9 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.revrobotics.CANPIDController;
 
 import frc.constants.Port;
@@ -27,12 +30,15 @@ public class Shuttle
 
     // *** CLASS & INSTANCE VARIABLES ***
     // initializing motors
-    private static CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static CANSparkMax secondStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax secondStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final double FIRST_STAGE_SPEED = 0.25;
+    private static final double SECOND_STAGE_SPEED = 0.25;
 
     // initializing sensors TODO
-    // private static SENSOR firstStageSensor = new SENSOR();
-    // private static SENSOR secondStageSensor = new SENSOR();
+    private static final DigitalInput intakeSensor = new DigitalInput(Port.Sensor.INTAKE_SENSOR);
+    private static final DigitalInput firstStageSensor = new DigitalInput(Port.Sensor.FIRST_STAGE_SENSOR);
+    private static final DigitalInput secondStageSensor = new DigitalInput(Port.Sensor.SECOND_STAGE_SENSOR);
 
     // initializing encoders
     // private static CANEncoder firstEncoder = firstStageMotor.getEncoder();
@@ -209,35 +215,63 @@ public class Shuttle
     // TODO: Create a configMotor() method to configure each motor
     
 
-    public void reversefirstStage()
+    public void reverseFirstStage()
     {
-
+        setFirstStageSpeed(-FIRST_STAGE_SPEED);
     }
     
     public void stopFirstStage()
     {
-
+        setFirstStageSpeed(0);
     }
 
     public void forwardFirstStage()
     {
-
+        setFirstStageSpeed(FIRST_STAGE_SPEED);
     }
 
     public void reverseSecondStage()
     {
-
+        setSecondStageSpeed(-SECOND_STAGE_SPEED);
     }
 
     public void stopSecondStage()
     {
-
+        setSecondStageSpeed(0);
     }
 
     public void forwardSecondStage()
     {
-
+        setSecondStageSpeed(SECOND_STAGE_SPEED);
     }
+
+    private void setFirstStageSpeed(double speed)
+    {
+        if (speed > 1)
+        {
+            speed = 1;
+        }
+        else if (speed < -1)
+        {
+            speed = -1;
+        }
+        firstStageMotor.set(speed);
+    }
+
+    private void setSecondStageSpeed(double speed)
+    {
+        if (speed > 1)
+        {
+            speed = 1;
+        }
+        else if (speed < -1)
+        {
+            speed = -1;
+        }
+        secondStageMotor.set(speed);
+    }
+
+
     
     public String toString()
     {
