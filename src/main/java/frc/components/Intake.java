@@ -230,7 +230,7 @@ public class Intake
                 setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
             }
         }
-        if(c >= 10)
+        if(c >= 10 && armsEncoder.getPosition() >= desiredPosition-2)
         {
             System.out.println("Force quit");
         }

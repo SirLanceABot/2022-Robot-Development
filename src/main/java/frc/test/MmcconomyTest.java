@@ -2,6 +2,12 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
+//import edu.wpi.first.wpilibj.RobotController;
+import frc.components.Intake;
+import frc.robot.RobotContainer;
+
+
+
 public class MmcconomyTest implements MyTest
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -18,7 +24,7 @@ public class MmcconomyTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static final Intake INTAKE = RobotContainer.INTAKE;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -34,7 +40,7 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
-
+        INTAKE.moveArmOut(25);
     }
 
     /**
