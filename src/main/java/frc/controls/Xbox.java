@@ -163,7 +163,7 @@ public class Xbox extends Joystick
 
         if(axisIsFlipped[axis])
         {
-            value *= -1;
+            value *= -value;
         }
         if(Math.abs(value) <= axisDeadzone[axis])
         {
@@ -408,24 +408,24 @@ public class Xbox extends Joystick
         String str = "";
 
         //buttons
-        str = str + "A" + " " + (getRawButton(Button.kA) ? " 1" : " 0") + "\n";
-        str = str + "B" + " " + (getRawButton(Button.kB) ? " 1" : " 0") + "\n";
-        str = str + "X" + " " + (getRawButton(Button.kX) ? " 1" : " 0") + "\n";
-        str = str + "Y" + " " + (getRawButton(Button.kY) ? " 1" : " 0") + "\n";
-        str = str + "Left Bumper" + " " + (getRawButton(Button.kLeftBumper) ? " 1" : " 0") + "\n";
-        str = str + "Right Bumper" + " " + (getRawButton(Button.kRightBumper) ? " 1" : " 0") + "\n";
-        str = str + "Back" + " " + (getRawButton(Button.kBack) ? " 1" : " 0") + "\n";
-        str = str + "Start" + " " + (getRawButton(Button.kStart) ? " 1" : " 0") + "\n";
-        str = str + "Left Stick" + " " + (getRawButton(Button.kLeftStick) ? " 1" : " 0") + "\n";
-        str = str + "Right Stick" + " " + (getRawButton(Button.kRightStick) ? " 1" : " 0") + "\n";
+        str = str + "A   " + (getRawButton(Button.kA)) + "\n";
+        str = str + "B   " + (getRawButton(Button.kB)) + "\n";
+        str = str + "X   " + (getRawButton(Button.kX)) + "\n";
+        str = str + "Y   " + (getRawButton(Button.kY)) + "\n";
+        str = str + "Left Bumper   " + (getRawButton(Button.kLeftBumper)) + "\n";
+        str = str + "Right Bumper   " + (getRawButton(Button.kRightBumper)) + "\n";
+        str = str + "Back   " + (getRawButton(Button.kBack)) + "\n";
+        str = str + "Start   " + (getRawButton(Button.kStart)) + "\n";
+        str = str + "Left Stick   " + (getRawButton(Button.kLeftStick)) + "\n";
+        str = str + "Right Stick   " + (getRawButton(Button.kRightStick)) + "\n";
 
         //axis
-        str = str + "Left X" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftX)) + "\n";
-        str = str + "Left Y" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftY)) + "\n";
-        str = str + "Left Trigger" + " " + String.format("%3.2f", getRawAxis(Axis.kLeftTrigger)) + "\n";
-        str = str + "Right Trigger" + " " + String.format("%3.2f", getRawAxis(Axis.kRightTrigger)) + "\n";
-        str = str + "Right X" + " " + String.format("%3.2f", getRawAxis(Axis.kRightX)) + "\n";
-        str = str + "Right Y" + " " + String.format("%3.2f", getRawAxis(Axis.kRightY)) + "\n";
+        str = str + "Left X   " + String.format("%3.2f", getRawAxis(Axis.kLeftX)) + "\n";
+        str = str + "Left Y   " + String.format("%3.2f", getRawAxis(Axis.kLeftY)) + "\n";
+        str = str + "Left Trigger   " + String.format("%3.2f", getRawAxis(Axis.kLeftTrigger)) + "\n";
+        str = str + "Right Trigger   " + String.format("%3.2f", getRawAxis(Axis.kRightTrigger)) + "\n";
+        str = str + "Right X   " + String.format("%3.2f", getRawAxis(Axis.kRightX)) + "\n";
+        str = str + "Right Y   " + String.format("%3.2f", getRawAxis(Axis.kRightY)) + "\n";
 
         return str;
     }

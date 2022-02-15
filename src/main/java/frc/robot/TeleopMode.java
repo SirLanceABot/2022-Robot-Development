@@ -4,13 +4,14 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.Intake;
 // import frc.components.Climber;
-//import frc.components.Drivetrain;
-// import frc.components.Shooter;
-// import frc.components.Shuttle;
+// import frc.drivetrain.Drivetrain;
+import frc.components.Shooter;
+import frc.components.Shuttle;
 // import frc.components.CargoManager;
 
 // import frc.components.Shuttle;
 import frc.controls.DriverController;
+// import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
 // import frc.controls.DriverController.DriverAxisAction;
 // import frc.controls.DriverController.DriverPOVAction;
@@ -39,10 +40,10 @@ public class TeleopMode implements ModeTransition
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
     private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final OperatorController OPERATOR_CONTROLLER = RobotContainer.OPERATOR_CONTROLLER;
-    //private static final Shooter SHOOTER = RobotContainer.SHOOTER;
-    //private static final Climber CLIMBER = RobotContainer.CLIMBER;
-    //private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
-    //private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final Shooter SHOOTER = RobotContainer.SHOOTER;
+    // private static final Climber CLIMBER = RobotContainer.CLIMBER;
+    private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
+    // private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -92,23 +93,34 @@ public class TeleopMode implements ModeTransition
             }
         }
 
+
         // running the shuttle
         if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
         {
-            //SHUTTLE.overrideFSm();
-            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageToggle))
+            // SHUTTLE.overrideFSm();
+            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
             {
-               // if(SHUTTLE.forwardFirstStage());
-                {
+                SHUTTLE.forwardFirstStage();
+            }
 
-                }
-                    
+            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOn))
+            {
+                SHUTTLE.forwardSecondStage();
+            }
 
+            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOff))
+            {
+                SHUTTLE.stopFirstStage();
+            }
+
+            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOff))
+            {
+                SHUTTLE.stopSecondStage();
             }
         }
         else
         {
-            //shuttle.runFSM();
+            // SHUTTLE.run();
         }
 
     
@@ -117,45 +129,57 @@ public class TeleopMode implements ModeTransition
         {
             // SHOOTER.overrideFSM();
 
-            // SHOOTER.setShroudMotorSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud); 
+            // SHOOTER.setShroudAngle(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
             
-            // SHOOTER.setFlyWheelSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower);
+            // SHOOTER.setFlyWheelSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
         
             if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
             {
                 // SHUTTLE.overrideFSM();
-                // SHUTTLE.forwardSecondStage(); 
-                // SHUTTLE.forwardFirstStage();
+                SHUTTLE.forwardSecondStage(); 
+                SHUTTLE.forwardFirstStage();
             }
         }
         else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
         {
-            //SHOOTER.Shooter();
+            SHOOTER.shoot();
         }
 
 
         // running the climber
         if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kAutoClimb))
         {
-            //CLIMBER.run();
+        // CLIMBER.run();
         }
         else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOverride))
         {
-            //CLIMBER.overrideFSM();
+            // CLIMBER.overrideFSM();
             if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle))
             {
-                
+                //CLIMBER.extendClimberArm();
+            }
+
+        //   else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.extendClimberArm() == true)
+            {
+                // CLIMBER.bringInClimberArm();
+            }
+
+        //  else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.bringInClimberArm() == true)
+            {
+                // CLIMBER.ExtendClimberArm();
             }
 
         }
 
 
         // running the drivetrain
-        //DRIVETRAIN.moveYAxis()
-        //DRIVETRAIN.
-        //DRIVETRAIN.
+        // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
 
+        // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
 
+        // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+
+        // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriveBoost));
 
     }
 
