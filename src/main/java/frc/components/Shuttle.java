@@ -48,8 +48,30 @@ public class Shuttle
 
     // What we want to happen with the motors
     // FIXME Make variables not static 
+    //private static final boolean[] motorRequests = new boolean[2];
     private static boolean requestStageOneMotorRunning = false;
     private static boolean requestStageTwoMotorRunning = false;
+
+    // public enum MotorStage
+    // {
+    //     kOne(0), kTwo(1);
+
+    //     public int value;
+        
+    //     private MotorStage(int value)
+    //     {
+    //         this.value = value;
+    //     }
+    // }
+
+    public static class MotorStage
+    {
+        public boolean stageOne; 
+        public boolean stageTwo;
+
+    }
+
+    private static final MotorStage motorRequest = new MotorStage();
 
     /**
      * List of allowed Shuttle states, each state should have a doAction
@@ -61,8 +83,11 @@ public class Shuttle
             void doAction()
             {
                 // Request stage one and two to be turned off
-                requestStageOneMotorRunning = false;
-                requestStageTwoMotorRunning = false;
+                // requestStageOneMotorRunning = false;
+                // requestStageTwoMotorRunning = false;
+                motorRequest.stageOne = false;
+                motorRequest.stageTwo = false;
+
             }
         },
 
@@ -72,8 +97,10 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                requestStageOneMotorRunning = true;
-                requestStageTwoMotorRunning = true;
+                // requestStageOneMotorRunning = true;
+                // requestStageTwoMotorRunning = true;
+                motorRequest.stageOne = true;
+                motorRequest.stageTwo = true;
             }
         },
 
@@ -82,8 +109,10 @@ public class Shuttle
             void doAction()
             {
                 // Turn off stage one and two
-                requestStageOneMotorRunning = false;
-                requestStageTwoMotorRunning = false;
+                // requestStageOneMotorRunning = false;
+                // requestStageTwoMotorRunning = false;
+                motorRequest.stageOne = false;
+                motorRequest.stageTwo = false;
             }
         },
         
@@ -92,8 +121,10 @@ public class Shuttle
             void doAction()
             {
                 // Run stage two and turn off stage one
-                requestStageOneMotorRunning = false;
-                requestStageTwoMotorRunning = true;
+                // requestStageOneMotorRunning = false;
+                // requestStageTwoMotorRunning = true;
+                motorRequest.stageOne = false;
+                motorRequest.stageTwo = true;
             }
         },
 
@@ -102,8 +133,10 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one
-                requestStageOneMotorRunning = true;
+                // requestStageOneMotorRunning = true;
                 // requestStageTwoMotorRunning = false;
+                motorRequest.stageOne = true;
+                //motorRequest.stageTwo = false;
             }
         },
 
@@ -112,8 +145,10 @@ public class Shuttle
             void doAction()
             {
                 // Turn off stage one
-                requestStageOneMotorRunning = false;
+                //requestStageOneMotorRunning = false;
                 // requestStageTwoMotorRunning = false;
+                motorRequest.stageOne = false;
+                //motorRequest.stageTwo = false;
             }
         },
 
@@ -122,8 +157,10 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                requestStageOneMotorRunning = true;
-                requestStageTwoMotorRunning = true;
+                // requestStageOneMotorRunning = true;
+                // requestStageTwoMotorRunning = true;
+                motorRequest.stageOne = true;
+                motorRequest.stageTwo = true;
             }
         },
 
@@ -132,8 +169,10 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                requestStageOneMotorRunning = true;
-                requestStageTwoMotorRunning = true;
+                // requestStageOneMotorRunning = true;
+                // requestStageTwoMotorRunning = true;
+                motorRequest.stageOne = true;
+                motorRequest.stageTwo = true;
             }
         },
 
@@ -147,6 +186,7 @@ public class Shuttle
             }
         };
     }
+
 
     /**
      * Transitions of FSM
@@ -206,7 +246,11 @@ public class Shuttle
     // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
     public Shuttle()
     {
+        // motorRequests[MotorStage.kOne.value] = false;
+        // motorRequests[MotorStage.kTwo.value] = false;
 
+        motorRequest.stageOne = false;
+        motorRequest.stageTwo = false;
     }
 
 
