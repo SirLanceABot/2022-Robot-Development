@@ -322,6 +322,32 @@ public class Shuttle
         return null;
     }
 
+    /*
+    public void determineAndSetInitialState()
+    {
+        // Measure sensor values
+        // TODO: Make new state for cargo only in stage one
+        // TODO: Turn into a switch with cases
+        if (stageOneSensor == false && stageTwo == false)
+        {
+            currentShuttleState = State.NO_CARGO_STORED;
+        }
+        else if (stageOneSensor == true && stageTwo == false)
+        {
+            // currentShuttleState = State.CARGO_STORED_IN_STAGE_ONE;
+        }
+        else if (stageOneSensor == false && stageTwo == true)
+        {
+            currentShuttleState = State.CARGO_STORED_IN_STAGE_TWO;
+        }
+        else if (stageOneSensor == true && stageTwoSensor == true)
+        {
+            currentShuttleState = State.CARGO_STORED_IN_STAGE_ONE_AND_TWO;
+        }
+
+    }
+    */
+
     public static class Events
     {
         public static enum event
