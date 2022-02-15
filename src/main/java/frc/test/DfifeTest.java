@@ -36,9 +36,11 @@ public class DfifeTest implements MyTest
         Shuttle.Events.event.SHOOT_IS_CALLED
     };
     
+    Shuttle.State state = Shuttle.State.NO_CARGO_STORED;
+
     private static int i = 0;
 
-    private boolean tracker = false;
+    private boolean previousStateOfBumper = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -62,7 +64,7 @@ public class DfifeTest implements MyTest
      */
     public void periodic()
     {
-        
+        FSMTesting();
     }
 
     /**
@@ -73,13 +75,14 @@ public class DfifeTest implements MyTest
 
     }   
 
-    private void DarrensTestingMode()
+    private void FSMTesting()
     {
-        
         Shuttle.Events.event event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
-        Shuttle.State state = Shuttle.State.NO_CARGO_STORED;
 
-        if(tracker != DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+        boolean currentStateOfBumper = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
+
+
+        if(previousStateOfBumper != currentStateOfBumper)
         {
             event = array[i];
 
@@ -92,18 +95,20 @@ public class DfifeTest implements MyTest
             {
                 i = 0;
             }
+            
+            System.out.println("Event: " + event.toString());
+            System.out.println("State: " + state.toString());
         }
         else
         {
-            // event = Shuttle.Events.event.NONE;
+            event = Shuttle.Events.event.NONE;
         }
 
         state = Shuttle.Transition.findNextState(state, event);
 
-        // System.out.println("State: " + state.toString());
-        SmartDashboard.putString("State", state.toString());
-        SmartDashboard.putString("Event", event.toString());
+        // SmartDashboard.putString("State", state.toString());
+        // SmartDashboard.putString("Event", event.toString());
 
-        tracker = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
+        previousStateOfBumper = currentStateOfBumper;
     }
 }
