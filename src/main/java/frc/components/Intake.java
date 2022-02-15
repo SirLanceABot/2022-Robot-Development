@@ -86,7 +86,7 @@ public class Intake
 
     // TODO: add the modifier final to the rollerMotor
     //private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
     /*private static CANEncoder armsEncoder = armsMotor.getEncoder();
     private static CANDigitalInput armsForwardLimitSwitch;
@@ -220,17 +220,18 @@ public class Intake
                 c = 0;
                 p = armsEncoder.getPosition();
                 System.out.println("moving out, position of: " + armsEncoder.getPosition());
-                System.out.println("Speed is: " + (desiredPosition-armsEncoder.getPosition())/desiredPosition);
+                
             }
-            else
+            else if(armsEncoder.getPosition() >= desiredPosition-.8)
             {
                 c++;
+                System.out.println("C is: " + c);
             }
             if(armsEncoder.getPosition() > desiredPosition-.80)
             {
                 setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
             }
-            if(c >= 10 && armsEncoder.getPosition() >= desiredPosition-.5)
+            if(c >= 13 && armsEncoder.getPosition() >= desiredPosition-.2)
             {
                 System.out.println("Force quit");
                 forceQuit = true;

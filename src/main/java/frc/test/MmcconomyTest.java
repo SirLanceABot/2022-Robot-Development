@@ -40,8 +40,8 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
+        INTAKE.configMotor(INTAKE.armsMotor);
         INTAKE.moveArmOut(25);
-        INTAKE.moveArmIn(0);
     }
 
     /**
