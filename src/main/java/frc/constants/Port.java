@@ -3,6 +3,9 @@ package frc.constants;
  //TODO: Get right values for each port
 public class Port 
 {
+
+    // TODO: Make up numbers for these so that they avoid conflicts
+    // Maybe start with 30 and count up from there
     public class Motor
     {
         public static final int FRONT_LEFT_DRIVE = 0;

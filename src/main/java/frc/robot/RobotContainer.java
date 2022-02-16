@@ -35,16 +35,45 @@ public final class RobotContainer
     public static final Shuttle SHUTTLE = new Shuttle();
     public static final Climber CLIMBER = new Climber();
 
-    public static final DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
-    public static final OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
+    public static final DriverController DRIVER_CONTROLLER;
+    public static final OperatorController OPERATOR_CONTROLLER;
 
-    public static final MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
+    public static final MainShuffleboard MAIN_SHUFFLEBOARD;
 
-    public static final AutonomousTabData AUTONOMOUS_TAB_DATA = new AutonomousTabData();
+    public static final AutonomousTabData AUTONOMOUS_TAB_DATA;
     // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
-    public static final ArrayList<String> AUTONOMOUS_COMMANDS = new ArrayList<>();
+    public static final ArrayList<String> AUTONOMOUS_COMMANDS;
 
+    static
+    {
+        DRIVETRAIN = new Drivetrain();
+        CARGO_MANAGER = new CargoManager();
+        INTAKE = new Intake();
+        // SHOOTER = new Shooter();
+        SHUTTLE = new Shuttle();
     
+        DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
+        OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
+    
+        MAIN_SHUFFLEBOARD = new MainShuffleboard();
+    
+        AUTONOMOUS_TAB_DATA = new AutonomousTabData();
+        // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
+        AUTONOMOUS_COMMANDS = new ArrayList<>();
+
+        // DRIVETRAIN = null;
+        // CARGO_MANAGER = null;
+        // INTAKE = null;
+        // SHOOTER = null;
+        // SHUTTLE = null;
+        // DRIVER_CONTROLLER = null;
+        // OPERATOR_CONTROLLER = null;
+        // MAIN_SHUFFLEBOARD = null;
+        // AUTONOMOUS_TAB_DATA = null;
+        // AUTONOMOUS_COMMANDS = null;
+    }
+    
+
     // *** CLASS CONSTRUCTOR ***
     private RobotContainer()
     {
