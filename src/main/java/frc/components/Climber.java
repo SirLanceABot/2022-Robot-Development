@@ -16,13 +16,6 @@ public class Climber
     // *** CLASS & INSTANCE VARIABLES ***
 
 
-    static
-    {
-        // *** OBJECT INSTANTIATION ***
-        
-    }
-
-
     // *** CLASS CONSTRUCTOR ***
     public Climber()
     {

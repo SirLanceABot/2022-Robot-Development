@@ -16,13 +16,6 @@ public class CargoManager
     // *** CLASS & INSTANCE VARIABLES ***
 
 
-    static
-    {
-        // *** OBJECT INSTANTIATION ***
-        
-    }
-
-
     // *** CLASS CONSTRUCTOR ***
     public CargoManager()
     {

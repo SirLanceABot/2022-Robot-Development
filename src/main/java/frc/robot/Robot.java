@@ -35,25 +35,12 @@ public class Robot extends TimedRobot
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final TestMode test;
-    private static final AutonomousMode autonomous;
-    private static final DisabledMode disabled;
-    private static final TeleopMode teleop;
+    private static final TestMode test = new TestMode();
+    private static final AutonomousMode autonomous = new AutonomousMode();
+    private static final DisabledMode disabled = new DisabledMode();
+    private static final TeleopMode teleop = new TeleopMode();
 
     private static RobotState robotState = RobotState.kNone;
-
-    static
-    {
-        test = new TestMode();
-        autonomous = new AutonomousMode();
-        disabled = new DisabledMode();
-        teleop = new TeleopMode();
-
-        // test = null;
-        // autonomous = null;
-        // disabled = null;
-        // teleop = null;
-    }
 
 
     // *** CLASS CONSTRUCTOR ***

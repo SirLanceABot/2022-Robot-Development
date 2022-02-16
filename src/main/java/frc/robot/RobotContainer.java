@@ -28,51 +28,21 @@ public final class RobotContainer
 
     
     // *** CLASS & INSTANCE VARIABLES ***
-    public static final Drivetrain DRIVETRAIN;
-    public static final CargoManager CARGO_MANAGER;
-    public static final Intake INTAKE;
-    public static final Shooter SHOOTER;
-    public static final Shuttle SHUTTLE;
-    public static final Climber CLIMBER;
+    public static final Drivetrain DRIVETRAIN = new Drivetrain();
+    public static final CargoManager CARGO_MANAGER = new CargoManager();
+    public static final Intake INTAKE = new Intake();
+    public static final Shooter SHOOTER = new Shooter();
+    public static final Shuttle SHUTTLE = new Shuttle();
+    public static final Climber CLIMBER = new Climber();
 
-    public static final DriverController DRIVER_CONTROLLER;
-    public static final OperatorController OPERATOR_CONTROLLER;
+    public static final DriverController DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
+    public static final OperatorController OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
 
-    public static final MainShuffleboard MAIN_SHUFFLEBOARD;
+    public static final MainShuffleboard MAIN_SHUFFLEBOARD = new MainShuffleboard();
 
-    public static final AutonomousTabData AUTONOMOUS_TAB_DATA;
+    public static final AutonomousTabData AUTONOMOUS_TAB_DATA = new AutonomousTabData();
     // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
-    public static final ArrayList<String> AUTONOMOUS_COMMANDS;
-
-    static
-    {
-        DRIVETRAIN = new Drivetrain();
-        CARGO_MANAGER = new CargoManager();
-        INTAKE = new Intake();
-        SHOOTER = new Shooter();
-        SHUTTLE = new Shuttle();
-        CLIMBER = new Climber();
-    
-        DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
-        OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
-    
-        MAIN_SHUFFLEBOARD = new MainShuffleboard();
-        AUTONOMOUS_TAB_DATA = new AutonomousTabData();
-        // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
-        AUTONOMOUS_COMMANDS = new ArrayList<>();
-
-        // DRIVETRAIN = null;
-        // CARGO_MANAGER = null;
-        // INTAKE = null;
-        // SHOOTER = null;
-        // SHUTTLE = null;
-        // CLIMBER = null;
-        // DRIVER_CONTROLLER = null;
-        // OPERATOR_CONTROLLER = null;
-        // MAIN_SHUFFLEBOARD = null;
-        // AUTONOMOUS_TAB_DATA = null;
-        // AUTONOMOUS_COMMANDS = null;
-    }
+    public static final ArrayList<String> AUTONOMOUS_COMMANDS = new ArrayList<>();
     
 
     // *** CLASS CONSTRUCTOR ***
