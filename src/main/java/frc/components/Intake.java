@@ -20,6 +20,8 @@ import com.revrobotics.RelativeEncoder;
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
 
+import javax.print.attribute.standard.Destination;
+
 //test lol
 
 public class Intake 
@@ -209,7 +211,7 @@ public class Intake
         //TODO counter the force quit issue using c variable
         desiredPosition -= .05;
         System.out.println("Moving arms out...");
-        setArmSpeed(.09);
+        setArmSpeed(0.09);
         double p = armsEncoder.getPosition();
         int c = 0;
         boolean forceQuit = false;
@@ -247,14 +249,35 @@ public class Intake
     
     public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
     {
+        desiredPosition += .05;
         System.out.println("Moving arms In...");
-        setArmSpeed(-0.5);
-        if(armsEncoder.getPosition() > 0 ) //Both getPostion and 0 SHOULD be in the unit of rotations
+        setArmSpeed(-0.09);
+        double p = armsEncoder.getPosition();
+        int c = 0;
+        boolean forceQuit = false;
+        if(armsEncoder.getPosition() > desiredPosition && forceQuit == false) //Both getPostion and 0 SHOULD be in the unit of rotations
         {
-            
-            System.out.println(armsEncoder.getPosition());
-            System.out.println("moving in");
-            setArmSpeed(-1*((desiredPosition-armsEncoder.getPosition())/desiredPosition));
+            if(p!=armsEncoder.getPosition())
+            {
+                c = 0;
+                p = armsEncoder.getPosition();
+                System.out.println("Moving in, position of: " + armsEncoder.getPosition());
+            }
+            else if(armsEncoder.getPosition() >= desiredPosition+.8)
+            {
+                c++;
+                System.out.println("C is "+ c);
+            }
+            if(armsEncoder.getPosition() > desiredPosition+.80)
+            {
+                setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
+            }
+            if(c >= 13 && armsEncoder.getPosition() >= desiredPosition+.2)
+            {
+                System.out.println("Force Quit");
+                forceQuit = true;
+            }
+           
         }
         setArmSpeed(0.0);
         System.out.println("Arms in!");
