@@ -28,12 +28,12 @@ public final class RobotContainer
 
     
     // *** CLASS & INSTANCE VARIABLES ***
-    public static final Drivetrain DRIVETRAIN = new Drivetrain();
-    public static final CargoManager CARGO_MANAGER = new CargoManager();
-    public static final Intake INTAKE = new Intake();
-    public static final Shooter SHOOTER = new Shooter();
-    public static final Shuttle SHUTTLE = new Shuttle();
-    public static final Climber CLIMBER = new Climber();
+    public static final Drivetrain DRIVETRAIN;
+    public static final CargoManager CARGO_MANAGER;
+    public static final Intake INTAKE;
+    public static final Shooter SHOOTER;
+    public static final Shuttle SHUTTLE;
+    public static final Climber CLIMBER;
 
     public static final DriverController DRIVER_CONTROLLER;
     public static final OperatorController OPERATOR_CONTROLLER;
@@ -49,14 +49,14 @@ public final class RobotContainer
         DRIVETRAIN = new Drivetrain();
         CARGO_MANAGER = new CargoManager();
         INTAKE = new Intake();
-        // SHOOTER = new Shooter();
+        SHOOTER = new Shooter();
         SHUTTLE = new Shuttle();
+        CLIMBER = new Climber();
     
         DRIVER_CONTROLLER = new DriverController(Port.Controller.DRIVER);
         OPERATOR_CONTROLLER = new OperatorController(Port.Controller.OPERATOR);
     
         MAIN_SHUFFLEBOARD = new MainShuffleboard();
-    
         AUTONOMOUS_TAB_DATA = new AutonomousTabData();
         // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
         AUTONOMOUS_COMMANDS = new ArrayList<>();
@@ -66,6 +66,7 @@ public final class RobotContainer
         // INTAKE = null;
         // SHOOTER = null;
         // SHUTTLE = null;
+        // CLIMBER = null;
         // DRIVER_CONTROLLER = null;
         // OPERATOR_CONTROLLER = null;
         // MAIN_SHUFFLEBOARD = null;
