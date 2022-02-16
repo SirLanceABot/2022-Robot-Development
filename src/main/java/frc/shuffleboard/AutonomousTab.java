@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
-import frc.shuffleboard.AutonomousTabData;
-
 // TODO @Joel - Look for these TODO comments in this class and in the DisableMode.java class. They have a blue mark on the scroll bar.
 // Here is the basic idea.
 // 1. The RobotContainer.java class has the following:

@@ -20,7 +20,9 @@ public class AutonomousMode implements ModeTransition
     // *** CLASS CONSTRUCTOR ***
     public AutonomousMode()
     {
+        System.out.println(fullClassName + " : Constructor Started");
 
+        System.out.println(fullClassName + ": Constructor Finished");
     }
 
     /**

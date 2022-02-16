@@ -4,7 +4,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
 import frc.robot.Robot.RobotState;
-import frc.shuffleboard.AutonomousTab;
 import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
 
@@ -29,7 +28,9 @@ public class DisabledMode implements ModeTransition
     // *** CLASS CONSTRUCTOR ***
     public DisabledMode()
     {
+        System.out.println(fullClassName + " : Constructor Started");
 
+        System.out.println(fullClassName + ": Constructor Finished");
     }
 
     /**
@@ -45,7 +46,7 @@ public class DisabledMode implements ModeTransition
      */
     public void periodic()
     {
-        if (robotState == RobotState.kDisabledAfterRobotInit)
+        if (robotState == RobotState.kDisabledAfterRobotInit && MAIN_SHUFFLEBOARD != null)
         {
             boolean isNewData = MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
 

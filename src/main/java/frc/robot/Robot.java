@@ -16,6 +16,7 @@ public class Robot extends TimedRobot
     static
     {
         System.out.println("Loading: " + fullClassName);
+        RobotContainer.constructMeFirst();
         robotState = RobotState.kNone;
     }
 
@@ -35,9 +36,9 @@ public class Robot extends TimedRobot
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    private static final DisabledMode disabled = new DisabledMode();
     private static final TestMode test = new TestMode();
     private static final AutonomousMode autonomous = new AutonomousMode();
-    private static final DisabledMode disabled = new DisabledMode();
     private static final TeleopMode teleop = new TeleopMode();
 
     private static RobotState robotState = RobotState.kNone;

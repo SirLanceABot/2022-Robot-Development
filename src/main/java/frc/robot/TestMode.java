@@ -46,7 +46,9 @@ public class TestMode implements ModeTransition
     // *** CLASS CONSTRUCTOR ***
     public TestMode()
     {
+        System.out.println(fullClassName + " : Constructor Started");
 
+        System.out.println(fullClassName + ": Constructor Finished");
     }
 
     /**

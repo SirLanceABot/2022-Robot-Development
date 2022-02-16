@@ -2,7 +2,7 @@ package frc.shuffleboard;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.shuffleboard.AutonomousTabData;
+// import frc.robot.RobotContainer;
 
 public class MainShuffleboard 
 {
@@ -16,6 +16,9 @@ public class MainShuffleboard
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // private static final DriverControllerTab DRIVER_CONTROLLER_TAB = RobotContainer.DRIVER_CONTROLLER_TAB;
+    // private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = RobotContainer.OPERATOR_CONTROLLER_TAB;
+    // private static final AutonomousTab AUTONOMOUS_TAB = RobotContainer.AUTONOMOUS_TAB;
     private static final DriverControllerTab DRIVER_CONTROLLER_TAB = new DriverControllerTab();
     private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = new OperatorControllerTab();
     private static final AutonomousTab AUTONOMOUS_TAB = new AutonomousTab();
