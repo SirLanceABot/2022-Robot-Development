@@ -86,10 +86,9 @@ public final class RobotContainer
         throw new UnsupportedOperationException("This is a utility class!");
     }
 
-    public static void constructMeFirst()
-    {}
 
     // *** CLASS & INSTANCE METHODS ***
-
+    public static void constructMeFirst()
+    {}
         
 }
