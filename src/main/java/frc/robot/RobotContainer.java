@@ -29,19 +29,19 @@ public final class RobotContainer
     
     // *** INCLUDED ROBOT OBJECTS ***
     // Switch objects to true that you need to use
-    private static final boolean useDrivetrain = false;
-    private static final boolean useCargoManager = false;
-    private static final boolean useIntake = false;
-    private static final boolean useShooter = false;
-    private static final boolean useShuttle = false;
-    private static final boolean useClimber = false;
+    private static final boolean useDrivetrain          = false;
+    private static final boolean useCargoManager        = false;
+    private static final boolean useIntake              = false;
+    private static final boolean useShooter             = false;
+    private static final boolean useShuttle             = false;
+    private static final boolean useClimber             = false;
 
-    private static final boolean useDriverController = false;
-    private static final boolean useOperatorController = false;
+    private static final boolean useDriverController    = false;
+    private static final boolean useOperatorController  = false;
 
-    private static final boolean useMainShuffleboard = false;
-    private static final boolean useAutonomousTabData = false;
-    private static final boolean useAutonomousCommands = false;
+    private static final boolean useMainShuffleboard    = false;
+    private static final boolean useAutonomousTabData   = false;
+    private static final boolean useAutonomousCommands  = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
