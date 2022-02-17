@@ -41,7 +41,10 @@ public class MmcconomyTest implements MyTest
     public void init()
     {
         INTAKE.configMotor(INTAKE.armsMotor);
-        INTAKE.moveArmOut(25);
+        INTAKE.moveArmOut(5.19480519481*50/3);
+        INTAKE.moveArmIn(0);
+        //System.out.println(INTAKE.GetArm());
+        INTAKE.TestRoller();
     }
 
     /**

@@ -15,7 +15,7 @@ import frc.test.BlankTest;
 // import frc.test.EmeaselTest;
 // import frc.test.IguptaTest;
 // import frc.test.JsawyerTest;
-// import frc.test.MmcconomyTest;
+import frc.test.MmcconomyTest;
 // import frc.test.OdomsTest;
 // import frc.test.RkapaluruTest;
 // import frc.test.TjadhavTest;
@@ -32,13 +32,13 @@ public class TestMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final BlankTest myTest = new BlankTest();
+    // private static final BlankTest myTest = new BlankTest();
     // private static final AburriTest myTest = new AburriTest();
     // private static final DfifeTest myTest = new DfifeTest();
     // private static final EmeaselTest myTest = new EmeaselTest();
     // private static final IguptaTest myTest = new IguptaTest();
     // private static final JsawyerTest myTest = new JsawyerTest();
-    // private static final MmcconomyTest myTest = new MmcconomyTest();
+    private static final MmcconomyTest myTest = new MmcconomyTest();
     // private static final OdomsTest myTest = new OdomsTest();
     // private static final RkapaluruTest myTest = new RkapaluruTest();
     // private static final TjadhavTest myTest = new TjadhavTest();
