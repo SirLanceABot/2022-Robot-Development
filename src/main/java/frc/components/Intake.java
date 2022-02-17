@@ -1,28 +1,15 @@
 package frc.components;
 import frc.constants.Constant;
 import frc.constants.Port;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-//import com.revrobotics.CANDigitalInput;
 import com.revrobotics.SparkMaxLimitSwitch;
-//import com.revrobotics.CANEncoder;
-//import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.ControlType;
-//import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
-//import com.revrobotics.CANPIDController;
-import com.revrobotics.SparkMaxPIDController;
-//import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.RelativeEncoder;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
-
-import javax.print.attribute.standard.Destination;
-
-//test lol
 
 public class Intake 
 {
@@ -83,32 +70,29 @@ public class Intake
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static CANSparkMax rollerMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // ^that fella is for when I'm testing with a boxbot
+   
 
-    // TODO: add the modifier final to the rollerMotor
-    //private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax armsMotor = new CANSparkMax(/*elliot needs to add this port*/1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    /*private static CANEncoder armsEncoder = armsMotor.getEncoder();
-    private static CANDigitalInput armsForwardLimitSwitch;
-    private static CANDigitalInput armsReverseLimitSwitch;*/
+    private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax armsMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private static final CANSparkMax rollerMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // public static final CANSparkMax armsMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // ^these fellas are for when I'm testing with a boxbot
     private static RelativeEncoder armsEncoder = armsMotor.getEncoder();
     private static SparkMaxLimitSwitch armsForwardLimitSwitch;
     private static SparkMaxLimitSwitch armsBackwardLimitSwitch;
 
 
-    // TODO: make the following static
-    private double armSolenoiod;
-    private double armSensor;
-    private double armUpSensor;
-    private double armDownSensor;
+    // private double armSolenoiod;
+    // private double armSensor;
+    // private double armUpSensor;
+    // private double armDownSensor;
+    //^unknown if nessicary because unused
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = /*Constant.INTAKE_SPEED*/.1;
+    private static final double intakeSpeed = Constant.INTAKE_SPEED;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -126,8 +110,6 @@ public class Intake
         return this.armPosition;
     }
 
-    //create a configRollerMotor() method to configure the roller motor
-    //It has become configMotor() because there are two motors that need configuring
     //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
     public static void configMotor(CANSparkMax motor)
     {
@@ -144,11 +126,6 @@ public class Intake
 
         if(motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
         {
-            /*armsReverseLimitSwitch = Motor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
-            armsReverseLimitSwitch.enableLimitSwitch(false);
-            armsForwardLimitSwitch = Motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
-            armsForwardLimitSwitch.enableLimitSwitch(false);
-            armsEncoder.setPosition(0);*/
             armsBackwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
             armsBackwardLimitSwitch.enableLimitSwitch(false);
             armsForwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
@@ -170,9 +147,6 @@ public class Intake
     }
 
     //setters
-    // TODO This looks like a setRollerDirection() method, should it be renamed
-    // The setRollerSpeed() method should call the set() method of the rollerMotor
-    // we dont currenly need a setRollerSpeed() becuase IntakeSpeed is a constant
     private void setRollerDirection(CANSparkMax motor, RollerDirection direction)
     {
         motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
@@ -208,7 +182,6 @@ public class Intake
     //The motor has a diameter of .49in and a circumference of 1.54in
     //to move 8in it needs to spin 5.19480519481 times
     {
-        //TODO counter the force quit issue using c variable
         desiredPosition -= .05;
         System.out.println("Moving arms out...");
         setArmSpeed(0.09);
@@ -297,11 +270,9 @@ public class Intake
     public String toString()
     {
         String thisthing = "";
-        thisthing += String.format("%-20s%-20s%-20s%", "armSolenoid", "armPosition\n");
-        thisthing += String.format("%-20s%-20s%-20s%", this.armSolenoiod, this.armPosition+"\n");
         thisthing += String.format("------------------------------------------------------------\n");
-        thisthing += String.format("%-20s%-20s%-20s%",  "ArmSensor", "ArmDownSensor", "ArmUpSensor\n");
-        thisthing += String.format("%-20s%-20s%-20s%", this.armSensor, this.armUpSensor, this.armDownSensor+"\n");
+        thisthing += String.format("%-20s%-20s%",  "Arms Position", "Arms Speed");
+        thisthing += String.format("%-20s%-20s%", this.armPosition, armsMotor.get()+"\n");
         thisthing += String.format("------------------------------------------------------------\n");
         thisthing += String.format("%-20s%-20s%-20s%", "RollerDirection", "DesiredRollerSpeed", "RollerSpeed\n");
         thisthing += String.format("%-20s%-20s%-20s%", this.rollerDirection, this.desiredRollerSpeed, this.rollerSpeed+"\n");

@@ -18,15 +18,16 @@ public class Port
         public static final int BACK_RIGHT_TURN = 37;
 
         public static final int INTAKE_ROLLER = 38;
+        public static final int INTAKE_ARMS_MOTOR = 39;
 
-        public static final int SHUTTLE_STAGE_ONE = 39;
-        public static final int SHUTTLE_STAGE_TWO = 40;
+        public static final int SHUTTLE_STAGE_ONE = 40;
+        public static final int SHUTTLE_STAGE_TWO = 41;
 
-        public static final int CLIMBER_STAGE_ONE = 41;
-        public static final int CLIMBER_STAGE_TWO = 42;
+        public static final int CLIMBER_STAGE_ONE = 42;
+        public static final int CLIMBER_STAGE_TWO = 43;
 
-        public static final int SHOOTER_FLYWHEEL = 43;
-        public static final int SHOOTER_SHROUD = 44;
+        public static final int SHOOTER_FLYWHEEL = 44;
+        public static final int SHOOTER_SHROUD = 45;
     }
 
     public class Sensor
