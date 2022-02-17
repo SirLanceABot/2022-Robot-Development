@@ -59,7 +59,7 @@ public class Shooter
     //i *think* you divide gear ratio because you're finding flywheel speed given motor speed
     private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 4096.0) / FLYWHEEL_GEAR_RATIO;
 
-    /**
+    /*
      * Equation for conversion from V to cm for shroud sensor:
      * 2.139808155x^4 - 17.61030368x^3 + 54.6287886x^2 - 79.35135805x + 52.95064821 (r^2 = 0.9998)
      */

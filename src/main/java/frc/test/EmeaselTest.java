@@ -1,6 +1,10 @@
 package frc.test;
 
 import java.lang.invoke.MethodHandles;
+import frc.robot.RobotContainer;
+import frc.components.Shooter;
+import java.lang.Object;
+import edu.wpi.first.wpilibj.RobotController;
 
 public class EmeaselTest implements MyTest
 {
@@ -18,7 +22,7 @@ public class EmeaselTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static Shooter shooter = new Shooter();
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -42,7 +46,13 @@ public class EmeaselTest implements MyTest
      */
     public void periodic()
     {
-        
+        //when testing sensor output values, square ruler, sensor, and reflector, and then subtract 3/32 of an inch from the final reading
+        System.out.printf("%9s %1.3f", "Input: ", RobotController.getVoltage5V());
+        System.out.println();
+        System.out.printf("%9s %1.3f", "Output:  ", shooter.measureShroudAngle());
+        System.out.println();
+
+        // System.out.println(RobotController.getVoltage5V() + " " + shooter.measureShroudAngle());
     }
 
     /**

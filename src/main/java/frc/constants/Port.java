@@ -31,7 +31,7 @@ public class Port
 
     public class Sensor
     {
-        public static final int SHOOTER_SHROUD = 3;
+        public static final int SHOOTER_SHROUD = 0;
         public static final int INTAKE_SENSOR = 0;
         public static final int FIRST_STAGE_SENSOR = 1;
         public static final int SECOND_STAGE_SENSOR = 2;
