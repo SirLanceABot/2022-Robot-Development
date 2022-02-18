@@ -402,6 +402,8 @@ public class AutonomousTab
             DriverStation.reportWarning("Cannot Move Off Tarmac And Do Nothing", false);
         }
 
+        // TODO: trying to move first without moving off tarmac
+
         return isValid;
     }
 }

@@ -60,7 +60,6 @@ public class AutonomousTabData
 
     public PickUpCargo pickUpCargo = PickUpCargo.kYes;
 
-    @Override
     public String toString()
     {
         String str = "";
