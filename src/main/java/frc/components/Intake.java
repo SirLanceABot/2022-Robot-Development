@@ -51,9 +51,10 @@ public class Intake
 
     public static enum RollerDirection
     {
-        kIn(Math.abs(intakeSpeed)), //is basically posotive speed
-        kOut(Math.abs(intakeSpeed)*-1.0), //is basically negative speed
+        kIn(-intakeSpeed), //is basically posotive speed
+        kOut(intakeSpeed), //is basically negative speed
         kOff(0.0); //is zero
+        //in is negative
 
         private final double position;
 
@@ -72,10 +73,10 @@ public class Intake
     // *** CLASS & INSTANCE VARIABLES ***
    
 
-    private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax armsMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private static final CANSparkMax rollerMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // public static final CANSparkMax armsMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private static final CANSparkMax armsMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax armsMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^these fellas are for when I'm testing with a boxbot
     private static RelativeEncoder armsEncoder = armsMotor.getEncoder();
     private static SparkMaxLimitSwitch armsForwardLimitSwitch;
@@ -92,7 +93,7 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = Constant.INTAKE_SPEED;
+    private static final double intakeSpeed = .4;//Constant.INTAKE_SPEED;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -184,7 +185,7 @@ public class Intake
     {
         desiredPosition -= .05;
         System.out.println("Moving arms out...");
-        setArmSpeed(0.09);
+        setArmSpeed(0.1);
         double p = armsEncoder.getPosition();
         int c = 0;
         boolean forceQuit = false;
@@ -224,7 +225,7 @@ public class Intake
     {
         desiredPosition += .05;
         System.out.println("Moving arms In...");
-        setArmSpeed(-0.09);
+        setArmSpeed(-0.1);
         double p = armsEncoder.getPosition();
         int c = 0;
         boolean forceQuit = false;
