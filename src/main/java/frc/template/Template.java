@@ -24,7 +24,9 @@ public class Template
     // *** CLASS CONSTRUCTOR ***
     public Template()
     {
+        System.out.println(fullClassName + " : Constructor Started");
 
+        System.out.println(fullClassName + ": Constructor Finished");
     }
 
 
