@@ -32,8 +32,8 @@ public class Shuttle
     // initializing motors
     private static final CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANSparkMax secondStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final double FIRST_STAGE_SPEED = 0.25;
-    private static final double SECOND_STAGE_SPEED = 0.25;
+    private static final double FIRST_STAGE_SPEED = 0.1;
+    private static final double SECOND_STAGE_SPEED = 0.1;
 
     // initializing sensors TODO
     private static final DigitalInput intakeSensor = new DigitalInput(Port.Sensor.INTAKE_SENSOR);
@@ -306,7 +306,11 @@ public class Shuttle
     public Shuttle()
     {
         // Intital state of the FSM
-        currentShuttleState = measureCurrentState();
+        currentShuttleState = State.NO_CARGO_STORED;
+        // currentShuttleState = measureCurrentState();
+
+        configStageOneMotor();
+        configStageTwoMotor();
 
         // motorRequests[MotorStage.kOne.value] = false;
         // motorRequests[MotorStage.kTwo.value] = false;
@@ -345,8 +349,27 @@ public class Shuttle
         return measuredState;
     }
 
-    // TODO: Create a configMotor() method to configure each motor FIXME
+    // what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
+    private static void configStageOneMotor()
+    {
+        firstStageMotor.restoreFactoryDefaults();
+        firstStageMotor.setInverted(true);
+        firstStageMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+
+        firstStageMotor.setOpenLoopRampRate(0.1);
+        firstStageMotor.setSmartCurrentLimit(40);
+    }
     
+    // what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
+    private static void configStageTwoMotor()
+    {
+        secondStageMotor.restoreFactoryDefaults();
+        secondStageMotor.setInverted(true);
+        secondStageMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+
+        secondStageMotor.setOpenLoopRampRate(0.1);
+        secondStageMotor.setSmartCurrentLimit(40);
+    }
 
     public void reverseFirstStage()
     {
@@ -388,6 +411,7 @@ public class Shuttle
         {
             speed = -1;
         }
+
         firstStageMotor.set(speed);
     }
 
@@ -401,26 +425,26 @@ public class Shuttle
         {
             speed = -1;
         }
+
         secondStageMotor.set(speed);
     }
 
     // Proximity sensors
     // (intakeSensor, firstStageSensor, secondStageSensor)
-    // FIXME TODO: Figure out what True means
-    // True means ____
+    // True means sensor is picking something up which is why we are taking opposite
     public boolean measureIntakeSensor()
     {
-        return intakeSensor.get();
+        return !intakeSensor.get();
     }
 
     public boolean measureFirstStageSensor()
     {
-        return firstStageSensor.get();
+        return !firstStageSensor.get();
     }
     
     public boolean measureSecondStageSensor()
     {
-        return secondStageSensor.get();
+        return !secondStageSensor.get();
     }
     
     // TODO: Make toString()
@@ -433,13 +457,55 @@ public class Shuttle
     {
         public static enum event
         {
-            NONE,
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
-            STAGE_ONE_FULL_SENSOR_ACTIVATES,
-            STAGE_TWO_FULL_SENSOR_ACTIVATES,
-            STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-            SHOOT_IS_CALLED;
+            NONE
+            {
+                public String toString()
+                {
+                    return "NONE";
+                }
+            },
+            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES
+            {
+                public String toString()
+                {
+                    return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES";
+                }
+            },
+            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES
+            {
+                public String toString()
+                {
+                    return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES";
+                }
+            },
+            STAGE_ONE_FULL_SENSOR_ACTIVATES
+            {
+                public String toString()
+                {
+                    return "STAGE_ONE_FULL_SENSOR_ACTIVATES";
+                }
+            },
+            STAGE_TWO_FULL_SENSOR_ACTIVATES
+            {
+                public String toString()
+                {
+                    return "STAGE_TWO_FULL_SENSOR_ACTIVATES";
+                }
+            },
+            STAGE_TWO_FULL_SENSOR_DEACTIVATES
+            {
+                public String toString()
+                {
+                    return "STAGE_TWO_FULL_SENSOR_DEACTIVATES";
+                }
+            },
+            SHOOT_IS_CALLED
+            {
+                public String toString()
+                {
+                    return "SHOOT_IS_CALLED";
+                }
+            };
         }
     }
 

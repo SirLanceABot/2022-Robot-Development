@@ -4,10 +4,20 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.components.Shuttle;
+import frc.components.Shuttle.Events.event;
 import frc.controls.DriverController;
 import frc.controls.Xbox;
 import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
+
+// TODO: Testing numbers
+// 
+// public static final int SHUTTLE_STAGE_ONE = 7;
+// public static final int SHUTTLE_STAGE_TWO = 5;
+// 
+// public static final boolean useIntake2             = false;
+// public static final boolean useShooter             = false;
+// public static final boolean useShuttle             = true;
 
 public class DfifeTest implements MyTest
 {
@@ -81,6 +91,8 @@ public class DfifeTest implements MyTest
         measureABXY();
 
         FSMTestingV2();
+
+        testShuttleSensors();
         // shuttleTesting();
         // FSMTestingV1();
 
@@ -102,22 +114,26 @@ public class DfifeTest implements MyTest
         if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
         {
             // Move first stage
+            System.out.println("Stage one activated");
             shuttle.forwardFirstStage();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
         {
             // Move second stage
+            System.out.println("Stage two activated");
             shuttle.forwardSecondStage();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
         {
             // Reverse both stages
+            System.out.println("Stage one and two reversed");
             shuttle.reverseFirstStage();
             shuttle.reverseSecondStage();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
         {
             // Move both stages
+            System.out.println("Stage one and two activated");
             shuttle.forwardFirstStage();
             shuttle.forwardSecondStage();
         }
@@ -180,6 +196,10 @@ public class DfifeTest implements MyTest
             event = Shuttle.Events.event.SHOOT_IS_CALLED;
         }
 
+        if (event != Shuttle.Events.event.NONE)
+        {
+            System.out.println("Event name: " + event.toString());
+        }
         shuttle.fancyRun(event);
     }
 
@@ -232,5 +252,12 @@ public class DfifeTest implements MyTest
         previousButtonB = currentButtonB;
         previousButtonX = currentButtonX;
         previousButtonY = currentButtonY;
+    }
+
+    private void testShuttleSensors()
+    {
+        System.out.println("Intake Sensor: " + shuttle.measureIntakeSensor());
+        System.out.println("First Stage Sensor: " + shuttle.measureFirstStageSensor());
+        System.out.println("Second Stage Sensor: " + shuttle.measureSecondStageSensor());
     }
 }
