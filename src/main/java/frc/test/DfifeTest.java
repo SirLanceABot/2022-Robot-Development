@@ -18,6 +18,11 @@ import frc.robot.RobotContainer;
 // public static final boolean useIntake2             = false;
 // public static final boolean useShooter             = false;
 // public static final boolean useShuttle             = true;
+//
+// import frc.test.DfifeTest;
+    // // private static final BlankTest myTest = new BlankTest();
+    // // private static final AburriTest myTest = new AburriTest();
+    // private static final DfifeTest myTest = new DfifeTest();
 
 public class DfifeTest implements MyTest
 {
