@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import frc.components.CargoManager;
 import frc.components.Climber;
 import frc.components.Intake;
+import frc.components.Intake2;
 import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.constants.Port;
@@ -31,7 +32,8 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useDrivetrain          = false;
     private static final boolean useCargoManager        = false;
-    private static final boolean useIntake              = true;
+    private static final boolean useIntake              = false;
+    private static final boolean useIntake2             = false;
     private static final boolean useShooter             = false;
     private static final boolean useShuttle             = false;
     private static final boolean useClimber             = false;
@@ -39,7 +41,7 @@ public final class RobotContainer
     private static final boolean useDriverController    = false;
     private static final boolean useOperatorController  = false;
 
-    private static final boolean useMainShuffleboard    = false;
+    private static final boolean useMainShuffleboard    = true;
     private static final boolean useAutonomousTabData   = false;
     private static final boolean useAutonomousCommands  = false;
 
@@ -48,6 +50,7 @@ public final class RobotContainer
     public static final Drivetrain DRIVETRAIN; // = new Drivetrain();
     public static final CargoManager CARGO_MANAGER; // = new CargoManager();
     public static final Intake INTAKE; // = new Intake();
+    public static final Intake2 INTAKE2;
     public static final Shooter SHOOTER; // = new Shooter();
     public static final Shuttle SHUTTLE; // = new Shuttle();
     public static final Climber CLIMBER; // = new Climber();
@@ -67,6 +70,7 @@ public final class RobotContainer
         DRIVETRAIN = useDrivetrain ? new Drivetrain() : null;
         CARGO_MANAGER = useCargoManager ? new CargoManager() : null;
         INTAKE = useIntake ? new Intake() : null;
+        INTAKE2 = useIntake2 ? new Intake2() : null;
         SHOOTER = useShooter ? new Shooter() : null;
         SHUTTLE = useShuttle ? new Shuttle() : null;
         CLIMBER = useClimber ? new Climber() : null;

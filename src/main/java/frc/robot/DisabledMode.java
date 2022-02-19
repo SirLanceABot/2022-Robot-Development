@@ -50,7 +50,7 @@ public class DisabledMode implements ModeTransition
         {
             boolean isNewData = MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
 
-            if (isNewData)
+            if (isNewData && AUTONOMOUS_TAB_DATA != null && AUTONOMOUS_COMMANDS != null)
             {
                 AUTONOMOUS_TAB_DATA.updateData(MAIN_SHUFFLEBOARD.getAutonomousTabData());
 
