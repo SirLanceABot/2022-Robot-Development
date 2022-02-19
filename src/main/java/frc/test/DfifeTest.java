@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.components.Shuttle;
 import frc.controls.DriverController;
+import frc.controls.Xbox;
 import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
 
@@ -25,22 +26,34 @@ public class DfifeTest implements MyTest
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+    private static final Shuttle shuttle = RobotContainer.SHUTTLE;
+
     private static Shuttle.Events.event[] array =
     {
         Shuttle.Events.event.NONE,
         Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-        Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
+        Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this state and base it on something else?
         Shuttle.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,
         Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,
         Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
         Shuttle.Events.event.SHOOT_IS_CALLED
     };
     
-    Shuttle.State state = Shuttle.State.NO_CARGO_STORED;
+    private Shuttle.Events.event event;
+
+    private boolean previousButtonA = false;
+    private boolean previousButtonB = false;
+    private boolean previousButtonX = false;
+    private boolean previousButtonY = false;
+
+    private boolean currentButtonA = false;
+    private boolean currentButtonB = false;
+    private boolean currentButtonX = false;
+    private boolean currentButtonY = false;
 
     private static int i = 0;
 
-    private boolean previousStateOfBumper = false;
+    private boolean previousStateOfButton = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -64,7 +77,15 @@ public class DfifeTest implements MyTest
      */
     public void periodic()
     {
-        FSMTesting();
+        // Measure ABXY buttons
+        measureABXY();
+
+        FSMTestingV2();
+        // shuttleTesting();
+        // FSMTestingV1();
+
+        // Remember ABXY buttons
+        // rememberABXY();
     }
 
     /**
@@ -73,16 +94,105 @@ public class DfifeTest implements MyTest
     public void exit()
     {
 
-    }   
-
-    private void FSMTesting()
+    }
+    
+    // Testing the shuttle movements without FSM
+    private void shuttleTesting()
     {
-        Shuttle.Events.event event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+        if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
+        {
+            // Move first stage
+            shuttle.forwardFirstStage();
+        }
+        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
+        {
+            // Move second stage
+            shuttle.forwardSecondStage();
+        }
+        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
+        {
+            // Reverse both stages
+            shuttle.reverseFirstStage();
+            shuttle.reverseSecondStage();
+        }
+        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
+        {
+            // Move both stages
+            shuttle.forwardFirstStage();
+            shuttle.forwardSecondStage();
+        }
+        else
+        {
+            // Stop both stages
+            shuttle.stopFirstStage();
+            shuttle.stopSecondStage();
+        }
+    }
 
-        boolean currentStateOfBumper = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
+    // Testing FSM out
+    private void FSMTestingV2()
+    {
+        // Initially say there is no event then continue to look for an event
+        event = Shuttle.Events.event.NONE;
 
+        // Each event is a button
+        if(currentButtonA != previousButtonA)
+        {
+            if (currentButtonA)
+            {
+                event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+            }
+            else
+            {
+                event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
+            }
 
-        if(previousStateOfBumper != currentStateOfBumper)
+            previousButtonA = currentButtonA;
+        }
+        else if(currentButtonY != previousButtonY)
+        {
+            if (currentButtonY)
+            {
+                event = Shuttle.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
+            }
+            else
+            {
+                // STAGE_ONE_FULL_SENSOR_DEACTIVATES
+            }
+
+            previousButtonY = currentButtonY;
+        }
+        else if(currentButtonB != previousButtonB)
+        {
+            if (currentButtonB)
+            {
+                event = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
+            }
+            else
+            {
+                event = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
+            }
+
+            previousButtonB = currentButtonB;
+        }
+        else if(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftTrigger) > 0.5)
+        {
+            event = Shuttle.Events.event.SHOOT_IS_CALLED;
+        }
+
+        shuttle.fancyRun(event);
+    }
+
+    // Testing FSM out using cycling through events
+    private void FSMTestingV1()
+    {
+        // Initially say there is no event then continue to look for an event
+        event = Shuttle.Events.event.NONE;
+
+        // Cycle through the available events using a single button
+        boolean currentStateOfButton = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA);
+
+        if(previousStateOfButton != currentStateOfButton)
         {
             event = array[i];
 
@@ -97,18 +207,30 @@ public class DfifeTest implements MyTest
             }
             
             System.out.println("Event: " + event.toString());
-            System.out.println("State: " + state.toString());
         }
         else
         {
             event = Shuttle.Events.event.NONE;
         }
+        
+        shuttle.fancyRun(event);
 
-        state = Shuttle.Transition.findNextState(state, event);
+        previousStateOfButton = currentStateOfButton;
+    }
 
-        // SmartDashboard.putString("State", state.toString());
-        // SmartDashboard.putString("Event", event.toString());
+    private void measureABXY()
+    {
+        currentButtonA = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA);
+        currentButtonB = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB);
+        currentButtonX = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX);
+        currentButtonY = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY);
+    }
 
-        previousStateOfBumper = currentStateOfBumper;
+    private void rememberABXY()
+    {
+        previousButtonA = currentButtonA;
+        previousButtonB = currentButtonB;
+        previousButtonX = currentButtonX;
+        previousButtonY = currentButtonY;
     }
 }
