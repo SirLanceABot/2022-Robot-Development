@@ -41,8 +41,8 @@ public class MmcconomyTest implements MyTest
     public void init()
     {
         //INTAKE.TestRoller();
-        INTAKE.moveArmOut(1);
-        INTAKE.moveArmIn(0);
+        INTAKE.moveArmOut();
+        INTAKE.moveArmIn();
     }
 
     /**

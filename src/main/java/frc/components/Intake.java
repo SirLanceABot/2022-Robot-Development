@@ -30,28 +30,9 @@ public class Intake
         kOff
     }
 
-    public enum ArmDirection
-    {
-        kIn(1), 
-        kOut(-1.0), 
-        kOff(0.0); //is zero
-
-        private final double direction;
-
-        private ArmDirection(final double direction)
-        {
-            this.direction = direction;
-        }
-
-        public double direction()
-        {
-            return direction;
-        }
-    }
-
     public static enum RollerDirection
     {
-        kIn(-intakeSpeed), //is basically posotive speed
+        kIn(-intakeSpeed), //is basically positive speed
         kOut(intakeSpeed), //is basically negative speed
         kOff(0.0); //is zero
         //in is negative
@@ -82,18 +63,13 @@ public class Intake
     private static SparkMaxLimitSwitch armsForwardLimitSwitch;
     private static SparkMaxLimitSwitch armsBackwardLimitSwitch;
 
-
-    // private double armSolenoiod;
-    // private double armSensor;
-    // private double armUpSensor;
-    // private double armDownSensor;
-    //^unknown if nessicary because unused
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
     private static final double intakeSpeed = .4;//Constant.INTAKE_SPEED;
+    private static final double armSpeed = .1;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -110,37 +86,6 @@ public class Intake
     {
         return this.armPosition;
     }
-
-    //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
-    public static void configMotor(CANSparkMax motor)
-    {
-        System.out.println("configurating " + motor);
-
-        motor.restoreFactoryDefaults();
-        motor.setInverted(true);
-        motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
-
-        motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        motor.setSoftLimit(SoftLimitDirection.kForward, 0);
-        motor.enableSoftLimit(SoftLimitDirection.kForward, false);
-
-        if(motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
-        {
-            armsBackwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
-            armsBackwardLimitSwitch.enableLimitSwitch(false);
-            armsForwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
-            armsForwardLimitSwitch.enableLimitSwitch(false);
-            armsEncoder.setPosition(0);
-        }
-
-        motor.setOpenLoopRampRate(0.1);
-        motor.setSmartCurrentLimit(40);
-        
-
-        System.out.println(motor + "Configurated");
-    }
-
 
     public RollerDirection getRollerDirection()
     {
@@ -178,95 +123,143 @@ public class Intake
         System.out.println("Roller Off");
     }
 
-    public void moveArmOut(double desiredPosition) //FELLA MOVES 8 INCHES
-    //10:1 gear ratio, pulley system 40:24 gear teeth, total gear ratio is 50:3
-    //The motor has a diameter of .49in and a circumference of 1.54in
-    //to move 8in it needs to spin 5.19480519481 times
+    public void moveArmOut()
     {
-        desiredPosition -= .05;
-        System.out.println("Moving arms out...");
-        setArmSpeed(0.1);
-        double p = armsEncoder.getPosition();
-        int c = 0;
-        boolean forceQuit = false;
-        while(armsEncoder.getPosition() < desiredPosition && forceQuit == false/*5.19480519481*50/3*/) //Both getPostion and 5.19480519481 SHOULD be in the unit of rotations //50/3 is the gear ratio
-        {
-            if(p != armsEncoder.getPosition())
-            {
-                c = 0;
-                p = armsEncoder.getPosition();
-                System.out.println("moving out, position of: " + armsEncoder.getPosition());
-                
-            }
-            else if(armsEncoder.getPosition() >= desiredPosition-.8)
-            {
-                c++;
-                System.out.println("C is: " + c);
-            }
-            if(armsEncoder.getPosition() > desiredPosition-.80)
-            {
-                setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
-            }
-            if(c >= 13 && armsEncoder.getPosition() >= desiredPosition-.2)
-            {
-                System.out.println("Force quit");
-                forceQuit = true;
-            }
-        }
-        
-        setArmSpeed(0.0);
-        System.out.println("Final position: " + armsEncoder.getPosition());
-        System.out.println("Arms are out!");
-        armPosition = ArmPosition.kOut;
-        
+        setArmSpeed(armSpeed);
     }
-    
-    public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
+
+    public void moveArmIn()
     {
-        desiredPosition += .05;
-        System.out.println("Moving arms In...");
-        setArmSpeed(-0.1);
-        double p = armsEncoder.getPosition();
-        int c = 0;
-        boolean forceQuit = false;
-        if(armsEncoder.getPosition() > desiredPosition && forceQuit == false) //Both getPostion and 0 SHOULD be in the unit of rotations
-        {
-            if(p!=armsEncoder.getPosition())
-            {
-                c = 0;
-                p = armsEncoder.getPosition();
-                System.out.println("Moving in, position of: " + armsEncoder.getPosition());
-            }
-            else if(armsEncoder.getPosition() >= desiredPosition+.8)
-            {
-                c++;
-                System.out.println("C is "+ c);
-            }
-            if(armsEncoder.getPosition() > desiredPosition+.80)
-            {
-                setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
-            }
-            if(c >= 13 && armsEncoder.getPosition() >= desiredPosition+.2)
-            {
-                System.out.println("Force Quit");
-                forceQuit = true;
-            }
-           
-        }
+        setArmSpeed(-armSpeed);
+    }
+
+    public void stopArm()
+    {
         setArmSpeed(0.0);
-        System.out.println("Arms in!");
-        armPosition = ArmPosition.kIn;
-    } 
-    
-    public void updateArmPosition(ArmPosition armPosition)
-    {
-        //don't know how worthwile this is when I can just armPosition = ArmPosition.kIn;
     }
 
     public double MeasureMotorSpeed(CANSparkMax motor)
     {
         return(motor.get()); 
     }
+
+    //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
+    public static void configMotor(CANSparkMax motor)
+    {
+        System.out.println("configurating " + motor);
+    
+        motor.restoreFactoryDefaults();
+        motor.setInverted(true);
+        motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+    
+        motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        motor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    
+        if(motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
+        {
+            motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+            motor.enableSoftLimit(SoftLimitDirection.kReverse, false); //these stay until we get hard encoder working
+            armsBackwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsBackwardLimitSwitch.enableLimitSwitch(true);
+            armsForwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
+            armsForwardLimitSwitch.enableLimitSwitch(true);
+            armsEncoder.setPosition(0);
+        }
+    
+        motor.setOpenLoopRampRate(0.1);
+        motor.setSmartCurrentLimit(40);
+        
+        System.out.println(motor + "Configurated");
+    }
+
+        public double getArmMotorRotations()
+    {
+        // 4096 ticks per rev
+        // ^I don't know what that means lmao
+        return armsEncoder.getPosition();
+    }
+
+    // public void moveArmOut(double desiredPosition) 
+    // //FELLA MOVES 5 INCHES
+    // //The motor has a diameter of .49in and a circumference of 1.54in
+    // //I forgot the gear ratio lol
+    // {
+    //     desiredPosition -= .05;
+    //     System.out.println("Moving arms out...");
+    //     setArmSpeed(0.1);
+    //     double p = armsEncoder.getPosition();
+    //     int c = 0;
+    //     boolean forceQuit = false;
+    //     while(armsEncoder.getPosition() < desiredPosition && forceQuit == false/*5.19480519481*50/3*/) //Both getPostion and desiredPostion SHOULD be in the unit of rotations //50/3 is the gear ratio
+    //     {
+    //         if(p != armsEncoder.getPosition())
+    //         {
+    //             c = 0;
+    //             p = armsEncoder.getPosition();
+    //             System.out.println("moving out, position of: " + armsEncoder.getPosition());
+                
+    //         }
+    //         else if(armsEncoder.getPosition() >= desiredPosition-.8)
+    //         {
+    //             c++;
+    //             System.out.println("C is: " + c);
+    //         }
+    //         if(armsEncoder.getPosition() > desiredPosition-.80)
+    //         {
+    //             setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
+    //         }
+    //         if(c >= 13 && armsEncoder.getPosition() >= desiredPosition-.2)
+    //         {
+    //             System.out.println("Force quit");
+    //             forceQuit = true;
+    //         }
+    //     }
+        
+    //     setArmSpeed(0.0);
+    //     System.out.println("Final position: " + armsEncoder.getPosition());
+    //     System.out.println("Arms are out!");
+    //     armPosition = ArmPosition.kOut;
+        
+    // }
+    
+    // public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
+    // {
+    //     desiredPosition += .05;
+    //     System.out.println("Moving arms In...");
+    //     setArmSpeed(-0.1);
+    //     double p = armsEncoder.getPosition();
+    //     int c = 0;
+    //     boolean forceQuit = false;
+    //     if(armsEncoder.getPosition() > desiredPosition && forceQuit == false) //Both getPostion and 0 SHOULD be in the unit of rotations
+    //     {
+    //         if(p!=armsEncoder.getPosition())
+    //         {
+    //             c = 0;
+    //             p = armsEncoder.getPosition();
+    //             System.out.println("Moving in, position of: " + armsEncoder.getPosition());
+    //         }
+    //         else if(armsEncoder.getPosition() >= desiredPosition+.8)
+    //         {
+    //             c++;
+    //             System.out.println("C is "+ c);
+    //         }
+    //         if(armsEncoder.getPosition() > desiredPosition+.80)
+    //         {
+    //             setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
+    //         }
+    //         if(c >= 13 && armsEncoder.getPosition() >= desiredPosition+.2)
+    //         {
+    //             System.out.println("Force Quit");
+    //             forceQuit = true;
+    //         }
+           
+    //     }
+    //     setArmSpeed(0.0);
+    //     System.out.println("Arms in!");
+    //     armPosition = ArmPosition.kIn;
+    // } 
 
     public String toString()
     {
@@ -280,9 +273,8 @@ public class Intake
         return thisthing;
     }
 
-    public void TestRoller() //I just wanted to test the motors bro
+    public void TestRoller()
     {
-        //you can find the motor in the red bins in the robotics room and then you need a robot in a box and a laptop
         try
         {
             System.out.println("Starting");
@@ -300,13 +292,5 @@ public class Intake
             ex.printStackTrace();
         }
         
-    }
-
-    public void TestArms()
-    {
-        System.out.println("Starting");
-        moveArmOut(10);
-        //moveArmIn();
-        System.out.println("Complete");
     }
 }
