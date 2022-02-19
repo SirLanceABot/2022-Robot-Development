@@ -30,20 +30,22 @@ public final class RobotContainer
     
     // *** INCLUDED ROBOT OBJECTS ***
     // Switch objects to true that you need to use
-    private static final boolean useDrivetrain          = false;
-    private static final boolean useCargoManager        = false;
-    private static final boolean useIntake              = false;
-    private static final boolean useIntake2             = false;
-    private static final boolean useShooter             = false;
-    private static final boolean useShuttle             = false;
-    private static final boolean useClimber             = false;
+    public static final boolean useFullRobot           = false;
+    
+    public static final boolean useDrivetrain          = false;
+    public static final boolean useCargoManager        = false;
+    public static final boolean useIntake              = false;
+    public static final boolean useIntake2             = true;
+    public static final boolean useShooter             = false;
+    public static final boolean useShuttle             = false;
+    public static final boolean useClimber             = false;
 
-    private static final boolean useDriverController    = false;
-    private static final boolean useOperatorController  = false;
+    public static final boolean useDriverController    = true;
+    public static final boolean useOperatorController  = false;
 
-    private static final boolean useMainShuffleboard    = true;
-    private static final boolean useAutonomousTabData   = false;
-    private static final boolean useAutonomousCommands  = false;
+    public static final boolean useMainShuffleboard    = false;
+    public static final boolean useAutonomousTabData   = false;
+    public static final boolean useAutonomousCommands  = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
@@ -67,20 +69,20 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
-        DRIVETRAIN = useDrivetrain ? new Drivetrain() : null;
-        CARGO_MANAGER = useCargoManager ? new CargoManager() : null;
-        INTAKE = useIntake ? new Intake() : null;
-        INTAKE2 = useIntake2 ? new Intake2() : null;
-        SHOOTER = useShooter ? new Shooter() : null;
-        SHUTTLE = useShuttle ? new Shuttle() : null;
-        CLIMBER = useClimber ? new Climber() : null;
+        DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain() : null;
+        CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
+        INTAKE = useFullRobot || useIntake ? new Intake() : null;
+        INTAKE2 = useFullRobot || useIntake2 ? new Intake2() : null;
+        SHOOTER = useFullRobot || useShooter ? new Shooter() : null;
+        SHUTTLE = useFullRobot || useShuttle ? new Shuttle() : null;
+        CLIMBER = useFullRobot || useClimber ? new Climber() : null;
 
-        DRIVER_CONTROLLER = useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
-        OPERATOR_CONTROLLER = useOperatorController ? new OperatorController(Port.Controller.OPERATOR) : null;
+        DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
+        OPERATOR_CONTROLLER = useFullRobot || useOperatorController ? new OperatorController(Port.Controller.OPERATOR) : null;
 
-        MAIN_SHUFFLEBOARD = useMainShuffleboard ? new MainShuffleboard() : null;
-        AUTONOMOUS_TAB_DATA = useAutonomousTabData ? new AutonomousTabData() : null;
-        AUTONOMOUS_COMMANDS = useAutonomousCommands ? new ArrayList<>() : null;
+        MAIN_SHUFFLEBOARD = useFullRobot || useMainShuffleboard ? new MainShuffleboard() : null;
+        AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTabData ? new AutonomousTabData() : null;
+        AUTONOMOUS_COMMANDS = useFullRobot || useAutonomousCommands ? new ArrayList<>() : null;
     }
 
 

@@ -79,13 +79,13 @@ public class Intake2
 
     // private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private static final CANSparkMax armMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax armMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax rollerMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax armMotor = new CANSparkMax(7, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     
     // ^these fellas are for when I'm testing with a boxbot
     private static RelativeEncoder armEncoder = armMotor.getEncoder();
     private static SparkMaxLimitSwitch armForwardLimitSwitch;
-    private static SparkMaxLimitSwitch armBackwardLimitSwitch;
+    private static SparkMaxLimitSwitch armReverseLimitSwitch;
 
 
     // private double armSolenoiod;
@@ -153,7 +153,7 @@ public class Intake2
     // }
 
 
-    //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
+    //what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
     private static void configRollerMotor()
     {
         rollerMotor.restoreFactoryDefaults();
@@ -169,7 +169,7 @@ public class Intake2
         rollerMotor.setSmartCurrentLimit(40);
     }
 
-    //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
+    //what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
     private static void configArmMotor()
     {
         armMotor.restoreFactoryDefaults();
@@ -178,13 +178,13 @@ public class Intake2
 
         armMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         armMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        armMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        armMotor.setSoftLimit(SoftLimitDirection.kForward, 10);
         armMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
 
-        armBackwardLimitSwitch = armMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        armBackwardLimitSwitch.enableLimitSwitch(false);
-        armForwardLimitSwitch = armMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        armForwardLimitSwitch.enableLimitSwitch(false);
+        armReverseLimitSwitch = armMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        armReverseLimitSwitch.enableLimitSwitch(true);
+        armForwardLimitSwitch = armMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        armForwardLimitSwitch.enableLimitSwitch(true);
         // armEncoder.setPositionConversionFactor(4096);
         armEncoder.setPosition(0);
 
