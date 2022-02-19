@@ -67,120 +67,135 @@ public class TeleopMode implements ModeTransition
      */
     public void periodic()
     {
-        DRIVER_CONTROLLER.checkRumbleEvent();
-
-        // Running the intake
-        if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+        if(DRIVER_CONTROLLER != null)
         {
-            if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
+            DRIVER_CONTROLLER.checkRumbleEvent();
+
+            if(DRIVETRAIN != null)
             {
-                INTAKE.intakeRoller();
+                // running the drivetrain
+                // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
+
+                // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
+
+                // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+
+                // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
             }
-            else
+
+            // Running the intake
+            if(INTAKE != null)
             {
-                INTAKE.turnOffRoller();
+                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+                {
+                    if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
+                    {
+                        INTAKE.intakeRoller();
+                    }
+                    else
+                    {
+                        INTAKE.turnOffRoller();
+                    }
+                }
+                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                {
+                    if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+                    {
+                        INTAKE.outtakeRoller();
+                    }
+                    else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+                    {
+                        INTAKE.intakeRoller();
+                    }
+                }
             }
         }
-        else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+
+        if(OPERATOR_CONTROLLER != null)
         {
-            if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+            if(SHUTTLE != null)
             {
-                INTAKE.outtakeRoller();
+                // running the shuttle
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
+                {
+                    // SHUTTLE.overrideFSM();
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
+                    {
+                        SHUTTLE.forwardFirstStage();
+                    }
+
+                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOn))
+                    {
+                        SHUTTLE.forwardSecondStage();
+                    }
+
+                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOff))
+                    {
+                        SHUTTLE.stopFirstStage();
+                    }
+
+                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOff))
+                    {
+                        SHUTTLE.stopSecondStage();
+                    }
+                }
+                else
+                {
+                    // SHUTTLE.run();
+                }
             }
-            else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+
+            if(SHOOTER != null && SHUTTLE != null)
             {
-                INTAKE.intakeRoller();
+                // running the shooter
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
+                {
+                    // SHOOTER.overrideFSM();
+
+                    // SHOOTER.setShroudAngle(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
+                    
+                    // SHOOTER.setFlyWheelSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
+                
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
+                    {
+                        // SHUTTLE.overrideFSM();
+                        SHUTTLE.forwardSecondStage(); 
+                        SHUTTLE.forwardFirstStage();
+                    }
+                }
+                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+                {
+                    SHOOTER.shoot();
+                }
+            }
+
+            if(CLIMBER != null)
+            {
+                // running the climber
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kAutoClimb))
+                {
+                // CLIMBER.run();
+                }
+                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOverride))
+                {
+                    // CLIMBER.overrideFSM();
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle))
+                    {
+                        //CLIMBER.extendClimberArm();
+                    }
+
+                //   else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.extendClimberArm() == true)
+                    {
+                        // CLIMBER.bringInClimberArm();
+                    }
+
+                //  else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.bringInClimberArm() == true)
+                    {
+                        // CLIMBER.ExtendClimberArm();
+                    }
+                }
             }
         }
-
-
-        // running the shuttle
-        if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
-        {
-            // SHUTTLE.overrideFSM();
-            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
-            {
-                SHUTTLE.forwardFirstStage();
-            }
-
-            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOn))
-            {
-                SHUTTLE.forwardSecondStage();
-            }
-
-            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOff))
-            {
-                SHUTTLE.stopFirstStage();
-            }
-
-            else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOff))
-            {
-                SHUTTLE.stopSecondStage();
-            }
-        }
-        else
-        {
-            // SHUTTLE.run();
-        }
-
-    
-        // running the shooter
-        if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
-        {
-            // SHOOTER.overrideFSM();
-
-            // SHOOTER.setShroudAngle(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
-            
-            // SHOOTER.setFlyWheelSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
-        
-            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
-            {
-                // SHUTTLE.overrideFSM();
-                SHUTTLE.forwardSecondStage(); 
-                SHUTTLE.forwardFirstStage();
-            }
-        }
-        else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
-        {
-            SHOOTER.shoot();
-        }
-
-
-        // running the climber
-        if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kAutoClimb))
-        {
-        // CLIMBER.run();
-        }
-        else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOverride))
-        {
-            // CLIMBER.overrideFSM();
-            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle))
-            {
-                //CLIMBER.extendClimberArm();
-            }
-
-        //   else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.extendClimberArm() == true)
-            {
-                // CLIMBER.bringInClimberArm();
-            }
-
-        //  else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.bringInClimberArm() == true)
-            {
-                // CLIMBER.ExtendClimberArm();
-            }
-
-        }
-
-
-        // running the drivetrain
-        // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
-
-        // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
-
-        // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
-
-        // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
-
     }
 
     /**
