@@ -97,7 +97,7 @@ public class TeleopMode implements ModeTransition
         // running the shuttle
         if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
         {
-            // SHUTTLE.overrideFSm();
+            // SHUTTLE.overrideFSM();
             if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
             {
                 SHUTTLE.forwardFirstStage();
