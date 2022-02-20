@@ -11,18 +11,23 @@ import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
 
 // TODO: Testing numbers
-// 
-// public static final int SHUTTLE_STAGE_ONE = 7;
-// public static final int SHUTTLE_STAGE_TWO = 5;
-// 
-// public static final boolean useIntake2             = false;
-// public static final boolean useShooter             = false;
-// public static final boolean useShuttle             = true;
-//
-// import frc.test.DfifeTest;
-    // // private static final BlankTest myTest = new BlankTest();
-    // // private static final AburriTest myTest = new AburriTest();
-    // private static final DfifeTest myTest = new DfifeTest();
+/*
+// Port.java
+public static final int SHUTTLE_STAGE_ONE = 7;
+public static final int SHUTTLE_STAGE_TWO = 5;
+
+// RobotContainer.java
+public static final boolean useIntake2             = false;
+public static final boolean useShooter             = false;
+public static final boolean useShuttle             = true;
+
+// TestMode.java
+import frc.test.DfifeTest;
+
+// private static final BlankTest myTest = new BlankTest();
+// private static final AburriTest myTest = new AburriTest();
+private static final DfifeTest myTest = new DfifeTest();
+*/
 
 public class DfifeTest implements MyTest
 {
