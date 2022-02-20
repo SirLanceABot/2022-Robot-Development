@@ -35,7 +35,7 @@ public class Shuttle
     private static final double FIRST_STAGE_SPEED = 0.1;
     private static final double SECOND_STAGE_SPEED = 0.1;
 
-    // initializing sensors TODO
+    // initializing sensors
     private static final DigitalInput intakeSensor = new DigitalInput(Port.Sensor.INTAKE_SENSOR);
     private static final DigitalInput firstStageSensor = new DigitalInput(Port.Sensor.FIRST_STAGE_SENSOR);
     private static final DigitalInput secondStageSensor = new DigitalInput(Port.Sensor.SECOND_STAGE_SENSOR);
@@ -75,6 +75,7 @@ public class Shuttle
 
     private static final MotorStage motorRequest = new MotorStage();
 
+    // TODO: Figure out if this is needed or should be the "determinedEvent"
     private Shuttle.Events.event event;
 
     private boolean previousIntakeCanBe = false;
@@ -509,12 +510,18 @@ public class Shuttle
         }
     }
 
-    public void fancyRun(Events.event event)
-    // public void fancyRun(boolean shoot)
+    // public void fancyRun(Events.event event)
+    public void fancyRun(boolean shoot)
     {
         // TODO: Add measuring sensors to determine event, probablly in a different method
         // Could possibly then change measureState to use that as well
-        // determineEvent(shoot);
+        Events.event event = determineEvent(shoot);
+        
+        // Prints out the event if there is one
+        if (event != Shuttle.Events.event.NONE)
+        {
+            System.out.println("Event name: " + event.toString());
+        }
 
         // Send event to FSM
         checkStateChange(event);
@@ -549,17 +556,17 @@ public class Shuttle
         currentStageTwoFull = measureSecondStageSensor();
 
         // Initially say there is no event then continue to look for an event
-        event = Shuttle.Events.event.NONE;
+        Events.event determinedEvent = Events.event.NONE;
 
         if(currentIntakeCanBe != previousIntakeCanBe)
         {
             if (currentIntakeCanBe)
             {
-                event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+                determinedEvent = Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
             }
             else
             {
-                event = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
+                determinedEvent = Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
             }
 
             previousIntakeCanBe = currentIntakeCanBe;
@@ -568,31 +575,33 @@ public class Shuttle
         {
             if (currentStageOneFull)
             {
-                event = Shuttle.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
+                determinedEvent = Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
             }
             else
             {
                 // STAGE_ONE_FULL_SENSOR_DEACTIVATES
             }
+
+            previousStageOneFull = currentStageOneFull;
         }
         else if(currentStageTwoFull != previousStageTwoFull)
         {
             if (currentStageTwoFull)
             {
-                event = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
+                determinedEvent = Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
             }
             else
             {
-                event = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
+                determinedEvent = Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
             }
 
             previousStageTwoFull = currentStageTwoFull;
         }
         else if(shoot)
         {
-            event = Shuttle.Events.event.SHOOT_IS_CALLED;
+            determinedEvent = Events.event.SHOOT_IS_CALLED;
         }
 
-        return event;
+        return determinedEvent;
     }
 }
