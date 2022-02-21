@@ -1,6 +1,7 @@
 package frc.components;
 
 import java.lang.invoke.MethodHandles;
+import com.revrobotics.CANSparkMax;
 
 public class Climber 
 {
@@ -13,17 +14,99 @@ public class Climber
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
+    //FIXME For the st. joe match, we're only gonna go up to the second bar
+    //TODO Set up motors to canspark max
 
+    // *** CLASS & INSTANCE VARIABLES ***
+    private static final CANSparkMax fistStageClimbMotorLeader = new CANSparkMax(CLIMBER_STAGE_ONE_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);;
+    public climberMotor firstStageClimbMotorFollower;
+    public climberMotor secondStageClimberLeader;
+    public climberMotor secondStageClimberFollower;
+
+    private int FCLPosition;
+    private int FCFPosition;
+    private int SCLPosition;
+    private int SCFPosition;
 
     // *** CLASS CONSTRUCTOR ***
     public Climber()
     {
-
+        configFCF();
+        configFCL();
+        configSCL();
+        configSCF();
+        System.out.println("climber constructed");
     }
 
-
     // *** CLASS & INSTANCE METHODS ***
+    //Configs
+    public void configFCL() //FCL >> FirstClimberLeader
+    {
+        //TODO set a soft limit of however far the guy is legally allowed to move
+    }
 
-    
+    public void configFCF() //FCF >> FirstClimberFollower
+    {
+        //TODO set a soft limit of however far the guy is legally allowed to move
+    }
+
+    public void configSCL() //SCL >> SecondClimberLeader
+    {
+        //TODO set a soft limit of however far the guy is legally allowed to move
+    }
+
+    public void configSCF() //SCF >> SecondClimberFollower
+    {
+        //TODO set a soft limit of however far the guy is legally allowed to move
+    }
+
+    //Getters
+    public int getFCFPosition() {
+        return FCFPosition;
+    }
+    public int getFCLposition(){
+        return FCLPosition;
+    }
+    public int getSCFPosition() {
+        return SCFPosition;
+    }
+    public int getSCLposition(){
+        return SCLPosition;
+    }
+    //Setters
+    private int setFCFPosition(int FCFPosition) {
+        this.FCFPosition = FCFPosition;
+    }
+    private int setFCLPosition(int FCLPosition) {
+        this.FCLPosition = FCLPosition;
+    }
+    private int setSCFPosition(int SCFPosition) {
+        this.SCFPosition = SCFPosition;
+    }
+    private int setSCLPosition(int SCLPosition) {
+        this.SCLPosition = SCLPosition;
+    }
+    //Everything Else
+    public void setMotorSpeed(climbermotor motor, double speed)
+    {
+        //TODO change this according to chosen motor
+        motor.speed = speed;
+    }
+    public void grabFirstRung()
+    {
+        //move arm to yada yada position and pull arms up
+    }
+    public void grabSecondRung()
+    {
+        //move arm to yada yada position and pull arms up
+    }
+
+    public void grabThirdRung()
+    {
+        //move arm to yada yada position and pull arms up
+    }
+    pubilc void grabFourthRung()
+    {
+        //move arm to yada yada position and pull arms up
+    }
 }

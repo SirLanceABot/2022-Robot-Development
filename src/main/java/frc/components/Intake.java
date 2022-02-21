@@ -173,13 +173,11 @@ public class Intake
         armsMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
     
         armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 900);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 90);
         armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
-        armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false); //these stay until we get hard encoder working
         armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
         armsBackwardLimitSwitch.enableLimitSwitch(true);
         armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);

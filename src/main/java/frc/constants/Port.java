@@ -23,11 +23,14 @@ public class Port
         public static final int SHUTTLE_STAGE_ONE = 40;
         public static final int SHUTTLE_STAGE_TWO = 41;
 
-        public static final int CLIMBER_STAGE_ONE = 42;
-        public static final int CLIMBER_STAGE_TWO = 43;
+        public static final int CLIMBER_STAGE_ONE_LEADER = 42;
+        public static final int CLIMBER_STAGE_TWO_LEADER = 43;
+        public static final int CLIMBER_STAGE_ONE_FOLLOWER = 44;
+        public static final int CLIMBER_STAGE_TWO_FOLLOWER = 45;
 
-        public static final int SHOOTER_FLYWHEEL = 44;
-        public static final int SHOOTER_SHROUD = 45;
+        public static final int SHOOTER_FLYWHEEL = 46;
+        public static final int SHOOTER_SHROUD = 47;
+
     }
 
     public class Sensor
