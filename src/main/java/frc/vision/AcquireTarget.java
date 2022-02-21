@@ -20,6 +20,7 @@ public class AcquireTarget  implements Runnable{
 	// This object is used to capture frames from the camera.
 	// The captured image is stored to a Mat
 	private CvSink inputStream;
+  private GripPipeLine gripPipeLine = new GripPipeLine();
 
 
     public void run() {
@@ -55,6 +56,7 @@ public class AcquireTarget  implements Runnable{
             // skip the rest of the current iteration
             continue;
           }
+          gripPipeLine.process(mat);
           // Put a rectangle on the image
           Imgproc.rectangle(
               mat, new Point(10, 10), new Point(100, 100), new Scalar(255, 255, 255), 5);
