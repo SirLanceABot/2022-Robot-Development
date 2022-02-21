@@ -2,7 +2,7 @@ package frc.vision;
 
 import java.lang.invoke.MethodHandles;
 import frc.vision.GripPipeLine;
-import com.google.gson.Gson;
+// import com.google.gson.Gson;
 
 public class Vision extends GripPipeLine
 {
@@ -145,15 +145,15 @@ public class Vision extends GripPipeLine
 
     public synchronized void fromJson(String message)
     {
-        Vision temp = new Gson().fromJson(message, Vision.class);
-        set(temp);
+        // Vision temp = new Gson().fromJson(message, Vision.class);
+        // set(temp);
     }
 
-     public synchronized String toJson()
+    //  public synchronized String toJson()
     {
-        Gson gson = new Gson(); // Or use new GsonBuilder().create();
-        String json = gson.toJson(this); // serializes target to Json
-        return json;
+        //Gson gson = new Gson(); // Or use new GsonBuilder().create();
+        // String json = gson.toJson(this); // serializes target to Json
+        // return json;
     }
 
     /**
