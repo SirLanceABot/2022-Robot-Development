@@ -3,6 +3,8 @@ package frc.components;
 import java.lang.invoke.MethodHandles;
 import com.revrobotics.CANSparkMax;
 
+import frc.constants.Port;
+
 public class Climber 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -18,10 +20,10 @@ public class Climber
     //TODO Set up motors to canspark max
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final CANSparkMax fistStageClimbMotorLeader = new CANSparkMax(CLIMBER_STAGE_ONE_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);;
-    public climberMotor firstStageClimbMotorFollower;
-    public climberMotor secondStageClimberLeader;
-    public climberMotor secondStageClimberFollower;
+    private static final CANSparkMax firstStageClimbMotorLeader = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);;
+    // public climberMotor firstStageClimbMotorFollower;
+    // public climberMotor secondStageClimberLeader;
+    // public climberMotor secondStageClimberFollower;
 
     private int FCLPosition;
     private int FCFPosition;
@@ -74,23 +76,23 @@ public class Climber
         return SCLPosition;
     }
     //Setters
-    private int setFCFPosition(int FCFPosition) {
+    private void setFCFPosition(int FCFPosition) {
         this.FCFPosition = FCFPosition;
     }
-    private int setFCLPosition(int FCLPosition) {
+    private void setFCLPosition(int FCLPosition) {
         this.FCLPosition = FCLPosition;
     }
-    private int setSCFPosition(int SCFPosition) {
+    private void setSCFPosition(int SCFPosition) {
         this.SCFPosition = SCFPosition;
     }
-    private int setSCLPosition(int SCLPosition) {
+    private void setSCLPosition(int SCLPosition) {
         this.SCLPosition = SCLPosition;
     }
     //Everything Else
-    public void setMotorSpeed(climbermotor motor, double speed)
+    public void setMotorSpeed(double speed)
     {
         //TODO change this according to chosen motor
-        motor.speed = speed;
+        // motor.speed = speed;
     }
     public void grabFirstRung()
     {
@@ -105,7 +107,7 @@ public class Climber
     {
         //move arm to yada yada position and pull arms up
     }
-    pubilc void grabFourthRung()
+    public void grabFourthRung()
     {
         //move arm to yada yada position and pull arms up
     }
