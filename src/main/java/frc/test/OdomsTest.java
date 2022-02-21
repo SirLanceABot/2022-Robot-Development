@@ -2,6 +2,11 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.RobotContainer;
+
+import frc.vision.AcquireTarget;
+import frc.vision.Vision;
+
 public class OdomsTest implements MyTest
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -18,13 +23,14 @@ public class OdomsTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-
+    private static AcquireTarget target;
+    private static Thread targetThread;
 
 
     // *** CLASS CONSTRUCTOR ***
     public OdomsTest()
     {
-
+        //private static final Intake INTAKE = RobotContainer.INTAKE;
     }
 
 
@@ -34,6 +40,12 @@ public class OdomsTest implements MyTest
      */
     public void init()
     {
+        
+         // start thread for target camera and locate target
+        target = new AcquireTarget();
+        targetThread = new Thread(target, "TargetCamera");
+        targetThread.setDaemon(true);
+        targetThread.start();
 
     }
 
