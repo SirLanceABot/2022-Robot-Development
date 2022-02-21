@@ -104,6 +104,16 @@ public class Shuttle
                 motorRequest.stageTwo = false;
             }
         },
+
+        STORING_CARGO_IN_STAGE_TWO_AND_ONE
+        {
+            void doAction()
+            {
+                // Run stage one and two
+                // motorRequest.stageOne = true;
+                // motorRequest.stageTwo = true;
+            }
+        },
         
         SHOOTING_CARGO_FROM_STAGE_TWO
         {
@@ -119,9 +129,9 @@ public class Shuttle
         {
             void doAction()
             {
-                // Run stage one
+                // Run stage one and turn off stage two
                 motorRequest.stageOne = true;
-                //motorRequest.stageTwo = false;
+                motorRequest.stageTwo = false;
             }
         },
 
@@ -194,6 +204,8 @@ public class Shuttle
         // transition name (current state, event, new state)
         TRANSITION_1  (State.NO_CARGO_STORED,                       Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_TWO),
         TRANSITION_2  (State.STORING_CARGO_IN_STAGE_TWO,            Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO),
+        TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
+        TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
         TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
         TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
         TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
