@@ -76,8 +76,8 @@ public class Intake
     public Intake()
     {
         System.out.println("Intake Created");
-        configMotor(rollerMotor);
-        configMotor(armsMotor);
+        configArmsMotor();
+        configRollerMotor();
     }
 
     // *** CLASS & INSTANCE METHODS ***
@@ -123,6 +123,7 @@ public class Intake
         System.out.println("Roller Off");
     }
 
+    //100:1 gearbox
     public void moveArmOut()
     {
         setArmSpeed(armSpeed);
@@ -144,34 +145,52 @@ public class Intake
     }
 
     //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
-    public static void configMotor(CANSparkMax motor)
+    public static void configRollerMotor()
     {
-        System.out.println("configurating " + motor);
+        System.out.println("configurating Intake Motor");
     
-        motor.restoreFactoryDefaults();
-        motor.setInverted(true);
-        motor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+        rollerMotor.restoreFactoryDefaults();
+        rollerMotor.setInverted(true);
+        rollerMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
     
-        motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        motor.setSoftLimit(SoftLimitDirection.kForward, 0);
-        motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+        rollerMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        rollerMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        rollerMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        rollerMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
     
-        if(motor == armsMotor) //to my knowledge this is the only motor that'll need an encoder
-        {
-            motor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-            motor.enableSoftLimit(SoftLimitDirection.kReverse, false); //these stay until we get hard encoder working
-            armsBackwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
-            armsBackwardLimitSwitch.enableLimitSwitch(true);
-            armsForwardLimitSwitch = motor.getReverseLimitSwitch(Type.kNormallyOpen);
-            armsForwardLimitSwitch.enableLimitSwitch(true);
-            armsEncoder.setPosition(0);
-        }
-    
-        motor.setOpenLoopRampRate(0.1);
-        motor.setSmartCurrentLimit(40);
+        rollerMotor.setOpenLoopRampRate(0.1);
+        rollerMotor.setSmartCurrentLimit(40);
         
-        System.out.println(motor + "Configurated");
+        System.out.println("Configurated");
+    }
+
+    public static void configArmsMotor()
+    {
+        System.out.println("configurating arms motor");
+    
+        armsMotor.restoreFactoryDefaults();
+        armsMotor.setInverted(true);
+        armsMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
+    
+        armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 900);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    
+        
+        armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false); //these stay until we get hard encoder working
+        armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        armsBackwardLimitSwitch.enableLimitSwitch(true);
+        armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        armsForwardLimitSwitch.enableLimitSwitch(true);
+        armsEncoder.setPosition(0);
+        
+    
+        armsMotor.setOpenLoopRampRate(0.1);
+        armsMotor.setSmartCurrentLimit(40);
+        
+        System.out.println("Configurated");
     }
 
         public double getArmMotorRotations()
