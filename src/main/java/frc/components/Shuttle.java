@@ -32,8 +32,8 @@ public class Shuttle
     // initializing motors
     private static final CANSparkMax firstStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANSparkMax secondStageMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final double FIRST_STAGE_SPEED = 0.1;
-    private static final double SECOND_STAGE_SPEED = 0.1;
+    private static final double FIRST_STAGE_SPEED = 0.5;
+    private static final double SECOND_STAGE_SPEED = 0.5;
 
     // initializing sensors
     private static final DigitalInput intakeSensor = new DigitalInput(Port.Sensor.INTAKE_SENSOR);
@@ -50,23 +50,6 @@ public class Shuttle
 
     // What we want to happen with the motors
     // FIXME Make variables not static
-    // TODO: Remove these once transition to motorRequest is done
-    //private static final boolean[] motorRequests = new boolean[2];
-    private static boolean requestStageOneMotorRunning = false;
-    private static boolean requestStageTwoMotorRunning = false;
-
-    // public enum MotorStage
-    // {
-    //     kOne(0), kTwo(1);
-
-    //     public int value;
-        
-    //     private MotorStage(int value)
-    //     {
-    //         this.value = value;
-    //     }
-    // }
-
     public static class MotorStage
     {
         public boolean stageOne; 
@@ -97,8 +80,6 @@ public class Shuttle
             void doAction()
             {
                 // Request stage one and two to be turned off
-                // requestStageOneMotorRunning = false;
-                // requestStageTwoMotorRunning = false;
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = false;
             }
@@ -109,8 +90,6 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                // requestStageOneMotorRunning = true;
-                // requestStageTwoMotorRunning = true;
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
             }
@@ -121,8 +100,6 @@ public class Shuttle
             void doAction()
             {
                 // Turn off stage one and two
-                // requestStageOneMotorRunning = false;
-                // requestStageTwoMotorRunning = false;
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = false;
             }
@@ -133,8 +110,6 @@ public class Shuttle
             void doAction()
             {
                 // Run stage two and turn off stage one
-                // requestStageOneMotorRunning = false;
-                // requestStageTwoMotorRunning = true;
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = true;
             }
@@ -145,8 +120,6 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one
-                // requestStageOneMotorRunning = true;
-                // requestStageTwoMotorRunning = false;
                 motorRequest.stageOne = true;
                 //motorRequest.stageTwo = false;
             }
@@ -157,8 +130,6 @@ public class Shuttle
             void doAction()
             {
                 // Turn off stage one
-                //requestStageOneMotorRunning = false;
-                // requestStageTwoMotorRunning = false;
                 motorRequest.stageOne = false;
                 //motorRequest.stageTwo = false;
             }
@@ -169,8 +140,6 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                // requestStageOneMotorRunning = true;
-                // requestStageTwoMotorRunning = true;
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
             }
@@ -181,8 +150,6 @@ public class Shuttle
             void doAction()
             {
                 // Run stage one and two
-                // requestStageOneMotorRunning = true;
-                // requestStageTwoMotorRunning = true;
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
             }
@@ -306,19 +273,18 @@ public class Shuttle
     // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
     public Shuttle()
     {
-        // Intital state of the FSM
-        currentShuttleState = State.NO_CARGO_STORED;
-        // currentShuttleState = measureCurrentState();
-
         configStageOneMotor();
         configStageTwoMotor();
-
-        // motorRequests[MotorStage.kOne.value] = false;
-        // motorRequests[MotorStage.kTwo.value] = false;
 
         // Initialize motor commands to stop
         motorRequest.stageOne = false;
         motorRequest.stageTwo = false;
+
+        // Intital state of the FSM
+        // currentShuttleState = State.NO_CARGO_STORED;
+        currentShuttleState = measureCurrentState();
+        // Make a motor request that will be processed once enabled
+        currentShuttleState.doAction();
     }
 
 
@@ -354,7 +320,8 @@ public class Shuttle
     private static void configStageOneMotor()
     {
         firstStageMotor.restoreFactoryDefaults();
-        firstStageMotor.setInverted(true);
+        // TODO: Might need to make this not inverted if it works that way
+        firstStageMotor.setInverted(false);
         firstStageMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
 
         firstStageMotor.setOpenLoopRampRate(0.1);
