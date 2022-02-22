@@ -1,16 +1,25 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Size;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.core.Core;
+import org.opencv.core.CvType;
 
 public class AcquireTarget  implements Runnable
 {
@@ -35,6 +44,10 @@ public class AcquireTarget  implements Runnable
 
 	// This object is used to capture frames from the camera. The captured image is stored to a Mat
 	private CvSink inputStream;
+
+  GripPipeline gripPipeline = new GripPipeline();
+
+  TargetDataB nextTargetData = new TargetDataB();
 
   public void run() {
     // The Registered Trademark looks right in VSC but it isn't "/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0"
@@ -85,12 +98,128 @@ public class AcquireTarget  implements Runnable
       // angle to turn, distance to target, frame sequence number, time of acquisition
 
       // Demo OpenCV draw a rectangle on the image
-      Imgproc.rectangle(mat, new Point(10, 10), new Point(100, 100), new Scalar(255, 255, 255), 5);
+      // Imgproc.rectangle(mat, new Point(10, 10), new Point(100, 100), new Scalar(255, 255, 255), 5);
 
-      if(displayTargetContours)
-      {
-        outputStream.putFrame(mat); // Give the output stream a new image to display
-      }
+      // END Demo OpenCV draw a rectangle on the image
+
+
+
+/* demo GRIP pipeline */
+      gripPipeline.process(mat); // filter the image with the GRIP pipeline
+
+      // The gripPowerPortVisionPipeline creates an array of contours that must
+      // be searched to find the target.
+      ArrayList<MatOfPoint> filteredContours;
+      filteredContours = new ArrayList<MatOfPoint>(gripPipeline.filterContoursOutput());
+
+      
+      int contourIndex = -1; // initialize here - using same value to indicate no contours and count contours
+      int contourIndexBest = -1;
+
+      // Check if no contours were found in the camera frame.
+      if (filteredContours.isEmpty()) {
+          // Display a message if no contours are found.
+          Imgproc.putText(mat, "No Contours", new Point(20, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.25,
+                  new Scalar(255, 255, 255), 1);
+          nextTargetData.portDistance = -1.;
+          nextTargetData.angleToTurn = -1.;
+          nextTargetData.isFreshData = true;
+          nextTargetData.isTargetFound = false;
+      } else {
+          // contours were found
+          if (filteredContours.size() > 1) { // not very good if more than one contour
+              System.out.println(filteredContours.size() + " Contours found");
+          }
+
+          Rect boundRect = null; // upright rectangle
+
+              // Draw all contours at once (negative index).
+              // Positive thickness means not filled, negative thickness means filled.
+              Imgproc.drawContours(mat, filteredContours, -1, new Scalar(255, 0, 0), 1);
+
+          // Loop through all contours and just remember the best one
+
+          for (MatOfPoint contour : filteredContours) {
+              contourIndex++;
+
+              // debug output Print all the contours
+
+              // System.out.println("Contour Index = " + contourIndex);
+              // System.out.println(contour.dump()); // OpenCV Mat dump one line string of numbers
+              // or more control over formatting with your own array to manipulate
+              // System.out.println(pId + " " + aContour.size() + " points in contour"); // a contour is a bunch of points
+              // convert MatofPoint to an array of those Points and iterate (could do list of Points but no need for this)
+              // for(Point aPoint : aContour.toArray())System.out.print(" " + aPoint); // print each point
+
+              // for(int idx = 0; idx < contour.toArray().length; idx++)
+              // {
+              // System.out.println("(" + contour.toArray()[idx].x + ", " +
+              // contour.toArray()[idx].y + ")");
+              // }
+
+              { // create angled bounding rectangle - could use angle to double check position
+              RotatedRect rotatedRect;
+              MatOfPoint2f NewMtx = new MatOfPoint2f(contour.toArray());
+              rotatedRect = Imgproc.minAreaRect(NewMtx);
+              NewMtx.release();
+              Point[] boxPts = new Point[4];
+              rotatedRect.points(boxPts);
+
+              List<MatOfPoint> listMidContour = new ArrayList<MatOfPoint>();
+              listMidContour.add(new MatOfPoint(boxPts[0], boxPts[1], boxPts[2], boxPts[3]));
+
+              Imgproc.polylines(mat, // Matrix obj of the image
+                  listMidContour, // java.util.List<MatOfPoint> pts
+                  true, // isClosed
+                  new Scalar(0, 255, 255), // Scalar object for color
+                  1, // Thickness of the line
+                  Imgproc.LINE_4 // line type
+                  );
+              
+              Imgproc.putText(mat,
+                  String.format("%4.0f", rotatedRect.angle),
+                  boxPts[0],
+                  Imgproc.FONT_HERSHEY_SIMPLEX, 0.3,
+                  new Scalar(255, 255, 255), 1);
+
+              while(!listMidContour.isEmpty()) {
+                  listMidContour.get(0).release();
+                  listMidContour.remove(0);
+              }
+              }
+
+              // Create a bounding upright rectangle for the contour's points
+              MatOfPoint2f NewMtx = new MatOfPoint2f(contour.toArray());
+              boundRect = Imgproc.boundingRect(NewMtx);
+              NewMtx.release();
+              
+              // Draw a Rect, using lines, that represents the Rect
+              Point boxPts[] = new Point[4];
+              boxPts[0] = boundRect.tl();
+              boxPts[1] = new Point(boundRect.br().x, boundRect.tl().y);
+              boxPts[2] = boundRect.br();
+              boxPts[3] = new Point(boundRect.tl().x, boundRect.br().y);
+
+              // draw edges of bounding rectangle
+              List<MatOfPoint> listMidContour = new ArrayList<MatOfPoint>();
+              listMidContour.add(new MatOfPoint(boxPts[0], boxPts[1], boxPts[2], boxPts[3]));
+
+              Imgproc.polylines(mat, // Matrix obj of the image
+                      listMidContour, // java.util.List<MatOfPoint> pts
+                      true, // isClosed
+                      new Scalar(0, 255, 255), // Scalar object for color
+                      1, // Thickness of the line
+                      Imgproc.LINE_4 // line type
+                      );
+            }
+          } // end contours found
+// end demo grip pipeline
+
+        if(displayTargetContours)
+        {
+          outputStream.putFrame(mat); // Give the output stream a new image to display
+        }
+    
 
     }
   }
