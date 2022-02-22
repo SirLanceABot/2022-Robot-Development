@@ -1,0 +1,55 @@
+package frc.robot;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+
+import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.SerialDataType;
+
+public class Robot extends TimedRobot {
+
+  private static AcquireTarget target;
+  private static Thread targetThread;
+
+  @Override
+  public void robotInit() {
+
+    //////////// NAVX GYRO FOR USB LOAD TESTING ////////////
+    AHRS ahrs; // here for this test because I don't have the whole robot code - need it somewhere
+    ahrs = new AHRS(SerialPort.Port.kUSB1, SerialDataType.kProcessedData, (byte) 60);
+    Timer.delay(1.0); // make sure AHRS USB communication is done before doing other USB.
+    ahrs.enableLogging(true);
+    System.out.println("NavX update " + ahrs.getActualUpdateRate() + " " + ahrs.getUpdateCount() + " " + ahrs.getRequestedUpdateRate());
+
+    // start intake camera for human driver - automatically acquires and passes through the image
+    // this camera and server at 160, 120; 20fps; 35 quality adds about 3% cpu (top %CPU for java)
+    // set mjpeg stream address at http://roboRIO-4237-FRC.local:1189/?action=stream
+    // auto sequence starts at 1181 so use the far end to avoid conflicts
+    UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
+    IntakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    IntakeCamera.setResolution(160, 120);
+    IntakeCamera.setFPS(20);
+    MjpegServer server = CameraServer.addServer("IntakeServer", 1189);
+    server.setSource(IntakeCamera);
+    server.setCompression(35); // 35 about as low as you can go for seeing to drive with low bit rate and little lag
+
+    // TODO you could create the shuffle board camera widget for the driver here
+
+
+    // start thread for target camera and locate target
+    target = new AcquireTarget();
+    targetThread = new Thread(target, "TargetCamera");
+    targetThread.setDaemon(true);
+    targetThread.start();
+
+  }
+}
+// parking lot for junk
+// UsbCamera IntakeCamera = CameraServer.startAutomaticCapture("intake", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
+// MjpegServer server = CameraServer.startAutomaticCapture(IntakeCamera);
+//System.out.println("intakecamera" + IntakeCamera.getConfigJson());
