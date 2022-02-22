@@ -157,8 +157,8 @@ public class Climber
     public int getFCFPosition(){
         return FCFPosition;
     }
-    public int getFCLposition(){
-        return FCLPosition;
+    public double getFCLposition(){
+        return FCLEncoder.getPosition();
     }
     public int getSCFPosition(){
         return SCFPosition;

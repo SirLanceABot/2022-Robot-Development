@@ -35,10 +35,10 @@ public final class RobotContainer
     public static final boolean useDrivetrain          = false;
     public static final boolean useCargoManager        = false;
     public static final boolean useIntake              = false;
-    public static final boolean useIntake2             = true;
+    public static final boolean useIntake2             = false;
     public static final boolean useShooter             = false;
     public static final boolean useShuttle             = false;
-    public static final boolean useClimber             = false;
+    public static final boolean useClimber             = true;
 
     public static final boolean useDriverController    = true;
     public static final boolean useOperatorController  = false;

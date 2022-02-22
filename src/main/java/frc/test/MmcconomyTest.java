@@ -2,6 +2,8 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.lang.model.util.ElementScanner6;
+
 //import edu.wpi.first.wpilibj.RobotController;
 import frc.components.Intake;
 import frc.components.Climber;
@@ -25,7 +27,7 @@ public class MmcconomyTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final Intake INTAKE = RobotContainer.INTAKE;
+    //private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
 
 
@@ -53,11 +55,15 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
-        if(CLIMBER.getGamer().equals("Stage2") && CLIMBER.getFCLposition() >= 2.3);
+        if(CLIMBER.getGamer().equals("Stage2") && CLIMBER.getFCLposition() >= 2.3)
         {
             System.out.println("STAGE 2 COMPLETE!!!");
             CLIMBER.setGamer("");
             CLIMBER.setMotorSpeed(CLIMBER.firstStageClimbMotorLeader, 0.0);
+        }
+        else
+        {
+            //System.out.println(CLIMBER.getFCLposition());
         }
     }
 
