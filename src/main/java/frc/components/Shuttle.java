@@ -105,6 +105,7 @@ public class Shuttle
             }
         },
 
+        // TODO: Determine if these two should be commented in motor commands
         STORING_CARGO_IN_STAGE_TWO_AND_ONE
         {
             void doAction()
@@ -112,6 +113,26 @@ public class Shuttle
                 // Run stage one and two
                 // motorRequest.stageOne = true;
                 // motorRequest.stageTwo = true;
+            }
+        },
+
+        STORING_CARGO_IN_STAGE_TWO_FROM_TWO
+        {
+            void doAction()
+            {
+                // Run stage one and two
+                // motorRequest.stageOne = true;
+                // motorRequest.stageTwo = true;
+            }
+        },
+
+        CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO
+        {
+            void doAction()
+            {
+                // Turn off stage one and run stage two
+                motorRequest.stageOne = false;
+                motorRequest.stageTwo = true;
             }
         },
         
@@ -139,9 +160,9 @@ public class Shuttle
         {
             void doAction()
             {
-                // Turn off stage one
+                // Turn off stage one and two
                 motorRequest.stageOne = false;
-                //motorRequest.stageTwo = false;
+                motorRequest.stageTwo = false;
             }
         },
 
@@ -206,6 +227,10 @@ public class Shuttle
         TRANSITION_2  (State.STORING_CARGO_IN_STAGE_TWO,            Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO),
         TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
         TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2C (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,	Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES,	                State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO),
+        TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,	                State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
+        TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
         TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
         TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
         TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
@@ -267,6 +292,8 @@ public class Shuttle
             currentShuttleState = newShuttleState; // switch states
             // currentShuttleState.doEnter(); // initiate new state
             currentShuttleState.doAction();
+
+            System.out.println("State: " + currentShuttleState);
         }
         // move above doAction to below to always run it
         // currentFanState.doAction(); // always maintain current state or the new state as determined above
@@ -344,7 +371,7 @@ public class Shuttle
     private static void configStageTwoMotor()
     {
         secondStageMotor.restoreFactoryDefaults();
-        secondStageMotor.setInverted(true);
+        secondStageMotor.setInverted(false);
         secondStageMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
 
         secondStageMotor.setOpenLoopRampRate(0.1);
@@ -437,55 +464,63 @@ public class Shuttle
     {
         public static enum event
         {
-            NONE
-            {
-                public String toString()
-                {
-                    return "NONE";
-                }
-            },
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES
-            {
-                public String toString()
-                {
-                    return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES";
-                }
-            },
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES
-            {
-                public String toString()
-                {
-                    return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES";
-                }
-            },
-            STAGE_ONE_FULL_SENSOR_ACTIVATES
-            {
-                public String toString()
-                {
-                    return "STAGE_ONE_FULL_SENSOR_ACTIVATES";
-                }
-            },
-            STAGE_TWO_FULL_SENSOR_ACTIVATES
-            {
-                public String toString()
-                {
-                    return "STAGE_TWO_FULL_SENSOR_ACTIVATES";
-                }
-            },
-            STAGE_TWO_FULL_SENSOR_DEACTIVATES
-            {
-                public String toString()
-                {
-                    return "STAGE_TWO_FULL_SENSOR_DEACTIVATES";
-                }
-            },
-            SHOOT_IS_CALLED
-            {
-                public String toString()
-                {
-                    return "SHOOT_IS_CALLED";
-                }
-            };
+            NONE,
+            // FIXME Remove comments
+            // {
+            //     public String toString()
+            //     {
+            //         return "NONE";
+            //     }
+            // },
+            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES";
+            //     }
+            // },
+            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES";
+            //     }
+            // },
+            STAGE_ONE_FULL_SENSOR_ACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "STAGE_ONE_FULL_SENSOR_ACTIVATES";
+            //     }
+            // },
+            STAGE_ONE_FULL_SENSOR_DEACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "STAGE_ONE_FULL_SENSOR_DEACTIVATES";
+            //     }
+            // },
+            STAGE_TWO_FULL_SENSOR_ACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "STAGE_TWO_FULL_SENSOR_ACTIVATES";
+            //     }
+            // },
+            STAGE_TWO_FULL_SENSOR_DEACTIVATES,
+            // {
+            //     public String toString()
+            //     {
+            //         return "STAGE_TWO_FULL_SENSOR_DEACTIVATES";
+            //     }
+            // },
+            SHOOT_IS_CALLED;
+            // {
+            //     public String toString()
+            //     {
+            //         return "SHOOT_IS_CALLED";
+            //     }
+            // };
         }
     }
 
@@ -499,7 +534,7 @@ public class Shuttle
         // Prints out the event if there is one
         if (event != Shuttle.Events.event.NONE)
         {
-            System.out.println("Event name: " + event.toString());
+            System.out.println("Event name: " + event);
         }
 
         // Send event to FSM
@@ -558,7 +593,7 @@ public class Shuttle
             }
             else
             {
-                // STAGE_ONE_FULL_SENSOR_DEACTIVATES
+                determinedEvent = Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES;
             }
 
             previousStageOneFull = currentStageOneFull;
