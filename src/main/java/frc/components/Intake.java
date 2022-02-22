@@ -93,12 +93,12 @@ public class Intake
     }
 
     //setters
-    private void setRollerDirection(CANSparkMax motor, RollerDirection direction)
+    public void setRollerDirection(CANSparkMax motor, RollerDirection direction)
     {
         motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
     }
 
-    private void setArmSpeed(double speed)
+    public void setArmSpeed(double speed)
     {
         armsMotor.set(speed);
     }
