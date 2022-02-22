@@ -3,6 +3,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
+import frc.commands.Command;
 import frc.components.CargoManager;
 import frc.components.Climber;
 import frc.components.Intake;
@@ -63,7 +64,7 @@ public final class RobotContainer
     public static final MainShuffleboard MAIN_SHUFFLEBOARD; // = new MainShuffleboard(); 
     public static final AutonomousTabData AUTONOMOUS_TAB_DATA; // = new AutonomousTabData();
     // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
-    public static final ArrayList<String> AUTONOMOUS_COMMANDS; // = new ArrayList<>();
+    public static final ArrayList<Command> AUTO_COMMAND_LIST; // = new ArrayList<>();
    
 
     // *** ROBOT OBJECT INSTANTIATION ***
@@ -82,7 +83,7 @@ public final class RobotContainer
 
         MAIN_SHUFFLEBOARD = useFullRobot || useMainShuffleboard ? new MainShuffleboard() : null;
         AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTabData ? new AutonomousTabData() : null;
-        AUTONOMOUS_COMMANDS = useFullRobot || useAutonomousCommands ? new ArrayList<>() : null;
+        AUTO_COMMAND_LIST = useFullRobot || useAutonomousCommands ? new ArrayList<>() : null;
     }
 
 
