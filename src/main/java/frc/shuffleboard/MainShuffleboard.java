@@ -68,9 +68,9 @@ public class MainShuffleboard
         return AUTONOMOUS_TAB.getAutonomousTabData();
     }
 
-    public boolean checkForNewAutonomousTabData()
+    public boolean wasSendDataButtonPressed()
     {
-        return AUTONOMOUS_TAB.isThereNewAutonomousTabData();
+        return AUTONOMOUS_TAB.wasSendDataButtonPressed();
     }
 
 
