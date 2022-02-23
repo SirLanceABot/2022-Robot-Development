@@ -49,23 +49,18 @@ public class AutonomousTabData
     }
 
     public StartingLocation startingLocation = StartingLocation.kMiddle;
-
-    public OrderOfOperations orderOfOperations = OrderOfOperations.kDoNothing;
-
+    public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
     public ShootCargo shootCargo = ShootCargo.k0;
     public ShootDelay shootDelay = ShootDelay.k0;
-
     public MoveOffTarmac moveOffTarmac = MoveOffTarmac.kYes;
     public MoveDelay moveDelay = MoveDelay.k0;
-
-    public PickUpCargo pickUpCargo = PickUpCargo.kYes;
+    public PickUpCargo pickUpCargo = PickUpCargo.kNo;
 
     public String toString()
     {
         String str = "";
 
-        str += " \n";
-        str += "*****  AUTONOMOUS SELECTION  *****\n";
+        str += "\n*****  AUTONOMOUS SELECTION  *****\n";
         str += "Starting Location     : "  + startingLocation   + "\n";
         str += "Order of Operations   : "  + orderOfOperations  + "\n";
         str += "Shoot Cargo           : "  + shootCargo         + "\n";
@@ -73,6 +68,7 @@ public class AutonomousTabData
         str += "Move Off Tarmac       : "  + moveOffTarmac      + "\n";
         str += "Move Delay            : "  + moveDelay          + "\n";
         str += "Pick Up Cargo         : "  + pickUpCargo        + "\n";
+        str += "\n";
 
         return str;
     }
