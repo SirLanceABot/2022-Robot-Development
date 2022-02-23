@@ -50,24 +50,22 @@ public class AutonomousTab
   
     // Create the Box objects
     private SendableChooser<AutonomousTabData.StartingLocation> startingLocationBox = new SendableChooser<>();
- 
     private SendableChooser<AutonomousTabData.OrderOfOperations> orderOfOperationsBox = new SendableChooser<>();
- 
     private SendableChooser<AutonomousTabData.ShootCargo> shootCargoBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.ShootDelay> shootDelayBox = new SendableChooser<>();
-     
     private SendableChooser<AutonomousTabData.MoveOffTarmac> moveOffTarmacBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.MoveDelay> moveDelayBox = new SendableChooser<>();
- 
     private SendableChooser<AutonomousTabData.PickUpCargo> pickUpCargoBox = new SendableChooser<>();
      
-    private NetworkTableEntry goodToGo;
- 
+    private NetworkTableEntry successfulDownload;
+    private NetworkTableEntry errorMessageBox;
+
     // Create the Button object
     private SendableChooser<Boolean> sendDataButton = new SendableChooser<>();
  
     private boolean previousStateOfSendButton = false;
-
+    private boolean isDataValid = true;
+    private String errorMessage = "No Errors";
 
     // *** CLASS CONSTRUCTOR ***
     public AutonomousTab()
@@ -75,23 +73,21 @@ public class AutonomousTab
         System.out.println(fullClassName + " : Constructor Started");
 
         createStartingLocationBox();
-
         createOrderOfOperationsBox();
-        
         createShootCargoBox();
         createShootDelayBox();
-        
         createMoveOffTarmacBox();
         createMoveDelayBox();
-
         createPickUpCargoBox();
         
-        // sendDataButton = createSendDataButton();
-        // sendDataButton.setBoolean(false);
         createSendDataButton();
+        successfulDownload = createSuccessfulDownloadBox();
+        successfulDownload.setBoolean(false);
 
-        goodToGo = createRedLightGreenLightBox();
-        goodToGo.setBoolean(false);
+        // createMessageBox();
+
+        errorMessageBox = createErrorMessageBox();
+        // errorMessageBox.setString("No Errors");
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
@@ -109,8 +105,8 @@ public class AutonomousTab
         SendableRegistry.setName(startingLocationBox, "Starting Location");
         
         //add options to  Box
-        startingLocationBox.setDefaultOption("Left", AutonomousTabData.StartingLocation.kLeft);
-        startingLocationBox.addOption("Middle", AutonomousTabData.StartingLocation.kMiddle);
+        startingLocationBox.addOption("Left", AutonomousTabData.StartingLocation.kLeft);
+        startingLocationBox.setDefaultOption("Middle", AutonomousTabData.StartingLocation.kMiddle);
         startingLocationBox.addOption("Right", AutonomousTabData.StartingLocation.kRight);
 
         //put the widget on the shuffleboard
@@ -131,8 +127,8 @@ public class AutonomousTab
         SendableRegistry.setName(orderOfOperationsBox, "Order of Operations");
 
         //add options to box
-        orderOfOperationsBox.setDefaultOption("Shoot First", AutonomousTabData.OrderOfOperations.kShootFirst);
-        orderOfOperationsBox.addOption("Move First", AutonomousTabData.OrderOfOperations.kMoveFirst);
+        orderOfOperationsBox.addOption("Shoot First", AutonomousTabData.OrderOfOperations.kShootFirst);
+        orderOfOperationsBox.setDefaultOption("Move First", AutonomousTabData.OrderOfOperations.kMoveFirst);
         orderOfOperationsBox.addOption("Do Nothing", AutonomousTabData.OrderOfOperations.kDoNothing);
 
         //put the widget on the Shuffleboard
@@ -246,13 +242,13 @@ public class AutonomousTab
         SendableRegistry.setName(pickUpCargoBox, "Pick Up Cargo");
 
         //add options to Box
-        pickUpCargoBox.setDefaultOption("Yes", AutonomousTabData.PickUpCargo.kYes);
-        pickUpCargoBox.addOption("No", AutonomousTabData.PickUpCargo.kNo);
+        pickUpCargoBox.addOption("Yes", AutonomousTabData.PickUpCargo.kYes);
+        pickUpCargoBox.setDefaultOption("No", AutonomousTabData.PickUpCargo.kNo);
 
         //put the widget on the shuffleboard
         autonomousTab.add(pickUpCargoBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            .withPosition(1, 9)
+            .withPosition(13, 3) //.withPosition(1, 9)
             .withSize(4, 2);
     }
 
@@ -276,27 +272,15 @@ public class AutonomousTab
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
             .withPosition(23, 1)
             .withSize(4, 2);
-        
-        // return autonomousTab.add("Send Data", false)
-        //     .withWidget(BuiltInWidgets.kToggleSwitch)
-        //     .withPosition(23, 1)
-        //     .withSize(4, 2)
-        //     .getEntry();
     }
 
-    private NetworkTableEntry createRedLightGreenLightBox()
+    private NetworkTableEntry createSuccessfulDownloadBox()
     {
-        //SendableRegistry.add(redLightGreenLightBox, "Good to Go?");
-        //SendableRegistry.setName(redLightGreenLightBox, "Good to Go?");
-
-        // redLightGreenLightBox.setDefaultOption("No", false);
-        // redLightGreenLightBox.addOption("Yes", true);
-
         Map<String, Object> booleanBoxProperties = new HashMap<>();
         booleanBoxProperties.put("Color when true", "Lime");
         booleanBoxProperties.put("Color when false", "Red");
         
-        return autonomousTab.add("Good to Go?", false)
+        return autonomousTab.add("Successful Download?", false)
              .withWidget(BuiltInWidgets.kBooleanBox)
              .withPosition(23, 4)
              .withSize(4, 4)
@@ -304,42 +288,49 @@ public class AutonomousTab
              .getEntry();
     }
 
+    private NetworkTableEntry createErrorMessageBox()
+    {
+        return autonomousTab.add("Error Messages", "No Errors")
+             .withWidget(BuiltInWidgets.kTextView)
+             .withPosition(1, 10)
+             .withSize(26, 2)
+             .getEntry();
+    }
+
     private void updateAutonomousTabData()
     {
         autonomousTabData.startingLocation = startingLocationBox.getSelected();
-
         autonomousTabData.orderOfOperations = orderOfOperationsBox.getSelected();
-        
         autonomousTabData.shootCargo = shootCargoBox.getSelected();
         autonomousTabData.shootDelay = shootDelayBox.getSelected();
-
         autonomousTabData.moveOffTarmac = moveOffTarmacBox.getSelected();
         autonomousTabData.moveDelay = moveDelayBox.getSelected();
-
         autonomousTabData.pickUpCargo = pickUpCargoBox.getSelected();
     }
 
-    public boolean isThereNewAutonomousTabData()
+    public boolean wasSendDataButtonPressed()
     {
         boolean isNewData = false;
         boolean isSendDataButtonPressed = sendDataButton.getSelected();
+
+        updateIsDataValidAndErrorMessage();
 
         if(isSendDataButtonPressed && !previousStateOfSendButton)
         {
             previousStateOfSendButton = true;
             isNewData = true;
 
-            if(isDataValid())
+            if(isDataValid)
             {
-                goodToGo.setBoolean(true);
+                successfulDownload.setBoolean(true);
                 updateAutonomousTabData();
             }
             else
             {
-                goodToGo.setBoolean(false);
+                successfulDownload.setBoolean(false);
+                DriverStation.reportWarning(errorMessage, false);
+                errorMessageBox.setString(errorMessage);
             }
-
-            System.out.println(autonomousTabData);
         }
         
         if (!isSendDataButtonPressed && previousStateOfSendButton)
@@ -355,19 +346,18 @@ public class AutonomousTab
         return autonomousTabData;
     }
 
-    private boolean isDataValid()
+    public void updateIsDataValidAndErrorMessage()
     {
+        errorMessage = "No Errors";
+        String msg = "";
         boolean isValid = true;
 
         boolean isPickUpCargo = (pickUpCargoBox.getSelected() == AutonomousTabData.PickUpCargo.kYes);
         boolean isMoveOffTarmac = (moveOffTarmacBox.getSelected() == AutonomousTabData.MoveOffTarmac.kYes);
-
         boolean isMoveDelay = (moveDelayBox.getSelected() != AutonomousTabData.MoveDelay.k0);
         boolean isShootDelay = (shootDelayBox.getSelected() != AutonomousTabData.ShootDelay.k0);
         boolean isShootCargo = (shootCargoBox.getSelected() != AutonomousTabData.ShootCargo.k0);
-
         boolean isShootTwo = (shootCargoBox.getSelected() == AutonomousTabData.ShootCargo.k2);
-
         boolean isDoNothing = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kDoNothing);
 
         // if trying to pick up cargo without moving off tarmac
@@ -375,7 +365,8 @@ public class AutonomousTab
         {
             isValid = false;
             
-            DriverStation.reportWarning("Cannot Pick Up Cargo Without Moving Off Tarmac", false);
+            // DriverStation.reportWarning("Cannot Pick Up Cargo Without Moving Off Tarmac", false);
+            msg += "[ Cannot Pick Up Cargo Without Moving Off Tarmac ]  \n";
         }
 
         // if trying to set a delay for an action not taken
@@ -383,7 +374,8 @@ public class AutonomousTab
         {
             isValid = false;
             
-            DriverStation.reportWarning("Cannot Set A Delay For An Action Not Taken", false);
+            // DriverStation.reportWarning("Cannot Set A Delay For An Action Not Taken", false);
+            msg += "[ Cannot Set A Delay For An Action Not Taken ]  \n";
         }
 
         // if trying to shoot two cargo without picking up cargo
@@ -391,7 +383,8 @@ public class AutonomousTab
         {
             isValid = false;
 
-            DriverStation.reportWarning("Cannot Shoot Two Cargo Wihtout Picking Up Cargo", false);
+            // DriverStation.reportWarning("Cannot Shoot Two Cargo Without Picking Up Cargo", false);
+            msg += "[ Cannot Shoot Two Cargo Without Picking Up Cargo ]  \n";
         }
 
         // if selecting do nothing and trying to move
@@ -399,11 +392,17 @@ public class AutonomousTab
         {
             isValid = false;
             
-            DriverStation.reportWarning("Cannot Move Off Tarmac And Do Nothing", false);
+            // DriverStation.reportWarning("Cannot Move Off Tarmac And Do Nothing", false);
+            msg += "[ Cannot Move Off Tarmac And Do Nothing ]  \n";
         }
 
         // TODO: trying to move first without moving off tarmac
 
-        return isValid;
+        if(!isValid)
+            errorMessage = msg;
+        
+        errorMessageBox.setString(errorMessage);
+
+        isDataValid = isValid;
     }
 }
