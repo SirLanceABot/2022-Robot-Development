@@ -13,7 +13,7 @@ import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
 public class Robot extends TimedRobot {
 
-  private static AcquireTarget target;
+  private static AcquireHubImage target;
   private static Thread targetThread;
 
   @Override
@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
 
 
     // start thread for target camera and locate target
-    target = new AcquireTarget();
+    target = new AcquireHubImage();
     targetThread = new Thread(target, "TargetCamera");
     targetThread.setDaemon(true);
     targetThread.start();

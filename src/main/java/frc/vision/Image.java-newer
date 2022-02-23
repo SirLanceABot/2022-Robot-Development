@@ -19,16 +19,14 @@ public class Image
 
     public synchronized void getImage(Mat mat)
     {
-        if (!this.isFreshImage)
+        try
         {
-            try
-            {
-                wait(); // stale image so wait for a new image
-            } 
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            while(!this.isFreshImage) // make sure awakened for the right reason
+            wait(); // stale image so wait for a new image
+        } 
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
         this.isFreshImage = false;
         this.mat.copyTo(mat);
