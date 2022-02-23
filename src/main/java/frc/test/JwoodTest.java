@@ -2,7 +2,7 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.components.Intake2;
+import frc.components.Intake;
 import frc.controls.DriverController;
 import frc.controls.Xbox;
 import frc.robot.RobotContainer;
@@ -24,7 +24,7 @@ public class JwoodTest implements MyTest
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
-    private static final Intake2 INTAKE2 = RobotContainer.INTAKE2;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -48,33 +48,33 @@ public class JwoodTest implements MyTest
      */
     public void periodic()
     {
-        double armEnc = INTAKE2.getArmMotorRotations();
+        double armEnc = INTAKE.getArmMotorRotations();
 
         System.out.println("  Enc=" + armEnc);
         if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
         {
-            INTAKE2.moveArmIn();
+            INTAKE.moveArmIn();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
         {
-            INTAKE2.moveArmOut();
+            INTAKE.moveArmOut();
         }
         else
         {
-            INTAKE2.stopArm();
+            INTAKE.stopArm();
         }
 
         if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
         {
-            INTAKE2.intakeRoller();
+            INTAKE.intakeRoller();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
         {
-            INTAKE2.outtakeRoller();
+            INTAKE.outtakeRoller();
         }
         else
         {
-            INTAKE2.turnOffRoller();
+            INTAKE.turnOffRoller();
         }
 
     }
