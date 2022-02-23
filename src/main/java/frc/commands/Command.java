@@ -2,8 +2,8 @@ package frc.commands;
 
 public interface Command
 {
-    void init();
-    void execute();
-    boolean isFinished();
-    void end();
+    public void init();
+    public void execute();
+    public boolean isFinished();
+    public void end();
 }

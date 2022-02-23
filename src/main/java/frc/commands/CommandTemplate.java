@@ -27,7 +27,8 @@ public class CommandTemplate implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
-
+        System.out.println(this);
+        isFinished = false;
     }
 
     public void execute()
@@ -46,5 +47,10 @@ public class CommandTemplate implements Command
     public void end()
     {
 
+    }
+
+    public String toString()
+    {
+        return "CommandTemplate()";
     }
 }

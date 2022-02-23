@@ -23,6 +23,9 @@ public class DriveDistance implements Command
     private double distance_meters;
     private boolean isFinished;
 
+    // This variable is only used to simulate the distance driven
+    private double distanceDrivenSimulation = 0.0;
+
 
     // *** CLASS CONSTRUCTOR ***
     public DriveDistance(double speed_metersPerSecond, double distance_meters)
@@ -36,14 +39,25 @@ public class DriveDistance implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
-        System.out.println("DriveDistance: speed=" + speed_metersPerSecond + "  distance=" + distance_meters);
+        System.out.println(this);
+
+        isFinished = false;
+        distanceDrivenSimulation = 0.0;
+
         // DRIVETRAIN.resetEncoders();
         // DRIVETRAIN.configLoopRampRate(0.75);
-
     }
 
     public void execute()
     {
+        distanceDrivenSimulation += 0.05;
+        System.out.printf("Distance driven: %5.2f meters\n", distanceDrivenSimulation);
+
+        if(distanceDrivenSimulation > distance_meters)
+        {
+            isFinished = true;
+        }
+
         // if(DRIVETRAIN.driveDistance(speed_metersPerSecond, distance_meters)))
         // {
         //     isFinished = true;
@@ -58,5 +72,10 @@ public class DriveDistance implements Command
     public void end()
     {
         // DRIVETRAIN.configLoopRampRate(0.1);
+    }
+
+    public String toString()
+    {
+        return "DriveDistance(" + speed_metersPerSecond + ", " + distance_meters + ")";
     }
 }

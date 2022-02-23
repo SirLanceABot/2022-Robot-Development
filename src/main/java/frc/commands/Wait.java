@@ -33,6 +33,9 @@ public class Wait implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
+        System.out.println(this);
+
+        isFinished = false;
         timer.stop();
         timer.reset();
         timer.start();
@@ -40,7 +43,8 @@ public class Wait implements Command
 
     public void execute()
     {
-        System.out.println(timer.get());
+        System.out.printf("Wait time: %5.2f seconds\n", timer.get());
+
         if(timer.get() > waitTime_seconds)
         {
             isFinished = true;
@@ -56,6 +60,11 @@ public class Wait implements Command
     {
         timer.stop();
         timer.reset();
+    }
+
+    public String toString()
+    {
+        return "Wait(" + waitTime_seconds + ")";
     }
 
 }
