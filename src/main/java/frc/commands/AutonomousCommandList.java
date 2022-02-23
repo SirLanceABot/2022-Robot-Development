@@ -59,19 +59,6 @@ public class AutonomousCommandList
         commandList.add(command);
     }
 
-    public void print()
-    {
-        System.out.println("\n***** AUTONOMOUS COMMAND LIST *****");
-
-        for(Command command : commandList)
-        {
-            System.out.println(command);
-        }
-
-        System.out.println("\n");
-    }
-
-
     // ***** Use these methods in AutonomousMode to execute the AutonomousCommandList
     public void init()
     {
@@ -148,5 +135,18 @@ public class AutonomousCommandList
         currentCommandState = CommandState.kAllDone;
         // currentCommand = null;
         // commandList.clear();
+    }
+
+    public String toString()
+    {
+        String str = "";
+
+        str += "\n***** AUTONOMOUS COMMAND LIST *****\n";
+        for(Command command : commandList)
+        {
+            str += command + "\n";
+        }
+
+        return str;
     }
 }
