@@ -1,13 +1,11 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 
-import frc.commands.Command;
+import frc.commands.AutonomousCommandList;
 import frc.components.CargoManager;
 import frc.components.Climber;
 import frc.components.Intake;
-import frc.components.Intake2;
 import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.constants.Port;
@@ -31,29 +29,27 @@ public final class RobotContainer
     
     // *** INCLUDED ROBOT OBJECTS ***
     // Switch objects to true that you need to use
-    public static final boolean useFullRobot           = false;
+    private static final boolean useFullRobot               = false;
     
-    public static final boolean useDrivetrain          = false;
-    public static final boolean useCargoManager        = false;
-    public static final boolean useIntake              = false;
-    public static final boolean useIntake2             = false;
-    public static final boolean useShooter             = false;
-    public static final boolean useShuttle             = false;
-    public static final boolean useClimber             = true;
+    private static final boolean useDrivetrain              = false;
+    private static final boolean useCargoManager            = false;
+    private static final boolean useIntake                  = false;
+    private static final boolean useShooter                 = false;
+    private static final boolean useShuttle                 = false;
+    private static final boolean useClimber                 = false;
 
-    public static final boolean useDriverController    = true;
-    public static final boolean useOperatorController  = false;
+    private static final boolean useDriverController        = false;
+    private static final boolean useOperatorController      = false;
 
-    public static final boolean useMainShuffleboard    = false;
-    public static final boolean useAutonomousTabData   = false;
-    public static final boolean useAutonomousCommands  = false;
+    private static final boolean useMainShuffleboard        = true;
+    private static final boolean useAutonomousTabData       = true;
+    private static final boolean useAutonomousCommandList   = true;
 
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN; // = new Drivetrain();
     public static final CargoManager CARGO_MANAGER; // = new CargoManager();
     public static final Intake INTAKE; // = new Intake();
-    public static final Intake2 INTAKE2;
     public static final Shooter SHOOTER; // = new Shooter();
     public static final Shuttle SHUTTLE; // = new Shuttle();
     public static final Climber CLIMBER; // = new Climber();
@@ -63,8 +59,7 @@ public final class RobotContainer
 
     public static final MainShuffleboard MAIN_SHUFFLEBOARD; // = new MainShuffleboard(); 
     public static final AutonomousTabData AUTONOMOUS_TAB_DATA; // = new AutonomousTabData();
-    // The following is just an ArrayList of Strings for now, but it would be better to be a new AutoCommand type
-    public static final ArrayList<Command> AUTO_COMMAND_LIST; // = new ArrayList<>();
+    public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
    
 
     // *** ROBOT OBJECT INSTANTIATION ***
@@ -73,7 +68,6 @@ public final class RobotContainer
         DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain() : null;
         CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
         INTAKE = useFullRobot || useIntake ? new Intake() : null;
-        INTAKE2 = useFullRobot || useIntake2 ? new Intake2() : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter() : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle() : null;
         CLIMBER = useFullRobot || useClimber ? new Climber() : null;
@@ -83,7 +77,7 @@ public final class RobotContainer
 
         MAIN_SHUFFLEBOARD = useFullRobot || useMainShuffleboard ? new MainShuffleboard() : null;
         AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTabData ? new AutonomousTabData() : null;
-        AUTO_COMMAND_LIST = useFullRobot || useAutonomousCommands ? new ArrayList<>() : null;
+        AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
     }
 
 
