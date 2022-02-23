@@ -55,16 +55,7 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
-        if(CLIMBER.getGamer().equals("Stage2") && CLIMBER.getFCLposition() >= 2.3)
-        {
-            System.out.println("STAGE 2 COMPLETE!!!");
-            CLIMBER.setGamer("");
-            CLIMBER.setMotorSpeed(CLIMBER.firstStageClimbMotorLeader, 0.0);
-        }
-        else
-        {
-            //System.out.println(CLIMBER.getFCLposition());
-        }
+
     }
 
     /**

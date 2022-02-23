@@ -1,5 +1,9 @@
 package frc.components;
 
+import java.util.concurrent.TimeUnit;
+import java.lang.invoke.MethodHandles;
+import java.io.*;
+
 import java.lang.invoke.MethodHandles;
 import com.revrobotics.CANSparkMax;
 import frc.constants.Port;
@@ -24,6 +28,7 @@ public class Climber
 
     // *** CLASS & INSTANCE VARIABLES ***
     //Neo 1650
+    //Maybe NEO 550
     public static final CANSparkMax firstStageClimbMotorLeader = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     //private static CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private static final CANSparkMax secondStageClimberLeader  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -34,7 +39,12 @@ public class Climber
     private int SCLPosition; //SCL >> SecondClimberLeader
     private int SCFPosition; //SCF >> SecondClimberFollower
 
-    String gamer;
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RESET_BACKGROUND = "\u001B[40m";
+    
+
     private static RelativeEncoder FCLEncoder = firstStageClimbMotorLeader.getEncoder();
     private static SparkMaxLimitSwitch FCLForwardLimitSwitch;
     private static SparkMaxLimitSwitch FCLBackwardLimitSwitch;
@@ -166,9 +176,6 @@ public class Climber
     public int getSCLposition(){
         return SCLPosition;
     }
-    public String getGamer(){
-        return gamer;
-    }
     //Setters
     public void setFCFPosition(int FCFPosition) 
     {
@@ -186,10 +193,7 @@ public class Climber
     {
         this.SCLPosition = SCLPosition;
     }
-    public void setGamer(String gamer)
-    {
-        this.gamer = gamer;
-    }
+
     //Everything Else
     public void setMotorSpeed(CANSparkMax motor, double speed)
     {
@@ -200,20 +204,33 @@ public class Climber
     {
         //move arm to yada yada position and pull arms up
     }
-
+    
     public void grabSecondRung() 
     {
         //41.1in to 60.25in 24 in ball park travel
         //motor has a diameter of 3.2
         //2 * pi * (diameter/2) = circumfrence of 10.0530964915in
         //24 / ans = 2.38732414638 rotations
-        gamer = "Stage2";
-        System.out.println("Going up");
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 2.38732414638f);
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        setMotorSpeed(firstStageClimbMotorLeader, 0.1);
-        System.out.println("UP!");
-
+        try
+        {
+            System.out.println("Going up");
+            firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 2.38732414638f);
+            firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+            setMotorSpeed(firstStageClimbMotorLeader, 0.1);
+            System.out.println("UP!");
+            setMotorSpeed(firstStageClimbMotorLeader, 0);
+            TimeUnit.SECONDS.sleep(5);
+            System.out.println(ANSI_RED + ANSI_CYAN_BACKGROUND + "MOVE FORWARD! "+ ANSI_RESET + ANSI_RESET_BACKGROUND);
+            TimeUnit.SECONDS.sleep(5);
+            setMotorSpeed(firstStageClimbMotorLeader, -0.1);
+            System.out.println("BACK DOWN!");
+            setMotorSpeed(firstStageClimbMotorLeader, 0);
+            TimeUnit.SECONDS.sleep(5);
+        }
+        catch(InterruptedException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     public void grabThirdRung()
