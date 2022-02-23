@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.commands.AutonomousCommandList;
+
 public class AutonomousMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -13,8 +15,9 @@ public class AutonomousMode implements ModeTransition
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
 
+    // *** CLASS & INSTANCE VARIABLES ***
+    private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -30,7 +33,8 @@ public class AutonomousMode implements ModeTransition
      */
     public void init()
     {
-
+        if(AUTONOMOUS_COMMAND_LIST != null)
+            AUTONOMOUS_COMMAND_LIST.init();
     }
 
     /**
@@ -38,7 +42,8 @@ public class AutonomousMode implements ModeTransition
      */
     public void periodic()
     {
-
+        if(AUTONOMOUS_COMMAND_LIST != null)
+            AUTONOMOUS_COMMAND_LIST.execute();
     }
 
     /**
@@ -46,6 +51,7 @@ public class AutonomousMode implements ModeTransition
      */
     public void exit()
     {
-
+        if(AUTONOMOUS_COMMAND_LIST != null)
+            AUTONOMOUS_COMMAND_LIST.end();
     }
 }
