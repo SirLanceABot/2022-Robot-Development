@@ -52,10 +52,6 @@ public class AutonomousCommandList
         // Use the AUTONOMOUS_TAB_DATA to determine which commands to add and the order to put them in
         addCommand(new Wait(5.0));
         addCommand(new DriveDistance(2.0, 4.0));
-
-
-        // Print the command list when finished for the Drive Team to read
-        print();
     }
 
     private void addCommand(Command command)
