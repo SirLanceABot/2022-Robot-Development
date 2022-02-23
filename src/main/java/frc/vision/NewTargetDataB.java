@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.vision;
 
 // import com.google.gson.Gson;
 import org.opencv.core.Point;
@@ -14,7 +14,7 @@ import org.opencv.core.Size;
  * @author FRC Team 4237
  * @version 2019.01.28.14.20
  */
-public class TargetDataB
+public class NewTargetDataB
 {
     // NOTE: No modifier means visible to both the class and package.
 
@@ -39,7 +39,7 @@ public class TargetDataB
     /**
      * Default constructor - resets all of the target data.
      */
-    public TargetDataB()
+    public NewTargetDataB()
     {
         boundingBoxPts = new Point[4];
         reset();

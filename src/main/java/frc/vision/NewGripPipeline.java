@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.vision;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class GripPipeline {
+public class NewGripPipeline {
 
 	//Outputs
 	private Mat cvThresholdOutput = new Mat();

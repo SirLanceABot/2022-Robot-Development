@@ -32,10 +32,10 @@ public class TargetDataB
     double portPositionInFrame, portDistance;
     double angleToTurn;
 
-    // Point center;
-    // Size size;
-    // double angle;
-    // public double fixedAngle;
+    Point center;
+    Size size;
+    double angle;
+    public double fixedAngle;
 
     // These fields are used to track the validity of the data.
     int frameNumber; // Number of the camera frame
@@ -49,13 +49,13 @@ public class TargetDataB
      */
     public TargetDataB()
     {
-        //System.out.println(className + " : Constructor Started");
+        System.out.println(className + " : Constructor Started");
 
         boundingBoxPts = new Point[4];
         reset();
         frameNumber = 0;
 
-        //System.out.println(className + ": Constructor Finished");
+        System.out.println(className + ": Constructor Finished");
     }
 
     /**

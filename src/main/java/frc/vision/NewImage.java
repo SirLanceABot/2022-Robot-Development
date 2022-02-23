@@ -1,11 +1,11 @@
-package frc.robot;
+package frc.vision;
 
 import org.opencv.core.Mat;
 
 /**
  * images for merge process
  */
-public class Image
+public class NewImage
 {
     private Mat mat = new Mat();
     private boolean isFreshImage = false;

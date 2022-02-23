@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.vision;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.Timer;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
-public class Robot extends TimedRobot {
+public class NewRobot extends TimedRobot {
 
-  private static AcquireHubImage target;
+  private static NewAcquireHubImage target;
   private static Thread targetThread;
 
   @Override
@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
 
 
     // start thread for target camera and locate target
-    target = new AcquireHubImage();
+    target = new NewAcquireHubImage();
     targetThread = new Thread(target, "TargetCamera");
     targetThread.setDaemon(true);
     targetThread.start();
