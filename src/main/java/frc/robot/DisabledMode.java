@@ -1,9 +1,8 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 
-import frc.commands.Command;
+import frc.commands.AutonomousCommandList;
 import frc.robot.Robot.RobotState;
 import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
@@ -22,7 +21,7 @@ public class DisabledMode implements ModeTransition
     // *** CLASS & INSTANCE VARIABLES ***
     private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
     private static final AutonomousTabData AUTONOMOUS_TAB_DATA = RobotContainer.AUTONOMOUS_TAB_DATA;
-    private static final ArrayList<Command> AUTONOMOUS_COMMANDS = RobotContainer.AUTO_COMMAND_LIST;
+    private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
     
     private RobotState robotState;
 
@@ -49,19 +48,23 @@ public class DisabledMode implements ModeTransition
     {
         if (robotState == RobotState.kDisabledAfterRobotInit && MAIN_SHUFFLEBOARD != null)
         {
-            boolean isNewData = MAIN_SHUFFLEBOARD.checkForNewAutonomousTabData();
+            boolean isNewData = MAIN_SHUFFLEBOARD.wasSendDataButtonPressed();
 
-            if (isNewData && AUTONOMOUS_TAB_DATA != null && AUTONOMOUS_COMMANDS != null)
+            if (isNewData && AUTONOMOUS_TAB_DATA != null && AUTONOMOUS_COMMAND_LIST != null)
             {
                 AUTONOMOUS_TAB_DATA.updateData(MAIN_SHUFFLEBOARD.getAutonomousTabData());
+                System.out.println(AUTONOMOUS_TAB_DATA);
 
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.startingLocation.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.orderOfOperations.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.shootCargo.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.shootDelay.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.moveOffTarmac.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.moveDelay.toString());
-                // AUTONOMOUS_COMMANDS.add(AUTONOMOUS_TAB_DATA.pickUpCargo.toString());
+                AUTONOMOUS_COMMAND_LIST.build();
+                System.out.println(AUTONOMOUS_COMMAND_LIST);
+
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.startingLocation.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.orderOfOperations.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.shootCargo.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.shootDelay.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.moveOffTarmac.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.moveDelay.toString());
+                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.pickUpCargo.toString());
             }
         }
     }
