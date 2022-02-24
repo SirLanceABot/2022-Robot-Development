@@ -24,23 +24,39 @@ public class ShootCargo implements Command
     // TODO: enum for upper/lower hub
     private boolean isFinished;
 
+    // These variables are only used to simulate cargo being shot
+    private int cargoShotSimulation = 0;
+    private double distanceShotSimulation = 0.0;
+    // TODO: enum for upper/lower hub
+
 
     // *** CLASS CONSTRUCTOR ***
-    public ShootCargo()
+    public ShootCargo(int numberOfCargo, double distance_meters)
     {
+        this.numberOfCargo = numberOfCargo;
+        this.distance_meters = distance_meters;
+
         isFinished = false;
     }
+
 
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
         System.out.println(this);
+
         isFinished = false;
+        cargoShotSimulation = 0;
     }
 
     public void execute()
     {
-        if(true)
+        distanceShotSimulation = distance_meters;
+        cargoShotSimulation++;
+        System.out.println("Cargo shot at a distance of " + distanceShotSimulation + " m");
+        // TODO: does distanceShotSimulation need to exist? Can distance_meters just be displayed instead?
+        
+        if(cargoShotSimulation == numberOfCargo)
         {
             isFinished = true;
         }

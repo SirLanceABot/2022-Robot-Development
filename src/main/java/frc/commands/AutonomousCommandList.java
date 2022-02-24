@@ -53,10 +53,6 @@ public class AutonomousCommandList
     {
         // Clear the command list
         commandList.clear();
-
-        // Use the AUTONOMOUS_TAB_DATA to determine which commands to add and the order to put them in
-        // addCommand(new Wait(5.0));
-        // addCommand(new DriveDistance(2.0, 4.0));
         
         switch (AUTONOMOUS_TAB_DATA.orderOfOperations)
         {
