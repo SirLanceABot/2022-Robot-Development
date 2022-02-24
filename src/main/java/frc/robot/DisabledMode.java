@@ -57,14 +57,6 @@ public class DisabledMode implements ModeTransition
 
                 AUTONOMOUS_COMMAND_LIST.build();
                 System.out.println(AUTONOMOUS_COMMAND_LIST);
-
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.startingLocation.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.orderOfOperations.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.shootCargo.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.shootDelay.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.moveOffTarmac.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.moveDelay.toString());
-                // AUTONOMOUS_COMMAND_LIST.add(AUTONOMOUS_TAB_DATA.pickUpCargo.toString());
             }
         }
     }

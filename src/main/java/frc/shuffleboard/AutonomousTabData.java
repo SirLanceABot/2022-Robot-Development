@@ -21,12 +21,26 @@ public class AutonomousTabData
 
     public static enum ShootCargo
     {
-        k0, k1, k2;
+        k0(0), k1(1), k2(2);
+        
+        public int value;
+
+        private ShootCargo(int value)
+        {
+            this.value = value;
+        }
     }
 
     public static enum ShootDelay
     {
-        k0, k1, k2, k3, k4, k5;
+        k0(0.0), k1(1.0), k2(2.0), k3(3.0), k4(4.0), k5(5.0);
+        
+        public double value;
+
+        private ShootDelay(double value)
+        {
+            this.value = value;
+        }
     }
 
     //-------------------------------------------------------------------//
@@ -38,7 +52,14 @@ public class AutonomousTabData
 
     public static enum MoveDelay
     {
-        k0, k1, k2, k3, k4, k5;
+        k0(0.0), k1(1.0), k2(2.0), k3(3.0), k4(4.0), k5(5.0);
+        
+        public double value;
+
+        private MoveDelay(double value)
+        {
+            this.value = value;
+        }
     }
 
     //-------------------------------------------------------------------//

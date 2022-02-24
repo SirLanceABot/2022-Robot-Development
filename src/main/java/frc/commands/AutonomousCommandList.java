@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 import frc.robot.RobotContainer;
 import frc.shuffleboard.AutonomousTabData;
+import frc.shuffleboard.AutonomousTabData.MoveDelay;
+import frc.shuffleboard.AutonomousTabData.MoveOffTarmac;
+import frc.shuffleboard.AutonomousTabData.OrderOfOperations;
+import frc.shuffleboard.AutonomousTabData.PickUpCargo;
+import frc.shuffleboard.AutonomousTabData.ShootDelay;
 
 public class AutonomousCommandList
 {
@@ -50,8 +55,78 @@ public class AutonomousCommandList
         commandList.clear();
 
         // Use the AUTONOMOUS_TAB_DATA to determine which commands to add and the order to put them in
-        addCommand(new Wait(5.0));
-        addCommand(new DriveDistance(2.0, 4.0));
+        // addCommand(new Wait(5.0));
+        // addCommand(new DriveDistance(2.0, 4.0));
+        
+        switch (AUTONOMOUS_TAB_DATA.orderOfOperations)
+        {
+        case kMoveFirst:
+            move();
+            shoot();
+
+            break;
+
+        case kShootFirst:
+            shoot();
+            move();
+
+            break;
+        
+        case kDoNothing:
+
+            break;
+        }
+    }
+
+    // TODO: get actual drive speeds and distances
+    private void move()
+    {
+        if (AUTONOMOUS_TAB_DATA.moveOffTarmac == MoveOffTarmac.kYes)
+        {
+            if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
+            {
+                addCommand(new Wait(AUTONOMOUS_TAB_DATA.moveDelay.value));
+            }
+            
+            if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
+            {
+                addCommand(new TurnOnIntake());
+                addCommand(new DriveStraight(1.0, 5.0));
+                addCommand(new StopDriving());
+                addCommand(new TurnOffIntake());
+            }
+            else
+            {
+                addCommand(new DriveStraight(1.0, 2.0));
+                addCommand(new StopDriving());
+            }
+        }
+    }
+
+    // TODO: get actual shooter distances
+    private void shoot()
+    {
+        if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
+        {
+             addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
+        }
+
+        if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kMoveFirst)
+        {
+            if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
+            {
+                // addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargo.value, 5.0, upper));
+            }
+            else
+            {
+                // addCommand(new ShootCargo(1, 3.0, upper));
+            }
+        }
+
+        if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kShootFirst)
+        {
+            // addCommand(new ShootCargo(1, 1.0, lower));
+        }
     }
 
     private void addCommand(Command command)

@@ -5,7 +5,7 @@ import java.lang.invoke.MethodHandles;
 import frc.drivetrain.Drivetrain;
 import frc.robot.RobotContainer;
 
-public class DriveDistance implements Command 
+public class DriveStraight implements Command 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
@@ -28,7 +28,7 @@ public class DriveDistance implements Command
 
 
     // *** CLASS CONSTRUCTOR ***
-    public DriveDistance(double speed_metersPerSecond, double distance_meters)
+    public DriveStraight(double speed_metersPerSecond, double distance_meters)
     {
         this.speed_metersPerSecond = speed_metersPerSecond;
         this.distance_meters = distance_meters;
