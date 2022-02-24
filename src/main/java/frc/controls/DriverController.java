@@ -31,9 +31,9 @@ public class DriverController extends Xbox
 
 
         // kIntakeUp(Button.kY),
-        // kIntakeDown(Button.kX),
-
-
+        
+        
+        kIntakeArmStop(Button.kX),
         kIntakeToggleDirection(Button.kRightBumper),
         kIntakeToggleOnOff(Button.kLeftBumper),
         kIntakeExtendToggle(Button.kRightStick),

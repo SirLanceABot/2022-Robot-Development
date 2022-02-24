@@ -80,6 +80,11 @@ public class Shooter
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
     }
 
+    public void setFlywheelSpeedNew(double speed)
+    {
+        flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+    }
+
     //return value is in rpm
     public double measureFlywheelSpeed()
     {
@@ -137,6 +142,22 @@ public class Shooter
     }
 
     private void setShroudAngle(double angle)
+    {
+        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
+        {
+            setShroudMotorSpeed(0.25);
+        }
+        else if (angle - measureShroudAngle() < SHROUD_ANGLE_THRESHOLD)
+        {
+            setShroudMotorSpeed(-0.25);
+        }
+        else
+        {
+            setShroudMotorSpeed(0.0);
+        }
+    }
+    // DO NOT USE UNLESS IN TELEOP MODE
+    public void setShroudAngleNew(double angle)
     {
         if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
         {

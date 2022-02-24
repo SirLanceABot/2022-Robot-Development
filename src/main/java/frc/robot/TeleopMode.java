@@ -14,16 +14,16 @@ import frc.controls.DriverController;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
 import frc.controls.DriverController.DriverAxisAction;
-// import frc.controls.DriverController.DriverPOVAction;
-// import frc.controls.Logitech.AxisSettings;
+import frc.controls.DriverController.DriverPOVAction;
+import frc.controls.Logitech.AxisSettings;
 import frc.controls.OperatorController;
-// import frc.controls.Xbox;
+import frc.controls.Xbox;
 
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
-// import frc.controls.Xbox.Button;
+import frc.controls.Xbox.Button;
 
-// import frc.shuffleboard.MainShuffleboard;
+import frc.shuffleboard.MainShuffleboard;
 
 public class TeleopMode implements ModeTransition
 {
@@ -108,6 +108,21 @@ public class TeleopMode implements ModeTransition
                         INTAKE.intakeRoller();
                     }
                 }
+                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
+                {
+                    if(INTAKE.getArmPosition() == Intake.ArmPosition.kOff || INTAKE.getArmPosition() == Intake.ArmPosition.kIn)
+                    {
+                        INTAKE.moveArmOut();
+                    }
+                    else if(INTAKE.getArmPosition() == Intake.ArmPosition.kOut)
+                    {
+                        INTAKE.moveArmIn();
+                    }
+                }
+                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
+                {
+                    INTAKE.stopArm();
+                }
             }
         }
 
@@ -152,9 +167,9 @@ public class TeleopMode implements ModeTransition
                 {
                     // SHOOTER.overrideFSM();
 
-                    // SHOOTER.setShroudAngle(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
+                    SHOOTER.setShroudAngleNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
                     
-                    // SHOOTER.setFlyWheelSpeed(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
+                    SHOOTER.setFlywheelSpeedNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                 
                     if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
                     {
@@ -172,27 +187,17 @@ public class TeleopMode implements ModeTransition
             if(CLIMBER != null)
             {
                 // running the climber
-                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kAutoClimb))
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbUp))
                 {
-                // CLIMBER.run();
+                    // CLIMBER.climbUp();
                 }
-                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOverride))
+                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbDown))
                 {
-                    // CLIMBER.overrideFSM();
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle))
-                    {
-                        //CLIMBER.extendClimberArm();
-                    }
-
-                //   else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.extendClimberArm() == true)
-                    {
-                        // CLIMBER.bringInClimberArm();
-                    }
-
-                //  else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kMoveClimbToggle) && CLIMBER.bringInClimberArm() == true)
-                    {
-                        // CLIMBER.ExtendClimberArm();
-                    }
+                    // CLIMBER.climbDown();
+                }
+                else
+                {
+                    // CLIMBER.shutDown();
                 }
             }
         }
