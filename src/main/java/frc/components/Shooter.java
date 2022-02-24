@@ -64,6 +64,19 @@ public class Shooter
      * 2.139808155x^4 - 17.61030368x^3 + 54.6287886x^2 - 79.35135805x + 52.95064821 (r^2 = 0.9998)
      */
 
+    public static enum Hub
+    {
+        kUpper(1),
+        kLower(0)
+        ;
+
+        public final int direction;
+
+        private Hub(int direction)
+        {
+            this.direction = direction;
+        } 
+    }
 
     // *** CLASS CONSTRUCTOR ***
     public Shooter()
