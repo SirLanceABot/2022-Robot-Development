@@ -4,6 +4,9 @@ import java.lang.invoke.MethodHandles;
 
 import javax.lang.model.util.ElementScanner6;
 
+import java.util.concurrent.TimeUnit;
+
+
 //import edu.wpi.first.wpilibj.RobotController;
 import frc.components.Intake;
 import frc.components.Climber;
@@ -44,10 +47,23 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
-        //INTAKE.TestRoller();
-        // INTAKE.moveArmOut();
-        // INTAKE.moveArmIn();
-        CLIMBER.grabSecondRung();
+        try
+        {
+            System.out.println("Starting");
+            TimeUnit.SECONDS.sleep(2);   
+            CLIMBER.climbDown();
+            TimeUnit.SECONDS.sleep(2);
+            CLIMBER.shutDown();
+            TimeUnit.SECONDS.sleep(2);
+            CLIMBER.climbUp();
+            TimeUnit.SECONDS.sleep(2);
+            CLIMBER.climbUp();
+        }
+        catch(InterruptedException ex)
+        {
+            ex.printStackTrace();
+        }
+        
     }
 
     /**
