@@ -10,6 +10,9 @@ import frc.constants.Port;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
 
@@ -29,7 +32,7 @@ public class Climber
     // *** CLASS & INSTANCE VARIABLES ***
     //Neo 1650
     //Maybe NEO 550
-    public static final CANSparkMax firstStageClimbMotorLeader = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // public static final CANSparkMax firstStageClimbMotorLeader = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     //private static CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private static final CANSparkMax secondStageClimberLeader  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private static final CANSparkMax secondStageClimberFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -45,7 +48,7 @@ public class Climber
     public static final String ANSI_RESET_BACKGROUND = "\u001B[40m";
     
 
-    private static RelativeEncoder FCLEncoder = firstStageClimbMotorLeader.getEncoder();
+    // private static RelativeEncoder FCLEncoder = firstStageClimbMotorLeader.getEncoder();
     private static SparkMaxLimitSwitch FCLForwardLimitSwitch;
     private static SparkMaxLimitSwitch FCLBackwardLimitSwitch;
     // private static RelativeEncoder FCFEncoder = firstStageClimbMotorLeader.getEncoder();
@@ -73,24 +76,24 @@ public class Climber
     //Configs
     public void configFCL() 
     {
-        firstStageClimbMotorLeader.restoreFactoryDefaults();
-        firstStageClimbMotorLeader.setInverted(true);
-        firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
+        // firstStageClimbMotorLeader.restoreFactoryDefaults();
+        // firstStageClimbMotorLeader.setInverted(true);
+        // firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
     
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        // firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        // firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        // firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        // firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
         
-        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        FCLBackwardLimitSwitch.enableLimitSwitch(false);
-        FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-        FCLForwardLimitSwitch.enableLimitSwitch(false);
-        //^^Unknown if being used for now^^
-        FCLEncoder.setPosition(0);
-        firstStageClimbMotorLeader.setOpenLoopRampRate(0.1);
-        firstStageClimbMotorLeader.setSmartCurrentLimit(40);
+        // FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        // FCLBackwardLimitSwitch.enableLimitSwitch(false);
+        // FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
+        // FCLForwardLimitSwitch.enableLimitSwitch(false);
+        // //^^Unknown if being used for now^^
+        // FCLEncoder.setPosition(0);
+        // firstStageClimbMotorLeader.setOpenLoopRampRate(0.1);
+        // firstStageClimbMotorLeader.setSmartCurrentLimit(40);
     }
 
     public void configFCF()
@@ -167,9 +170,9 @@ public class Climber
     public int getFCFPosition(){
         return FCFPosition;
     }
-    public double getFCLposition(){
-        return FCLEncoder.getPosition();
-    }
+    // public double getFCLposition(){
+    //     return FCLEncoder.getPosition();
+    // }
     public int getSCFPosition(){
         return SCFPosition;
     }
@@ -207,30 +210,30 @@ public class Climber
     
     public void grabSecondRung() 
     {
-        //41.1in to 60.25in 24 in ball park travel
-        //motor has a diameter of 3.2
-        //2 * pi * (diameter/2) = circumfrence of 10.0530964915in
-        //24 / ans = 2.38732414638 rotations
-        try
-        {
-            System.out.println("Going up");
-            firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 2.38732414638f);
-            firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-            setMotorSpeed(firstStageClimbMotorLeader, 0.1);
-            System.out.println("UP!");
-            setMotorSpeed(firstStageClimbMotorLeader, 0);
-            TimeUnit.SECONDS.sleep(5);
-            System.out.println(ANSI_RED + ANSI_CYAN_BACKGROUND + "MOVE FORWARD! "+ ANSI_RESET + ANSI_RESET_BACKGROUND);
-            TimeUnit.SECONDS.sleep(5);
-            setMotorSpeed(firstStageClimbMotorLeader, -0.1);
-            System.out.println("BACK DOWN!");
-            setMotorSpeed(firstStageClimbMotorLeader, 0);
-            TimeUnit.SECONDS.sleep(5);
-        }
-        catch(InterruptedException ex)
-        {
-            ex.printStackTrace();
-        }
+        // //41.1in to 60.25in 24 in ball park travel
+        // //motor has a diameter of 3.2
+        // //2 * pi * (diameter/2) = circumfrence of 10.0530964915in
+        // //24 / ans = 2.38732414638 rotations
+        // try
+        // {
+        //     System.out.println("Going up");
+        //     // firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 2.38732414638f);
+        //     // firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        //     // setMotorSpeed(firstStageClimbMotorLeader, 0.1);
+        //     DriverStation.reportError("UP!", false);
+        //     // setMotorSpeed(firstStageClimbMotorLeader, 0);
+        //     TimeUnit.SECONDS.sleep(5);
+        //     DriverStation.reportError("GO FORWARD", false);
+        //     TimeUnit.SECONDS.sleep(5);
+        //     // setMotorSpeed(firstStageClimbMotorLeader, -0.1);
+        //     DriverStation.reportError("ROBOT UP!", false);
+        //     // setMotorSpeed(firstStageClimbMotorLeader, 0);
+        //     TimeUnit.SECONDS.sleep(5);
+        // }
+        // catch(InterruptedException ex)
+        // {
+        //     ex.printStackTrace();
+        // }
     }
 
     public void grabThirdRung()
