@@ -80,6 +80,7 @@ public class Shooter
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
     }
 
+    //DO NOT USE UNLESS IN TELEOP MODE
     public void setFlywheelSpeedNew(double speed)
     {
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);

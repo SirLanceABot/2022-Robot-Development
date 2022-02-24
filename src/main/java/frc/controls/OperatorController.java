@@ -31,7 +31,7 @@ public class OperatorController extends Logitech
 
         kClimbUp(Button.k10),
         kClimbDown(Button.k11),
-        // kMoveClimbToggle(Button.k12),
+        kClimbShutDown(Button.k12),
         
 
         // kOffTarget(Button.k3),
