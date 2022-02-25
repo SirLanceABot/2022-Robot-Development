@@ -23,7 +23,7 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class GripPipeLine
+public class GripPipeLine2
 {
 	//Outputs
 	private Mat blurOutput = new Mat();
