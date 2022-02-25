@@ -203,14 +203,14 @@ public class Climber
 
     public void climbUp()
     {
-        setMotorSpeed(firstStageClimbMotorLeader, 1);
+        setMotorSpeed(firstStageClimbMotorLeader, .1);
         DriverStation.reportError("Climber going up", false);
         //TODO make sure this value goes the right direction
     }
 
     public void climbDown()
     {
-        setMotorSpeed(firstStageClimbMotorLeader, -1);
+        setMotorSpeed(firstStageClimbMotorLeader, -.1);
         DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
     }

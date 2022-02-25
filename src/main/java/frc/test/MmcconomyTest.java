@@ -50,14 +50,15 @@ public class MmcconomyTest implements MyTest
         try
         {
             System.out.println("Starting");
-            TimeUnit.SECONDS.sleep(2);   
+            //TimeUnit.SECONDS.sleep(2);   
+            CLIMBER.climbUp();
+            TimeUnit.SECONDS.sleep(2);
+            System.out.println(CLIMBER.getFCLposition());
+            CLIMBER.shutDown();
+            TimeUnit.SECONDS.sleep(2);
             CLIMBER.climbDown();
             TimeUnit.SECONDS.sleep(2);
             CLIMBER.shutDown();
-            TimeUnit.SECONDS.sleep(2);
-            CLIMBER.climbUp();
-            TimeUnit.SECONDS.sleep(2);
-            CLIMBER.climbUp();
         }
         catch(InterruptedException ex)
         {
