@@ -1,7 +1,9 @@
 package frc.constants;
 
- //TODO: Get right values for each port
-public class Port 
+import frc.drivetrain.SwerveModuleData;
+
+//TODO: Get right values for each port
+public final class Port 
 {
 
     // TODO: Make up numbers for these so that they avoid conflicts
@@ -30,7 +32,15 @@ public class Port
 
         public static final int SHOOTER_FLYWHEEL = 46;
         public static final int SHOOTER_SHROUD = 47;
+    }
 
+    public static class Module
+    {
+        public static final SwerveModuleData FRONT_LEFT = new SwerveModuleData("Front Left", 7, true, 8, -167.255859375, 9);
+        public static final SwerveModuleData FRONT_RIGHT = new SwerveModuleData("Front Right", 10, false, 11, -305.947265625, 12);
+        public static final SwerveModuleData BACK_LEFT = new SwerveModuleData("Back Left", 4, true, 5, -348.75, 6);
+        public static final SwerveModuleData BACK_RIGHT = new SwerveModuleData("Back Right", 1, false, 2, -101.953125, 3);
+    
     }
 
     public class Sensor
