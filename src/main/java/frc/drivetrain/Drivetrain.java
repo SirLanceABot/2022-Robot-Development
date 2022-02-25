@@ -6,6 +6,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -66,6 +67,7 @@ public class Drivetrain extends RobotDriveBase
         super();
 
         navx.reset();
+        odometry.resetPosition(new Pose2d(), navx.getRotation2d());
         
         // System.out.println(frontLeft.getTurningEncoderPosition());
         // System.out.println(frontRight.getTurningEncoderPosition());
@@ -111,10 +113,10 @@ public class Drivetrain extends RobotDriveBase
 
         if(xSpeed == 0 && ySpeed == 0 && turn == 0 && previousSwerveModuleStates != null)
         {
-        for(int i = 0; i < swerveModuleStates.length; i++)
-        {
-            swerveModuleStates[i].angle = previousSwerveModuleStates[i].angle;
-        }
+            for(int i = 0; i < swerveModuleStates.length; i++)
+            {
+                swerveModuleStates[i].angle = previousSwerveModuleStates[i].angle;
+            }
         }
         frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
@@ -124,6 +126,34 @@ public class Drivetrain extends RobotDriveBase
         previousSwerveModuleStates = swerveModuleStates;
 
         feedWatchdog();
+    }
+
+    /**
+     * Drive a "straight" distance in meters
+     * 
+     * @param velocity in meters per second (+ forward, - reverse)
+     * @param distanceToDrive in meters
+     * @return true when drive is complete
+     */
+    public boolean driveStraight(double velocity, double distanceToDrive)
+    {
+        boolean isDone = false;
+        double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0,0));
+
+        updateOdometry();
+
+        if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))
+        {
+            drive(velocity, 0.0, 0.0, true);
+        }
+        else
+        {
+            stopMotor();
+            isDone = true;
+            System.out.println("Dist (meters) = " + distanceDriven);
+        }
+
+        return isDone;
     }
 
     /** Updates the field relative position of the robot. */
