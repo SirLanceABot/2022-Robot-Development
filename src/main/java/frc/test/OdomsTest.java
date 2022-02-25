@@ -4,7 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
 
-import frc.vision.AcquireTarget;
+import frc.vision.AcquireHubImage;
 import frc.vision.Vision;
 
 public class OdomsTest implements MyTest
@@ -23,7 +23,7 @@ public class OdomsTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static AcquireTarget target;
+    private static AcquireHubImage target;
     private static Thread targetThread;
 
 
@@ -42,7 +42,7 @@ public class OdomsTest implements MyTest
     {
         
          // start thread for target camera and locate target
-        target = new AcquireTarget();
+        target = new AcquireHubImage();
         targetThread = new Thread(target, "TargetCamera");
         targetThread.setDaemon(true);
         targetThread.start();
