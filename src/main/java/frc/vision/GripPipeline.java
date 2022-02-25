@@ -48,9 +48,12 @@ public class GripPipeline
 
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = blurOutput;
-		double[] hsvThresholdHue = {69.60431654676259, 86.31399317406142};
-		double[] hsvThresholdSaturation = {29.81115107913669, 107.04778156996586};
-		double[] hsvThresholdValue = {200.88129496402877, 235.41808873720134};
+		// double[] hsvThresholdHue = {69.60431654676259, 86.31399317406142};
+		double[] hsvThresholdHue = {60., 90.};
+		// double[] hsvThresholdSaturation = {29.81115107913669, 107.04778156996586};
+		double[] hsvThresholdSaturation = {10., 255.};
+		// double[] hsvThresholdValue = {200.88129496402877, 235.41808873720134};
+		double[] hsvThresholdValue = {10., 255.};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_dilate0:
@@ -69,7 +72,7 @@ public class GripPipeline
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 40.0;
+		double filterContoursMinArea = 0; //40.0;
 		double filterContoursMinPerimeter = 9.0;
 		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 1000.0;
