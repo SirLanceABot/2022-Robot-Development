@@ -7,6 +7,7 @@ import frc.components.Climber;
 import frc.drivetrain.Drivetrain;
 import frc.components.Shooter;
 import frc.components.Shuttle;
+import frc.constants.Constant;
 import frc.components.CargoManager;
 
 import frc.components.Shuttle;
@@ -59,7 +60,11 @@ public class TeleopMode implements ModeTransition
      */
     public void init()
     {
-        DRIVER_CONTROLLER.resetRumbleCounter();
+        if(DRIVER_CONTROLLER != null && DRIVETRAIN != null)
+        {
+            DRIVER_CONTROLLER.resetRumbleCounter();
+            DRIVETRAIN.resetEncoders();
+        }
     }
 
     /**
@@ -73,6 +78,23 @@ public class TeleopMode implements ModeTransition
 
             if(DRIVETRAIN != null)
             {
+                // TODO : Add slew rate limiter
+                double drivePowerLimit = 0.6;
+                double turnPowerLimit = 0.1;
+                double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
+                double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
+                double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
+
+                // Scales down the input power
+                // TODO : Add button for full power
+                drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+
+                xSpeed *= drivePowerLimit;
+                ySpeed *= drivePowerLimit;
+                turn *= turnPowerLimit;
+
+                DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
+
                 // running the drivetrain
                 // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
 
