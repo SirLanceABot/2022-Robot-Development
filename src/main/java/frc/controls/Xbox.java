@@ -163,7 +163,7 @@ public class Xbox extends Joystick
 
         if(axisIsFlipped[axis])
         {
-            value *= -value;
+            value = -value;
         }
         if(Math.abs(value) <= axisDeadzone[axis])
         {
