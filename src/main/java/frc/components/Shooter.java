@@ -66,15 +66,15 @@ public class Shooter
 
     public static enum Hub
     {
-        kUpper(1),
-        kLower(0)
+        kUpper("Upper"),
+        kLower("Lower")
         ;
 
-        public final int direction;
+        public final String level;
 
-        private Hub(int direction)
+        private Hub(String level)
         {
-            this.direction = direction;
+            this.level = level;
         } 
     }
 

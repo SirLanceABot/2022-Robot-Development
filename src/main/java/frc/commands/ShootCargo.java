@@ -21,19 +21,20 @@ public class ShootCargo implements Command
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private int numberOfCargo;
     private double distance_meters;
-    // TODO: enum for upper/lower hub
+    private Shooter.Hub hub;
     private boolean isFinished;
 
     // These variables are only used to simulate cargo being shot
     private int cargoShotSimulation = 0;
     private double distanceShotSimulation = 0.0;
-    // TODO: enum for upper/lower hub
+    private Shooter.Hub hubSimulation;
 
 
     // *** CLASS CONSTRUCTOR ***
-    public ShootCargo(int numberOfCargo, double distance_meters)
+    public ShootCargo(int numberOfCargo, double distance_meters, Shooter.Hub hub)
     {
         this.numberOfCargo = numberOfCargo;
+        this.hub = hub;
         this.distance_meters = distance_meters;
 
         isFinished = false;
@@ -51,10 +52,10 @@ public class ShootCargo implements Command
 
     public void execute()
     {
+        hubSimulation = hub;
         distanceShotSimulation = distance_meters;
         cargoShotSimulation++;
-        System.out.println("Cargo shot at a distance of " + distanceShotSimulation + " m");
-        // TODO: does distanceShotSimulation need to exist? Can distance_meters just be displayed instead?
+        System.out.println("Cargo shot into " + hub.level + " hub at a distance of " + distanceShotSimulation + " m");
         
         if(cargoShotSimulation == numberOfCargo)
         {

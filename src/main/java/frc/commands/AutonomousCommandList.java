@@ -10,6 +10,7 @@ import frc.shuffleboard.AutonomousTabData.MoveOffTarmac;
 import frc.shuffleboard.AutonomousTabData.OrderOfOperations;
 import frc.shuffleboard.AutonomousTabData.PickUpCargo;
 import frc.shuffleboard.AutonomousTabData.ShootDelay;
+import frc.components.Shooter;
 
 public class AutonomousCommandList
 {
@@ -59,17 +60,12 @@ public class AutonomousCommandList
         case kMoveFirst:
             move();
             shoot();
-
             break;
-
         case kShootFirst:
             shoot();
             move();
-
             break;
-        
         case kDoNothing:
-
             break;
         }
     }
@@ -111,17 +107,17 @@ public class AutonomousCommandList
         {
             if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
             {
-                // addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargo.value, 5.0, upper));
+                addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargo.value, 5.0, Shooter.Hub.kUpper));
             }
             else
             {
-                // addCommand(new ShootCargo(1, 3.0, upper));
+                addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
             }
         }
 
         if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kShootFirst)
         {
-            // addCommand(new ShootCargo(1, 1.0, lower));
+            addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
         }
     }
 
@@ -157,7 +153,6 @@ public class AutonomousCommandList
             currentCommand.init();
             currentCommandState = CommandState.kExecute;
             break;
-
         case kExecute:
             if(headerNeedsToBeDisplayed)
             {
@@ -172,7 +167,6 @@ public class AutonomousCommandList
                 headerNeedsToBeDisplayed = true;
             }
             break;
-
         case kEnd:
             System.out.println("Ending command number: " + currentCommandIndex);
             
@@ -188,7 +182,6 @@ public class AutonomousCommandList
                 currentCommandState = CommandState.kAllDone;
             }
             break;
-
         case kAllDone:
             if(headerNeedsToBeDisplayed)
             {
