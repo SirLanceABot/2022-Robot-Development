@@ -26,7 +26,7 @@ public class Shooter
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final TalonFX flywheelMotor = new TalonFX(Port.Motor.SHOOTER_FLYWHEEL);
+    private static final TalonSRX flywheelMotor = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
     private static final TalonSRX shroudMotor = new TalonSRX(Port.Motor.SHOOTER_SHROUD);
 
     private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
@@ -38,9 +38,9 @@ public class Shooter
     private static final double DROP_SHOT_SPEED = Constant.DROP_SHOT_SPEED;
 
     //TODO: Tune PID values
-    private static final double kP = 0.4;
-    private static final double kI = 0.000025;
-    private static final double kD = 0.0000001;
+    private static final double kP = 0.0;
+    private static final double kI = 0.000000;
+    private static final double kD = 0.0000000;
     private static final double kF = 0.0;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
@@ -102,7 +102,7 @@ public class Shooter
     //return value is in rpm
     public double measureFlywheelSpeed()
     {
-        return flywheelMotor.getSelectedSensorVelocity() * TICK_TO_RPM;
+        return flywheelMotor.getSelectedSensorVelocity(0) * TICK_TO_RPM;
     }
     
     public boolean isFlywheelReady()
@@ -113,9 +113,11 @@ public class Shooter
 
     public void shoot()
     {
-        calculateLaunchTrajectory();
-        setFlywheelSpeed(desiredLaunchSpeed);
-        setShroudAngle(desiredLaunchAngle);
+        // calculateLaunchTrajectory();
+        // setFlywheelSpeed(desiredLaunchSpeed);
+        // setShroudAngle(desiredLaunchAngle);
+
+        setFlywheelSpeed(300);
     }
 
     public void startLongShot()
@@ -231,6 +233,8 @@ public class Shooter
         flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
 
         //increase framerate for sensor velocity checks (currently at 100ms)
+        
+        
     }
 
     private void configShroudMotor()

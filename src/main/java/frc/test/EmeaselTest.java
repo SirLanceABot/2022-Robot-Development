@@ -50,19 +50,22 @@ public class EmeaselTest implements MyTest
      */
     public void periodic()
     {
-        shroudSensorInput = RobotController.getVoltage5V();
-        shroudSensorOutput = shooter.measureShroudAngle();
-        shroudSensorOutputAdjusted = shroudSensorInput / 5.0 * shroudSensorOutput;
+        // shroudSensorInput = RobotController.getVoltage5V();
+        // shroudSensorOutput = shooter.measureShroudAngle();
+        // shroudSensorOutputAdjusted = shroudSensorInput / 5.0 * shroudSensorOutput;
 
-        //when testing sensor output values, square ruler, sensor, and reflector, and then subtract 1.4 cm from the final reading
-        System.out.printf("%9s %1.3f", "Input:  ", shroudSensorInput);
-        System.out.println();
-        System.out.printf("%9s %1.3f", "Output:  ", shroudSensorOutput);
-        System.out.println();
-        System.out.printf("%17s %1.3f", "Adjusted Output: ", shroudSensorOutputAdjusted);
-        System.out.println();
+        // //when testing sensor output values, square ruler, sensor, and reflector, and then subtract 1.4 cm from the final reading
+        // System.out.printf("%9s %1.3f", "Input:  ", shroudSensorInput);
+        // System.out.println();
+        // System.out.printf("%9s %1.3f", "Output:  ", shroudSensorOutput);
+        // System.out.println();
+        // System.out.printf("%17s %1.3f", "Adjusted Output: ", shroudSensorOutputAdjusted);
+        // System.out.println();
 
-        // System.out.println(RobotController.getVoltage5V() + " " + shooter.measureShroudAngle());
+        // // System.out.println(RobotController.getVoltage5V() + " " + shooter.measureShroudAngle());
+
+        shooter.shoot();
+        System.out.println(shooter.measureFlywheelSpeed());
     }
 
     /**
