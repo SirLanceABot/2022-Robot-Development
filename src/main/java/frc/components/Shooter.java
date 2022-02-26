@@ -26,8 +26,10 @@ public class Shooter
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final TalonSRX flywheelMotor = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
+    // private static final TalonSRX flywheelMotor = new TalonFX(Port.Motor.SHOOTER_FLYWHEEL);
     private static final TalonSRX shroudMotor = new TalonSRX(Port.Motor.SHOOTER_SHROUD);
+
+    private static final TalonSRX flywheelMotor = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
 
     private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
 
@@ -38,10 +40,10 @@ public class Shooter
     private static final double DROP_SHOT_SPEED = Constant.DROP_SHOT_SPEED;
 
     //TODO: Tune PID values
-    private static final double kP = 0.0;
+    private static final double kP = 0.2;
     private static final double kI = 0.000000;
     private static final double kD = 0.0000000;
-    private static final double kF = 0.0;
+    private static final double kF = 0.53;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
@@ -102,7 +104,7 @@ public class Shooter
     //return value is in rpm
     public double measureFlywheelSpeed()
     {
-        return flywheelMotor.getSelectedSensorVelocity(0) * TICK_TO_RPM;
+        return flywheelMotor.getSelectedSensorVelocity();
     }
     
     public boolean isFlywheelReady()
@@ -117,7 +119,7 @@ public class Shooter
         // setFlywheelSpeed(desiredLaunchSpeed);
         // setShroudAngle(desiredLaunchAngle);
 
-        setFlywheelSpeed(300);
+        setFlywheelSpeed(120);
     }
 
     public void startLongShot()
