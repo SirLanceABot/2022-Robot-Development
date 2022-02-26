@@ -4,7 +4,8 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.components.Shuttle;
-import frc.components.Shuttle.Events.event;
+import frc.components.ShuttleFSM;
+import frc.components.ShuttleFSM.Events.event;
 import frc.controls.DriverController;
 import frc.controls.Xbox;
 import frc.controls.DriverController.DriverButtonAction;
@@ -47,20 +48,22 @@ public class DfifeTest implements MyTest
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
-    private static final Shuttle shuttle = RobotContainer.SHUTTLE;
+    private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
-    private static Shuttle.Events.event[] array =
+    private static ShuttleFSM.Events.event[] array =
     {
-        Shuttle.Events.event.NONE,
-        Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-        Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this state and base it on something else?
-        Shuttle.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,
-        Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,
-        Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-        Shuttle.Events.event.SHOOT_IS_CALLED
+        ShuttleFSM.Events.event.NONE,
+        ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
+        ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this event and base it on something else?
+        ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,
+        ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES,
+        ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,
+        ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
+        ShuttleFSM.Events.event.SHOOT_IS_CALLED
     };
     
-    private Shuttle.Events.event event;
+    private ShuttleFSM.Events.event event;
 
     private boolean previousButtonA = false;
     private boolean previousButtonB = false;
@@ -102,8 +105,8 @@ public class DfifeTest implements MyTest
         measureABXY();
 
         // System.out.println("Intake Sensor: " + shuttle.measureIntakeSensor());
-        // System.out.println("First Stage Sensor: " + shuttle.measureFirstStageSensor());
-        // System.out.println("Second Stage Sensor: " + shuttle.measureSecondStageSensor());
+        // System.out.println("First Stage Sensor: " + shuttle.measureStageOneSensor());
+        // System.out.println("Second Stage Sensor: " + shuttle.measureStageTwoSensor());
         // testShuttleSensors();
 
         FSMTestingV2();
@@ -130,33 +133,33 @@ public class DfifeTest implements MyTest
         {
             // Move first stage
             System.out.println("Stage one activated");
-            shuttle.forwardFirstStage();
+            SHUTTLE.forwardStageOne();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
         {
             // Move second stage
             System.out.println("Stage two activated");
-            shuttle.forwardSecondStage();
+            SHUTTLE.forwardStageTwo();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
         {
             // Reverse both stages
             System.out.println("Stage one and two reversed");
-            shuttle.reverseFirstStage();
-            shuttle.reverseSecondStage();
+            SHUTTLE.reverseStageOne();
+            SHUTTLE.reverseStageTwo();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
         {
             // Move both stages
             System.out.println("Stage one and two activated");
-            shuttle.forwardFirstStage();
-            shuttle.forwardSecondStage();
+            SHUTTLE.forwardStageOne();
+            SHUTTLE.forwardStageTwo();
         }
         else
         {
             // Stop both stages
-            shuttle.stopFirstStage();
-            shuttle.stopSecondStage();
+            SHUTTLE.stopStageOne();
+            SHUTTLE.stopStageTwo();
         }
     }
 
@@ -169,25 +172,25 @@ public class DfifeTest implements MyTest
         // event = determineEventFromController(shoot);
         // shuttle.fancyRun(event);
 
-        shuttle.fancyRun(shoot);
+        SHUTTLEFSM.fancyRun(shoot);
     }
 
     // Returns a determined event from the controller input
-    private Shuttle.Events.event determineEventFromController(boolean shoot)
+    private ShuttleFSM.Events.event determineEventFromController(boolean shoot)
     {
         // Initially say there is no event then continue to look for an event
-        Shuttle.Events.event determinedEvent = Shuttle.Events.event.NONE;
+        ShuttleFSM.Events.event determinedEvent = ShuttleFSM.Events.event.NONE;
 
         // Each event is a button
         if(currentButtonA != previousButtonA)
         {
             if (currentButtonA)
             {
-                determinedEvent = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+                determinedEvent = ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
             }
             else
             {
-                determinedEvent = Shuttle.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
+                determinedEvent = ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
             }
 
             previousButtonA = currentButtonA;
@@ -196,11 +199,11 @@ public class DfifeTest implements MyTest
         {
             if (currentButtonY)
             {
-                determinedEvent = Shuttle.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
+                determinedEvent = ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
             }
             else
             {
-                // STAGE_ONE_FULL_SENSOR_DEACTIVATES
+                determinedEvent = ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES;
             }
 
             previousButtonY = currentButtonY;
@@ -209,18 +212,18 @@ public class DfifeTest implements MyTest
         {
             if (currentButtonB)
             {
-                determinedEvent = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
+                determinedEvent = ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
             }
             else
             {
-                determinedEvent = Shuttle.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
+                determinedEvent = ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
             }
 
             previousButtonB = currentButtonB;
         }
         else if(shoot)
         {
-            determinedEvent = Shuttle.Events.event.SHOOT_IS_CALLED;
+            determinedEvent = ShuttleFSM.Events.event.SHOOT_IS_CALLED;
         };
 
         return determinedEvent;
@@ -230,7 +233,7 @@ public class DfifeTest implements MyTest
     private void FSMTestingV1()
     {
         // Initially say there is no event then continue to look for an event
-        event = Shuttle.Events.event.NONE;
+        event = ShuttleFSM.Events.event.NONE;
 
         // Cycle through the available events using a single button
         boolean currentStateOfButton = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA);
@@ -253,7 +256,7 @@ public class DfifeTest implements MyTest
         }
         else
         {
-            event = Shuttle.Events.event.NONE;
+            event = ShuttleFSM.Events.event.NONE;
         }
         
         // shuttle.fancyRun(event);
@@ -279,14 +282,14 @@ public class DfifeTest implements MyTest
 
     private void testShuttleSensors()
     {
-        if (shuttle.measureIntakeSensor() || shuttle.measureFirstStageSensor() || shuttle.measureSecondStageSensor())
+        if (SHUTTLE.measureIntakeSensor() || SHUTTLE.measureStageOneSensor() || SHUTTLE.measureStageTwoSensor())
         {
-            System.out.println("Shuttle Sensors: " + shuttle.measureIntakeSensor() + 
-                                              ", " + shuttle.measureFirstStageSensor() + 
-                                              ", " + shuttle.measureSecondStageSensor());
+            System.out.println("Shuttle Sensors: " + SHUTTLE.measureIntakeSensor() + 
+                                              ", " + SHUTTLE.measureStageOneSensor() + 
+                                              ", " + SHUTTLE.measureStageTwoSensor());
             // System.out.println("Intake Sensor: " + shuttle.measureIntakeSensor());
-            // System.out.println("First Stage Sensor: " + shuttle.measureFirstStageSensor());
-            // System.out.println("Second Stage Sensor: " + shuttle.measureSecondStageSensor());
+            // System.out.println("First Stage Sensor: " + shuttle.measureStageOneSensor());
+            // System.out.println("Second Stage Sensor: " + shuttle.measureStageTwoSensor());
         }
     }
 }

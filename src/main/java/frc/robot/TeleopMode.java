@@ -158,22 +158,22 @@ public class TeleopMode implements ModeTransition
                     // SHUTTLE.overrideFSM();
                     if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
                     {
-                        SHUTTLE.forwardFirstStage();
+                        SHUTTLE.forwardStageOne();
                     }
 
                     else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOn))
                     {
-                        SHUTTLE.forwardSecondStage();
+                        SHUTTLE.forwardStageTwo();
                     }
 
                     else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOff))
                     {
-                        SHUTTLE.stopFirstStage();
+                        SHUTTLE.stopStageOne();
                     }
 
                     else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOff))
                     {
-                        SHUTTLE.stopSecondStage();
+                        SHUTTLE.stopStageTwo();
                     }
                 }
                 else
@@ -196,8 +196,8 @@ public class TeleopMode implements ModeTransition
                     if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
                     {
                         // SHUTTLE.overrideFSM();
-                        SHUTTLE.forwardSecondStage(); 
-                        SHUTTLE.forwardFirstStage();
+                        SHUTTLE.forwardStageTwo(); 
+                        SHUTTLE.forwardStageOne();
                     }
                 }
                 else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
