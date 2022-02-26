@@ -1,8 +1,11 @@
 package frc.drivetrain;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 public class SwerveModuleData
 {
     public final String moduleName;
+    public final Translation2d moduleLocation;
     public final int driveMotorChannel;
     public final boolean driveMotorInverted;
     public final int turnEncoderChannel;
@@ -17,14 +20,16 @@ public class SwerveModuleData
      * @param turnEncoderOffset
      * @param turnMotorChannel
      */
-    public SwerveModuleData( String moduleName,
-                        int driveMotorChannel, 
-                        boolean driveMotorInverted, 
-                        int turnEncoderChannel, 
-                        double turnEncoderOffset, 
-                        int turnMotorChannel)
+    public SwerveModuleData(String moduleName,
+                            Translation2d moduleLocation,
+                            int driveMotorChannel, 
+                            boolean driveMotorInverted, 
+                            int turnEncoderChannel, 
+                            double turnEncoderOffset, 
+                            int turnMotorChannel)
     {
         this.moduleName = moduleName;
+        this.moduleLocation = moduleLocation;
         this.driveMotorChannel = driveMotorChannel;
         this.driveMotorInverted = driveMotorInverted;
         this.turnEncoderChannel = turnEncoderChannel;

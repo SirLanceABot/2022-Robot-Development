@@ -11,8 +11,6 @@ public class Xbox extends Joystick
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
   
-
-
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
     static
@@ -46,7 +44,6 @@ public class Xbox extends Joystick
             this.value = value;
         }
     }
-
 
     public static enum AxisScale
     {
@@ -221,8 +218,6 @@ public class Xbox extends Joystick
         else
             return super.getRawButton(button);
     }
-
-
 
     /**
      * This method returns the axis settings for 1 axis

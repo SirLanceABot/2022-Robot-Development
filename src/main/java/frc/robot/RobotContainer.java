@@ -65,7 +65,7 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
-        DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain() : null;
+        DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.Drivetrain.DRIVETRAIN_DATA) : null;
         CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
         INTAKE = useFullRobot || useIntake ? new Intake() : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter() : null;
