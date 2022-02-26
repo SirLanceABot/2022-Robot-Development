@@ -111,7 +111,7 @@ public class AutonomousCommandList
             }
             else
             {
-                addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
+                // addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
             }
         }
 
