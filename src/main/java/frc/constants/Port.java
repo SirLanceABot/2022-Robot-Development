@@ -23,10 +23,10 @@ public final class Port
         public static final int BACK_RIGHT_TURN = 3;
 
         public static final int INTAKE_ROLLER = 38;
-        public static final int INTAKE_ARMS_MOTOR = 39;  //MM 2/26/22
+        public static final int INTAKE_ARMS_MOTOR = 5;  //MM 2/26/22
 
-        public static final int SHUTTLE_STAGE_ONE = 40;  //MM 2/26/22
-        public static final int SHUTTLE_STAGE_TWO = 41;  //MM 2/26/22
+        public static final int SHUTTLE_STAGE_ONE = 4;  //MM 2/26/22
+        public static final int SHUTTLE_STAGE_TWO = 10;  //MM 2/26/22
 
         public static final int CLIMBER_STAGE_ONE_LEADER = 42;
         public static final int CLIMBER_STAGE_TWO_LEADER = 43;
