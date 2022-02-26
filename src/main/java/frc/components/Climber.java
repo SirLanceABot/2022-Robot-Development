@@ -73,7 +73,7 @@ public class Climber
     
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 2.38732414638f); //TODO set a soft limit of however far the guy is legally allowed to move
+        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 15.5844155844f); //TODO set a soft limit of however far the guy is legally allowed to move
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
         
