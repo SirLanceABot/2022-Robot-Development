@@ -252,7 +252,7 @@ public void run()
 /* END demo GRIP pipeline */
 
       // update the target information with best contour or the initialized no contour data
-        Vision.targetData.set(nextTargetData);
+        VisionData.targetData.set(nextTargetData);
 
         if(displayTargetContours)
         {

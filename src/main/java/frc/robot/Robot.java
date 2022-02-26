@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.vision.Vision;
 
 public class Robot extends TimedRobot
 {
@@ -36,6 +37,8 @@ public class Robot extends TimedRobot
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    private static final Vision VISION = RobotContainer.VISION;
+
     private static final DisabledMode disabled = new DisabledMode();
     private static final TestMode test = new TestMode();
     private static final AutonomousMode autonomous = new AutonomousMode();
@@ -58,6 +61,9 @@ public class Robot extends TimedRobot
     {
         System.out.println("\n\n2022-Robot-Development\n\n");
         robotState = RobotState.kRobotInit;
+        
+        if(VISION != null)
+            addPeriodic(() -> VISION.getCalibration(), 2.0, 0.018);
     }
 
     /**

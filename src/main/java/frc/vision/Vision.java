@@ -10,17 +10,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
-public class Vision extends TimedRobot {
+public class Vision //extends TimedRobot 
+{
 
   private static AcquireHubImage target;
   private static Thread targetThread;
-  static public TargetData targetData = new TargetData(); // get data from here
   private TargetData targetDataTemp; // Robot's working copy
   static NetworkTableEntry calibrate;
   static double calibrateAngle = 0.;
 
-  @Override
-  public void robotInit() {
+  public Vision() 
+  {
 
     // here for this test because I don't have the whole robot code - need it somewhere
     //////////// NAVX GYRO FOR USB LOAD TESTING ////////////
@@ -42,8 +42,8 @@ public class Vision extends TimedRobot {
 
   
   }
-  @Override
-  public void robotPeriodic()
+
+  public void getCalibration()
   {
     // this is way faster than needed - put in slow addPeriodic?
     if(calibrate != null)
@@ -51,7 +51,7 @@ public class Vision extends TimedRobot {
 
 
      // get the latest targeting data
-    targetDataTemp = targetData.get();
+    targetDataTemp = VisionData.targetData.get();
     if(targetDataTemp.isFreshData)
     {
       SmartDashboard.putString("vision", targetDataTemp.angleToTurn + " " +

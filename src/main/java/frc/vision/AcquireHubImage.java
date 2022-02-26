@@ -85,7 +85,7 @@ public class AcquireHubImage  implements Runnable
     UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
     IntakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     IntakeCamera.setResolution(160, 120);
-    IntakeCamera.setFPS(20);
+    IntakeCamera.setFPS(30);
     // MjpegServer server = CameraServer.startAutomaticCapture(IntakeCamera);
     // MjpegServer server = CameraServer.addServer("IntakeServer");
     MjpegServer intakeCameraServer = CameraServer.addServer("IntakeServer");

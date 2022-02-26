@@ -15,6 +15,7 @@ import frc.controls.OperatorController;
 import frc.drivetrain.Drivetrain;
 import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
+import frc.vision.Vision;
 
 public final class RobotContainer 
 {
@@ -48,6 +49,8 @@ public final class RobotContainer
     private static final boolean useAutonomousTabData       = true;
     private static final boolean useAutonomousCommandList   = true;
 
+    public static final boolean useVision                   = true;
+
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN; // = new Drivetrain();
@@ -65,6 +68,8 @@ public final class RobotContainer
     public static final MainShuffleboard MAIN_SHUFFLEBOARD; // = new MainShuffleboard(); 
     public static final AutonomousTabData AUTONOMOUS_TAB_DATA; // = new AutonomousTabData();
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
+
+    public static final Vision VISION;
    
 
     // *** ROBOT OBJECT INSTANTIATION ***
@@ -85,6 +90,8 @@ public final class RobotContainer
         MAIN_SHUFFLEBOARD = useFullRobot || useMainShuffleboard ? new MainShuffleboard() : null;
         AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTabData ? new AutonomousTabData() : null;
         AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
+
+        VISION = useFullRobot || useVision ? new Vision() : null;
     }
 
 

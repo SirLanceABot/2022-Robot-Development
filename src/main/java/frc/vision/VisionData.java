@@ -2,5 +2,5 @@ package frc.vision;
 
 public class VisionData 
 {
-    public static TargetData targetData;
+    static public TargetData targetData = new TargetData(); // get data from here
 }
