@@ -34,7 +34,9 @@ public class AutonomousMode implements ModeTransition
     public void init()
     {
         if(AUTONOMOUS_COMMAND_LIST != null)
+        {
             AUTONOMOUS_COMMAND_LIST.init();
+        }
     }
 
     /**
@@ -43,7 +45,9 @@ public class AutonomousMode implements ModeTransition
     public void periodic()
     {
         if(AUTONOMOUS_COMMAND_LIST != null)
+        {
             AUTONOMOUS_COMMAND_LIST.execute();
+        }
     }
 
     /**
@@ -52,6 +56,8 @@ public class AutonomousMode implements ModeTransition
     public void exit()
     {
         if(AUTONOMOUS_COMMAND_LIST != null)
+        {
             AUTONOMOUS_COMMAND_LIST.end();
+        }
     }
 }
