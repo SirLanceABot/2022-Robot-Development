@@ -38,13 +38,13 @@ public final class RobotContainer
     private static final boolean useDrivetrain              = false;
     private static final boolean useIntake                  = false;
     private static final boolean useShooter                 = false;
-    private static final boolean useShuttle                 = true;
+    private static final boolean useShuttle                 = false;
     private static final boolean useClimber                 = false;
     
-    private static final boolean useSensorValues            = true;
-    private static final boolean useEventGenerator          = true;
+    private static final boolean useSensorValues            = false;
+    private static final boolean useEventGenerator          = false;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = true;
+    private static final boolean useShuttleFSM              = false;
 
 
     private static final boolean useDriverController        = false;
