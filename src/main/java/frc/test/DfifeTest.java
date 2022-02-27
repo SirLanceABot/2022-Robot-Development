@@ -2,13 +2,12 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.components.Events;
+import frc.components.SensorValues;
 import frc.components.Shuttle;
 import frc.components.ShuttleFSM;
-import frc.components.ShuttleFSM.Events.event;
 import frc.controls.DriverController;
 import frc.controls.Xbox;
-import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
 
 // TODO: Testing numbers
@@ -49,21 +48,23 @@ public class DfifeTest implements MyTest
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
+
+    private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
-    private static ShuttleFSM.Events.event[] array =
+    private static Events.ShuttleEvent[] array =
     {
-        ShuttleFSM.Events.event.NONE,
-        ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-        ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this event and base it on something else?
-        ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,
-        ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES,
-        ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,
-        ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-        ShuttleFSM.Events.event.SHOOT_IS_CALLED
+        Events.ShuttleEvent.NONE,
+        Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
+        Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this event and base it on something else?
+        Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,
+        Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,
+        Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,
+        Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
+        Events.ShuttleEvent.SHOOT_IS_CALLED
     };
     
-    private ShuttleFSM.Events.event event;
+    private Events.ShuttleEvent event;
 
     private boolean previousButtonA = false;
     private boolean previousButtonB = false;
@@ -176,21 +177,21 @@ public class DfifeTest implements MyTest
     }
 
     // Returns a determined event from the controller input
-    private ShuttleFSM.Events.event determineEventFromController(boolean shoot)
+    private Events.ShuttleEvent determineEventFromController(boolean shoot)
     {
         // Initially say there is no event then continue to look for an event
-        ShuttleFSM.Events.event determinedEvent = ShuttleFSM.Events.event.NONE;
+        Events.ShuttleEvent determinedEvent = Events.ShuttleEvent.NONE;
 
         // Each event is a button
         if(currentButtonA != previousButtonA)
         {
             if (currentButtonA)
             {
-                determinedEvent = ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+                determinedEvent = Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
             }
             else
             {
-                determinedEvent = ShuttleFSM.Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
+                determinedEvent = Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
             }
 
             previousButtonA = currentButtonA;
@@ -199,11 +200,11 @@ public class DfifeTest implements MyTest
         {
             if (currentButtonY)
             {
-                determinedEvent = ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
+                determinedEvent = Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES;
             }
             else
             {
-                determinedEvent = ShuttleFSM.Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES;
+                determinedEvent = Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES;
             }
 
             previousButtonY = currentButtonY;
@@ -212,18 +213,18 @@ public class DfifeTest implements MyTest
         {
             if (currentButtonB)
             {
-                determinedEvent = ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
+                determinedEvent = Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES;
             }
             else
             {
-                determinedEvent = ShuttleFSM.Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
+                determinedEvent = Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
             }
 
             previousButtonB = currentButtonB;
         }
         else if(shoot)
         {
-            determinedEvent = ShuttleFSM.Events.event.SHOOT_IS_CALLED;
+            determinedEvent = Events.ShuttleEvent.SHOOT_IS_CALLED;
         };
 
         return determinedEvent;
@@ -233,7 +234,7 @@ public class DfifeTest implements MyTest
     private void FSMTestingV1()
     {
         // Initially say there is no event then continue to look for an event
-        event = ShuttleFSM.Events.event.NONE;
+        event = Events.ShuttleEvent.NONE;
 
         // Cycle through the available events using a single button
         boolean currentStateOfButton = DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA);
@@ -256,7 +257,7 @@ public class DfifeTest implements MyTest
         }
         else
         {
-            event = ShuttleFSM.Events.event.NONE;
+            event = Events.ShuttleEvent.NONE;
         }
         
         // shuttle.fancyRun(event);
