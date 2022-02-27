@@ -66,6 +66,10 @@ public class DisabledMode implements ModeTransition
      */
     public void exit()
     {
-     
+        if(robotState == RobotState.kDisabledAfterRobotInit && MAIN_SHUFFLEBOARD != null)
+        {
+            MAIN_SHUFFLEBOARD.setDriverControllerSettings();
+            MAIN_SHUFFLEBOARD.setOperatorControllerSettings();
+        }
     }
 }
