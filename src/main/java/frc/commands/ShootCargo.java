@@ -75,6 +75,6 @@ public class ShootCargo implements Command
 
     public String toString()
     {
-        return "ShootCargo()";
+        return "ShootCargo(" + numberOfCargo + ", " + distance_meters + ", " + hub + ")";
     }
 }
