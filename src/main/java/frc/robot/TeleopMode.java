@@ -26,6 +26,14 @@ import frc.controls.Xbox.Button;
 
 import frc.shuffleboard.MainShuffleboard;
 
+
+// TODO : To make the periodic() method more manageable, ...
+// 1. Create a method called drivetrain() for all the drivetrain commands
+//    In periodic(), keep the statement if(DRIVETRAIN != null), but call the new method in that if statement
+// 2. Create a method called intake() and do the same as drivetrain()
+// 3. Create a method called shuttle()
+// 4. Create a method called shooter()
+// 5. Create a method called climber()
 public class TeleopMode implements ModeTransition
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -37,14 +45,15 @@ public class TeleopMode implements ModeTransition
         System.out.println("Loading: " + fullClassName);
     }
 
+    
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
-    private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final OperatorController OPERATOR_CONTROLLER = RobotContainer.OPERATOR_CONTROLLER;
+    private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
-    private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
 
 
     // *** CLASS CONSTRUCTOR ***
