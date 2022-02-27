@@ -142,13 +142,15 @@ public class OperatorControllerTab
     {
         OperatorController.AxisSettings axisSettings = OPERATOR_CONTROLLER.new AxisSettings();
 
-        axisSettings.axisDeadzone = axisObjects.deadzoneEntry.getDouble(0.1);
-        axisSettings.axisMinOutput = axisObjects.minOutputEntry.getDouble(0.0);
-        axisSettings.axisMaxOutput = axisObjects.maxOutputEntry.getDouble(1.0);
+        // These MUST be read from the shuffleboard as a String, then converted to a Double because it is a "Text Box"
+        axisSettings.axisDeadzone = Double.valueOf(axisObjects.deadzoneEntry.getString("0.1"));
+        axisSettings.axisMinOutput = Double.valueOf(axisObjects.minOutputEntry.getString("0.0"));
+        axisSettings.axisMaxOutput = Double.valueOf(axisObjects.maxOutputEntry.getString("1.0"));
 
         axisSettings.axisIsFlipped = axisObjects.isFlipped.getSelected();
         axisSettings.axisScale = axisObjects.axisScaleComboBox.getSelected();
 
+        // System.out.println(axisSettings);
         return axisSettings;
     }
 
