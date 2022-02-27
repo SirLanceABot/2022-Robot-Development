@@ -3,6 +3,7 @@ package frc.test;
 import java.lang.invoke.MethodHandles;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import frc.components.Intake;
 import frc.controls.DriverController;
@@ -36,7 +37,9 @@ public class JwoodTest implements MyTest
     public JwoodTest()
     {
         // leftMotor.restoreFactoryDefaults();
+        // leftMotor.setIdleMode(IdleMode.kCoast);
         // rightMotor.restoreFactoryDefaults();
+        // rightMotor.setIdleMode(IdleMode.kCoast);
     }
 
 
@@ -56,7 +59,7 @@ public class JwoodTest implements MyTest
     {
 
         // leftMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftX));
-        // rightMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kRightX));
+        // rightMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftX));
 
         // double armEnc = INTAKE.getArmMotorRotations();
 
