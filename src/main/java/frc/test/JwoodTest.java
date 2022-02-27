@@ -2,6 +2,8 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
+import com.revrobotics.CANSparkMax;
+
 import frc.components.Intake;
 import frc.controls.DriverController;
 import frc.controls.Xbox;
@@ -26,11 +28,15 @@ public class JwoodTest implements MyTest
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
     private static final Intake INTAKE = RobotContainer.INTAKE;
 
+    // private static final CANSparkMax leftMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private static final CANSparkMax rightMotor = new CANSparkMax(7, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+
 
     // *** CLASS CONSTRUCTOR ***
     public JwoodTest()
     {
-
+        // leftMotor.restoreFactoryDefaults();
+        // rightMotor.restoreFactoryDefaults();
     }
 
 
@@ -48,34 +54,39 @@ public class JwoodTest implements MyTest
      */
     public void periodic()
     {
-        double armEnc = INTAKE.getArmMotorRotations();
 
-        System.out.println("  Enc=" + armEnc);
-        if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
-        {
-            INTAKE.moveArmIn();
-        }
-        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
-        {
-            INTAKE.moveArmOut();
-        }
-        else
-        {
-            INTAKE.stopArm();
-        }
+        // leftMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftX));
+        // rightMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kRightX));
 
-        if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
-        {
-            INTAKE.intakeRoller();
-        }
-        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
-        {
-            INTAKE.outtakeRoller();
-        }
-        else
-        {
-            INTAKE.turnOffRoller();
-        }
+        // double armEnc = INTAKE.getArmMotorRotations();
+
+        // // System.out.println("  Enc=" + armEnc);
+        // if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
+        // {
+        //     INTAKE.moveArmIn();
+        // }
+        // else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
+        // {
+        //     INTAKE.moveArmOut();
+        // }
+        // else
+        // {
+        //     INTAKE.stopArm();
+        // }
+
+        // if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
+        // {
+        //     INTAKE.intakeRoller();
+        // }
+        // else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kY))
+        // {
+        //     INTAKE.outtakeRoller();
+        // }
+        // else
+        // {
+        //     INTAKE.turnOffRoller();
+        // }
+
 
     }
 
