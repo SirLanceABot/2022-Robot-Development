@@ -3,8 +3,6 @@ package frc.test;
 import java.lang.invoke.MethodHandles;
 import frc.robot.RobotContainer;
 import frc.components.Shooter;
-import java.lang.Object;
-import edu.wpi.first.wpilibj.RobotController;
 
 public class EmeaselTest implements MyTest
 {
@@ -22,7 +20,8 @@ public class EmeaselTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static Shooter shooter = new Shooter();
+    // private static Shooter shooter = new Shooter(0, 1);
+    private static final Shooter SHOOTER = RobotContainer.SHOOTER;
 
     private static double shroudSensorInput;
     private static double shroudSensorOutput;
@@ -64,8 +63,8 @@ public class EmeaselTest implements MyTest
 
         // // System.out.println(RobotController.getVoltage5V() + " " + shooter.measureShroudAngle());
 
-        shooter.shoot();
-        System.out.println(shooter.measureFlywheelSpeed());
+        SHOOTER.shoot();
+        System.out.println(SHOOTER.measureFlywheelSpeed());
     }
 
     /**
