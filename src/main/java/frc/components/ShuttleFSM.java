@@ -176,29 +176,29 @@ public class ShuttleFSM
     {
         // Transition table
         // transition name (current state, event, new state)
-        TRANSITION_1  (State.NO_CARGO_STORED,                       Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_TWO),
-        TRANSITION_2  (State.STORING_CARGO_IN_STAGE_TWO,            Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO),
-        TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
-        TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
-        TRANSITION_2C (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,	Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES,	                State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO),
-        TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
-        TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,	                State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
-        TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,	State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
-        TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
-        TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
-        TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
-        TRANSITION_6  (State.STORING_CARGO_IN_STAGE_ONE,            Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
-        TRANSITION_7  (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.event.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO),
-        TRANSITION_8  (State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO, Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE),
-        TRANSITION_9  (State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE,   Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
-        TRANSITION_10 (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.EJECTING_EXTRA_CARGO),
-        TRANSITION_11 (State.EJECTING_EXTRA_CARGO,                  Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO);
+        TRANSITION_1  (State.NO_CARGO_STORED,                       Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_TWO),
+        TRANSITION_2  (State.STORING_CARGO_IN_STAGE_TWO,            Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO),
+        TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
+        TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2C (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,	                State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO),
+        TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,	                State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
+        TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
+        TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
+        TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
+        TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_6  (State.STORING_CARGO_IN_STAGE_ONE,            Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
+        TRANSITION_7  (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO),
+        TRANSITION_8  (State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO, Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE),
+        TRANSITION_9  (State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE,   Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
+        TRANSITION_10 (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.EJECTING_EXTRA_CARGO),
+        TRANSITION_11 (State.EJECTING_EXTRA_CARGO,                  Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO);
 
         private final State currentState;
-        private final Events.event event;
+        private final Events.ShuttleEvent event;
         private final State nextState;
 
-        Transition(State currentState, Events.event event, State nextState)
+        Transition(State currentState, Events.ShuttleEvent event, State nextState)
         {
             this.currentState = currentState;
             this.event = event;
@@ -211,7 +211,7 @@ public class ShuttleFSM
          * @param currentState
          * @param event
          */
-        public static State findNextState(State currentState, Events.event event)
+        public static State findNextState(State currentState, Events.ShuttleEvent event)
         {
             for (Transition transition : Transition.values())
             {
@@ -226,42 +226,18 @@ public class ShuttleFSM
     }
     // End of Transition enum
 
-    // TODO: Move this to EventManager class
-    public static class Events
-    {
-        public static enum event
-        {
-            NONE,
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-            INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
-            STAGE_ONE_FULL_SENSOR_ACTIVATES,
-            STAGE_ONE_FULL_SENSOR_DEACTIVATES,
-            STAGE_TWO_FULL_SENSOR_ACTIVATES,
-            STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-            SHOOT_IS_CALLED;
-        }
-    }
-
     // *** CLASS & INSTANCE VARIABLES ***
-    // Current state
+    private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
+    private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
+    // Current state
     private State currentShuttleState;
 
     private static final MotorStage motorRequest = new MotorStage();
 
     // TODO: Figure out if this is needed or should be the "determinedEvent"
-    private Events.event event;
-
-    private boolean previousIntakeCanBe = false;
-    private boolean previousStageOneFull = false;
-    private boolean previousStageTwoFull = false;
-    
-    private boolean currentIntakeCanBe = false;
-    private boolean currentStageOneFull = false;
-    private boolean currentStageTwoFull = false;
-
-
+    private Events.ShuttleEvent event;
 
     // *** CLASS CONSTRUCTOR ***
     public ShuttleFSM()
@@ -284,7 +260,7 @@ public class ShuttleFSM
 
     // *** CLASS & INSTANCE METHODS ***
 
-    public void checkStateChange(Events.event event)
+    public void checkStateChange(Events.ShuttleEvent event)
     {
         // make the transition to a new currentState if an event triggered it
 
@@ -324,20 +300,20 @@ public class ShuttleFSM
         State measuredState = State.NO_CARGO_STORED;
 
         // Measure sensor values to determine initial state
-        if (!SHUTTLE.measureStageOneSensor() && !SHUTTLE.measureStageTwoSensor())
+        if (!CURRENT_SENSOR_VALUES.getShuttleStageOne() && !CURRENT_SENSOR_VALUES.getShuttleStageTwo())
         {
             measuredState = State.NO_CARGO_STORED;
         }
-        else if (SHUTTLE.measureStageOneSensor() && !SHUTTLE.measureStageTwoSensor())
+        else if (CURRENT_SENSOR_VALUES.getShuttleStageOne() && !CURRENT_SENSOR_VALUES.getShuttleStageTwo())
         {
             // Cargo is stored in stage one, but we want it to be stored in stage two so just say we're doing that
             measuredState = State.STORING_CARGO_IN_STAGE_TWO;
         }
-        else if (!SHUTTLE.measureStageOneSensor() && SHUTTLE.measureStageTwoSensor())
+        else if (!CURRENT_SENSOR_VALUES.getShuttleStageOne() && CURRENT_SENSOR_VALUES.getShuttleStageTwo())
         {
             measuredState = State.CARGO_STORED_IN_STAGE_TWO;
         }
-        else if (SHUTTLE.measureStageOneSensor() && SHUTTLE.measureStageTwoSensor())
+        else if (CURRENT_SENSOR_VALUES.getShuttleStageOne() && CURRENT_SENSOR_VALUES.getShuttleStageTwo())
         {
             measuredState = State.CARGO_STORED_IN_STAGE_ONE_AND_TWO;
         }
@@ -348,12 +324,12 @@ public class ShuttleFSM
     // public void fancyRun(Events.event event)
     public void fancyRun(boolean shoot)
     {
-        // TODO: Add measuring sensors to determine event, probablly in a different method
-        // Could possibly then change measureState to use that as well
-        Events.event event = determineEvent(shoot);
+        EVENT_GENERATOR.determineEvents(shoot);
+
+        Events.ShuttleEvent event = EVENT_GENERATOR.getShuttleEvent();
         
         // Prints out the event if there is one
-        if (event != Events.event.NONE)
+        if (event != Events.ShuttleEvent.NONE)
         {
             System.out.println("Event name: " + event);
         }
@@ -380,64 +356,5 @@ public class ShuttleFSM
         {
             SHUTTLE.stopStageTwo();
         }
-    }
-
-    // TODO: Move this to EventManager class
-    // Determine what event based on proximity sensors and if shoot command is given
-    private Events.event determineEvent(boolean shoot)
-    {
-        // Measure the current state of the proximity sensors
-        currentIntakeCanBe = SHUTTLE.measureIntakeSensor();
-        currentStageOneFull = SHUTTLE.measureStageOneSensor();
-        currentStageTwoFull = SHUTTLE.measureStageTwoSensor();
-
-        // Initially say there is no event then continue to look for an event
-        Events.event determinedEvent = Events.event.NONE;
-
-        if(currentIntakeCanBe != previousIntakeCanBe)
-        {
-            if (currentIntakeCanBe)
-            {
-                determinedEvent = Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
-            }
-            else
-            {
-                determinedEvent = Events.event.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES;
-            }
-
-            previousIntakeCanBe = currentIntakeCanBe;
-        }
-        else if(currentStageOneFull != previousStageOneFull)
-        {
-            if (currentStageOneFull)
-            {
-                determinedEvent = Events.event.STAGE_ONE_FULL_SENSOR_ACTIVATES;
-            }
-            else
-            {
-                determinedEvent = Events.event.STAGE_ONE_FULL_SENSOR_DEACTIVATES;
-            }
-
-            previousStageOneFull = currentStageOneFull;
-        }
-        else if(currentStageTwoFull != previousStageTwoFull)
-        {
-            if (currentStageTwoFull)
-            {
-                determinedEvent = Events.event.STAGE_TWO_FULL_SENSOR_ACTIVATES;
-            }
-            else
-            {
-                determinedEvent = Events.event.STAGE_TWO_FULL_SENSOR_DEACTIVATES;
-            }
-
-            previousStageTwoFull = currentStageTwoFull;
-        }
-        else if(shoot)
-        {
-            determinedEvent = Events.event.SHOOT_IS_CALLED;
-        }
-
-        return determinedEvent;
     }
 }
