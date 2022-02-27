@@ -54,6 +54,21 @@ public class Logitech extends Joystick
         public double axisMaxOutput;
         public boolean axisIsFlipped;
         public AxisScale axisScale;
+        
+        public String toString()
+        {
+            String str = "";
+
+            str += "[";
+            str += axisDeadzone + ", ";
+            str += axisMinOutput + ", ";
+            str += axisMaxOutput + ", ";
+            str += axisIsFlipped + ", ";
+            str += axisScale;
+            str += "]\n";
+
+            return str;
+        }
     }
 
 
