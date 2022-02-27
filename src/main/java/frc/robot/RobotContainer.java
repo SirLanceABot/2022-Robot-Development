@@ -5,7 +5,9 @@ import java.lang.invoke.MethodHandles;
 import frc.commands.AutonomousCommandList;
 import frc.components.CargoManager;
 import frc.components.Climber;
+import frc.components.EventGenerator;
 import frc.components.Intake;
+import frc.components.SensorValues;
 import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.components.ShuttleFSM;
@@ -36,11 +38,13 @@ public final class RobotContainer
     private static final boolean useDrivetrain              = false;
     private static final boolean useIntake                  = false;
     private static final boolean useShooter                 = false;
-    private static final boolean useShuttle                 = false;
+    private static final boolean useShuttle                 = true;
     private static final boolean useClimber                 = false;
     
+    private static final boolean useSensorValues            = true;
+    private static final boolean useEventGenerator          = true;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = false;
+    private static final boolean useShuttleFSM              = true;
 
 
     private static final boolean useDriverController        = false;
@@ -55,12 +59,14 @@ public final class RobotContainer
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN;
-    public static final CargoManager CARGO_MANAGER;
     public static final Intake INTAKE;
     public static final Shooter SHOOTER;
     public static final Shuttle SHUTTLE;
     public static final Climber CLIMBER;
     
+    public static final SensorValues CURRENT_SENSOR_VALUES;
+    public static final EventGenerator EVENT_GENERATOR;
+    public static final CargoManager CARGO_MANAGER;
     public static final ShuttleFSM SHUTTLEFSM;
 
     public static final DriverController DRIVER_CONTROLLER;
@@ -77,12 +83,15 @@ public final class RobotContainer
     static
     {
         DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.DrivetrainSetup.DRIVETRAIN_DATA) : null;
-        CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
         INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER, Port.Motor.INTAKE_ARMS_MOTOR) : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter(Port.Motor.SHOOTER_FLYWHEEL, Port.Motor.SHOOTER_SHROUD) : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
         CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER) : null;
         
+        // TODO: Build in using other booleans to trigger eachother
+        CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;
+        EVENT_GENERATOR = useFullRobot || useEventGenerator ? new EventGenerator() : null;
+        CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
         SHUTTLEFSM = useFullRobot || useShuttleFSM ? new ShuttleFSM() : null;
 
         DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
