@@ -20,29 +20,36 @@ public class Shuttle
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** INNER ENUMS and INNER CLASSES ***
 
     // *** CLASS & INSTANCE VARIABLES ***
     // initializing motors
-    private static final CANSparkMax stageOneMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax stageTwoMotor = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax stageOneMotor;// = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax stageTwoMotor;// = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final double FIRST_STAGE_SPEED = 0.5;
     private static final double SECOND_STAGE_SPEED = 0.5;
 
     // initializing sensors
-    private static final DigitalInput intakeSensor = new DigitalInput(Port.Sensor.INTAKE_SENSOR);
-    private static final DigitalInput stageOneSensor = new DigitalInput(Port.Sensor.FIRST_STAGE_SENSOR);
-    private static final DigitalInput stageTwoSensor = new DigitalInput(Port.Sensor.SECOND_STAGE_SENSOR);
+    private final DigitalInput intakeSensor;// = new DigitalInput(Port.Sensor.SHUTTLE_INTAKE_SENSOR);
+    private final DigitalInput stageOneSensor;// = new DigitalInput(Port.Sensor.SHUTTLE_STAGE_ONE_SENSOR);
+    private final DigitalInput stageTwoSensor;// = new DigitalInput(Port.Sensor.SHUTTLE_STAGE_TWO_SENSOR);
 
     // initializing encoders
     // private static CANEncoder stageOneMotorEncoder = stageOneMotor.getEncoder();
     // private static CANEncoder stageTwoMotorEncoder = stageTwoMotor.getEncoder();
 
+
     // *** CLASS CONSTRUCTOR ***
     // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
-    public Shuttle()
+    public Shuttle(ShuttleData sd)
     {
         System.out.println(fullClassName + " : Constructor Started");
+
+        stageOneMotor = new CANSparkMax(sd.stageOneMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        stageTwoMotor = new CANSparkMax(sd.stageTwoMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+
+        intakeSensor = new DigitalInput(sd.intakeSensorPort);
+        stageOneSensor = new DigitalInput(sd.stageOneSensorPort);
+        stageTwoSensor = new DigitalInput(sd.stageTwoSensorPort);
 
         configStageOneMotor();
         configStageTwoMotor();
@@ -50,9 +57,10 @@ public class Shuttle
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
+    
     // *** CLASS & INSTANCE METHODS ***
     // what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
-    private static void configStageOneMotor()
+    private void configStageOneMotor()
     {
         stageOneMotor.restoreFactoryDefaults();
         stageOneMotor.setInverted(false);
@@ -63,7 +71,7 @@ public class Shuttle
     }
     
     // what this does is set the motors to basically their factory settings in case said motors had something different done to them at some point.
-    private static void configStageTwoMotor()
+    private void configStageTwoMotor()
     {
         stageTwoMotor.restoreFactoryDefaults();
         stageTwoMotor.setInverted(false);
