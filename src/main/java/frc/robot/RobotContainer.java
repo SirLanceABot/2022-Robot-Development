@@ -42,12 +42,13 @@ public final class RobotContainer
     private static final boolean useCargoManager            = false;
     private static final boolean useShuttleFSM              = false;
 
-    private static final boolean useDriverController        = true;
+
+    private static final boolean useDriverController        = false;
     private static final boolean useOperatorController      = false;
 
-    private static final boolean useMainShuffleboard        = true;
-    private static final boolean useAutonomousTabData       = true;
-    private static final boolean useAutonomousCommandList   = true;
+    private static final boolean useMainShuffleboard        = false;
+    private static final boolean useAutonomousTabData       = false;
+    private static final boolean useAutonomousCommandList   = false;
 
     private static final boolean useVision                  = false;
 
