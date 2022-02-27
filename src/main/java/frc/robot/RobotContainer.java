@@ -34,12 +34,12 @@ public final class RobotContainer
     private static final boolean useFullRobot               = false;
     
     private static final boolean useDrivetrain              = false;
-    private static final boolean useCargoManager            = false;
     private static final boolean useIntake                  = false;
     private static final boolean useShooter                 = false;
     private static final boolean useShuttle                 = false;
     private static final boolean useClimber                 = false;
     
+    private static final boolean useCargoManager            = false;
     private static final boolean useShuttleFSM              = false;
 
     private static final boolean useDriverController        = true;
@@ -49,24 +49,24 @@ public final class RobotContainer
     private static final boolean useAutonomousTabData       = true;
     private static final boolean useAutonomousCommandList   = true;
 
-    public static final boolean useVision                   = true;
+    private static final boolean useVision                  = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
-    public static final Drivetrain DRIVETRAIN; // = new Drivetrain();
-    public static final CargoManager CARGO_MANAGER; // = new CargoManager();
-    public static final Intake INTAKE; // = new Intake();
-    public static final Shooter SHOOTER; // = new Shooter();
-    public static final Shuttle SHUTTLE; // = new Shuttle();
-    public static final Climber CLIMBER; // = new Climber();
+    public static final Drivetrain DRIVETRAIN;
+    public static final CargoManager CARGO_MANAGER;
+    public static final Intake INTAKE;
+    public static final Shooter SHOOTER;
+    public static final Shuttle SHUTTLE;
+    public static final Climber CLIMBER;
     
-    public static final ShuttleFSM SHUTTLEFSM; // = new ShuttleFSM();
+    public static final ShuttleFSM SHUTTLEFSM;
 
-    public static final DriverController DRIVER_CONTROLLER; // = new DriverController(Port.Controller.DRIVER);
-    public static final OperatorController OPERATOR_CONTROLLER; // = new OperatorController(Port.Controller.OPERATOR);
+    public static final DriverController DRIVER_CONTROLLER;
+    public static final OperatorController OPERATOR_CONTROLLER;
 
-    public static final MainShuffleboard MAIN_SHUFFLEBOARD; // = new MainShuffleboard(); 
-    public static final AutonomousTabData AUTONOMOUS_TAB_DATA; // = new AutonomousTabData();
+    public static final MainShuffleboard MAIN_SHUFFLEBOARD; 
+    public static final AutonomousTabData AUTONOMOUS_TAB_DATA;
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
 
     public static final Vision VISION;
@@ -75,12 +75,12 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
-        DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.Drivetrain.DRIVETRAIN_DATA) : null;
+        DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.DrivetrainSetup.DRIVETRAIN_DATA) : null;
         CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
-        INTAKE = useFullRobot || useIntake ? new Intake() : null;
-        SHOOTER = useFullRobot || useShooter ? new Shooter() : null;
-        SHUTTLE = useFullRobot || useShuttle ? new Shuttle() : null;
-        CLIMBER = useFullRobot || useClimber ? new Climber() : null;
+        INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER, Port.Motor.INTAKE_ARMS_MOTOR) : null;
+        SHOOTER = useFullRobot || useShooter ? new Shooter(Port.Motor.SHOOTER_FLYWHEEL, Port.Motor.SHOOTER_SHROUD) : null;
+        SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
+        CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER) : null;
         
         SHUTTLEFSM = useFullRobot || useShuttleFSM ? new ShuttleFSM() : null;
 
