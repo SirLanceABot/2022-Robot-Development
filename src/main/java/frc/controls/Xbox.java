@@ -362,7 +362,7 @@ public class Xbox extends Joystick
             rumbleEvents.add(new RumbleEvent(startTime, duration, leftPower, rightPower));
             rumbleCounter++;
             Collections.sort(rumbleEvents, Collections.reverseOrder());
-            System.out.println("Rumble Event Created: " + fail + " " + startTime + " " + duration + " " + leftPower + " " + rightPower);
+            // System.out.println("Rumble Event Created: " + fail + " " + startTime + " " + duration + " " + leftPower + " " + rightPower);
         }
         else 
         {
