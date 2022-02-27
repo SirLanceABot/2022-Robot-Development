@@ -12,6 +12,12 @@ import frc.shuffleboard.AutonomousTabData.PickUpCargo;
 import frc.shuffleboard.AutonomousTabData.ShootDelay;
 import frc.components.Shooter;
 
+
+// TODO : Fix the following
+// 1. MoveFirst, ShootCargo = 0  >>> Creates ShootCargo command
+// 2. ShootFirst, ShootCargo = 2  >>> Does not shoot 2nd cargo at the end
+// 3. Create a list of scenarios, test that they ALL work
+
 public class AutonomousCommandList
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -111,7 +117,7 @@ public class AutonomousCommandList
             }
             else
             {
-                // addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
+                addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
             }
         }
 
