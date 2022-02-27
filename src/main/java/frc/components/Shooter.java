@@ -14,6 +14,11 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 import frc.constants.*;
 
+
+// TODO: here are some things that need to change
+// 1. The Analog Input sensor will be plugged into the Shroud TalonSRX, use that instead of the QuadEncoder for Feedback
+// 2. The Shroud TalonSRX will have a reverse limit switch
+
 public class Shooter 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -25,12 +30,27 @@ public class Shooter
         System.out.println("Loading: " + fullClassName);
     }
 
+
+    // *** INNER ENUMS and INNER CLASSES ***
+    public static enum Hub
+    {
+        kUpper("Upper"),
+        kLower("Lower")
+        ;
+
+        public final String level;
+
+        private Hub(String level)
+        {
+            this.level = level;
+        } 
+    }
+
+
     // *** CLASS & INSTANCE VARIABLES ***
     // private static final TalonSRX flywheelMotor = new TalonFX(Port.Motor.SHOOTER_FLYWHEEL);
-    private static final TalonSRX shroudMotor = new TalonSRX(Port.Motor.SHOOTER_SHROUD);
-
-    private static final TalonSRX flywheelMotor = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
-
+    private final TalonSRX flywheelMotor;// = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
+    private final TalonSRX shroudMotor;// = new TalonSRX(Port.Motor.SHOOTER_SHROUD);
     private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
 
     private static final int TIMEOUT_MS = 30;
@@ -66,23 +86,16 @@ public class Shooter
      * 2.139808155x^4 - 17.61030368x^3 + 54.6287886x^2 - 79.35135805x + 52.95064821 (r^2 = 0.9998)
      */
 
-    public static enum Hub
-    {
-        kUpper("Upper"),
-        kLower("Lower")
-        ;
-
-        public final String level;
-
-        private Hub(String level)
-        {
-            this.level = level;
-        } 
-    }
 
     // *** CLASS CONSTRUCTOR ***
-    public Shooter()
+    public Shooter(int flywheelMotorPort, int shroudMotorPort)
     {
+        flywheelMotorPort = 0;  // Used ONLY for testing
+        shroudMotorPort = 1;    // Used ONLY for testing
+
+        flywheelMotor = new TalonSRX(flywheelMotorPort);
+        shroudMotor = new TalonSRX(shroudMotorPort);
+
         configFlywheelMotor();
         configShroudMotor();
     }

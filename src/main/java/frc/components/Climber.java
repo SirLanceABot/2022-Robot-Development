@@ -3,7 +3,6 @@ package frc.components;
 import java.lang.invoke.MethodHandles;
 
 import com.revrobotics.CANSparkMax;
-import frc.constants.Port;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
@@ -29,23 +28,23 @@ public class Climber
     // *** CLASS & INSTANCE VARIABLES ***
     //Neo 1650
     //Maybe NEO 550
-    public static final CANSparkMax firstStageClimbMotorLeader = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    //private static CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private static final CANSparkMax secondStageClimberLeader  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private static final CANSparkMax secondStageClimberFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private final CANSparkMax secondStageClimbMotorLeader;//  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    // private final CANSparkMax secondStageClimberFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private int FCLPosition; //FCL >> FirstClimberLeader
-    private int FCFPosition; //FCF >> FirstClimberFollower
-    private int SCLPosition; //SCL >> SecondClimberLeader
-    private int SCFPosition; //SCF >> SecondClimberFollower
+    // private int FCFPosition; //FCF >> FirstClimberFollower
+    // private int SCLPosition; //SCL >> SecondClimberLeader
+    // private int SCFPosition; //SCF >> SecondClimberFollower
 
-    private static RelativeEncoder FCLEncoder = firstStageClimbMotorLeader.getEncoder();
-    private static SparkMaxLimitSwitch FCLForwardLimitSwitch;
-    private static SparkMaxLimitSwitch FCLBackwardLimitSwitch;
+    private final RelativeEncoder FCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
+    private final SparkMaxLimitSwitch FCLForwardLimitSwitch;
+    private final SparkMaxLimitSwitch FCLBackwardLimitSwitch;
     // private static RelativeEncoder FCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch FCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch FCFBackwardLimitSwitch;
-    // private static RelativeEncoder SCLEncoder = firstStageClimbMotorLeader.getEncoder();
+    // private static RelativeEncoder SCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch SCLForwardLimitSwitch;
     // private static SparkMaxLimitSwitch SCLBackwardLimitSwitch;
     // private static RelativeEncoder SCFEncoder = firstStageClimbMotorLeader.getEncoder();
@@ -54,9 +53,26 @@ public class Climber
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Climber()
+    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
     {
-        configFCF();
+        firstStageClimbMotorPort = 1;   // Used ONLY for testing
+        secondStageClimbMotorPort = 7;  // Used ONLY for testing
+
+        firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+
+        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        FCLBackwardLimitSwitch.enableLimitSwitch(false);
+        FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
+        FCLForwardLimitSwitch.enableLimitSwitch(false);
+        //^^Unknown if being used for now^^
+
+        FCLEncoder = firstStageClimbMotorLeader.getEncoder();
+        FCLEncoder.setPosition(0);
+
+        // secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        // SCLEncoder = firstStageClimbMotorLeader.getEncoder();
+
+        // configFCF();
         configFCL();
         //configSCL();
         //configSCF();
@@ -77,12 +93,12 @@ public class Climber
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
         
-        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        FCLBackwardLimitSwitch.enableLimitSwitch(false);
-        FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-        FCLForwardLimitSwitch.enableLimitSwitch(false);
-        //^^Unknown if being used for now^^
-        FCLEncoder.setPosition(0);
+        // FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        // FCLBackwardLimitSwitch.enableLimitSwitch(false);
+        // FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
+        // FCLForwardLimitSwitch.enableLimitSwitch(false);
+        // //^^Unknown if being used for now^^
+        // FCLEncoder.setPosition(0);
         firstStageClimbMotorLeader.setOpenLoopRampRate(0.1);
         firstStageClimbMotorLeader.setSmartCurrentLimit(40);
     }
@@ -158,59 +174,60 @@ public class Climber
     }
 
     //Getters
-    public int getFCFPosition(){
-        return FCFPosition;
-    }
     public double getFCLposition(){
         return FCLEncoder.getPosition();
     }
-    public int getSCFPosition(){
-        return SCFPosition;
-    }
-    public int getSCLposition(){
-        return SCLPosition;
-    }
+    // public int getFCFPosition(){
+    //     return FCFPosition;
+    // }
+    // public int getSCLposition(){
+    //     return SCLPosition;
+    // }
+    // public int getSCFPosition(){
+    //     return SCFPosition;
+    // }
+
     //Setters
-    public void setFCFPosition(int FCFPosition) 
-    {
-        this.FCFPosition = FCFPosition;
-    }
     public void setFCLPosition(int FCLPosition) 
     {
         this.FCLPosition = FCLPosition;
     }
-    public void setSCFPosition(int SCFPosition) 
-    {
-        this.SCFPosition = SCFPosition;
-    }
-    public void setSCLPosition(int SCLPosition) 
-    {
-        this.SCLPosition = SCLPosition;
-    }
+    // public void setFCFPosition(int FCFPosition) 
+    // {
+    //     this.FCFPosition = FCFPosition;
+    // }
+    // public void setSCLPosition(int SCLPosition) 
+    // {
+    //     this.SCLPosition = SCLPosition;
+    // }
+    // public void setSCFPosition(int SCFPosition) 
+    // {
+    //     this.SCFPosition = SCFPosition;
+    // }
 
     //Everything Else
-    public void setMotorSpeed(CANSparkMax motor, double speed)
+    private void setFirstStageMotorSpeed(double speed)
     {
-        motor.set(speed);
+        firstStageClimbMotorLeader.set(speed);
     }
 
     public void shutDown()
     {
-        setMotorSpeed(firstStageClimbMotorLeader, 0);
+        setFirstStageMotorSpeed(0.0);
         DriverStation.reportError("Climber shut down!", false);
         //TODO add whatever motors start getting used to this
     }
 
     public void climbUp()
     {
-        setMotorSpeed(firstStageClimbMotorLeader, .1);
+        setFirstStageMotorSpeed(0.1);
         DriverStation.reportError("Climber going up", false);
         //TODO make sure this value goes the right direction
     }
 
     public void climbDown()
     {
-        setMotorSpeed(firstStageClimbMotorLeader, -.1);
+        setFirstStageMotorSpeed(-0.1);
         DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
     }

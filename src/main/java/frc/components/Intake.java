@@ -56,12 +56,12 @@ public class Intake
 
     // private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private static final CANSparkMax armsMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax rollerMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax armsMotor = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax rollerMotor;// = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax armsMotor;// = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^these fellas are for when I'm testing with a boxbot
-    private static RelativeEncoder armsEncoder = armsMotor.getEncoder();
-    private static SparkMaxLimitSwitch armsForwardLimitSwitch;
-    private static SparkMaxLimitSwitch armsBackwardLimitSwitch;
+    private final RelativeEncoder armsEncoder;// = armsMotor.getEncoder();
+    private final SparkMaxLimitSwitch armsForwardLimitSwitch;
+    private final SparkMaxLimitSwitch armsBackwardLimitSwitch;
 
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
@@ -73,11 +73,26 @@ public class Intake
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Intake()
+    public Intake(int rollerMotorPort, int armsMotorPort)
     {
         System.out.println("Intake Created");
+
+        rollerMotorPort = 1;  // Used ONLY for testing
+        armsMotorPort = 7;    // Used ONLY for testing
+
+        rollerMotor = new CANSparkMax(rollerMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        armsMotor = new CANSparkMax(armsMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        
         configArmsMotor();
         configRollerMotor();
+
+        armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        armsBackwardLimitSwitch.enableLimitSwitch(true);
+        armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        armsForwardLimitSwitch.enableLimitSwitch(true);
+
+        armsEncoder = armsMotor.getEncoder();
+        armsEncoder.setPosition(0);
     }
 
     // *** CLASS & INSTANCE METHODS ***
@@ -145,7 +160,7 @@ public class Intake
     }
 
     //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
-    public static void configRollerMotor()
+    private void configRollerMotor()
     {
         System.out.println("configurating Intake Motor");
     
@@ -164,7 +179,7 @@ public class Intake
         System.out.println("Configurated");
     }
 
-    public static void configArmsMotor()
+    private void configArmsMotor()
     {
         System.out.println("configurating arms motor");
     
@@ -178,11 +193,11 @@ public class Intake
         armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
-        armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        armsBackwardLimitSwitch.enableLimitSwitch(true);
-        armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        armsForwardLimitSwitch.enableLimitSwitch(true);
-        armsEncoder.setPosition(0);
+        // armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        // armsBackwardLimitSwitch.enableLimitSwitch(true);
+        // armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        // armsForwardLimitSwitch.enableLimitSwitch(true);
+        // armsEncoder.setPosition(0);
         
     
         armsMotor.setOpenLoopRampRate(0.1);
@@ -191,7 +206,7 @@ public class Intake
         System.out.println("Configurated");
     }
 
-        public double getArmMotorRotations()
+    public double getArmMotorRotations()
     {
         // 4096 ticks per rev
         // ^I don't know what that means lmao
