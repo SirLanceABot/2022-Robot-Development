@@ -2,6 +2,8 @@ package frc.test;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.robot.RobotContainer;
+
 public class JsawyerTest implements MyTest
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
