@@ -22,7 +22,7 @@ public class StopDriving implements Command
     private boolean isFinished;
 
     // This variable is only used to simulate the robot stopping
-    // private boolean isRobotStoppedSimulation = false;
+    private boolean isRobotStoppedSimulation = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -37,24 +37,24 @@ public class StopDriving implements Command
         System.out.println(this);
 
         isFinished = false;
-        // isRobotStoppedSimulation = false;
+        isRobotStoppedSimulation = false;
 
         //TODO: add actual DRIVETRAIN methods
     }
 
     public void execute()
     {
-        // isRobotStoppedSimulation = true;
+        isRobotStoppedSimulation = true;
         
-        // if(isRobotStoppedSimulation)
-        // {
-        //     System.out.println("Robot is stopped");
-        //     isFinished = true;
-        // }
+        if(isRobotStoppedSimulation)
+        {
+            System.out.println("Robot is stopped");
+            isFinished = true;
+        }
 
         //TODO: add actual DRIVETRAIN methods
 
-        DRIVETRAIN.stopMotor();
+        // DRIVETRAIN.stopMotor();
         isFinished = true;
     }
 

@@ -24,7 +24,7 @@ public class DriveStraight implements Command
     private boolean isFinished;
 
     // This variable is only used to simulate the distance driven
-    //private double distanceDrivenSimulation = 0.0;
+    private double distanceDrivenSimulation = 0.0;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -42,26 +42,26 @@ public class DriveStraight implements Command
         System.out.println(this);
 
         isFinished = false;
-        // distanceDrivenSimulation = 0.0;
+        distanceDrivenSimulation = 0.0;
 
-        DRIVETRAIN.resetEncoders();
+        // DRIVETRAIN.resetEncoders();
         // DRIVETRAIN.configLoopRampRate(0.75);
     }
 
     public void execute()
     {
-        // distanceDrivenSimulation += 0.05;
-        // System.out.printf("Distance driven: %5.2f meters\n", distanceDrivenSimulation);
+        distanceDrivenSimulation += 0.05;
+        System.out.printf("Distance driven: %5.2f meters\n", distanceDrivenSimulation);
 
-        // // if(distanceDrivenSimulation > distance_meters)
-        // {
-        //     isFinished = true;
-        // }
-
-        if(DRIVETRAIN.driveStraight(speed_metersPerSecond, distance_meters))
+        if(distanceDrivenSimulation > distance_meters)
         {
             isFinished = true;
         }
+
+        // if(DRIVETRAIN.driveStraight(speed_metersPerSecond, distance_meters))
+        // {
+        //     isFinished = true;
+        // }
     }
 
     public boolean isFinished()
