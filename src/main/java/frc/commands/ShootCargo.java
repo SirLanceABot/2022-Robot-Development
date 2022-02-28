@@ -27,7 +27,6 @@ public class ShootCargo implements Command
     // These variables are only used to simulate cargo being shot
     private int cargoShotSimulation = 0;
     private double distanceShotSimulation = 0.0;
-    private Shooter.Hub hubSimulation;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -52,7 +51,6 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        hubSimulation = hub;
         distanceShotSimulation = distance_meters;
         cargoShotSimulation++;
         System.out.println("Cargo shot into " + hub.level + " hub at a distance of " + distanceShotSimulation + " m");
