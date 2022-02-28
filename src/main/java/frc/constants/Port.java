@@ -29,7 +29,7 @@ public final class Port
         private static final int SHUTTLE_STAGE_ONE = 4;  //MM 2/26/22
         private static final int SHUTTLE_STAGE_TWO = 10;  //MM 2/26/22
 
-        public static final int CLIMBER_STAGE_ONE_LEADER = 42;
+        public static final int CLIMBER_STAGE_ONE_LEADER = 12; //MM 2/28/22
         public static final int CLIMBER_STAGE_TWO_LEADER = 43;
         public static final int CLIMBER_STAGE_ONE_FOLLOWER = 44;
         public static final int CLIMBER_STAGE_TWO_FOLLOWER = 45;

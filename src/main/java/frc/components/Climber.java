@@ -26,8 +26,7 @@ public class Climber
     //FIXME For the st. joe match, we're only gonna go up to the second bar
 
     // *** CLASS & INSTANCE VARIABLES ***
-    //Neo 1650
-    //Maybe NEO 550
+    //NEO 550
     private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private final CANSparkMax secondStageClimbMotorLeader;//  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
