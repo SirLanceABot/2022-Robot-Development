@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import frc.vision.Vision;
 
 public class Robot extends TimedRobot
@@ -72,7 +73,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic()
     {
-
+        
     }
 
     /**
@@ -122,6 +123,13 @@ public class Robot extends TimedRobot
     public void teleopPeriodic()
     {
         teleop.periodic();
+        var StartTime = Timer.getFPGATimestamp();
+        for(int Mathsine = 1; Mathsine <= 2741999; Mathsine ++)
+        {
+            Math.sin(Math.E/Math.PI);
+        }
+        var StopTime = Timer.getFPGATimestamp();
+        System.out.println("Time =" + (StopTime - StartTime));
     }
 
     /**
