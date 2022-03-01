@@ -36,6 +36,8 @@ public class ShuttleFSM
                 // Request stage one and two to be turned off
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = false;
+
+                cargoCount = 0;
             }
         },
         
@@ -46,6 +48,8 @@ public class ShuttleFSM
                 // Run stage one and two
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
+
+                cargoCount = 1;
             }
         },
 
@@ -56,6 +60,8 @@ public class ShuttleFSM
                 // Turn off stage one and two
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = false;
+
+                cargoCount = 1;
             }
         },
 
@@ -67,6 +73,8 @@ public class ShuttleFSM
                 // Run stage one and two
                 // motorRequest.stageOne = true;
                 // motorRequest.stageTwo = true;
+
+                cargoCount = 2;
             }
         },
 
@@ -77,6 +85,8 @@ public class ShuttleFSM
                 // Run stage one and two
                 // motorRequest.stageOne = true;
                 // motorRequest.stageTwo = true;
+
+                cargoCount = 2;
             }
         },
 
@@ -87,6 +97,8 @@ public class ShuttleFSM
                 // Turn off stage one and run stage two
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = true;
+
+                cargoCount = 2;
             }
         },
         
@@ -97,6 +109,8 @@ public class ShuttleFSM
                 // Run stage two and turn off stage one
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = true;
+
+                cargoCount = 1;
             }
         },
 
@@ -107,6 +121,8 @@ public class ShuttleFSM
                 // Run stage one and turn off stage two
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = false;
+
+                cargoCount = 2;
             }
         },
 
@@ -117,6 +133,8 @@ public class ShuttleFSM
                 // Turn off stage one and two
                 motorRequest.stageOne = false;
                 motorRequest.stageTwo = false;
+
+                cargoCount = 2;
             }
         },
 
@@ -127,9 +145,12 @@ public class ShuttleFSM
                 // Run stage one and two
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
+
+                cargoCount = 2;
             }
         },
 
+        // TODO: Remove this state and replace with STORING_CARGO_IN_STAGE_TWO once tested
         STORING_CARGO_IN_STAGE_TWO_FROM_ONE
         {
             void doAction()
@@ -137,16 +158,8 @@ public class ShuttleFSM
                 // Run stage one and two
                 motorRequest.stageOne = true;
                 motorRequest.stageTwo = true;
-            }
-        },
 
-        EJECTING_EXTRA_CARGO
-        {
-            void doAction()
-            {
-                // Eject extra cargo
-                // TODO: Make eject work
-                System.out.println("Eject extra cargo");
+                cargoCount = 1;
             }
         };
 
@@ -178,21 +191,19 @@ public class ShuttleFSM
         // transition name (current state, event, new state)
         TRANSITION_1  (State.NO_CARGO_STORED,                       Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_TWO),
         TRANSITION_2  (State.STORING_CARGO_IN_STAGE_TWO,            Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO),
-        TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
-        TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
-        TRANSITION_2C (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,	                State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO),
-        TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	                State.STORING_CARGO_IN_STAGE_ONE),
-        TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,	                State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
-        TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
+        TRANSITION_2A (State.STORING_CARGO_IN_STAGE_TWO,        	Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES, 	   State.STORING_CARGO_IN_STAGE_TWO_AND_ONE),
+        TRANSITION_2B (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,    Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	               State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2C (State.STORING_CARGO_IN_STAGE_TWO_AND_ONE,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,	               State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO),
+        TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	               State.STORING_CARGO_IN_STAGE_ONE),
+        TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,	               State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
+        TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
         TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
         TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
         TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
         TRANSITION_6  (State.STORING_CARGO_IN_STAGE_ONE,            Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
         TRANSITION_7  (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO),
         TRANSITION_8  (State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO, Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE),
-        TRANSITION_9  (State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE,   Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
-        TRANSITION_10 (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.EJECTING_EXTRA_CARGO),
-        TRANSITION_11 (State.EJECTING_EXTRA_CARGO,                  Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO);
+        TRANSITION_9  (State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE,   Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO);
 
         private final State currentState;
         private final Events.ShuttleEvent event;
@@ -235,6 +246,8 @@ public class ShuttleFSM
     private State currentShuttleState;
 
     private static final MotorStage motorRequest = new MotorStage();
+
+    private static int cargoCount = 0;
 
     // TODO: Figure out if this is needed or should be the "determinedEvent"
     private Events.ShuttleEvent event;
