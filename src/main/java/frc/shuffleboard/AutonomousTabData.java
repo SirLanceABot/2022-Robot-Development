@@ -14,18 +14,18 @@ public class AutonomousTabData
 
     public static enum OrderOfOperations
     {
-        kShootFirst, kMoveFirst, kDoNothing;
+        kShootFirst, kMoveFirst, kShootMoveShoot, kDoNothing;
     }
 
     //-------------------------------------------------------------------//
 
-    public static enum ShootCargo
+    public static enum ShootCargoAmount
     {
         k0(0), k1(1), k2(2);
         
         public int value;
 
-        private ShootCargo(int value)
+        private ShootCargoAmount(int value)
         {
             this.value = value;
         }
@@ -71,7 +71,7 @@ public class AutonomousTabData
 
     public StartingLocation startingLocation = StartingLocation.kMiddle;
     public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
-    public ShootCargo shootCargo = ShootCargo.k0;
+    public ShootCargoAmount shootCargoAmount = ShootCargoAmount.k0;
     public ShootDelay shootDelay = ShootDelay.k0;
     public MoveOffTarmac moveOffTarmac = MoveOffTarmac.kYes;
     public MoveDelay moveDelay = MoveDelay.k0;
@@ -84,7 +84,7 @@ public class AutonomousTabData
         str += "\n*****  AUTONOMOUS SELECTION  *****\n";
         str += "Starting Location     : "  + startingLocation   + "\n";
         str += "Order of Operations   : "  + orderOfOperations  + "\n";
-        str += "Shoot Cargo           : "  + shootCargo         + "\n";
+        str += "Shoot Cargo           : "  + shootCargoAmount         + "\n";
         str += "Shoot Delay           : "  + shootDelay         + "\n";
         str += "Move Off Tarmac       : "  + moveOffTarmac      + "\n";
         str += "Move Delay            : "  + moveDelay          + "\n";
@@ -98,7 +98,7 @@ public class AutonomousTabData
     {
         startingLocation = atd.startingLocation;
         orderOfOperations = atd.orderOfOperations;
-        shootCargo = atd.shootCargo;
+        shootCargoAmount = atd.shootCargoAmount;
         shootDelay = atd.shootDelay;
         moveOffTarmac = atd.moveOffTarmac;
         moveDelay = atd.moveDelay;

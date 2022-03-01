@@ -10,13 +10,11 @@ import frc.shuffleboard.AutonomousTabData.MoveOffTarmac;
 import frc.shuffleboard.AutonomousTabData.OrderOfOperations;
 import frc.shuffleboard.AutonomousTabData.PickUpCargo;
 import frc.shuffleboard.AutonomousTabData.ShootDelay;
+import frc.shuffleboard.AutonomousTabData.ShootCargoAmount;
 import frc.components.Shooter;
 
 
-// TODO : Fix the following
-// 1. MoveFirst, ShootCargo = 0  >>> Creates ShootCargo command
-// 2. ShootFirst, ShootCargo = 2  >>> Does not shoot 2nd cargo at the end
-// 3. Create a list of scenarios, test that they ALL work
+// TODO: Create a list of scenarios, test that they ALL work
 
 public class AutonomousCommandList
 {
@@ -71,6 +69,9 @@ public class AutonomousCommandList
             shoot();
             move();
             break;
+        case kShootMoveShoot:
+            shootMoveShoot();
+            break;
         case kDoNothing:
             break;
         }
@@ -111,13 +112,16 @@ public class AutonomousCommandList
 
         if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kMoveFirst)
         {
-            if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
+            if (AUTONOMOUS_TAB_DATA.shootCargoAmount != ShootCargoAmount.k0)
             {
-                addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargo.value, 5.0, Shooter.Hub.kUpper));
-            }
-            else
-            {
-                addCommand(new ShootCargo(1, 3.0, Shooter.Hub.kUpper));
+                if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
+                {
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, 5.0, Shooter.Hub.kUpper));
+                }
+                else
+                {
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, 3.0, Shooter.Hub.kUpper));
+                }
             }
         }
 
@@ -125,6 +129,28 @@ public class AutonomousCommandList
         {
             addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
         }
+    }
+
+    private void shootMoveShoot()
+    {
+        if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
+        {
+             addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
+        }
+
+        addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
+
+        if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
+        {
+            addCommand(new Wait(AUTONOMOUS_TAB_DATA.moveDelay.value));
+        }
+
+        addCommand(new TurnOnIntake());
+        addCommand(new DriveStraight(1.0, 5.0));
+        addCommand(new StopDriving());
+        addCommand(new TurnOffIntake());
+
+        addCommand(new ShootCargo(1, 5.0, Shooter.Hub.kUpper));
     }
 
     private void addCommand(Command command)
