@@ -11,45 +11,45 @@ public final class Port
 {
     public static class Motor
     {
-        private static final int FRONT_LEFT_DRIVE = 7;
-        private static final int FRONT_LEFT_TURN = 9;
+        private static final int FRONT_LEFT_DRIVE   =  7;  // MM 2/28/22
+        private static final int FRONT_LEFT_TURN    =  9;  // MM 2/28/22
 
-        private static final int FRONT_RIGHT_DRIVE = 10;
-        private static final int FRONT_RIGHT_TURN = 12;
+        private static final int FRONT_RIGHT_DRIVE  = 10;  // MM 2/28/22
+        private static final int FRONT_RIGHT_TURN   = 12;  // MM 2/28/22
 
-        private static final int BACK_LEFT_DRIVE = 4;
-        private static final int BACK_LEFT_TURN = 6;
+        private static final int BACK_LEFT_DRIVE    =  4;  // MM 2/28/22
+        private static final int BACK_LEFT_TURN     =  6;  // MM 2/28/22
 
-        private static final int BACK_RIGHT_DRIVE = 1;
-        private static final int BACK_RIGHT_TURN = 3;
+        private static final int BACK_RIGHT_DRIVE   =  1;  // MM 2/28/22
+        private static final int BACK_RIGHT_TURN    =  3;  // MM 2/28/22
 
-        public static final int INTAKE_ROLLER = 38;
-        public static final int INTAKE_ARMS_MOTOR = 5;  //MM 2/26/22
+        public static final int INTAKE_ROLLER       = 38;
+        public static final int INTAKE_ARMS_MOTOR   =  5;  // MM 2/26/22
 
-        private static final int SHUTTLE_STAGE_ONE = 4;  //MM 2/26/22
-        private static final int SHUTTLE_STAGE_TWO = 10;  //MM 2/26/22
+        private static final int SHUTTLE_STAGE_ONE  =  4;  // MM 2/26/22
+        private static final int SHUTTLE_STAGE_TWO  = 10;  // MM 2/26/22
 
-        public static final int CLIMBER_STAGE_ONE_LEADER = 12; //MM 2/28/22
-        public static final int CLIMBER_STAGE_TWO_LEADER = 43;
-        public static final int CLIMBER_STAGE_ONE_FOLLOWER = 44;
-        public static final int CLIMBER_STAGE_TWO_FOLLOWER = 45;
-
-        public static final int SHOOTER_FLYWHEEL = 46;
-        public static final int SHOOTER_SHROUD = 47;
+        public static final int SHOOTER_FLYWHEEL    = 13;  // JW 2/28/22
+        public static final int SHOOTER_SHROUD      = 14;  // JW 2/28/22
+        
+        public static final int CLIMBER_STAGE_ONE_LEADER    = 12;  // MM 2/28/22
+        public static final int CLIMBER_STAGE_TWO_LEADER    = 43;
+        public static final int CLIMBER_STAGE_ONE_FOLLOWER  = 44;
+        public static final int CLIMBER_STAGE_TWO_FOLLOWER  = 45;
     }
 
     public static class Sensor
     {
-        private static final int FRONT_LEFT_ENCODER = 8;
-        private static final int FRONT_RIGHT_ENCODER = 11;
-        private static final int BACK_LEFT_ENCODER = 5;
-        private static final int BACK_RIGHT_ENCODER = 2;
+        private static final int FRONT_LEFT_ENCODER         =  8;
+        private static final int FRONT_RIGHT_ENCODER        = 11;
+        private static final int BACK_LEFT_ENCODER          =  5;
+        private static final int BACK_RIGHT_ENCODER         =  2;
 
-        public static final int SHOOTER_SHROUD = 0;
+        public static final int SHOOTER_SHROUD              =  0;
 
-        private static final int SHUTTLE_INTAKE_SENSOR = 0;
-        private static final int SHUTTLE_STAGE_ONE_SENSOR = 1;
-        private static final int SHUTTLE_STAGE_TWO_SENSOR = 2;
+        private static final int SHUTTLE_INTAKE_SENSOR      =  0;
+        private static final int SHUTTLE_STAGE_ONE_SENSOR   =  1;
+        private static final int SHUTTLE_STAGE_TWO_SENSOR   =  2;
 
         private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
     }
