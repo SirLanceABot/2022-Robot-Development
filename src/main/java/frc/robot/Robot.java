@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import frc.vision.Vision;
 
 public class Robot extends TimedRobot
@@ -64,7 +63,7 @@ public class Robot extends TimedRobot
         robotState = RobotState.kRobotInit;
         
         if(VISION != null)
-            addPeriodic(() -> VISION.getCalibration(), 2.0, 0.018);
+            addPeriodic(() -> VISION.getCalibration(), 2.0, 0.0185); // get camera-target/shooter calibration from shuffleboard every 2 seconds
     }
 
     /**
