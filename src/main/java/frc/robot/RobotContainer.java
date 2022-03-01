@@ -54,7 +54,7 @@ public final class RobotContainer
     private static final boolean useAutonomousTabData       = false;
     private static final boolean useAutonomousCommandList   = false;
 
-    private static final boolean useVision                  = true;
+    private static final boolean useVision                  = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
