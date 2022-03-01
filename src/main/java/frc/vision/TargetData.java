@@ -173,11 +173,11 @@ public class TargetData
      * 
      * @return The string to display.
      */
-    // public synchronized String toString()
+    public synchronized String toString()
     {
-    //    return String.format("Frame = %d, %s\nimageSize.width = %f, imageSize.height = %f,\nportPositionInFrame = %f, portDistance = %f,\nangleToTurn = %f %s", 
-            // frameNumber, isTargetFound ? "target" : "no target",
-            // imageSize.width, imageSize.height, portPositionInFrame, portDistance, angleToTurn, isFreshData ? "FRESH" : "stale");
+       return String.format("Frame = %d, %s\nimageSize.width = %f, imageSize.height = %f,\nportPositionInFrame = %f, portDistance = %f,\nangleToTurn = %f %s", 
+            frameNumber, isTargetFound ? "target" : "no target",
+            imageSize.width, imageSize.height, portPositionInFrame, portDistance, angleToTurn, isFreshData ? "FRESH" : "stale");
     }
 }
 /*
