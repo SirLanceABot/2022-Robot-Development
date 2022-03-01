@@ -9,12 +9,12 @@ import java.lang.invoke.MethodHandles;
 // 4. Test your code
 // 5. Comment your IMPORT statement and CLASS VARIABLE statement when finished
 
-// import frc.test.BlankTest;
+import frc.test.BlankTest;
 // import frc.test.AburriTest;
 // import frc.test.DfifeTest;
 // import frc.test.EmeaselTest;
 // import frc.test.IguptaTest;
-import frc.test.JsawyerTest;
+// import frc.test.JsawyerTest;
 // import frc.test.JwoodTest;
 // import frc.test.MmcconomyTest;
 // import frc.test.OdomsTest;
@@ -33,12 +33,12 @@ public class TestMode implements ModeTransition
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // private static final BlankTest myTest = new BlankTest();
+    private static final BlankTest myTest = new BlankTest();
     // private static final AburriTest myTest = new AburriTest();
     // private static final DfifeTest myTest = new DfifeTest();
     // private static final EmeaselTest myTest = new EmeaselTest();
     // private static final IguptaTest myTest = new IguptaTest();
-    private static final JsawyerTest myTest = new JsawyerTest();
+    // private static final JsawyerTest myTest = new JsawyerTest();
     // private static final JwoodTest myTest = new JwoodTest();
     // private static final MmcconomyTest myTest = new MmcconomyTest();
     // private static final OdomsTest myTest = new OdomsTest();
