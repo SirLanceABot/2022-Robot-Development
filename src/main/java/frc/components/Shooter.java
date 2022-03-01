@@ -77,14 +77,11 @@ public class Shooter
     private static double currentFlywheelSpeed = 0.0;
     private static double currentShroudAngle = 0.0;
 
+    private static double distance;
+
     //flywheel.getSelectedSensorVelocity() returns ticks/100ms by default, so we convert to ticks/ms, ticks/s, ticks/min, rot/min, and gear ratio
     //i *think* you divide gear ratio because you're finding flywheel speed given motor speed
     private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 4096.0) / FLYWHEEL_GEAR_RATIO;
-
-    /*
-     * Equation for conversion from V to cm for shroud sensor:
-     * 2.139808155x^4 - 17.61030368x^3 + 54.6287886x^2 - 79.35135805x + 52.95064821 (r^2 = 0.9998)
-     */
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -98,6 +95,9 @@ public class Shooter
 
         configFlywheelMotor();
         configShroudMotor();
+
+        FlywheelData.dataInit();
+        ShroudData.dataInit();
     }
 
 
@@ -128,11 +128,9 @@ public class Shooter
 
     public void shoot()
     {
-        // calculateLaunchTrajectory();
-        // setFlywheelSpeed(desiredLaunchSpeed);
-        // setShroudAngle(desiredLaunchAngle);
-
-        setFlywheelSpeed(120);
+        calculateLaunchTrajectory();
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
     }
 
     public void startLongShot()
@@ -162,8 +160,11 @@ public class Shooter
     //TODO: actual calculations for trajectory, given vision distances, could also be from a table of experimented values (the latter is more likely) (will require testing)
     private void calculateLaunchTrajectory()
     {
-        desiredLaunchSpeed = 0.0;
-        desiredLaunchAngle = 0.0;
+        //TODO: vision distance calculation
+        distance = 0.0;
+
+        desiredLaunchSpeed = FlywheelData.getSpeed(distance);
+        desiredLaunchAngle = FlywheelData.getAngle(distance);
     }
 
     //this speed is in percent output
@@ -207,7 +208,7 @@ public class Shooter
     public double measureShroudAngle()
     {
         //TODO: Voltage conversions for actual distance, and then shroud angle (will require testing)
-        return measureShroudSensorValue();
+        return ShroudData.getAngle(measureShroudSensorValue());
     }
 
     private double measureShroudSensorValue()
