@@ -8,23 +8,14 @@ import frc.drivetrain.Drivetrain;
 import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.constants.Constant;
-import frc.components.CargoManager;
 
-import frc.components.Shuttle;
 import frc.controls.DriverController;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
-import frc.controls.DriverController.DriverAxisAction;
-import frc.controls.DriverController.DriverPOVAction;
-import frc.controls.Logitech.AxisSettings;
 import frc.controls.OperatorController;
-import frc.controls.Xbox;
 
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
-import frc.controls.Xbox.Button;
-
-import frc.shuffleboard.MainShuffleboard;
 
 
 // TODO : To make the periodic() method more manageable, ...

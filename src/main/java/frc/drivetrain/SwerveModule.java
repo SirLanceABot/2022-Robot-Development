@@ -13,11 +13,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -76,9 +72,11 @@ public class SwerveModule
      *
      * @param smd SwerveModuleData for making SwerveModules
      */
-    public SwerveModule(SwerveModuleData smd)
+    public SwerveModule(SwerveModuleConfig smd)
     {
         moduleName = smd.moduleName;
+
+        System.out.println(fullClassName + " : Constructor Started >> " + moduleName);
         driveMotor = new TalonFX(smd.driveMotorChannel);
         driveMotorInverted = smd.driveMotorInverted;
         turnEncoder = new CANCoder(smd.turnEncoderChannel);  

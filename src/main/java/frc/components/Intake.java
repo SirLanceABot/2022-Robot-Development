@@ -1,6 +1,5 @@
 package frc.components;
-import frc.constants.Constant;
-import frc.constants.Port;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;

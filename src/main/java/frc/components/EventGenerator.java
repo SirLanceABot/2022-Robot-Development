@@ -2,7 +2,6 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.components.Events.ShuttleEvent;
 import frc.robot.RobotContainer;
 
 public class EventGenerator 

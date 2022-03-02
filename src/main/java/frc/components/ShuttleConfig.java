@@ -1,6 +1,6 @@
 package frc.components;
 
-public class ShuttleData 
+public class ShuttleConfig 
 {
     public final int stageOneMotorPort;
     public final int stageTwoMotorPort;
@@ -8,7 +8,7 @@ public class ShuttleData
     public final int stageOneSensorPort;
     public final int stageTwoSensorPort;
 
-    public ShuttleData(int stageOneMotorPort,
+    public ShuttleConfig(int stageOneMotorPort,
                         int stageTwoMotorPort,
                         int intakeSensorPort,
                         int stageOneSensorPort,

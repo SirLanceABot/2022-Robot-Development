@@ -4,7 +4,6 @@ import java.lang.invoke.MethodHandles;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.constants.Constant;
-import frc.constants.Port;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends RobotDriveBase
@@ -53,7 +51,7 @@ public class Drivetrain extends RobotDriveBase
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Drivetrain(DrivetrainData dd)
+    public Drivetrain(DrivetrainConfig dd)
     {
         super();  // call the RobotDriveBase constructor
 

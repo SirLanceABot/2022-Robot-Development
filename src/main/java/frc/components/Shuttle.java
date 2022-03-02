@@ -7,8 +7,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import frc.constants.Port;
-
 public class Shuttle 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -40,7 +38,7 @@ public class Shuttle
 
     // *** CLASS CONSTRUCTOR ***
     // TODO: remove the public access modifier so that the constructor can only be accessed inside the package
-    public Shuttle(ShuttleData sd)
+    public Shuttle(ShuttleConfig sd)
     {
         System.out.println(fullClassName + " : Constructor Started");
 

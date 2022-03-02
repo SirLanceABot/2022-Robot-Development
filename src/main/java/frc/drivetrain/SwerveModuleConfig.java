@@ -2,7 +2,7 @@ package frc.drivetrain;
 
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class SwerveModuleData
+public class SwerveModuleConfig
 {
     public final String moduleName;
     public final Translation2d moduleLocation;
@@ -20,7 +20,7 @@ public class SwerveModuleData
      * @param turnEncoderOffset
      * @param turnMotorChannel
      */
-    public SwerveModuleData(String moduleName,
+    public SwerveModuleConfig(String moduleName,
                             Translation2d moduleLocation,
                             int driveMotorChannel, 
                             boolean driveMotorInverted, 

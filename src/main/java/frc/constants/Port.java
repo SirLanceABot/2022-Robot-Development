@@ -2,9 +2,9 @@ package frc.constants;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.components.ShuttleData;
-import frc.drivetrain.DrivetrainData;
-import frc.drivetrain.SwerveModuleData;
+import frc.components.ShuttleConfig;
+import frc.drivetrain.DrivetrainConfig;
+import frc.drivetrain.SwerveModuleConfig;
 
 //TODO: Get right values for each port
 public final class Port 
@@ -77,25 +77,25 @@ public final class Port
         private static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-Constant.DRIVETRAIN_WHEELBASE_METERS / 2, Constant.DRIVETRAIN_TRACKWIDTH_METERS / 2);
         private static final Translation2d BACK_RIGHT_LOCATION = new Translation2d(-Constant.DRIVETRAIN_WHEELBASE_METERS / 2, -Constant.DRIVETRAIN_TRACKWIDTH_METERS / 2);
 
-        private static final SwerveModuleData FRONT_LEFT = new SwerveModuleData(
+        private static final SwerveModuleConfig FRONT_LEFT = new SwerveModuleConfig(
             "Front Left", FRONT_LEFT_LOCATION, Motor.FRONT_LEFT_DRIVE, true, Sensor.FRONT_LEFT_ENCODER, FRONT_LEFT_ENCODER_OFFSET, Motor.FRONT_LEFT_TURN);
-        private static final SwerveModuleData FRONT_RIGHT = new SwerveModuleData(
+        private static final SwerveModuleConfig FRONT_RIGHT = new SwerveModuleConfig(
             "Front Right", FRONT_RIGHT_LOCATION, Motor.FRONT_RIGHT_DRIVE, false, Sensor.FRONT_RIGHT_ENCODER, FRONT_RIGHT_ENCODER_OFFSET, Motor.FRONT_RIGHT_TURN);
-        private static final SwerveModuleData BACK_LEFT = new SwerveModuleData(
+        private static final SwerveModuleConfig BACK_LEFT = new SwerveModuleConfig(
             "Back Left", BACK_LEFT_LOCATION, Motor.BACK_LEFT_DRIVE, true, Sensor.BACK_LEFT_ENCODER, BACK_LEFT_ENCODER_OFFSET, Motor.BACK_LEFT_TURN);
-        private static final SwerveModuleData BACK_RIGHT = new SwerveModuleData(
+        private static final SwerveModuleConfig BACK_RIGHT = new SwerveModuleConfig(
             "Back Right", BACK_RIGHT_LOCATION, Motor.BACK_RIGHT_DRIVE, false, Sensor.BACK_RIGHT_ENCODER, BACK_RIGHT_ENCODER_OFFSET, Motor.BACK_RIGHT_TURN);
     }
 
     public static class DrivetrainSetup
     {
-        public static final DrivetrainData DRIVETRAIN_DATA = new DrivetrainData(
+        public static final DrivetrainConfig DRIVETRAIN_DATA = new DrivetrainConfig(
             SwerveModuleSetup.FRONT_LEFT, SwerveModuleSetup.FRONT_RIGHT, SwerveModuleSetup.BACK_LEFT, SwerveModuleSetup.BACK_RIGHT, Sensor.NAV_X);
     }
 
     public static class ShuttleSetup
     {
-        public static final ShuttleData SHUTTLE_DATA = new ShuttleData(
+        public static final ShuttleConfig SHUTTLE_DATA = new ShuttleConfig(
             Motor.SHUTTLE_STAGE_ONE, Motor.SHUTTLE_STAGE_TWO, Sensor.SHUTTLE_INTAKE_SENSOR, Sensor.SHUTTLE_STAGE_ONE_SENSOR, Sensor.SHUTTLE_STAGE_TWO_SENSOR);
     }
 
