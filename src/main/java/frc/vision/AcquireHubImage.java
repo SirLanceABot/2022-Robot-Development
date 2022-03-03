@@ -10,6 +10,7 @@ import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.constants.Constant;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.MjpegServer;
 
@@ -49,15 +50,21 @@ public class AcquireHubImage  implements Runnable
     // start thread to process target camera and locate target
     targetSelection = new TargetSelection();
     targetSelectionThread = new Thread(targetSelection, "TargetSelection");
+    final int parentPriority = Thread.currentThread().getPriority();
+    targetSelectionThread.setPriority(parentPriority-1);
     //  targetSelectionThread.setDaemon(true);
     targetSelectionThread.start();
+    System.out.println("parent/child priorities " + Thread.currentThread().getPriority() + " " + targetSelectionThread.getPriority());
     // END start thread to process target camera and locate target
+
 
     /********start target camera******* */
     // The Registered Trademark looks right in VSC but it isn't "/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0"
     UsbCamera TargetCamera = new UsbCamera("TargetCamera", "/dev/v4l/by-id/usb-Microsoft_Microsoft\u00AE_LifeCam_HD-3000-video-index0");
+    // UsbCamera TargetCamera = new UsbCamera("TargetCamera", "usb-USB_Camera_USB_Camera_SN0001-video-index0"); // rkt tenvis
+    // UsbCamera TargetCamera = new UsbCamera("TargetCamera", "/dev/video0"); // rkt tenvis
     TargetCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    TargetCamera.setResolution(352, 288); // 10fps ok
+    TargetCamera.setResolution(Constant.targetCameraWidth, Constant.targetCameraHeight); // 10fps ok
     TargetCamera.setFPS(10);
     TargetCamera.setExposureManual(0);
  
@@ -111,7 +118,7 @@ public class AcquireHubImage  implements Runnable
   // Widget in Shuffleboard Tab
   CameraWidget cw = new CameraWidget();
   cw.name = "IntakeCamera";
-  cw.setLocation(0, 0, 5, 7);
+  cw.setLocation(0, 0, 10, 14);
   cw.setProperties(false, "white", false, "NONE");
   createCameraShuffleboardWidget(intakeCameraServer.getSource(), cw);
 
@@ -124,7 +131,7 @@ public class AcquireHubImage  implements Runnable
       Vision.calibrate =
           cameraTab.add("Turret Calibration", 0.0)
           .withSize(4, 2)
-          .withPosition(20, 14)
+          .withPosition(5, 22)
           .getEntry();
       
       Shuffleboard.update();
@@ -134,13 +141,25 @@ public class AcquireHubImage  implements Runnable
 
     while (!Thread.interrupted())
     {
-  // Tell the CvSink to grab a frame from the camera and put it
+      // Tell the CvSink to grab a frame from the camera and put it
       // in the source mat.  If there is an error notify the output.
       if (inputStream.grabFrame(mat, 1.0) == 0) { // 1.0 second timeout; sometimes the 2nd acquire took longer then ok forever after
         // Send the output the error
         System.out.println("target camera error " + inputStream.getError());//intake camera error timed out getting frame
         // skip the rest of the current iteration
         continue;
+      }
+
+      if (mat == null) // threads start at different times so skip problems that might happen at the beginning
+      {
+          System.out.println("target camera skipping null mat");
+          continue;
+      }
+      
+      if (mat.empty()) // threads start at different times so skip problems that might happen at the beginning
+      {
+          System.out.println("target camera skipping empty mat");
+          continue;
       }
 
       // new Image available for use so pass it on
@@ -207,7 +226,7 @@ public class AcquireHubImage  implements Runnable
         cameraTab.add(cw.name + " Camera", camera).withWidget(BuiltInWidgets.kCameraStream)
                 .withPosition(cw.column, cw.row).withSize(cw.width, cw.height)
                 .withProperties(cameraWidgetProperties);
-        Shuffleboard.update();
+        Shuffleboard.update(); // FIXME this is failing sometimes on startup and robot code has to be restarted
     }
 }
 
@@ -217,13 +236,6 @@ public class AcquireHubImage  implements Runnable
 /* pscp  -v lvuser@roborio-4237-frc.local:/home/lvuser/camerid.txt  c:\\users\\rkt\\cameraid.txt*/
 //MjpegServer server = CameraServer.startAutomaticCapture(TargetCamera); // save the server to enable changing quality, etc.
 //System.out.println("targetcamera" + TargetCamera.getConfigJson());
-
-// ["640x480 YUYV 30 fps","640x480 YUYV 20 fps","640x480 YUYV 15 fps","640x480 YUYV 10 fps","640x480 YUYV 7 fps","1280x720 YUYV 10 fps","1280x720 YUYV 7 fps","960x544 YUYV 15 fps","960x544 YUYV 10 fps","960x544 YUYV 7 fps","800x448 YUYV 20 fps","800x448 YUYV 15 fps","800x448 YUYV 10 fps","800x448 YUYV 7 fps","640x360 YUYV 30 fps","640x360 YUYV 20 fps","640x360 YUYV 15 fps","640x360 YUYV 10 fps","640x360 YUYV 7 fps","424x240 YUYV 30 fps","424x240 YUYV 20 fps","424x240 YUYV 15 fps","424x240 YUYV 10 fps","424x240 YUYV 7 fps","352x288 YUYV 30 fps","352x288 YUYV 20 fps","352x288 YUYV 15 fps","352x288 YUYV 10 fps","352x288 YUYV 7 fps","320x240 YUYV 30 fps","320x240 YUYV 20 fps","320x240 YUYV 15 fps","320x240 YUYV 10 fps","320x240 YUYV 7 fps","800x600 YUYV 15 fps","800x600 YUYV 10 fps","800x600 YUYV 7 fps","176x144 YUYV 30 fps","176x144 YUYV 20 fps","176x144 YUYV 15 fps","176x144 YUYV 10 fps","176x144 YUYV 7 fps","160x120 YUYV 30 fps","160x120 YUYV 20 fps","160x120 YUYV 15 fps","160x120 YUYV 10 fps","160x120 YUYV 7 fps","1280x800 YUYV 10 fps",
-// "640x480 MJPEG 30 fps","640x480 MJPEG 20 fps","640x480 MJPEG 15 fps","640x480 MJPEG 10 fps","640x480 MJPEG 7 fps","1280x720 MJPEG 30 fps","1280x720 MJPEG 20 fps","1280x720 MJPEG 15 fps","1280x720 MJPEG 10 fps","1280x720 MJPEG 7 fps","960x544 MJPEG 30 fps","960x544 MJPEG 20 fps","960x544 MJPEG 15 fps","960x544 MJPEG 10 fps","960x544 MJPEG 7 fps","800x448 MJPEG 30 fps","800x448 MJPEG 20 fps","800x448 MJPEG 15 fps","800x448 MJPEG 10 fps","800x448 MJPEG 7 fps","640x360 MJPEG 30 fps","640x360 MJPEG 20 fps","640x360 MJPEG 15 fps","640x360 MJPEG 10 fps","640x360 MJPEG 7 fps","800x600 MJPEG 30 fps","800x600 MJPEG 20 fps","800x600 MJPEG 15 fps","800x600 MJPEG 10 fps","800x600 MJPEG 7 fps",
-// "416x240 MJPEG 30 fps","416x240 MJPEG 20 fps","416x240 MJPEG 15 fps","416x240 MJPEG 10 fps","416x240 MJPEG 7 fps",
-// "352x288 MJPEG 30 fps","352x288 MJPEG 20 fps","352x288 MJPEG 15 fps","352x288 MJPEG 10 fps","352x288 MJPEG 7 fps",
-// "176x144 MJPEG 30 fps","176x144 MJPEG 20 fps","176x144 MJPEG 15 fps","176x144 MJPEG 10 fps","176x144 MJPEG 7 fps",
-// "320x240 MJPEG 30 fps","320x240 MJPEG 20 fps","320x240 MJPEG 15 fps","320x240 MJPEG 10 fps","320x240 MJPEG 7 fps","160x120 MJPEG 30 fps","160x120 MJPEG 20 fps","160x120 MJPEG 15 fps","160x120 MJPEG 10 fps","160x120 MJPEG 7 fps"]
 
 // import edu.wpi.first.wpilibj.Watchdog;
     // // restart vision if any watchdog tripped; Exit - should restart itself by WPILib server stuff
@@ -239,6 +251,5 @@ public class AcquireHubImage  implements Runnable
     //   // System.exit(1);
     // });
 
-    
 //    watchdog.enable();
 // watchdog.reset(); // made it to the end fo the loop

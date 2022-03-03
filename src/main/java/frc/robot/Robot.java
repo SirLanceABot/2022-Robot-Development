@@ -63,7 +63,10 @@ public class Robot extends TimedRobot
         robotState = RobotState.kRobotInit;
         
         if(VISION != null)
-            addPeriodic(() -> VISION.getCalibration(), 2.0, 0.0185); // get camera-target/shooter calibration from shuffleboard every 2 seconds
+        {
+            addPeriodic(() -> VISION.getCalibration(), 2.0, 0.0180); // get camera-target/shooter calibration from shuffleboard every 2 seconds
+            addPeriodic(() -> System.gc(), 5.0, 0.0182); // needed for all the OpenCV Mats
+        }
     }
 
     /**

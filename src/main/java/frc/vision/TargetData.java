@@ -1,9 +1,5 @@
 package frc.vision;
 
-// import com.google.gson.Gson;
-import org.opencv.core.Point;
-import org.opencv.core.Size;
-
 // Expected usage documented at the bottom of the code
 
 /**
@@ -19,9 +15,7 @@ public class TargetData
     // NOTE: No modifier means visible to both the class and package.
 
     // Target data that we need
-    Size imageSize;
-    double portPositionInFrame;
-    double portDistance;
+    double hubDistance;
     double angleToTurn;
 
     // These fields are used to track the validity of the data.
@@ -45,9 +39,7 @@ public class TargetData
      */
     public synchronized void reset()
     {
-        imageSize = new Size(-1.0, -1.0);
-        portPositionInFrame = -1.0;
-        portDistance = -1.0;
+        hubDistance = -1.0;
         angleToTurn = 0.;
         isTargetFound = false;
 
@@ -63,10 +55,7 @@ public class TargetData
      */
     public synchronized void set(TargetData targetData)
     {
-        imageSize.width = targetData.imageSize.width;
-        imageSize.height = targetData.imageSize.height;
-        portPositionInFrame = targetData.portPositionInFrame;
-        portDistance = targetData.portDistance;
+        hubDistance = targetData.hubDistance;
         angleToTurn = targetData.angleToTurn;
 
         isTargetFound = targetData.isTargetFound;
@@ -85,7 +74,7 @@ public class TargetData
      */
     public synchronized double getPortDistance()
     {
-        return portDistance;
+        return hubDistance;
     }
 
     /**
@@ -106,10 +95,7 @@ public class TargetData
     public synchronized TargetData get()
     {
         TargetData targetData = new TargetData();
-        targetData.imageSize.width = imageSize.width;
-        targetData.imageSize.height = imageSize.height;
-        targetData.portPositionInFrame = portPositionInFrame;
-        targetData.portDistance = portDistance;
+        targetData.hubDistance = hubDistance;
         targetData.angleToTurn = angleToTurn;
         targetData.isTargetFound = isTargetFound;
         targetData.frameNumber = frameNumber;
@@ -130,11 +116,6 @@ public class TargetData
     public synchronized void incrFrameNumber()
     {
             frameNumber++;
-    }
-
-    public synchronized Size getImageSize()
-    {
-        return imageSize;
     }
 
    /**
@@ -175,37 +156,33 @@ public class TargetData
      */
     public synchronized String toString()
     {
-       return String.format("Frame = %d, %s\nimageSize.width = %f, imageSize.height = %f,\nportPositionInFrame = %f, portDistance = %f,\nangleToTurn = %f %s", 
+       return String.format("Frame = %d, %s hubDistance = %5.1f, angleToTurn = %5.1f, %s", 
             frameNumber, isTargetFound ? "target" : "no target",
-            imageSize.width, imageSize.height, portPositionInFrame, portDistance, angleToTurn, isFreshData ? "FRESH" : "stale");
+            hubDistance, angleToTurn, isFreshData ? "FRESH" : "stale");
     }
 }
 /*
 Here's how to use the TargetData class.
 (If we want to make improvements for next year, this is a good model to start with and tweak.)
 
-In the Vision Process (class VisionProcess{}) define two TargetData objects say TargetData and
-newTargetData (public TargetData TargetData, newTargetData;).
+In the Vision Process (class VisionProcess{}) define two TargetData objects say targetData and
+myTargetData (public TargetData targetData, myTargetData;).
 
 The intention is another thread - TargetSelection - stuffs the
 latest data into targetData as fast as it can. This is expected to be relatively slowly as it's
 data from the camera.
 
-The Vision Process pulls the data from newTargetData into TargetData.
+The Vision using Process pulls the data from targetData into myTargetData.
 
-Use the data in targetData
+Use the data in myTargetData
 
 First check if it's fresh data or the same as before
-(if(targetData.isFresh()) do something else it's stale
+(if(myTargetData.isFresh) do something else it's stale
 
-If the targetData is not fresh then keep using the old data or skip that loop.
+If myTargetData is fresh then update the angle-to-turn setpoint.
+If the myTargetData is not fresh then keep using the old data to keep driving toward the previously set angle.
 
-Check if there is target data to be used
-(if(TargetData.isTargetFound())
- {double a=targetDataTemp.getAngleToTurn(); double d = targetDataTemp.getPortDistance();}
-else no target data
-
-Vision Process runs relatively fast and often so mostly it sees that TargetData is not fresh.
+Vision using Process runs relatively fast and often so mostly it sees that myTargetData is not fresh.
 
 
 The methods of TargetData are all synchronized so the data cannot be accessed and potentially
@@ -213,7 +190,35 @@ corrupted by two threads setting and getting at the same time.  However the get 
 distance and others like isFresh are separate and there could be an update between getting the angle
 and getting the distance thus that data pair would not be atomic in this design if there was only one
 object that can be accessed and updated by more than one thread.  That is why there are two copies of
-TargetData - targetData and targetDataTemp so Vision Process controls when the now atomic object of
-TargetData is updated from newTargetData.
+TargetData - targetData and myTargetData so Vision using Process controls when the now atomic object of
+myTargetData is updated from targetData.
+
+   // get the latest targeting data every 20ms for my use
+    myWorkingCopyOfTargetData = VisionData.targetData.get();
+
+    if(myWorkingCopyOfTargetData.isFreshData)
+     // Vision process finally gave me an update.
+     // If there is a target found, then update the setpoint for the "drive to" angle
+     // or if within your tolerance stop.
+     // If aligned, you might want to wait a little bit to settle to make sure
+     // the robot is still aligned then take the shot.
+     // If target is not found, then the camera doubts it's near.
+     // To verify the camera is still working check that the frame count is increasing.
+    { // access my working copy without getters since it's mine
+      SmartDashboard.putString("vision",
+        String.format("%5.1f, %5.1f, %b, %d", // better use toString but that doesn't show variable access I wanted to show
+        myWorkingCopyOfTargetData.angleToTurn,
+        myWorkingCopyOfTargetData.hubDistance,
+        myWorkingCopyOfTargetData.isTargetFound,
+        myWorkingCopyOfTargetData.frameNumber));
+    }
+     // Camera is slow so expect a lot of stale data.
+     // Keep moving toward last target if that's what's in progress and
+     // has not yet been completed, otherwise, if you have arrived, then stop.
+    else
+    {
+
+    }
+  }
 
 */

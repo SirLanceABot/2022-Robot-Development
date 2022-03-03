@@ -1,36 +1,20 @@
 package frc.vision;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.kauailabs.navx.frc.AHRS;
-import com.kauailabs.navx.frc.AHRS.SerialDataType;
-
-public class Vision //extends TimedRobot 
+public class Vision
 {
 
   private static AcquireHubImage target;
   private static Thread targetThread;
-  private TargetData targetDataTemp; // Robot's working copy
+  private TargetData myWorkingCopyOfTargetData; // Robot's working copy
   static NetworkTableEntry calibrate;
   static double calibrateAngle = 0.;
 
   public Vision() 
   {
-
-    // here for this test because I don't have the whole robot code - need it somewhere
-    //////////// NAVX GYRO FOR USB LOAD TESTING ////////////
-    AHRS ahrs;
-    ahrs = new AHRS(SerialPort.Port.kUSB1, SerialDataType.kProcessedData, (byte) 60);
-    Timer.delay(1.0); // make sure AHRS USB communication is done before doing other USB.
-    ahrs.enableLogging(true);
-    System.out.println("NavX update " + ahrs.getActualUpdateRate() + " " + ahrs.getUpdateCount() + " " + ahrs.getRequestedUpdateRate());
-    // END NAVX GYRO
-
   // start thread for target camera and locate target
   target = new AcquireHubImage();
   targetThread = new Thread(target, "TargetCamera");
@@ -39,7 +23,6 @@ public class Vision //extends TimedRobot
   // END start target camera and locate target  
         
   Timer.delay(5.);
-
   
   }
 
@@ -50,22 +33,36 @@ public class Vision //extends TimedRobot
       calibrateAngle = calibrate.getDouble(0.0); // get the camera calibration from the Shuffleboard
 
 
-     // get the latest targeting data
-    targetDataTemp = VisionData.targetData.get();
-    if(targetDataTemp.isFreshData)
+    if(true)  //FIXME: this example here just to test - set to false for real Robot usage
     {
-      SmartDashboard.putString("vision", targetDataTemp.angleToTurn + " " +
-       targetDataTemp.portDistance + " " + Timer.getFPGATimestamp() + " " +
-       targetDataTemp.frameNumber);
-       SmartDashboard.putBoolean("vision stale", false);
+    // get the latest targeting data every 20ms for my use
+    myWorkingCopyOfTargetData = VisionData.targetData.get();
+
+    if(myWorkingCopyOfTargetData.isFreshData)
+     // Vision process finally gave me an update.
+     // If there is a target found, then update the setpoint for the "drive to" angle
+     // or if within your tolerance stop.
+     // If aligned, you might want to wait a little bit to settle to make sure
+     // the robot is still aligned then take the shot.
+     // If target is not found, then the camera doubts it's near.
+     // To verify the camera is still working check that the frame count is increasing.
+    { // access my working copy without getters since it's mine
+      SmartDashboard.putString("vision",
+        String.format("%5.1f, %5.1f, %b, %d", // better use toString but that doesn't show variable access I wanted to show
+        myWorkingCopyOfTargetData.angleToTurn,
+        myWorkingCopyOfTargetData.hubDistance,
+        myWorkingCopyOfTargetData.isTargetFound,
+        myWorkingCopyOfTargetData.frameNumber));
     }
+     // Camera is slow so expect a lot of stale data.
+     // Keep moving toward last target if that's what's in progress and
+     // has not yet been completed, otherwise, if you have arrived, then stop.
     else
     {
-      SmartDashboard.putBoolean("vision stale", true);
+
+    }
     }
   }
-
-
 }
 // parking lot for junk
 // UsbCamera IntakeCamera = CameraServer.startAutomaticCapture("intake", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
@@ -98,3 +95,16 @@ public class Vision //extends TimedRobot
   //       System.out.println("input camera error " + inputStream.getError());//intake camera error timed out getting frame
   //       // skip the rest of the current iteration
   //     }     
+
+
+  // CPU utilization stress test for Robot.teleopPeriodic
+  
+
+  // var StartTime = Timer.getFPGATimestamp();
+  // for(int Mathsine = 1; Mathsine <= 1_200_000; Mathsine ++)
+  // {
+  //     Math.sin(Math.E/Math.PI);
+  // }
+  // var StopTime = Timer.getFPGATimestamp();
+  // SmartDashboard.putNumber("teleopTimer 0.02", StopTime - StartTime);
+

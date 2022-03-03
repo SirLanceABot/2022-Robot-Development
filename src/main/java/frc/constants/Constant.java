@@ -67,4 +67,19 @@ public final class Constant
         (1.0 / TURN_MOTOR_ENCODER_RESOLUTION) * (2.0 * Math.PI);
 
     public static final double MAX_BATTERY_VOLTAGE = 12.0;
+
+    // VISION   Constants
+    public static final double VERTICAL_CAMERA_ANGLE_OF_VIEW = 35.0;
+
+    public static final int targetCameraWidth = 352;
+    public static final int targetCameraHeight = 288;
+
+    // enter (x, y) coordinates x ascending order, must add at least 2 data points
+    public static final double[][] pixelsToInchesTable =
+    {
+        {19., 27.},
+        {262., 120.},
+        {348., 215.}
+    };
+
 }
