@@ -116,10 +116,10 @@
         <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="10">
-        <value>0.0</value>
+        <value>0.25</value>
       </grip:Input>
       <grip:Input step="6" socket="11">
-        <value>1000.0</value>
+        <value>1.0</value>
       </grip:Input>
       <grip:Output step="6" socket="0" previewed="true"/>
     </grip:Step>
