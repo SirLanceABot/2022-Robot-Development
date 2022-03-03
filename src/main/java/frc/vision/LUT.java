@@ -1,5 +1,7 @@
 package frc.vision;
 
+import java.lang.invoke.MethodHandles;
+
 /*
 
 Table lookup of X, Y co-ordinates
@@ -34,6 +36,15 @@ Example usage:
 
 public class LUT
 {
+    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+    // *** STATIC INITIALIZATION BLOCK ***
+    // This block of code is run first when the class is loaded
+    static
+    {
+        System.out.println("Loading: " + fullClassName);
+    }
+
     Point LUT[];
 
     private int capacity=0;

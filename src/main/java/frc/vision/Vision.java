@@ -1,11 +1,22 @@
 package frc.vision;
 
+import java.lang.invoke.MethodHandles;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision
 {
+
+  private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+  // *** STATIC INITIALIZATION BLOCK ***
+  // This block of code is run first when the class is loaded
+  static
+  {
+      System.out.println("Loading: " + fullClassName);
+  }
 
   private static AcquireHubImage target;
   private static Thread targetThread;
@@ -16,14 +27,17 @@ public class Vision
   public Vision() 
   {
   // start thread for target camera and locate target
+  System.out.println(fullClassName + " : Constructor Started");
+
   target = new AcquireHubImage();
   targetThread = new Thread(target, "TargetCamera");
   targetThread.setDaemon(true);
   targetThread.start();
-  // END start target camera and locate target  
         
   Timer.delay(5.);
   
+  System.out.println(fullClassName + ": Constructor Finished");
+  // END start target camera and locate target  
   }
 
   public void getCalibration()

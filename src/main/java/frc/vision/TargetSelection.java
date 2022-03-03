@@ -1,11 +1,12 @@
 package frc.vision;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvException;
-import org.opencv.core.CvType;
+// import org.opencv.core.CvException;
+// import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -17,6 +18,15 @@ import edu.wpi.first.cscore.CvSource;
 import frc.constants.Constant;
 
 public class TargetSelection implements Runnable {
+
+  private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+  // *** STATIC INITIALIZATION BLOCK ***
+  // This block of code is run first when the class is loaded
+  static
+  {
+      System.out.println("Loading: " + fullClassName);
+  }
 
   // set this display to false for match play to save Ethernet bandwidth
   // Probably put in config parameters such Constants class or SmartDashboard inputs
@@ -33,7 +43,7 @@ public void run()
     {
     if(displayTargetContours)
     {
-      // define our generated image the same size as the camera - doesn't have to be but easy
+      // define our generated image the same size as the camera - doesn't have to be but easier
       outputStream = CameraServer.putVideo("TargetContours", Constant.targetCameraWidth, Constant.targetCameraHeight);
       outputStream.setFPS(7);
     }
@@ -49,7 +59,6 @@ public void run()
       pixelsToInchesTable.add(Constant.pixelsToInchesTable[i][0], Constant.pixelsToInchesTable[i][1]);
     }
     System.out.println("[Camera Pixels To Inches To Hub] " + pixelsToInchesTable); // print the whole table
-  
 
     // Mats are very memory expensive. Lets reuse this Mat.
     Mat mat = new Mat();
@@ -67,32 +76,34 @@ public void run()
       // send 4 pieces of data to whatever is driving this beast
       // angle to turn, distance to target, frame sequence number, time of acquisition
 
-      // Demo OpenCV draw a rectangle on the image
-      // Imgproc.rectangle(mat, new Point(10, 10), new Point(100, 100), new Scalar(255, 255, 255), 5);
-      // END Demo OpenCV draw a rectangle on the image
-
-      // System.out.print("[ts" + Timer.getFPGATimestamp()); // doesn't print after a few seconds but no watchdog msg
-                                                          //this.image.getImage(mat);
       AcquireHubImage.image.getImage(mat);
 
-
 // fake contours to test
-// Imgproc.rectangle(mat, new Point(10, 10), new Point(20, 30), new Scalar(0, 255, 40), 2);
-// Imgproc.rectangle(mat, new Point(12, 50), new Point(21, 73), new Scalar(0, 255, 40), 2);
-// Imgproc.rectangle(mat, new Point(14, 90), new Point(22, 132), new Scalar(0, 255, 40), 2);
-// Imgproc.rectangle(mat, new Point(74, 90), new Point(82, 132), new Scalar(0, 255, 40), 2);
-// Imgproc.rectangle(mat, new Point(90, 150), new Point(120, 155), new Scalar(0, 255, 40), 2);
+// Imgproc.rectangle(mat, new Point(10, 10), new Point(20, 30), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
+// Imgproc.rectangle(mat, new Point(12, 50), new Point(21, 73), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
+// Imgproc.rectangle(mat, new Point(14, 90), new Point(22, 132), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
+// Imgproc.rectangle(mat, new Point(74, 90), new Point(82, 132), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
+// Imgproc.rectangle(mat, new Point(90, 150), new Point(120, 155), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
             
-      
       // Reset the next target data and bump up the frame number
       nextTargetData.reset();
       nextTargetData.incrFrameNumber();
 
-/* demo GRIP pipeline */
+      // note that GRIP ratio is width/height
+
+      // FIXME note that GRIP does not have maxArea so add it to filterContours
+      // double maxArea = 1000.0;
+			// if (area > maxArea) continue;
+
+      // FIXME note that GRIP has a bad import so comment it out
+      // import org.opencv.features2d.FeatureDetector;
+
+      // FIXME maybe add min and max Vertices to GRIP
+      
+
       gripPipeline.process(mat); // filter the image with the GRIP pipeline
 
-      // The gripPowerPortVisionPipeline creates an array of contours that must
-      // be searched to find the target.
+      // The gripPipeline creates an array of contours that must be searched to find the target.
       ArrayList<MatOfPoint> filteredContours;
       filteredContours = new ArrayList<MatOfPoint>(gripPipeline.filterContoursOutput());
 
@@ -117,132 +128,115 @@ public void run()
           
           if(displayTargetContours)
           {
+            // Draw center-line
             Imgproc.line(mat, new Point(0,Constant.targetCameraHeight/2.) , 
-              new Point(Constant.targetCameraWidth,Constant.targetCameraHeight/2.), new Scalar(255, 255, 255)
-              , 1);
+              new Point(Constant.targetCameraWidth,Constant.targetCameraHeight/2.), new Scalar(255, 255, 255),
+              1, Imgproc.LINE_4);
             // Draw all contours at once (negative index).
             // Positive thickness means not filled, negative thickness means filled.
-            Imgproc.drawContours(mat, filteredContours, -1, new Scalar(255, 0, 0), 1); // all contours in blue
+            // Draw all the contours that gripPipeline found in red
+            // Later we'll draw over the ones we use in yellow
+            Imgproc.drawContours(mat, filteredContours, -1, new Scalar(0, 0, 255), 1); // red
 
             listBoxContour = new ArrayList<MatOfPoint>();
           }
 
-          for (MatOfPoint contour : filteredContours) {
-              // System.out.println(contour.dump()); // OpenCV Mat dump one line string of numbers
-              // or more control over formatting with your own array to manipulate
-              // System.out.println(pId + " " + aContour.size() + " points in contour"); // a contour is a bunch of points
-              // convert MatofPoint to an array of those Points and iterate (could do list of Points but no need for this)
-              // for(Point aPoint : aContour.toArray())System.out.print(" " + aPoint); // print each point
+          filteredContours.forEach((cd)->contourData.add(new ContourData(cd))); // get out of Mat form
 
-              // for(int idx = 0; idx < contour.toArray().length; idx++)
-              // {
-              // System.out.println("(" + contour.toArray()[idx].x + ", " +
-              // contour.toArray()[idx].y + ")");
-              // }
+            // if no contours, say no target
+            // if one contour, use that one to center
+            // if two contours, center on their average
+            // if three or more contours,
+            //  if largest contour located between the 2nd and 3rd largest then center on that one largest
+            //  otherwise center on the average of the 2 largest contours.
 
-              contourData.add(new ContourData(contour));
+            // Also try sliding window to "bin" contours or other clustering techniques
+            //  ideally all contours line up in the same x value spread by the different y
+            //  keep the set with the largest number in the same X; toss out the rest
 
-  
-              if(displayTargetContours)
+            // initial values in case not set elsewhere
+            double targetCenterX = -1;
+            double targetCenterY = -1;
+
+            if(filteredContours.size() == 1)
+            {
+              targetCenterX = contourData.get(0).centerX;
+              targetCenterY = contourData.get(0).centerY;
+
+              if(displayTargetContours) // list of good contour's boxes to draw
               {
-              var currentContour = contourData.size()-1; // index of this addition
-              listBoxContour.add(new MatOfPoint( // list of contour's boxes to draw
-                contourData.get(currentContour).boxPts[0],
-                contourData.get(currentContour).boxPts[1],
-                contourData.get(currentContour).boxPts[2],
-                contourData.get(currentContour).boxPts[3]));
+              listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1],contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
               }
+            } // end one contour
+            else
+            if(filteredContours.size() == 2)
+            {
+              targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
+              targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
 
-              // Imgproc.putText(mat,
-              // String.format("%4.0f", contourData.get(currentContour).angle),
-              // contourData.get(currentContour).boxPts[0],
-              //   Imgproc.FONT_HERSHEY_SIMPLEX, 0.3,
-              //     new Scalar(255, 255, 255), 1);
+              if(displayTargetContours) // list of good contour's boxes to draw
+              {
+              listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
+              listBoxContour.add(new MatOfPoint(contourData.get(1).boxPts[0], contourData.get(1).boxPts[1], contourData.get(1).boxPts[2], contourData.get(1).boxPts[3]));
+              }
+            } // end 2 contours
+            else // 3  or more contours
+            {
+              contourData.sort(ContourData.compareArea()); // sort by area size, order large to small
+              // System.out.println(contourData.get(0).area);
+              // System.out.println("contourData");contourData.forEach((data)->System.out.println(data));
 
-          } // end loop through all contours
-
-                // if no contours, say no target
-                // if one contour, use that one to center
-                // if two contours, check if near each other in the X axis and if near each other center on their average otherwise say no target
-                // if three or more contours,
-                //  if one contour larger than the others by zzz pct then center on that one
-                //  otherwise center on the average of the 2 largest contours.
-                // Also try sliding window to "bin" contours
-                //  ideally all contours line up in the same x value spread by the different y
-                //  keep the set with the largest number in the same X; toss out the rest
-                
-                // also specify max vertices in GripPipeline
-    
-                // do something to set targetData - this is nonsense but almost right and illustrative
-                double targetCenterX = -1;
-                double targetCenterY = -1;
-                if(filteredContours.size() == 1)
-                {
+              // is #0 (max area contour) located between #1 and #2 in the Y-axis?
+              if(
+                ((contourData.get(0).centerY < contourData.get(1).centerY) &&
+                  (contourData.get(0).centerY > contourData.get(2).centerY)    )  ||
+                  ((contourData.get(0).centerY > contourData.get(1).centerY) &&
+                  (contourData.get(0).centerY < contourData.get(2).centerY)    )     )
+              {
                   targetCenterX = contourData.get(0).centerX;
                   targetCenterY = contourData.get(0).centerY;
-                }
-                else
-                if(filteredContours.size() == 2)
-                {
-                  targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
-                  targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
-                }
-                else // 3  or more contours
-                {
-                  // example extract just the centerX from all contours
-                  // double[] Xdata = new double[contourData.size()];
-                  // for(int i = 0; i < Xdata.length; i++)
-                  // {
-                  //   Xdata[i] = (float)contourData.get(i).centerX;
-                  // }
 
-                  contourData.sort(ContourData.compareArea()); // area size order large to small
-
-                  // is #0 (max area contour) located between #1 and #2 in the Y-axis?
-                  if(
-                    ((contourData.get(0).centerY < contourData.get(1).centerY) &&
-                     (contourData.get(0).centerY > contourData.get(2).centerY)    )  ||
-                     ((contourData.get(0).centerY > contourData.get(1).centerY) &&
-                     (contourData.get(0).centerY < contourData.get(2).centerY)    )     )
+                  if(displayTargetContours) // list of good contour's boxes to draw
                   {
-                      targetCenterX = contourData.get(0).centerX;
-                      targetCenterY = contourData.get(0).centerY;
+                  listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
                   }
-                  else
-                  {
-                    targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
-                    targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;  
-                  }
-                  
-                } // end 3 or more contours
-
-              
-                if(displayTargetContours)
+              }
+              else
+              {
+                targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
+                targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
+                
+                if(displayTargetContours) // list of good contour's boxes to draw
                 {
+                listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
+                listBoxContour.add(new MatOfPoint(contourData.get(1).boxPts[0], contourData.get(1).boxPts[1], contourData.get(1).boxPts[2], contourData.get(1).boxPts[3]));
+                }
+    
+              }
+            } // end 3 or more contours
+          
+            //Draw all the contours that we use in yellow
+            if(displayTargetContours)
+            {
               Imgproc.polylines(mat, // Matrix obj of the image
                 listBoxContour, // draw all the boxes
-                      true, // isClosed
-                      new Scalar(0, 255, 255), // Scalar object for color
-                      1, // Thickness of the line
-                      Imgproc.LINE_4 // line type
-                      );
+                true, // isClosed
+                new Scalar(0, 255, 255), // yellow
+                1, // Thickness of the line
+                Imgproc.LINE_4 // line type
+                );
 
-                      while(!listBoxContour.isEmpty()) {
-                        listBoxContour.get(0).release();
-                        listBoxContour.remove(0);
-                    }
-                  }
-
-            // // Find the corner points of the bounding rectangle and the image size
-            // nextTargetData.portPositionInFrame = 0.0;
+                while(!listBoxContour.isEmpty()) {
+                  listBoxContour.get(0).release();
+                  listBoxContour.remove(0);
+                }
+              }
 
             // Find the degrees to turn the turret by finding the difference between the
-            // horizontal center of the camera frame
-            // and the horizontal center of the target.
-            // calibrateAngle is the difference between what the camera sees as the
-            // retroreflective tape target and where
-            // the Cargo actually hits - the skew of the shooting process or camera
-            // misalignment.
+            // horizontal center of the camera frame and the horizontal center of the target.
+            // calibrateAngle is the difference between what the camera sees as the retro-reflective
+            // tape target and where the Cargo actually hits - the skew of the shooting process or
+            // camera misalignment.
             
             nextTargetData.angleToTurn = (Constant.VERTICAL_CAMERA_ANGLE_OF_VIEW / Constant.targetCameraHeight)
                     * ((Constant.targetCameraHeight / 2.0)
@@ -251,13 +245,13 @@ public void run()
 
             if (nextTargetData.angleToTurn <= -Constant.VERTICAL_CAMERA_ANGLE_OF_VIEW / 2.
                     || nextTargetData.angleToTurn >= Constant.VERTICAL_CAMERA_ANGLE_OF_VIEW / 2.) { 
-                // target not actually "seen" after the calibrateAngle offset was applied
+                // target not actually "seen" after the calibrateAngle offset was applied - no data
                 nextTargetData.hubDistance = -1.;
                 nextTargetData.angleToTurn = -1.;
                 nextTargetData.isFreshData = true;
                 nextTargetData.isTargetFound = false;
             } else {
-                // target still in view
+                // target still in view - good set of data
                 nextTargetData.hubDistance = pixelsToInchesTable.lookup(targetCenterX);
                 nextTargetData.isFreshData = true;
                 nextTargetData.isTargetFound = true;
@@ -265,26 +259,28 @@ public void run()
 
             if(displayTargetContours)
             {
-            // display the pixels and distance on image for reviewing or revising the conversion table
-            Imgproc.putText(mat,
-              String.format("(%4.0f pixels -> %4.0f inches)", targetCenterX, nextTargetData.hubDistance),
-              new Point(100, 20),
-              Imgproc.FONT_HERSHEY_SIMPLEX, 0.5,
-              new Scalar(255, 255, 255), 1);
+              Core.transpose(mat, mat); // camera is rotated so make image look right for humans
+              Core.flip(mat, mat, 1);
+
+              // display the pixels and distance on image for reviewing or revising the conversion table
+              Imgproc.putText(mat,
+                String.format("%3.0f px = %3.0f\"", targetCenterX, nextTargetData.hubDistance),
+                new Point(2, 12),
+                Imgproc.FONT_HERSHEY_SIMPLEX, 0.4,
+                new Scalar(255, 255, 255), 1);
               
               //displays the angle to turn on the image for reviewing or revising
               Imgproc.putText(mat,
-              String.format("(angle to turn %4.0f degrees)", nextTargetData.angleToTurn),
-              new Point(100, 40),
-              Imgproc.FONT_HERSHEY_SIMPLEX, 0.5,
-              new Scalar(255, 255, 255), 1);
+                String.format("turn %3.0f deg", nextTargetData.angleToTurn),
+                new Point(2, Constant.targetCameraWidth-8),
+                Imgproc.FONT_HERSHEY_SIMPLEX, 0.4,
+                new Scalar(255, 255, 255), 1);
             }
 
           } // end contours found
 
-      // update the target information with best contour or the initialized no contour data
+        // update the target information with best data or the initialized no contour data
         VisionData.targetData.set(nextTargetData);
-        // System.out.println(nextTargetData.toString());
 
         if(displayTargetContours)
         {
@@ -292,8 +288,10 @@ public void run()
         }
 
     }    // end "infinite" loop
+
     System.out.println("TargetSelection should never be here");
-    } // end run method
+    
+  } // end run method
 
   } // end outer class TargetSelection
 
@@ -342,6 +340,30 @@ public void run()
 
 
 // parking lot for good junk
+
+  // for (MatOfPoint contour : filteredContours) {
+          //     contourData.add(new ContourData(contour)); // get out of Mat form
+          //     // System.out.println(contour.dump()); // OpenCV Mat dump one line string of numbers
+          //     // or more control over formatting with your own array to manipulate
+          //     // System.out.println(pId + " " + aContour.size() + " points in contour"); // a contour is a bunch of points
+          //     // convert MatofPoint to an array of those Points and iterate (could do list of Points but no need for this)
+          //     // for(Point aPoint : aContour.toArray())System.out.print(" " + aPoint); // print each point
+
+          //     // for(int idx = 0; idx < contour.toArray().length; idx++)
+          //     // {
+          //     // System.out.println("(" + contour.toArray()[idx].x + ", " +
+          //     // contour.toArray()[idx].y + ")");
+          //     // }
+
+          // } // end loop through all contours
+
+// example extract just the centerX from all contours
+// double[] Xdata = new double[contourData.size()];
+// for(int i = 0; i < Xdata.length; i++)
+// {
+//   Xdata[i] = (float)contourData.get(i).centerX;
+// }
+
 
 // import edu.wpi.first.wpilibj.Watchdog;
     // // restart vision if any watchdog tripped; Exit - should restart itself by WPILib server stuff

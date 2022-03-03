@@ -1,5 +1,6 @@
 package frc.vision;
 
+import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,15 @@ public class AcquireHubImage  implements Runnable
   // Doubt camera will be streamed to humans during a match but if ti is
   // be sure to reduce the resolution
     
+  private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+  // *** STATIC INITIALIZATION BLOCK ***
+  // This block of code is run first when the class is loaded
+  static
+  {
+      System.out.println("Loading: " + fullClassName);
+  }
+
   static
   {
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -60,8 +70,6 @@ public class AcquireHubImage  implements Runnable
     /********start target camera******* */
     // The Registered Trademark looks right in VSC but it isn't "/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0"
     UsbCamera TargetCamera = new UsbCamera("TargetCamera", "/dev/v4l/by-id/usb-Microsoft_Microsoft\u00AE_LifeCam_HD-3000-video-index0");
-    // UsbCamera TargetCamera = new UsbCamera("TargetCamera", "usb-USB_Camera_USB_Camera_SN0001-video-index0"); // rkt tenvis
-    // UsbCamera TargetCamera = new UsbCamera("TargetCamera", "/dev/video0"); // rkt tenvis
     TargetCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     TargetCamera.setResolution(Constant.targetCameraWidth, Constant.targetCameraHeight); // 10fps ok
     TargetCamera.setFPS(10);
@@ -97,44 +105,44 @@ public class AcquireHubImage  implements Runnable
     MjpegServer intakeCameraServer = CameraServer.addServer("IntakeServer");
     intakeCameraServer.setSource(IntakeCamera);
     intakeCameraServer.setCompression(35); // 35 about as low as you can go for seeing to drive with low bit rate and little lag
-   /********END of start intake camera for human driver******* */
+    /********END of start intake camera for human driver******* */
 
 
    //start shuffleboard stuff
 
-  // Create the Camera tab on the shuffleboard
-  synchronized(tabLock)
-  {
-      cameraTab = Shuffleboard.getTab("Camera");
-  }
+    // Create the Camera tab on the shuffleboard
+    synchronized(tabLock)
+    {
+        cameraTab = Shuffleboard.getTab("Camera");
+    }
 
-  try {
-    Thread.sleep(3000); // wait for CameraServer to make the intakeCamera for the ShuffleBoard
-  } catch (InterruptedException e) {
-    e.printStackTrace();
-  }
+    try {
+      Thread.sleep(3000); // wait for CameraServer to make the intakeCamera for the ShuffleBoard
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
-  // Widget in Shuffleboard Tab
-  CameraWidget cw = new CameraWidget();
-  cw.name = "IntakeCamera";
-  cw.setLocation(0, 0, 10, 14);
-  cw.setProperties(false, "white", false, "NONE");
-  createCameraShuffleboardWidget(intakeCameraServer.getSource(), cw);
+    // Widget in Shuffleboard Tab
+    CameraWidget cw = new CameraWidget();
+    cw.name = "IntakeCamera";
+    cw.setLocation(0, 0, 10, 14);
+    cw.setProperties(false, "white", false, "NONE");
+    createCameraShuffleboardWidget(intakeCameraServer.getSource(), cw);
 
-  // END start intake camera
+    // END start intake camera
 
-  // Get an angle Calibration from Shuffleboard
-      //ShuffleboardTab tab = Shuffleboard.getTab("Camera");
-      synchronized(tabLock)
-      {
-      Vision.calibrate =
-          cameraTab.add("Turret Calibration", 0.0)
-          .withSize(4, 2)
-          .withPosition(5, 22)
-          .getEntry();
-      
-      Shuffleboard.update();
-      }
+    // Get an angle Calibration from Shuffleboard
+    //ShuffleboardTab tab = Shuffleboard.getTab("Camera");
+    synchronized(tabLock)
+    {
+    Vision.calibrate =
+        cameraTab.add("Turret Calibration", 0.0)
+        .withSize(4, 2)
+        .withPosition(5, 22)
+        .getEntry();
+    
+    Shuffleboard.update();
+    }
 
    // end shuffleboard stuff
 
@@ -165,9 +173,10 @@ public class AcquireHubImage  implements Runnable
       image.setImage(mat);
 
     } // the "infinite" loop
-    System.out.println("AcquireHubImage should never be here");
-  } // end run method
 
+    System.out.println("AcquireHubImage should never be here");
+  
+  } // end run method
 
   public static class CameraWidget {
     public String name;
@@ -204,7 +213,6 @@ public class AcquireHubImage  implements Runnable
     }
   }
 
-    
   private static void createCameraShuffleboardWidget(VideoSource camera, CameraWidget cw) {
     // Name Type Default Value Notes
     // ----------------- --------- --------

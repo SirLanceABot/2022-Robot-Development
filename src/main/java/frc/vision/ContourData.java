@@ -50,8 +50,8 @@ class ContourData
         @Override
         public int compare(ContourData cd1, ContourData cd2)
         {
-          if(cd1.area >  cd2.area) return  1;
-          if(cd1.area <  cd2.area) return -1;
+          if(cd1.area <  cd2.area) return  1;
+          if(cd1.area >  cd2.area) return -1;
           return 0; // they are equal or it's the first add to TreeSet
         }
       };

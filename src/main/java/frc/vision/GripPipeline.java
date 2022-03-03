@@ -98,8 +98,8 @@ public class GripPipeline {
 		double[] filterContoursSolidity = {80.22388059701493, 100.0};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
-		double filterContoursMinRatio = 0.25; //0.0; width/height
-		double filterContoursMaxRatio = 1.0; //1000.0;
+		double filterContoursMinRatio = 0.25;
+		double filterContoursMaxRatio = 1.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
 	}
@@ -343,6 +343,9 @@ public class GripPipeline {
 			if (bb.height < minHeight || bb.height > maxHeight) continue;
 			final double area = Imgproc.contourArea(contour);
 			if (area < minArea) continue;
+			// FIXME Team 4237 added check maxArea
+			double maxArea = 1000.0;
+			if (area > maxArea) continue;
 			if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) continue;
 			Imgproc.convexHull(contour, hull);
 			MatOfPoint mopHull = new MatOfPoint();
