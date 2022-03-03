@@ -54,7 +54,6 @@ public class AcquireHubImage  implements Runnable
     targetSelectionThread.setPriority(parentPriority-1);
     //  targetSelectionThread.setDaemon(true);
     targetSelectionThread.start();
-    System.out.println("parent/child priorities " + Thread.currentThread().getPriority() + " " + targetSelectionThread.getPriority());
     // END start thread to process target camera and locate target
 
 
