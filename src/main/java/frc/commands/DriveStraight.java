@@ -53,7 +53,7 @@ public class DriveStraight implements Command
         distanceDrivenSimulation += 0.05;
         System.out.printf("Distance driven: %5.2f meters\n", distanceDrivenSimulation);
 
-        if(distanceDrivenSimulation > distance_meters)
+        if(distanceDrivenSimulation >= distance_meters)
         {
             isFinished = true;
         }

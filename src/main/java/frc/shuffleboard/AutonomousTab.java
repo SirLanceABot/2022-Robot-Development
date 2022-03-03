@@ -346,13 +346,13 @@ public class AutonomousTab
         boolean isDoNothing = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kDoNothing);
         boolean isMoveFirst = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kMoveFirst);
         boolean isShootFirst = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kShootFirst);
+        boolean isShootMoveShoot = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kShootMoveShoot);
 
         // if trying to pick up cargo without moving off tarmac
         if(isPickUpCargo && !isMoveOffTarmac)
         {
             isValid = false;
             
-            // DriverStation.reportWarning("Cannot Pick Up Cargo Without Moving Off Tarmac", false);
             msg += "[ Cannot Pick Up Cargo Without Moving Off Tarmac ]  \n";
         }
 
@@ -360,8 +360,7 @@ public class AutonomousTab
         if((!isMoveOffTarmac && isMoveDelay) || (!isShootCargo && isShootDelay))
         {
             isValid = false;
-            
-            // DriverStation.reportWarning("Cannot Set A Delay For An Action Not Taken", false);
+
             msg += "[ Cannot Set A Delay For An Action Not Taken ]  \n";
         }
 
@@ -370,17 +369,15 @@ public class AutonomousTab
         {
             isValid = false;
 
-            // DriverStation.reportWarning("Cannot Shoot Two Cargo Without Picking Up Cargo", false);
             msg += "[ Cannot Shoot Two Cargo Without Picking Up Cargo ]  \n";
         }
 
-        // if selecting do nothing and trying to move
-        if (isDoNothing && isMoveOffTarmac)
+        // if selecting do nothing and trying to move or shoot
+        if ((isDoNothing && isMoveOffTarmac) || (isDoNothing && isShootCargo))
         {
             isValid = false;
-            
-            // DriverStation.reportWarning("Cannot Move Off Tarmac And Do Nothing", false);
-            msg += "[ Cannot Move Off Tarmac And Do Nothing ]  \n";
+ 
+            msg += "[ Cannot Do Nothing And Move Or Shoot ]  \n";
         }
 
         // if trying to move first without moving off tarmac
@@ -399,9 +396,15 @@ public class AutonomousTab
             msg += "[ Cannot Shoot First Without Shooting Any Cargo ] \n";
         }
 
-        // TODO: shoot, move, shoot error messages
-        
+        // if trying to shoot, move, and shoot without shooting 2 cargo
+        if (isShootMoveShoot && !isShootTwo)
+        {
+            isValid = false;
 
+            msg += "[ Cannot Shoot, Move, And Shoot Without Shooting Two Cargo ] \n";
+        }
+        
+        
         if(!isValid)
             errorMessage = msg;
         

@@ -14,7 +14,7 @@ import frc.shuffleboard.AutonomousTabData.ShootCargoAmount;
 import frc.components.Shooter;
 
 
-// TODO: Create a list of scenarios, test that they ALL work
+// TODO: Create option to move out to cargo location but not pick it up
 
 public class AutonomousCommandList
 {
@@ -133,11 +133,6 @@ public class AutonomousCommandList
 
     private void shootMoveShoot()
     {
-        if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
-        {
-             addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
-        }
-
         addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
 
         if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
@@ -149,6 +144,11 @@ public class AutonomousCommandList
         addCommand(new DriveStraight(1.0, 5.0));
         addCommand(new StopDriving());
         addCommand(new TurnOffIntake());
+
+        if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
+        {
+             addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
+        }
 
         addCommand(new ShootCargo(1, 5.0, Shooter.Hub.kUpper));
     }
