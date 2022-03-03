@@ -23,8 +23,8 @@ public class Shuttle
     // initializing motors
     private final CANSparkMax stageOneMotor;// = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_ONE, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax stageTwoMotor;// = new CANSparkMax(Port.Motor.SHUTTLE_STAGE_TWO, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final double FIRST_STAGE_SPEED = 0.1;
-    private static final double SECOND_STAGE_SPEED = 0.1;
+    private static final double FIRST_STAGE_SPEED = 0.5;
+    private static final double SECOND_STAGE_SPEED = 0.5;
 
     // initializing sensors
     private final DigitalInput intakeSensor;// = new DigitalInput(Port.Sensor.SHUTTLE_INTAKE_SENSOR);
@@ -43,11 +43,11 @@ public class Shuttle
         System.out.println(fullClassName + " : Constructor Started");
 
         // Testing version
-        stageOneMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        stageTwoMotor = new CANSparkMax(7, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        // stageOneMotor = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        // stageTwoMotor = new CANSparkMax(7, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        // stageOneMotor = new CANSparkMax(sd.stageOneMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        // stageTwoMotor = new CANSparkMax(sd.stageTwoMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        stageOneMotor = new CANSparkMax(sd.stageOneMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        stageTwoMotor = new CANSparkMax(sd.stageTwoMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
         intakeSensor = new DigitalInput(sd.intakeSensorPort);
         stageOneSensor = new DigitalInput(sd.stageOneSensorPort);

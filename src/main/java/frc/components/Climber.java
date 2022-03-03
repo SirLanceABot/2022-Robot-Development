@@ -55,7 +55,7 @@ public class Climber
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
     {
         firstStageClimbMotorPort = 1;   // Used ONLY for testing
-        secondStageClimbMotorPort = 7;  // Used ONLY for testing
+        // secondStageClimbMotorPort = 7;  // Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
@@ -85,11 +85,12 @@ public class Climber
         firstStageClimbMotorLeader.restoreFactoryDefaults();
         firstStageClimbMotorLeader.setInverted(true);
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
+
     
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 15.5844155844f); //TODO set a soft limit of however far the guy is legally allowed to move
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
         // FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
@@ -213,21 +214,25 @@ public class Climber
     public void shutDown()
     {
         setFirstStageMotorSpeed(0.0);
-        DriverStation.reportError("Climber shut down!", false);
+        // DriverStation.reportError("Climber shut down!", false);
         //TODO add whatever motors start getting used to this
     }
 
     public void climbUp()
     {
-        setFirstStageMotorSpeed(0.1);
-        DriverStation.reportError("Climber going up", false);
+        //button 10
+        //arms go up
+        setFirstStageMotorSpeed(.25);
+        // DriverStation.reportError("Climber going up", false);
         //TODO make sure this value goes the right direction
     }
 
     public void climbDown()
     {
-        setFirstStageMotorSpeed(-0.1);
-        DriverStation.reportError("Climber going down", false);
+        //button 11
+        // arms go down
+        setFirstStageMotorSpeed(-1);
+        // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
     }
 
