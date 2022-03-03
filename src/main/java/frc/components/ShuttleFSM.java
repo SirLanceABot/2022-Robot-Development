@@ -238,7 +238,9 @@ public class ShuttleFSM
     // End of Transition enum
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // Sensors are used to determine initial state
     private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
+    // Use events to run state machine
     private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
