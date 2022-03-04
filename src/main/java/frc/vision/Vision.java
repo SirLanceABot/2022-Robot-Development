@@ -4,6 +4,8 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision
@@ -24,11 +26,20 @@ public class Vision
   static NetworkTableEntry calibrate;
   static double calibrateAngle = 0.;
 
+  static Object tabLock = new Object(); // synchronizing lock between this program and the related Shuffleboard tab
+  static ShuffleboardTab cameraTab;
+
   public Vision() 
   {
   // start thread for target camera and locate target
   System.out.println(fullClassName + " : Constructor Started");
 
+  // Create the Camera tab on the shuffleboard
+  synchronized(Vision.tabLock)
+  {
+      Vision.cameraTab = Shuffleboard.getTab("Camera");
+  }
+  
   target = new AcquireHubImage();
   targetThread = new Thread(target, "TargetCamera");
   targetThread.setDaemon(true);
@@ -46,8 +57,9 @@ public class Vision
     if(calibrate != null)
       calibrateAngle = calibrate.getDouble(0.0); // get the camera calibration from the Shuffleboard
 
-
-    if(true)  //FIXME: this example here just to test - set to false for real Robot usage
+  //FIXME: this example here just to test - set to false for real Robot usage
+  // or maybe send this to the shuffleboard instead of SmartDashboard
+    if(true)
     {
     // get the latest targeting data every 20ms for my use
     myWorkingCopyOfTargetData = VisionData.targetData.get();

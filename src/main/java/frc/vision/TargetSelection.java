@@ -15,6 +15,10 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.VideoMode;
+// import edu.wpi.first.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.constants.Constant;
 
 public class TargetSelection implements Runnable {
@@ -43,11 +47,29 @@ public void run()
     {
     if(displayTargetContours)
     {
-      // define our generated image the same size as the camera - doesn't have to be but easier
-      outputStream = CameraServer.putVideo("TargetContours", Constant.targetCameraWidth, Constant.targetCameraHeight);
-      outputStream.setFPS(7);
+      // define our generated image the same size as the camera but rotated - doesn't have to be but easier
+      
+      // same as putVideo but we need the server returned instead of the source
+      //outputStream = CameraServer.putVideo("TargetContours", Constant.targetCameraWidth, Constant.targetCameraHeight);
+
+      outputStream = new CvSource("TargetContours", VideoMode.PixelFormat.kMJPEG,
+                      Constant.targetCameraHeight, Constant.targetCameraWidth, 30);
+
+      MjpegServer openCVserver = CameraServer.startAutomaticCapture(outputStream);
+      
+      // Widget in Shuffleboard Tab
+      synchronized(Vision.tabLock)
+      {
+        CameraWidget cw = new CameraWidget(Vision.cameraTab);
+        cw.name("TargetContours");
+        cw.setLocation(0, 15, 4, 6);
+        cw.setProperties(false, "white", false, "NONE");
+        cw.createCameraShuffleboardWidget(openCVserver.getSource());
+        
+        Shuffleboard.update();
+      }
     }
- 
+
     // Pixels to Inches Data Table Lookup copied from Constant
     // allocate fixed size array with parameter at least as large as the number
     // of data points - minimum of 2 points
@@ -99,6 +121,8 @@ public void run()
       // import org.opencv.features2d.FeatureDetector;
 
       // FIXME maybe add min and max Vertices to GRIP
+
+      // FIXME if you like clean then remove the unused imports
       
 
       gripPipeline.process(mat); // filter the image with the GRIP pipeline
@@ -111,8 +135,11 @@ public void run()
       if (filteredContours.isEmpty()) {
         if(displayTargetContours)
         {
+          Core.transpose(mat, mat); // camera is rotated so make image look right for humans
+          Core.flip(mat, mat, 1);
+
           // Display a message if no contours are found.
-          Imgproc.putText(mat, "No Contours", new Point(20, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5,
+          Imgproc.putText(mat, "No Contours", new Point(10, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5,
                   new Scalar(255, 255, 255), 1);
         }
           nextTargetData.hubDistance = -1.;
@@ -382,6 +409,31 @@ public void run()
     // watchdog.enable();
 
     // watchdog.reset(); // made it to the end fo the loop
+
+
+// outputStream =  new CvSource("PiCamera", VideoMode.PixelFormat.kMJPEG, 160, 120, 7);
+// outputStream.setFPS(7);
+
+// MjpegServer mjpegServer2 = new MjpegServer("serve_Blur", 1189);
+// mjpegServer2.setSource(outputStream);
+// Shuffleboard.getTab("Camera").add("MyOpenCV", outputStream);
+// Shuffleboard.update();
+
+//        final String PI_ADDRESS ="roboRIO-4237-FRC.local";
+//  final int PORT = 1182; // or whatever it ends up being
+
+//    String[] tmp = {"mjpeg:http://" + PI_ADDRESS + ":" + PORT + "/?action=stream", "mjpg:http://169.254.104.211:1182/?action=stream"};
+
+// NetworkTableInstance.getDefault()
+//     .getEntry("/CameraPublisher/PiCamera/streams")
+//     // .setStringArray(new String({"mjpeg:http://" + PI_ADDRESS + ":" + PORT + "/?action=stream"}));
+//     .setStringArray(tmp);
+//     // ["mjpg:http://roboRIO-4237-FRC.local:1189/?action=stream","mjpg:http://169.254.104.211:1189/?action=stream"]
+//     NetworkTableInstance.getDefault()
+//     .getEntry("/CameraPublisher/PiCamera/connected")
+//     .setBoolean(true);
+//      }
+
     //////////////////////////////////////////////////////////////////////////////
 
     // start of failed k-means analysis
