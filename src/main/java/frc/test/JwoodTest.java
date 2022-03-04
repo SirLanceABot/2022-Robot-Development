@@ -60,22 +60,23 @@ public class JwoodTest implements MyTest
 
         // leftMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftX));
         // rightMotor.set(DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftX));
+        
 
         // double armEnc = INTAKE.getArmMotorRotations();
 
         // // System.out.println("  Enc=" + armEnc);
-        // if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
-        // {
-        //     INTAKE.moveArmIn();
-        // }
-        // else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
-        // {
-        //     INTAKE.moveArmOut();
-        // }
-        // else
-        // {
-        //     INTAKE.stopArm();
-        // }
+        if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
+        {
+            INTAKE.moveArmIn();
+        }
+        else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
+        {
+            INTAKE.moveArmOut();
+        }
+        else
+        {
+            INTAKE.stopArm();
+        }
 
         // if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
         // {
