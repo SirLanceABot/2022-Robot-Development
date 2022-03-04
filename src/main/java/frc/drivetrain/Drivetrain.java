@@ -54,6 +54,7 @@ public class Drivetrain extends RobotDriveBase
     public Drivetrain(DrivetrainConfig dd)
     {
         super();  // call the RobotDriveBase constructor
+        setSafetyEnabled(false);
 
         frontLeft = new SwerveModule(dd.frontLeftSwerveModule);
         frontRight = new SwerveModule(dd.frontRightSwerveModule);
@@ -69,6 +70,7 @@ public class Drivetrain extends RobotDriveBase
 
         navX.reset();
         odometry.resetPosition(new Pose2d(), navX.getRotation2d());
+        setSafetyEnabled(true);
     }
 
 
