@@ -77,9 +77,10 @@ public final class Constant
     // enter (x, y) coordinates x ascending order, must add at least 2 data points
     public static final double[][] pixelsToInchesTable =
     {
-        {19., 27.},
-        {262., 120.},
-        {348., 215.}
+        // pixels can vary from about 0 to targetCameraWidth (above)
+        {8., 27.},
+        {115., 120.},
+        {150., 215.}
     };
 
 }
