@@ -71,8 +71,8 @@ public final class Constant
     // VISION   Constants
     public static final double VERTICAL_CAMERA_ANGLE_OF_VIEW = 35.0;
 
-    public static final int targetCameraWidth = 352;
-    public static final int targetCameraHeight = 288;
+    public static final int targetCameraWidth = 160;
+    public static final int targetCameraHeight = 120;
 
     // enter (x, y) coordinates x ascending order, must add at least 2 data points
     public static final double[][] pixelsToInchesTable =
