@@ -97,7 +97,6 @@ public class Climber
         firstStageClimbMotorLeader.setInverted(true);
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
-    
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of where motor goes
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, (float)(3.819718634 * 70.0)); //TODO set a soft limit of where motor goes
@@ -235,7 +234,14 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        setFirstStageMotorSpeed(.1);
+        if(getFCLposition() == 0 /*&& `limit switch is tripped*/)
+        {
+            windowMotor.set(ControlMode.PercentOutput, -.1);
+        }
+        else
+        {
+            setFirstStageMotorSpeed(.1);
+        }
         System.out.println(FCLEncoder.getPosition());
         //TODO make sure this value goes the right direction
     }
@@ -248,6 +254,10 @@ public class Climber
         //^robot value
         setFirstStageMotorSpeed(-.1);
         System.out.println(FCLEncoder.getPosition());
+        if(getFCLposition() == 0)
+        {
+            windowMotor.set(ControlMode.PercentOutput, .1);
+        }
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
