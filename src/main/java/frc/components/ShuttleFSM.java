@@ -217,7 +217,7 @@ public class ShuttleFSM
         }
 
         /**
-         * Table lookup to determine new state given teh curret state and event
+         * Table lookup to determine new state given the curret state and event
          * 
          * @param currentState
          * @param event
@@ -334,6 +334,11 @@ public class ShuttleFSM
         }
 
         return measuredState;
+    }
+
+    public int getCargoCount()
+    {
+        return cargoCount;
     }
 
     // public void fancyRun(Events.event event)

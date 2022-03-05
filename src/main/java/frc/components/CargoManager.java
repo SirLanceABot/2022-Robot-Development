@@ -21,6 +21,7 @@ public class CargoManager
     /**
      * List of allowed CargoManager states, each state should have a doAction
      */
+    // TODO: Rename this to cargoManagerState and add to a state class perhaps?
     public enum State
     {
         NOTHING
@@ -63,7 +64,7 @@ public class CargoManager
         {
             void doAction()
             {
-                // Turn on LED, center hub, spin up flywheel
+                // Turn on LED, center hub, spin up flywheel, position shroud
                 
             }
         },
@@ -77,11 +78,11 @@ public class CargoManager
             }
         },
 
-        SPINNING_UP_FLYWHEEL
+        PREPARING_SHOOTER
         {
             void doAction()
             {
-                // Turn off LED, spin up flywheel
+                // Turn off LED, spin up flywheel, position shroud
                 
             }
         },
@@ -131,12 +132,12 @@ public class CargoManager
         TRANSITION_8  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.SHUTTLE_FULL,	                        State.INTAKE_UP),
         TRANSITION_9  (State.INTAKING,	            Events.CargoManagerEvent.SHOOT_IS_CALLED,	                    State.COMMENCING_FIRING),
         TRANSITION_10 (State.INTAKE_UP,	            Events.CargoManagerEvent.SHOOT_IS_CALLED,	                    State.COMMENCING_FIRING),
-        TRANSITION_11 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.FLYWHEEL_READY,	                    State.CENTERING_HUB),
+        TRANSITION_11 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.SHOOTER_READY,	                    State.CENTERING_HUB),
         TRANSITION_12 (State.CENTERING_HUB,	        Events.CargoManagerEvent.HUB_IS_CENTERED,	                    State.SHOOTING),
-        TRANSITION_13 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED_AND_FLYWHEEL_READY,	State.SHOOTING),
-        TRANSITION_14 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED,	                    State.SPINNING_UP_FLYWHEEL),
-        TRANSITION_15 (State.SPINNING_UP_FLYWHEEL,	Events.CargoManagerEvent.FLYWHEEL_READY,	                    State.SHOOTING),
-        TRANSITION_16 (State.SHOOTING,	            Events.CargoManagerEvent.SHOT_ONE_OF_TWO,	                    State.SPINNING_UP_FLYWHEEL),
+        TRANSITION_13 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED_AND_SHOOTER_READY,	State.SHOOTING),
+        TRANSITION_14 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED,	                    State.PREPARING_SHOOTER),
+        TRANSITION_15 (State.PREPARING_SHOOTER,	Events.CargoManagerEvent.SHOOTER_READY,	                    State.SHOOTING),
+        TRANSITION_16 (State.SHOOTING,	            Events.CargoManagerEvent.SHOT_ONE_OF_TWO,	                    State.PREPARING_SHOOTER),
         TRANSITION_17 (State.SHOOTING,	            Events.CargoManagerEvent.SHUTTLE_EMPTY,	                        State.NOTHING);
         
         private final State currentState;
@@ -151,7 +152,7 @@ public class CargoManager
         }
 
         /**
-         * Table lookup to determine new state given teh curret state and event
+         * Table lookup to determine new state given the curret state and event
          * 
          * @param currentState
          * @param event
@@ -174,7 +175,6 @@ public class CargoManager
     // *** CLASS & INSTANCE VARIABLES ***
     // Use events to run state machine
     private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
-    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Current state
     private State currentCargoManagerState;
@@ -230,6 +230,4 @@ public class CargoManager
     {
         return currentCargoManagerState;
     }
-
-    
 }
