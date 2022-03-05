@@ -86,7 +86,7 @@ public final class RobotContainer
         INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER, Port.Motor.INTAKE_ARMS_MOTOR) : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter(Port.Motor.SHOOTER_FLYWHEEL, Port.Motor.SHOOTER_SHROUD) : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
-        CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER, Port.Motor.CLIMBER_WINDOWS_MOTOR) : null;
+        CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER, Port.Motor.CLIMBER_BRAKE_MOTOR) : null;
         
         // TODO: Build in using other booleans to trigger eachother
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;

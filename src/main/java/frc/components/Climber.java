@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.constants.Constant;
 
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
@@ -30,7 +31,7 @@ public class Climber
 
     // *** CLASS & INSTANCE VARIABLES ***
     //Talon 
-    private final TalonSRX windowMotor;
+    private final TalonSRX climbBrakeMotor;
     //NEO 550
     private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -57,24 +58,24 @@ public class Climber
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int windowMotorPort)
+    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        firstStageClimbMotorPort = 7;   // Used ONLY for testing
+        // firstStageClimbMotorPort = 7;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
-        windowMotorPort = 0; //Used ONLY for testing
+        // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        windowMotor = new TalonSRX(windowMotorPort);
+        climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
 
         FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
         FCLBackwardLimitSwitch.enableLimitSwitch(true);
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         FCLForwardLimitSwitch.enableLimitSwitch(true);
 
-        windowMotor.configReverseSoftLimitThreshold(0, 0);
-        windowMotor.configForwardSoftLimitThreshold(-9, 0);
-        windowMotor.configReverseSoftLimitEnable(true, 0);
-        windowMotor.configForwardSoftLimitEnable(true, 0);
+        // climbBrakeMotor.configReverseSoftLimitThreshold(0, 0);
+        // climbBrakeMotor.configForwardSoftLimitThreshold(-9, 0);
+        // climbBrakeMotor.configReverseSoftLimitEnable(true, 0);
+        // climbBrakeMotor.configForwardSoftLimitEnable(true, 0);
 
         FCLEncoder = firstStageClimbMotorLeader.getEncoder();
         FCLEncoder.setPosition(0);
@@ -99,7 +100,7 @@ public class Climber
 
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of where motor goes
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, (float)(3.819718634 * 70.0)); //TODO set a soft limit of where motor goes
+        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 255.0f); // DF Measured on 3/5/22
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
@@ -234,13 +235,13 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        if(getFCLposition() == 0 && windowMotor.getSelectedSensorPosition() <= -9)
+        if(getFCLposition() == 0 && climbBrakeMotor.getSelectedSensorPosition() <= -9)
         {
-            windowMotor.set(ControlMode.PercentOutput, -.1);
+            // climbBrakeMotor.set(ControlMode.PercentOutput, -.1);
         }
         else
         {
-            setFirstStageMotorSpeed(.1);
+            setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
         }
         System.out.println(FCLEncoder.getPosition());
         //TODO make sure this value goes the right direction
@@ -252,11 +253,11 @@ public class Climber
         // arms go down
         // setFirstStageMotorSpeed(-1);
         //^robot value
-        setFirstStageMotorSpeed(-.1);
+        setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         System.out.println(FCLEncoder.getPosition());
         if(getFCLposition() == 0)
         {
-            windowMotor.set(ControlMode.PercentOutput, .1);
+            // climbBrakeMotor.set(ControlMode.PercentOutput, .1);
         }
         //^Test value
         // DriverStation.reportError("Climber going down", false);

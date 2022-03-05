@@ -36,7 +36,7 @@ public final class Port
         public static final int CLIMBER_STAGE_TWO_LEADER    = 43;
         public static final int CLIMBER_STAGE_ONE_FOLLOWER  = 44;
         public static final int CLIMBER_STAGE_TWO_FOLLOWER  = 45;
-        public static final int CLIMBER_WINDOWS_MOTOR       = 46;
+        public static final int CLIMBER_BRAKE_MOTOR         = 15; // DF 3/05/22
     }
 
     public static class Sensor
