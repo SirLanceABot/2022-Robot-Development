@@ -36,6 +36,7 @@ public final class Port
         public static final int CLIMBER_STAGE_TWO_LEADER    = 43;
         public static final int CLIMBER_STAGE_ONE_FOLLOWER  = 44;
         public static final int CLIMBER_STAGE_TWO_FOLLOWER  = 45;
+        public static final int CLIMBER_WINDOWS_MOTOR       = 46;
     }
 
     public static class Sensor
@@ -50,6 +51,8 @@ public final class Port
         private static final int SHUTTLE_INTAKE_SENSOR      =  0;
         private static final int SHUTTLE_STAGE_ONE_SENSOR   =  1;
         private static final int SHUTTLE_STAGE_TWO_SENSOR   =  2;
+
+        public static final int PDH_CAN_ID                  =  1;
 
         private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
     }

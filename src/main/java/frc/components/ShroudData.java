@@ -48,6 +48,6 @@ public class ShroudData
         voltageRatio = (voltage - shroudData.get(index - 1).voltage) / (shroudData.get(index).voltage - shroudData.get(index - 1).voltage);
 
         //multiplies voltageRatio by the difference in angles between current index and previous index, and then adds the base angle
-        return voltageRatio * (shroudData.get(index).angle - shroudData.get(index - 1).angle) + shroudData.get(index).angle;
+        return voltageRatio * (shroudData.get(index).angle - shroudData.get(index - 1).angle) + shroudData.get(index - 1).angle;
     }
 }

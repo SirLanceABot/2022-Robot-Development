@@ -11,8 +11,11 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
-
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.constants.*;
+import frc.vision.TargetData;
+import frc.vision.VisionData;
 
 
 // TODO: here are some things that need to change
@@ -55,6 +58,10 @@ public class Shooter
     // TODO: the shroud Sensor will be plugged into the TalonSRX and thus will not be an AnalogInput
     private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
 
+    private static final PowerDistribution PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
+
+    private TargetData myWorkingCopyOfTargetData;
+
     private static final int TIMEOUT_MS = 30;
 
     private static final double LONG_SHOT_SPEED = Constant.LONG_SHOT_SPEED;
@@ -69,6 +76,7 @@ public class Shooter
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
+    private static final double HUB_ALIGNMENT_THRESHOLD = Constant.HUB_ALIGNMENT_THRESHOLD;
     //TODO: Actual gear ratio goes here
     private static final double FLYWHEEL_GEAR_RATIO = 1.0;
 
@@ -80,6 +88,12 @@ public class Shooter
     private static double currentShroudAngle = 0.0;
 
     private static double distance;
+
+    //number of consecutive checks saying the shooter is ready to shoot
+    private static int successfulChecks = 0;
+
+    //number of consecutive checsk required for the shuttle to empty cargo into the shooter
+    private static int requiredChecks = 3;
 
     //flywheel.getSelectedSensorVelocity() returns ticks/100ms by default, so we convert to ticks/ms, ticks/s, ticks/min, rot/min, and gear ratio
     //i *think* you divide gear ratio because you're finding flywheel speed given motor speed
@@ -98,7 +112,7 @@ public class Shooter
         configFlywheelMotor();
         configShroudMotor();
 
-        FlywheelData.dataInit();
+        TrajectoryData.dataInit();
         ShroudData.dataInit();
     }
 
@@ -130,9 +144,17 @@ public class Shooter
 
     public void shoot()
     {
-        calculateLaunchTrajectory();
+        updateVisionData();
+
+        if (isDataFresh())
+        {
+            calculateLaunchTrajectory();
+        }
+
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
+
+        checkIsShooterReady();
     }
 
     public void startLongShot()
@@ -159,14 +181,12 @@ public class Shooter
         desiredLaunchSpeed = 0.0;
     }
 
-    //TODO: actual calculations for trajectory, given vision distances, could also be from a table of experimented values (the latter is more likely) (will require testing)
     private void calculateLaunchTrajectory()
     {
-        //TODO: vision distance calculation
-        distance = 0.0;
+        distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
 
-        desiredLaunchSpeed = FlywheelData.getSpeed(distance);
-        desiredLaunchAngle = FlywheelData.getAngle(distance);
+        desiredLaunchSpeed = TrajectoryData.getSpeed(distance);
+        desiredLaunchAngle = TrajectoryData.getAngle(distance);
     }
 
     //this speed is in percent output
@@ -222,6 +242,55 @@ public class Shooter
     {
         currentShroudAngle = measureShroudAngle();
         return (Math.abs(desiredLaunchAngle - currentShroudAngle) < SHROUD_ANGLE_THRESHOLD);
+    }
+
+    public void updateVisionData()
+    {
+        myWorkingCopyOfTargetData = VisionData.targetData.get();
+    }
+
+    public boolean isDataFresh()
+    {
+        return myWorkingCopyOfTargetData.isFreshData();
+    }
+
+    //positive is looking left of the hub, negative is looking right (think unit circle)
+    public double getHubAngle()
+    {
+        return myWorkingCopyOfTargetData.getAngleToTurn();
+    }
+
+    public boolean isHubAligned()
+    {
+        return Math.abs(getHubAngle()) < HUB_ALIGNMENT_THRESHOLD;
+    }
+
+    private void checkIsShooterReady()
+    {
+        //TODO: darren wants to remove isHubAligned()
+        if (isFlywheelReady() && isShroudReady() && isHubAligned())
+        {
+            successfulChecks++;
+        }
+        else
+        {
+            successfulChecks = 0;
+        }
+    }
+
+    public boolean isShooterReady()
+    {
+        return successfulChecks >= requiredChecks;
+    }
+
+    public void turnOnLED()
+    {
+        PDH.setSwitchableChannel(true);
+    }
+
+    public void turnOffLED()
+    {
+        PDH.setSwitchableChannel(false);
     }
 
     private void configFlywheelMotor()
