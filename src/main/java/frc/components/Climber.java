@@ -1,11 +1,14 @@
 package frc.components;
 
 import java.lang.invoke.MethodHandles;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -26,6 +29,8 @@ public class Climber
     //FIXME For the st. joe match, we're only gonna go up to the second bar
 
     // *** CLASS & INSTANCE VARIABLES ***
+    //Talon 
+    private final TalonSRX windowMotor;
     //NEO 550
     private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -52,18 +57,24 @@ public class Climber
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
+    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int windowMotorPort)
     {
         firstStageClimbMotorPort = 7;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
+        windowMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        windowMotor = new TalonSRX(windowMotorPort);
 
         FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
         FCLBackwardLimitSwitch.enableLimitSwitch(true);
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         FCLForwardLimitSwitch.enableLimitSwitch(true);
-        //^^Unknown if being used for now^^
+
+        windowMotor.configReverseSoftLimitThreshold(80, 0);
+        windowMotor.configForwardSoftLimitThreshold(80, 0);
+        windowMotor.configReverseSoftLimitEnable(true, 0);
+        windowMotor.configForwardSoftLimitEnable(true, 0);
 
         FCLEncoder = firstStageClimbMotorLeader.getEncoder();
         FCLEncoder.setPosition(0);
