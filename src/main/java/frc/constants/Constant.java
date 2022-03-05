@@ -81,9 +81,8 @@ public final class Constant
     public static final double[][] pixelsToInchesTable =
     {
         // pixels can vary from about 0 to targetCameraWidth (above)
-        {8., 27.},
-        {115., 120.},
-        {150., 215.}
+        {0., 0.},
+        {targetCameraWidth , targetCameraWidth}
     };
 
 }

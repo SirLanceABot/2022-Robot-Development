@@ -344,7 +344,7 @@ public class GripPipeline {
 			final double area = Imgproc.contourArea(contour);
 			if (area < minArea) continue;
 			// FIXME Team 4237 added check maxArea
-			double maxArea = 250.0;
+			double maxArea = 200.0;
 			if (area > maxArea) continue;
 			if (Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true) < minPerimeter) continue;
 			Imgproc.convexHull(contour, hull);

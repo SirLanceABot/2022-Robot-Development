@@ -291,8 +291,8 @@ public void run()
 
               // display the pixels and distance on image for reviewing or revising the conversion table
               Imgproc.putText(mat,
-                String.format("%3.0f px = %3.0f\"", targetCenterX, nextTargetData.hubDistance),
-                new Point(2, 12),
+                String.format("%3.0f px = %3.0funits", targetCenterX, nextTargetData.hubDistance),
+                new Point(1, 12),
                 Imgproc.FONT_HERSHEY_SIMPLEX, 0.4,
                 new Scalar(255, 255, 255), 1);
               
