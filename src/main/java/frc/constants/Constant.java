@@ -77,6 +77,9 @@ public final class Constant
     public static final int targetCameraWidth = 160;
     public static final int targetCameraHeight = 120;
 
+    public static final int intakeCameraWidth = 320;
+    public static final int intakeCameraHeight = 240;
+
     // enter (x, y) coordinates x ascending order, must add at least 2 data points
     public static final double[][] pixelsToInchesTable =
     {

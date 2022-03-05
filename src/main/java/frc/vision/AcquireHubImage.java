@@ -74,7 +74,7 @@ public class AcquireHubImage  implements Runnable
     // x auto sequence starts at 1  (port 1181)
     UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
     IntakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    IntakeCamera.setResolution(160, 120);
+    IntakeCamera.setResolution(Constant.intakeCameraWidth, Constant.intakeCameraHeight);
     IntakeCamera.setFPS(30);
     // MjpegServer intakeCameraServer = CameraServer.startAutomaticCapture(IntakeCamera); // why not use this one?  can't remember
     MjpegServer intakeCameraServer = CameraServer.addServer("IntakeServer");
@@ -90,7 +90,7 @@ public class AcquireHubImage  implements Runnable
     {
       CameraWidget cw = new CameraWidget(Vision.cameraTab);
       cw.name("Intake");
-      cw.setLocation(0, 0, 10, 14);
+      cw.setLocation(0, 0, 13, 14);
       cw.setProperties(false, "white", false, "NONE");
       cw.createCameraShuffleboardWidget(intakeCameraServer.getSource());
       
@@ -105,7 +105,8 @@ public class AcquireHubImage  implements Runnable
       Vision.calibrate =
           Vision.cameraTab.add("Turret Calibration", 0.0)
           .withSize(4, 2)
-          .withPosition(5, 22)
+          .withPosition(23, 9)
+          .withSize(4, 3)
           .getEntry();
       
       Shuffleboard.update();
