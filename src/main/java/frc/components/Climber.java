@@ -71,8 +71,8 @@ public class Climber
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         FCLForwardLimitSwitch.enableLimitSwitch(true);
 
-        windowMotor.configReverseSoftLimitThreshold(80, 0);
-        windowMotor.configForwardSoftLimitThreshold(80, 0);
+        windowMotor.configReverseSoftLimitThreshold(0, 0);
+        windowMotor.configForwardSoftLimitThreshold(-9, 0);
         windowMotor.configReverseSoftLimitEnable(true, 0);
         windowMotor.configForwardSoftLimitEnable(true, 0);
 
@@ -234,7 +234,7 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        if(getFCLposition() == 0 /*&& `limit switch is tripped*/)
+        if(getFCLposition() == 0 && windowMotor.getSelectedSensorPosition() <= -9)
         {
             windowMotor.set(ControlMode.PercentOutput, -.1);
         }
