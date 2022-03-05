@@ -4,6 +4,8 @@ import java.lang.invoke.MethodHandles;
 
 import javax.lang.model.util.ElementScanner6;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 import java.util.concurrent.TimeUnit;
 
 
@@ -32,6 +34,7 @@ public class MmcconomyTest implements MyTest
     // *** CLASS & INSTANCE VARIABLES ***
     //private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
+    private static final Joystick JOYSTICK = new Joystick(0);
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -47,23 +50,7 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
-        try
-        {
-            System.out.println("Starting");
-            //TimeUnit.SECONDS.sleep(2);   
-            CLIMBER.climbUp();
-            TimeUnit.SECONDS.sleep(2);
-            System.out.println(CLIMBER.getFCLposition());
-            CLIMBER.shutDown();
-            TimeUnit.SECONDS.sleep(2);
-            CLIMBER.climbDown();
-            TimeUnit.SECONDS.sleep(2);
-            CLIMBER.shutDown();
-        }
-        catch(InterruptedException ex)
-        {
-            ex.printStackTrace();
-        }
+        
         
     }
 
@@ -72,7 +59,18 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
-
+        if(JOYSTICK.getRawButton(1))
+        {
+            CLIMBER.climbUp();
+        }
+        else if(JOYSTICK.getRawButton(2))
+        {
+            CLIMBER.climbDown();
+        }
+        else
+        {
+            CLIMBER.shutDown();
+        }
     }
 
     /**

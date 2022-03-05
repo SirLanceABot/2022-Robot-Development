@@ -54,15 +54,15 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
     {
-        firstStageClimbMotorPort = 1;   // Used ONLY for testing
+        firstStageClimbMotorPort = 7;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
         FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        FCLBackwardLimitSwitch.enableLimitSwitch(false);
+        FCLBackwardLimitSwitch.enableLimitSwitch(true);
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-        FCLForwardLimitSwitch.enableLimitSwitch(false);
+        FCLForwardLimitSwitch.enableLimitSwitch(true);
         //^^Unknown if being used for now^^
 
         FCLEncoder = firstStageClimbMotorLeader.getEncoder();
@@ -87,9 +87,9 @@ public class Climber
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
     
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of where motor goes
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 15.5844155844f); //TODO set a soft limit of however far the guy is legally allowed to move
+        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, (float)(3.819718634 * 70.0)); //TODO set a soft limit of where motor goes
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
@@ -222,8 +222,10 @@ public class Climber
     {
         //button 10
         //arms go up
-        setFirstStageMotorSpeed(.25);
-        // DriverStation.reportError("Climber going up", false);
+        // setFirstStageMotorSpeed(.25);
+        //^robot value
+        setFirstStageMotorSpeed(.1);
+        System.out.println(FCLEncoder.getPosition());
         //TODO make sure this value goes the right direction
     }
 
@@ -231,7 +233,11 @@ public class Climber
     {
         //button 11
         // arms go down
-        setFirstStageMotorSpeed(-1);
+        // setFirstStageMotorSpeed(-1);
+        //^robot value
+        setFirstStageMotorSpeed(-.1);
+        System.out.println(FCLEncoder.getPosition());
+        //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
     }
@@ -253,6 +259,11 @@ public class Climber
         // //motor has a diameter of .49in
         // //2 * pi * (diameter/2) = circumfrence of 1.54in
         // //24 / ans = 15.5844155844 rotations
+        // .. soft soft limit
+        // //70:1 gear ratio
+        // //2 in diameter
+        // //circumference of 6.283185307
+        // //3.819718634 * 70.0 rotations
         // try
         // {
         //     System.out.println("Going up");
