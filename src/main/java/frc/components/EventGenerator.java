@@ -201,6 +201,8 @@ public class EventGenerator
         cargoManagerEvent = determinedEvent;
     }
 
+    // TODO: Add controller events
+
     public Events.CargoManagerEvent getCargoManagerEvent()
     {
         return cargoManagerEvent;
