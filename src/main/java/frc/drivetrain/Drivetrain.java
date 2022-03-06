@@ -53,8 +53,8 @@ public class Drivetrain extends RobotDriveBase
     // *** CLASS CONSTRUCTOR ***
     public Drivetrain(DrivetrainConfig dd)
     {
-        super();  // call the RobotDriveBase constructor
-        setSafetyEnabled(false);
+        // super();  // call the RobotDriveBase constructor
+        // setSafetyEnabled(false);
 
         frontLeft = new SwerveModule(dd.frontLeftSwerveModule);
         frontRight = new SwerveModule(dd.frontRightSwerveModule);
