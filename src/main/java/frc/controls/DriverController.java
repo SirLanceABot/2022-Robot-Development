@@ -33,10 +33,10 @@ public class DriverController extends Xbox
         // kIntakeUp(Button.kY),
         
         
-        kIntakeArmStop(Button.kX),
+        kIntakeArmStop(Button.kB),
         kIntakeToggleDirection(Button.kRightBumper),
         kIntakeToggleOnOff(Button.kLeftBumper),
-        kIntakeExtendToggle(Button.kRightStick),
+        kIntakeExtendToggle(Button.kA),
         //kIntake(Button.kRightBumper),
 
         // kNoAction(Button.kBack),
@@ -45,8 +45,8 @@ public class DriverController extends Xbox
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
 
-        //kNoAction(Button.kLeftTrigger),
-        //kNoAction2(Button.kRightTrigger),
+        kShoot(Button.kLeftTrigger),
+        //kNoAction(Button.kRightTrigger),
 
         //If logitech used by driver
         // kIntakeReverse(Button.k5),
