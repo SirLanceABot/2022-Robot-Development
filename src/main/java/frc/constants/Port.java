@@ -23,7 +23,7 @@ public final class Port
         private static final int BACK_RIGHT_DRIVE   =  1;  // MM 2/28/22
         private static final int BACK_RIGHT_TURN    =  3;  // MM 2/28/22
 
-        public static final int INTAKE_ROLLER       = 38;
+        public static final int INTAKE_ROLLER       =  2;  // DF 3/06/22
         public static final int INTAKE_ARMS_MOTOR   =  5;  // MM 2/26/22
 
         private static final int SHUTTLE_STAGE_ONE  =  4;  // MM 2/26/22
