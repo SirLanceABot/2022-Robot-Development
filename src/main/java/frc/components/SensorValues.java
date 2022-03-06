@@ -57,7 +57,7 @@ public class SensorValues
         shuttleStageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
 
         // CargoManager
-        cargoCount = SHUTTLEFSM.getCargoCount();
+        // cargoCount = SHUTTLEFSM.getCargoCount();
         isShooterReady = false; // TODO: Use Elliot's code
         isHubCentered = false;
     }
