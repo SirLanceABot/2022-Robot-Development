@@ -44,8 +44,8 @@ public class Climber
     // private int SCFPosition; //SCF >> SecondClimberFollower
 
     private final RelativeEncoder FCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
-    private final SparkMaxLimitSwitch FCLForwardLimitSwitch;
-    private final SparkMaxLimitSwitch FCLBackwardLimitSwitch;
+    private SparkMaxLimitSwitch FCLForwardLimitSwitch;
+    private SparkMaxLimitSwitch FCLBackwardLimitSwitch;
     // private static RelativeEncoder FCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch FCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch FCFBackwardLimitSwitch;
@@ -66,11 +66,6 @@ public class Climber
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
-
-        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        FCLBackwardLimitSwitch.enableLimitSwitch(true);
-        FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-        FCLForwardLimitSwitch.enableLimitSwitch(true);
 
         // climbBrakeMotor.configReverseSoftLimitThreshold(0, 0);
         // climbBrakeMotor.configForwardSoftLimitThreshold(-9, 0);
@@ -98,11 +93,15 @@ public class Climber
         firstStageClimbMotorLeader.setInverted(true);
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
-        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of where motor goes
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of where motor goes
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 255.0f); // DF Measured on 3/5/22
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
+        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        FCLBackwardLimitSwitch.enableLimitSwitch(true);
+        FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
+        FCLForwardLimitSwitch.enableLimitSwitch(true);
         
         // FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
         // FCLBackwardLimitSwitch.enableLimitSwitch(false);
