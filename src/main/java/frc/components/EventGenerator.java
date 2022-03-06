@@ -44,7 +44,7 @@ public class EventGenerator
 
         // Call each component's determineEvent
         determineShuttleEvent(shoot);
-        determineCargoManagerEvent();
+        // determineCargoManagerEvent();
     }
 
     // Determine what event based on proximity sensors and if shoot command is given
