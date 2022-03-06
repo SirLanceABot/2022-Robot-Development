@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-// import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -51,12 +51,12 @@ public class Shooter
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // private static final TalonSRX flywheelMotor = new TalonFX(Port.Motor.SHOOTER_FLYWHEEL);
-    private final TalonSRX flywheelMotor;// = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
+    private final TalonFX flywheelMotor;// = new TalonFX(Port.Motor.SHOOTER_FLYWHEEL);
+    // private final TalonSRX flywheelMotor;// = new TalonSRX(Port.Motor.SHOOTER_FLYWHEEL);
     private final TalonSRX shroudMotor;// = new TalonSRX(Port.Motor.SHOOTER_SHROUD);
 
     // TODO: the shroud Sensor will be plugged into the TalonSRX and thus will not be an AnalogInput
-    private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
+    // private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
 
     private static final PowerDistribution PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
 
@@ -103,10 +103,11 @@ public class Shooter
     // *** CLASS CONSTRUCTOR ***
     public Shooter(int flywheelMotorPort, int shroudMotorPort)
     {
-        flywheelMotorPort = 0;  // Used ONLY for testing
-        shroudMotorPort = 1;    // Used ONLY for testing
+        // flywheelMotorPort = 0;  // Used ONLY for testing
+        // shroudMotorPort = 1;    // Used ONLY for testing
 
-        flywheelMotor = new TalonSRX(flywheelMotorPort);
+        flywheelMotor = new TalonFX(flywheelMotorPort);
+        // flywheelMotor = new TalonSRX(flywheelMotorPort);
         shroudMotor = new TalonSRX(shroudMotorPort);
 
         configFlywheelMotor();
@@ -116,6 +117,57 @@ public class Shooter
         ShroudData.dataInit();
     }
 
+    private void configFlywheelMotor()
+    {
+        flywheelMotor.configFactoryDefault();
+        flywheelMotor.setInverted(true);
+        flywheelMotor.setNeutralMode(NeutralMode.Coast);
+
+        flywheelMotor.config_kF(0, kF, TIMEOUT_MS);
+        flywheelMotor.config_kP(0, kP, TIMEOUT_MS);
+        flywheelMotor.config_kI(0, kI, TIMEOUT_MS);
+        flywheelMotor.config_kD(0, kD, TIMEOUT_MS);
+
+        flywheelMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT_MS);
+        flywheelMotor.setSensorPhase(false);
+
+        flywheelMotor.configForwardSoftLimitThreshold(0.0);
+        flywheelMotor.configForwardSoftLimitEnable(false);
+        flywheelMotor.configReverseSoftLimitThreshold(0.0);
+        flywheelMotor.configReverseSoftLimitEnable(false);
+        
+        flywheelMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
+        flywheelMotor.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
+
+        //comment out if using a PID
+        // flywheelMotor.configOpenloopRamp(0.5);
+        flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+
+        //increase framerate for sensor velocity checks (currently at 100ms)
+    }
+
+    private void configShroudMotor()
+    {
+        //TODO: delete or comment out unnecessary configs
+        shroudMotor.configFactoryDefault();
+        shroudMotor.setInverted(true);
+        shroudMotor.setNeutralMode(NeutralMode.Brake);
+
+        shroudMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, TIMEOUT_MS);
+        shroudMotor.setSensorPhase(false);
+
+        shroudMotor.configForwardSoftLimitThreshold(-110.0);
+        shroudMotor.configForwardSoftLimitEnable(true);
+        shroudMotor.configReverseSoftLimitThreshold(-235.0);
+        shroudMotor.configReverseSoftLimitEnable(true);
+        
+        shroudMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
+        shroudMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+
+        //comment out if using a PID
+        shroudMotor.configOpenloopRamp(0.5);
+        shroudMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+    }
 
     // *** CLASS & INSTANCE METHODS ***
     //speeds are all in rpm
@@ -127,7 +179,8 @@ public class Shooter
     //DO NOT USE UNLESS IN TELEOP MODE
     public void setFlywheelSpeedNew(double speed)
     {
-        flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        flywheelMotor.set(ControlMode.PercentOutput, speed);
+        System.out.println("Flywheel: Encoder " + flywheelMotor.getSelectedSensorPosition());
     }
 
     //return value is in rpm
@@ -195,6 +248,12 @@ public class Shooter
         shroudMotor.set(ControlMode.PercentOutput, speed);
     }
 
+    // DO NOT USE UNLESS IN TELEOP MODE
+    public void setShroudMotorSpeedNew(double speed)
+    {
+        shroudMotor.set(ControlMode.PercentOutput, speed);
+    }
+
     private void setShroudAngle(double angle)
     {
         if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
@@ -210,6 +269,7 @@ public class Shooter
             setShroudMotorSpeed(0.0);
         }
     }
+
     // DO NOT USE UNLESS IN TELEOP MODE
     public void setShroudAngleNew(double angle)
     {
@@ -235,7 +295,7 @@ public class Shooter
 
     private double measureShroudSensorValue()
     {
-        return shroudSensor.getAverageVoltage();
+        return shroudMotor.getSelectedSensorPosition();
     }
 
     public boolean isShroudReady()
@@ -293,58 +353,10 @@ public class Shooter
         PDH.setSwitchableChannel(false);
     }
 
-    private void configFlywheelMotor()
+    // For testing
+    public void outputShroudLimit()
     {
-        flywheelMotor.configFactoryDefault();
-        flywheelMotor.setInverted(false);
-        flywheelMotor.setNeutralMode(NeutralMode.Coast);
-
-        flywheelMotor.config_kF(0, kF, TIMEOUT_MS);
-        flywheelMotor.config_kP(0, kP, TIMEOUT_MS);
-        flywheelMotor.config_kI(0, kI, TIMEOUT_MS);
-        flywheelMotor.config_kD(0, kD, TIMEOUT_MS);
-
-        flywheelMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);
-        flywheelMotor.setSensorPhase(false);
-
-        flywheelMotor.configForwardSoftLimitThreshold(0.0);
-        flywheelMotor.configForwardSoftLimitEnable(false);
-        flywheelMotor.configReverseSoftLimitThreshold(0.0);
-        flywheelMotor.configReverseSoftLimitEnable(false);
-        
-        flywheelMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
-        flywheelMotor.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
-
-        //comment out if using a PID
-        // flywheelMotor.configOpenloopRamp(0.5);
-        flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
-
-        //increase framerate for sensor velocity checks (currently at 100ms)
-        
-        
-    }
-
-    private void configShroudMotor()
-    {
-        //TODO: delete or comment out unnecessary configs
-        shroudMotor.configFactoryDefault();
-        shroudMotor.setInverted(false);
-        shroudMotor.setNeutralMode(NeutralMode.Brake);
-
-        shroudMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT_MS);
-        shroudMotor.setSensorPhase(false);
-
-        shroudMotor.configForwardSoftLimitThreshold(0.0);
-        shroudMotor.configForwardSoftLimitEnable(false);
-        shroudMotor.configReverseSoftLimitThreshold(0.0);
-        shroudMotor.configReverseSoftLimitEnable(false);
-        
-        shroudMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
-        shroudMotor.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.Disabled);
-
-        //comment out if using a PID
-        shroudMotor.configOpenloopRamp(0.5);
-        shroudMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+        System.out.println("Shroud: " + measureShroudSensorValue());
     }
 
     public String toString()
