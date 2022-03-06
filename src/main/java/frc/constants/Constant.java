@@ -3,6 +3,8 @@ package frc.constants;
 //TODO: Add constants
 public final class Constant 
 {
+    public static final int DEBOUNCE_THRESHOLD = 3;
+
     //TODO: Configure shot rpm's
     public static final double LONG_SHOT_SPEED = 0.0;
     public static final double SHORT_SHOT_SPEED = 0.0;
