@@ -68,7 +68,7 @@ public class Intake
     private double rollerSpeed;
 
     private static final double intakeSpeed = 0.4;//Constant.INTAKE_SPEED;
-    private static final double armSpeed = 0.1;
+    private static final double armSpeed = 0.2;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -124,9 +124,9 @@ public class Intake
         armsMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
     
         armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
         armsMotor.setSoftLimit(SoftLimitDirection.kForward, 103); // DF 3/06/22
-        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         // armsEncoder.setPosition(0);
         
