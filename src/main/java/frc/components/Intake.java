@@ -67,8 +67,8 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = .4;//Constant.INTAKE_SPEED;
-    private static final double armSpeed = .1;
+    private static final double intakeSpeed = 0.4;//Constant.INTAKE_SPEED;
+    private static final double armSpeed = 0.1;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -76,8 +76,8 @@ public class Intake
     {
         System.out.println("Intake Created");
 
-        rollerMotorPort = 1;  // Used ONLY for testing
-        armsMotorPort = 7;    // Used ONLY for testing
+        // rollerMotorPort = 1;  // Used ONLY for testing
+        // armsMotorPort = 7;    // Used ONLY for testing
 
         rollerMotor = new CANSparkMax(rollerMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         armsMotor = new CANSparkMax(armsMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -95,76 +95,13 @@ public class Intake
     }
 
     // *** CLASS & INSTANCE METHODS ***
-    //getters
-    public ArmPosition getArmPosition()
-    {
-        return this.armPosition;
-    }
-
-    public RollerDirection getRollerDirection()
-    {
-        return this.rollerDirection;
-    }
-
-    //setters
-    public void setRollerDirection(CANSparkMax motor, RollerDirection direction)
-    {
-        motor.set(direction.position); //".set" sets the speed, it has to be between 1.0 and -1.0
-    }
-
-    public void setArmSpeed(double speed)
-    {
-        armsMotor.set(speed);
-    }
-
-    //not getters and setters?
-    //7:1 gearbox
-    public void outtakeRoller()
-    {
-        setRollerDirection(rollerMotor, RollerDirection.kOut);
-        System.out.println("Roller out");
-    }
-    
-    public void intakeRoller()
-    {
-        setRollerDirection(rollerMotor, RollerDirection.kIn);
-        System.out.println("Roller in");
-    }
-
-    public void turnOffRoller()
-    {
-        setRollerDirection(rollerMotor, RollerDirection.kOff);
-        System.out.println("Roller Off");
-    }
-
-    //100:1 gearbox
-    public void moveArmOut()
-    {
-        setArmSpeed(armSpeed);
-    }
-
-    public void moveArmIn()
-    {
-        setArmSpeed(-armSpeed);
-    }
-
-    public void stopArm()
-    {
-        setArmSpeed(0.0);
-    }
-
-    public double MeasureMotorSpeed(CANSparkMax motor)
-    {
-        return(motor.get()); 
-    }
-
     //what this does is set the motors to basically their factory settings in case said mortors had something different done to them at some point.
     private void configRollerMotor()
     {
         System.out.println("configurating Intake Motor");
     
         rollerMotor.restoreFactoryDefaults();
-        rollerMotor.setInverted(true);
+        rollerMotor.setInverted(false);
         rollerMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
     
         rollerMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
@@ -183,19 +120,14 @@ public class Intake
         System.out.println("configurating arms motor");
     
         armsMotor.restoreFactoryDefaults();
-        armsMotor.setInverted(true);
+        armsMotor.setInverted(false);
         armsMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
     
         armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 90);
-        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 103); // DF 3/06/22
+        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     
-        
-        // armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        // armsBackwardLimitSwitch.enableLimitSwitch(true);
-        // armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        // armsForwardLimitSwitch.enableLimitSwitch(true);
         // armsEncoder.setPosition(0);
         
     
@@ -203,6 +135,69 @@ public class Intake
         armsMotor.setSmartCurrentLimit(40);
         
         System.out.println("Configurated");
+    }
+
+    //getters
+    public ArmPosition getArmPosition()
+    {
+        return this.armPosition;
+    }
+
+    public RollerDirection getRollerDirection()
+    {
+        return this.rollerDirection;
+    }
+
+    //setters
+    private void setRollerVelocity(double velocity)
+    {
+        rollerMotor.set(velocity); // it has to be between 1.0 and -1.0
+    }
+
+    private void setArmVelocity(double velocity)
+    {
+        armsMotor.set(velocity);
+    }
+
+    //not getters and setters?
+    //7:1 gearbox
+    public void outtakeRoller()
+    {
+        setRollerVelocity(intakeSpeed);
+        // System.out.println("Roller out");
+    }
+    
+    public void intakeRoller()
+    {
+        setRollerVelocity(-intakeSpeed);
+        // System.out.println("Roller in");
+    }
+
+    public void turnOffRoller()
+    {
+        setRollerVelocity(0.0);
+        // System.out.println("Roller Off");
+    }
+
+    //100:1 gearbox
+    public void moveArmOut()
+    {
+        setArmVelocity(armSpeed);
+    }
+
+    public void moveArmIn()
+    {
+        setArmVelocity(-armSpeed);
+    }
+
+    public void stopArm()
+    {
+        setArmVelocity(0.0);
+    }
+
+    public double MeasureMotorSpeed(CANSparkMax motor)
+    {
+        return(motor.get()); 
     }
 
     public double getArmMotorRotations()
@@ -291,6 +286,12 @@ public class Intake
     //     System.out.println("Arms in!");
     //     armPosition = ArmPosition.kIn;
     // } 
+
+    public void outputArmLimit()
+    {
+        System.out.println("Arm: Encoder " + armsEncoder.getPosition());
+        // System.out.println("Arm: Forward Limit Switch " + armsForwardLimitSwitch.isPressed() + ", Backward Limit Switch " + armsBackwardLimitSwitch.isPressed());
+    }
 
     public String toString()
     {
