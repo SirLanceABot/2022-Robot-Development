@@ -48,6 +48,9 @@ public class TeleopMode implements ModeTransition
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
+    // Testing variable
+    private static final double SHOOTER_SPEED = 0.1;
+
 
     // *** CLASS CONSTRUCTOR ***
     public TeleopMode()
@@ -149,7 +152,7 @@ public class TeleopMode implements ModeTransition
                 // }
                 
                 // A testing line
-                INTAKE.outputArmLimit();
+                // INTAKE.outputArmLimit();
 
                 if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
                 {
@@ -225,29 +228,51 @@ public class TeleopMode implements ModeTransition
                 }
             }
 
-            if(SHOOTER != null && SHUTTLE != null)
+            if(SHOOTER != null)
             {
-                // running the shooter
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    // SHOOTER.overrideFSM();
-
-                    SHOOTER.setShroudAngleNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
-                    
-                    SHOOTER.setFlywheelSpeedNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
-                
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
                     {
-                        // SHUTTLE.overrideFSM();
-                        SHUTTLE.forwardStageTwo(); 
-                        SHUTTLE.forwardStageOne();
+                        SHOOTER.setFlywheelSpeedNew(-SHOOTER_SPEED);
+                    }
+                    else
+                    {
+                        SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     }
                 }
-                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+                else
                 {
-                    SHOOTER.shoot();
+                    SHOOTER.setFlywheelSpeedNew(0.0);
                 }
+
+                // SHOOTER.outputShroudLimit();
+                SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
             }
+
+            // if(SHOOTER != null && SHUTTLE != null)
+            // {
+            //     // running the shooter
+            //     if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
+            //     {
+            //         // SHOOTER.overrideFSM();
+
+            //         SHOOTER.setShroudAngleNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud)); 
+                    
+            //         SHOOTER.setFlywheelSpeedNew(OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
+                
+            //         if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShootBallToggle))
+            //         {
+            //             // SHUTTLE.overrideFSM();
+            //             SHUTTLE.forwardStageTwo(); 
+            //             SHUTTLE.forwardStageOne();
+            //         }
+            //     }
+            //     else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+            //     {
+            //         SHOOTER.shoot();
+            //     }
+            // }
 
             if(CLIMBER != null)
             {
