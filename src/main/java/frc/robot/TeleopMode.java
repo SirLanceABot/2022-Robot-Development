@@ -7,6 +7,7 @@ import frc.components.Climber;
 import frc.drivetrain.Drivetrain;
 import frc.components.Shooter;
 import frc.components.Shuttle;
+import frc.components.ShuttleFSM;
 import frc.constants.Constant;
 
 import frc.controls.DriverController;
@@ -45,6 +46,7 @@ public class TeleopMode implements ModeTransition
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -110,41 +112,82 @@ public class TeleopMode implements ModeTransition
             {
                 if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
                 {
-                    if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
-                    {
-                        INTAKE.intakeRoller();
-                    }
-                    else
-                    {
-                        INTAKE.turnOffRoller();
-                    }
-                }
-                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
-                {
-                    if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+                    if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
                     {
                         INTAKE.outtakeRoller();
                     }
-                    else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+                    else
                     {
                         INTAKE.intakeRoller();
                     }
                 }
-                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
+                else
                 {
-                    if(INTAKE.getArmPosition() == Intake.ArmPosition.kOff || INTAKE.getArmPosition() == Intake.ArmPosition.kIn)
-                    {
-                        INTAKE.moveArmOut();
-                    }
-                    else if(INTAKE.getArmPosition() == Intake.ArmPosition.kOut)
-                    {
-                        INTAKE.moveArmIn();
-                    }
+                    INTAKE.turnOffRoller();
+                }
+                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+                // {
+                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
+                //     {
+                //         INTAKE.intakeRoller();
+                //     }
+                //     else
+                //     {
+                //         INTAKE.turnOffRoller();
+                //     }
+                // }
+                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                // {
+                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+                //     {
+                //         INTAKE.outtakeRoller();
+                //     }
+                //     else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+                //     {
+                //         INTAKE.intakeRoller();
+                //     }
+                // }
+                
+                // A testing line
+                INTAKE.outputArmLimit();
+
+                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
+                {
+                    INTAKE.moveArmOut();
                 }
                 else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
                 {
+                    INTAKE.moveArmIn();
+                }
+                else
+                {
                     INTAKE.stopArm();
                 }
+
+                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
+                // {
+                //     if(INTAKE.getArmPosition() == Intake.ArmPosition.kOff || INTAKE.getArmPosition() == Intake.ArmPosition.kIn)
+                //     {
+                //         INTAKE.moveArmOut();
+                //     }
+                //     else if(INTAKE.getArmPosition() == Intake.ArmPosition.kOut)
+                //     {
+                //         INTAKE.moveArmIn();
+                //     }
+                // }
+                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
+                // {
+                //     INTAKE.stopArm();
+                // }
+            }
+
+            // Running the shuttle
+            if (SHUTTLE != null)
+            {
+                // TODO: Make this not here
+                boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+                
+                SHUTTLEFSM.fancyRun(shoot);
             }
         }
 
