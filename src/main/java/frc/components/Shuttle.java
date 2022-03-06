@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.constants.Constant;
 
 public class Shuttle 
 {
@@ -34,6 +35,17 @@ public class Shuttle
     // initializing encoders
     // private static CANEncoder stageOneMotorEncoder = stageOneMotor.getEncoder();
     // private static CANEncoder stageTwoMotorEncoder = stageTwoMotor.getEncoder();
+
+    // Used for debouncing
+    private int intakeSensorActivateCount = 0;
+    private int intakeSensorDeactivateCount = 0;
+    private boolean debouncedIntakeSensor = false;
+    private int stageOneSensorActivateCount = 0;
+    private int stageOneSensorDeactivateCount = 0;
+    private boolean debouncedStageOneSensor = false;
+    private int stageTwoSensorActivateCount = 0;
+    private int stageTwoSensorDeactivateCount = 0;
+    private boolean debouncedStageTwoSensor = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -144,27 +156,93 @@ public class Shuttle
     // Proximity sensors
     // (intakeSensor, stageOneSensor, stageTwoSensor)
     /**
+     * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
     public boolean measureIntakeSensor()
     {
-        return !intakeSensor.get();
+        // TODO: Move the debouncing to SensorValues class
+        if (!intakeSensor.get())
+        {
+            intakeSensorActivateCount++;
+            intakeSensorDeactivateCount = 0;
+        }
+        else
+        {
+            intakeSensorActivateCount = 0;
+            intakeSensorDeactivateCount++;
+        }
+
+        if (intakeSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedIntakeSensor = true;
+        }
+        else if (intakeSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedIntakeSensor = false;
+        }
+
+        return debouncedIntakeSensor;
     }
 
     /**
+     * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
     public boolean measureStageOneSensor()
     {
-        return !stageOneSensor.get();
+        // TODO: Move the debouncing to SensorValues class
+        if (!stageOneSensor.get())
+        {
+            stageOneSensorActivateCount++;
+            stageOneSensorDeactivateCount = 0;
+        }
+        else
+        {
+            stageOneSensorActivateCount = 0;
+            stageOneSensorDeactivateCount++;
+        }
+
+        if (stageOneSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedStageOneSensor = true;
+        }
+        else if (stageOneSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedStageOneSensor = false;
+        }
+
+        return debouncedStageOneSensor;
     }
     
     /**
+     * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
     public boolean measureStageTwoSensor()
     {
-        return !stageTwoSensor.get();
+        // TODO: Move the debouncing to SensorValues class
+        if (!stageTwoSensor.get())
+        {
+            stageTwoSensorActivateCount++;
+            stageTwoSensorDeactivateCount = 0;
+        }
+        else
+        {
+            stageTwoSensorActivateCount = 0;
+            stageTwoSensorDeactivateCount++;
+        }
+
+        if (stageTwoSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedStageTwoSensor = true;
+        }
+        else if (stageTwoSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+        {
+            debouncedStageTwoSensor = false;
+        }
+
+        return debouncedStageTwoSensor;
     }
     
     // TODO: Make toString()
