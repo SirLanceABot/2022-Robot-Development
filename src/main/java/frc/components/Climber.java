@@ -94,9 +94,13 @@ public class Climber
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of where motor goes
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 255.0f); // DF Measured on 3/5/22
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
+
+        // TODO: Figure out how to make this not take as many frames from CANbus
+        // firstStageClimbMotorLeader.setControlFramePeriodMs(periodMs);
+        // firstStageClimbMotorLeader.setPeriodicFramePeriod(frame, periodMs);
     
         FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
         FCLBackwardLimitSwitch.enableLimitSwitch(true);
