@@ -125,6 +125,7 @@ public class Logitech extends Joystick
 
         if(axisIsFlipped[axis])
         {
+        //FIXME: please code value = -value; do not use the time-wasting obscure way (double obscure since the even worse way had to be explained with a comment)
             value *= -1; //value = value * -1;
         }
 
