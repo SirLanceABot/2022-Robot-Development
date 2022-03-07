@@ -224,11 +224,15 @@ public class Climber
     {
         firstStageClimbMotorLeader.set(speed);
     }
+    private void setBrakeMotor(double speed)
+    {
+        climbBrakeMotor.set(ControlMode.PercentOutput, speed);
+    }
 
     public void shutDown()
     {
         setFirstStageMotorSpeed(0.0);
-        // DriverStation.reportError("Climber shut down!", false);
+        setBrakeMotor(0.0);
         //TODO add whatever motors start getting used to this
     }
 
@@ -238,9 +242,9 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        if(getFCLposition() == 0 && climbBrakeMotor.getSelectedSensorPosition() <= -9)
+        if(getFCLposition() == 0 && climbBrakeMotor.isFwdLimitSwitchClosed() == 0)
         {
-            // climbBrakeMotor.set(ControlMode.PercentOutput, -.1);
+            climbBrakeMotor.set(ControlMode.PercentOutput, -.1);
         }
         else
         {

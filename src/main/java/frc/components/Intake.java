@@ -161,6 +161,11 @@ public class Intake
 
     //not getters and setters?
     //7:1 gearbox
+    public boolean isArmOut()
+    {
+       return armsForwardLimitSwitch.isPressed();
+    }
+
     public void outtakeRoller()
     {
         setRollerVelocity(intakeSpeed);
