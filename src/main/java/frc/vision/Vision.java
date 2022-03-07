@@ -123,9 +123,7 @@ public class Vision
   //     }     
 
 
-  // CPU utilization stress test for Robot.teleopPeriodic
-  
-
+  // Owen's CPU utilization stress test for Robot.teleopPeriodic
   // var StartTime = Timer.getFPGATimestamp();
   // for(int Mathsine = 1; Mathsine <= 1_200_000; Mathsine ++)
   // {

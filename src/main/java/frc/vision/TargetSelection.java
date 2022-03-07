@@ -70,7 +70,7 @@ public void run()
       }
     }
 
-    // Pixels to Inches Data Table Lookup copied from Constant
+    // Pixels to Units Data Table Lookup copied from Constant
     // allocate fixed size array with parameter at least as large as the number
     // of data points - minimum of 2 points
     // Notice the LUT CTOR argument is maximum table size - change it if it needs to be larger
@@ -148,7 +148,7 @@ public void run()
                   new Scalar(255, 255, 255), 1);
         }
           nextTargetData.hubDistance = -1.;
-          nextTargetData.angleToTurn = -1.;
+          nextTargetData.angleToTurn = -999.;
           nextTargetData.isFreshData = true;
           nextTargetData.isTargetFound = false;
       } else {
@@ -210,8 +210,8 @@ public void run()
               contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
               // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
               // setup sliding window
-              int scanWindow = Constant.targetCameraWidth/5;
-              int scanStep =  scanWindow/3;
+              int scanWindow = Constant.targetCameraWidth/6;
+              int scanStep =  scanWindow/4;
 
               int countPointsMax = -1; // count of points in highest count window
               ArrayList<ContourData> windowedContourData = new ArrayList<ContourData>();
@@ -333,7 +333,7 @@ public void run()
                     || nextTargetData.angleToTurn >= Constant.VERTICAL_CAMERA_ANGLE_OF_VIEW / 2.) { 
                 // target not actually "seen" after the calibrateAngle offset was applied - no data
                 nextTargetData.hubDistance = -1.;
-                nextTargetData.angleToTurn = -1.;
+                nextTargetData.angleToTurn = -999.;
                 nextTargetData.isFreshData = true;
                 nextTargetData.isTargetFound = false;
             } else {
@@ -348,7 +348,7 @@ public void run()
               Core.transpose(mat, mat); // camera is rotated so make image look right for humans
               Core.flip(mat, mat, 1);
 
-              // display the pixels and distance on image for reviewing or revising the conversion table
+              // display the distance pixels on image for reviewing or revising the conversion table
               Imgproc.putText(mat,
                 String.format("%3.0f px", targetCenterX, nextTargetData.hubDistance),
                 new Point(1, 12),
@@ -357,7 +357,7 @@ public void run()
               
               //displays the angle to turn on the image for reviewing or revising
               Imgproc.putText(mat,
-                String.format("turn %3.0f deg", nextTargetData.angleToTurn),
+                nextTargetData.isTargetFound ? String.format("turn %3.0f deg", nextTargetData.angleToTurn) : "no calibrated view",
                 new Point(2, Constant.targetCameraWidth-8),
                 Imgproc.FONT_HERSHEY_SIMPLEX, 0.4,
                 new Scalar(255, 255, 255), 1);
