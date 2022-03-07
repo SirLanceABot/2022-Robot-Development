@@ -22,7 +22,7 @@ public class TurnOffIntake implements Command
     private boolean isFinished;
 
     // This variable is only used to simulate the intake being off
-    private boolean isIntakeOff = false;
+    // private boolean isIntakeOff = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -37,22 +37,26 @@ public class TurnOffIntake implements Command
         System.out.println(this);
 
         isFinished = false;
-        isIntakeOff = false;
-
-        //TODO: add actual INTAKE methods
+        // isIntakeOff = false;
     }
 
     public void execute()
     {
-        isIntakeOff = true;
+        INTAKE.turnOffRoller();
+        INTAKE.moveArmIn();
 
-        if(isIntakeOff)
-        {
-            System.out.println("Intake is off");
-            isFinished = true;
-        }
+        // if(INTAKE.isArmIn())
+        // {
+        //     System.out.println("Intake is off");
+        //     isFinished = true;
+        // }
+        
+        // isIntakeOff = true;
 
-        // TODO: add actual INTAKE methods
+        // if(isIntakeOff)
+        // {
+            
+        // }
     }
 
     public boolean isFinished()

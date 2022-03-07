@@ -75,7 +75,15 @@ public class Drivetrain extends RobotDriveBase
 
 
     // *** CLASS & INSTANCE METHODS ***
+    public void configOpenLoopRamp(double seconds)
+    {
+        frontLeft.configOpenLoopRamp(seconds);
+        frontRight.configOpenLoopRamp(seconds);
+        backLeft.configOpenLoopRamp(seconds);
+        backRight.configOpenLoopRamp(seconds);
+    }
 
+    
     /**
      * Method to drive the robot using joystick info.
      *

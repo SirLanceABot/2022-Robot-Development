@@ -22,7 +22,7 @@ public class TurnOnIntake implements Command
     private boolean isFinished;
 
     // This variable is only used to simulate the intake being on
-    private boolean isIntakeOn = false;
+    // private boolean isIntakeOn = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -37,22 +37,27 @@ public class TurnOnIntake implements Command
         System.out.println(this);
 
         isFinished = false;
-        isIntakeOn = false;
-
-        //TODO: add actual INTAKE methods
+        // isIntakeOn = false;
     }
 
     public void execute()
     {
-        isIntakeOn = true;
+        INTAKE.moveArmOut();
 
-        if(isIntakeOn)
-        {
-            System.out.println("Intake is on");
-            isFinished = true;
-        }
+        // if (INTAKE.isArmOut())
+        // {
+        //     INTAKE.intakeRoller();
 
-        // TODO: add actual INTAKE methods
+        //     System.out.println("Intake is on");
+        //     isFinished = true;
+        // }
+        
+        // isIntakeOn = true;
+
+        // if(isIntakeOn)
+        // {
+            
+        // }
     }
 
     public boolean isFinished()

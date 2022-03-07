@@ -22,6 +22,8 @@ public class DriveStraight implements Command
     private double speed_metersPerSecond;
     private double distance_meters;
     private boolean isFinished;
+    private final double SLOW_RAMP_RATE = 0.75;
+    private final double FAST_RAMP_RATE = 0.1;
 
     // This variable is only used to simulate the distance driven
     // private double distanceDrivenSimulation = 0.0;
@@ -45,7 +47,7 @@ public class DriveStraight implements Command
         // distanceDrivenSimulation = 0.0;
 
         DRIVETRAIN.resetEncoders();
-        // DRIVETRAIN.configLoopRampRate(0.75);
+        DRIVETRAIN.configOpenLoopRamp(SLOW_RAMP_RATE);
     }
 
     public void execute()
@@ -61,6 +63,7 @@ public class DriveStraight implements Command
         if(DRIVETRAIN.driveStraight(speed_metersPerSecond, distance_meters))
         {
             isFinished = true;
+            System.out.println("Finished driving");
         }
     }
 
@@ -71,7 +74,7 @@ public class DriveStraight implements Command
 
     public void end()
     {
-        // DRIVETRAIN.configLoopRampRate(0.1);
+        DRIVETRAIN.configOpenLoopRamp(FAST_RAMP_RATE);
         DRIVETRAIN.stopMotor();
     }
 

@@ -45,6 +45,11 @@ public class AutonomousCommandList
 
     private static final ArrayList<Command> commandList = new ArrayList<>();
 
+    private static final double DRIVE_SPEED = 1.0;  // meters per second (+/-)
+    private static final double SHORT_DISTANCE = 2.0;   // meters (+)
+    private static final double MEDIUM_DISTANCE = 3.0;  // meters (+)
+    private static final double LONG_DISTANCE = 5.0;    // meters (+)
+
 
     // *** CLASS CONSTRUCTOR ***
     public AutonomousCommandList()
@@ -90,14 +95,14 @@ public class AutonomousCommandList
             if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
             {
                 addCommand(new TurnOnIntake());
-                addCommand(new DriveStraight(1.0, 5.0));
-                addCommand(new StopDriving());
+                addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
+                // addCommand(new StopDriving());
                 addCommand(new TurnOffIntake());
             }
             else
             {
-                addCommand(new DriveStraight(1.0, 2.0));
-                addCommand(new StopDriving());
+                addCommand(new DriveStraight(DRIVE_SPEED, MEDIUM_DISTANCE));
+                // addCommand(new StopDriving());
             }
         }
     }
@@ -116,24 +121,24 @@ public class AutonomousCommandList
             {
                 if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, 5.0, Shooter.Hub.kUpper));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kUpper));
                 }
                 else
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, 3.0, Shooter.Hub.kUpper));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, MEDIUM_DISTANCE, Shooter.Hub.kUpper));
                 }
             }
         }
 
         if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kShootFirst)
         {
-            addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
+            addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kLower));
         }
     }
 
     private void shootMoveShoot()
     {
-        addCommand(new ShootCargo(1, 1.0, Shooter.Hub.kLower));
+        addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kLower));
 
         if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
         {
@@ -141,8 +146,8 @@ public class AutonomousCommandList
         }
 
         addCommand(new TurnOnIntake());
-        addCommand(new DriveStraight(1.0, 5.0));
-        addCommand(new StopDriving());
+        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
+        // addCommand(new StopDriving());
         addCommand(new TurnOffIntake());
 
         if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
@@ -150,7 +155,7 @@ public class AutonomousCommandList
              addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
         }
 
-        addCommand(new ShootCargo(1, 5.0, Shooter.Hub.kUpper));
+        addCommand(new ShootCargo(1, LONG_DISTANCE, Shooter.Hub.kUpper));
     }
 
     private void addCommand(Command command)

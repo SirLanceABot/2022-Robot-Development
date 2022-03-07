@@ -209,6 +209,11 @@ public class SwerveModule
         // System.out.println(CANCoderConfigs.toString());
     }
 
+    public void configOpenLoopRamp(double seconds)
+    {
+        driveMotor.configOpenloopRamp(seconds);
+    }
+
     /**
      * Returns the current state of the module.
      *
