@@ -166,6 +166,11 @@ public class Intake
        return armsForwardLimitSwitch.isPressed();
     }
 
+    public boolean isArmIn()
+    {
+       return armsBackwardLimitSwitch.isPressed();
+    }
+
     public void outtakeRoller()
     {
         setRollerVelocity(intakeSpeed);

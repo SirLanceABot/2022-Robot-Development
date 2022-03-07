@@ -1,6 +1,9 @@
 package frc.components;
 
 import java.lang.invoke.MethodHandles;
+
+import javax.lang.model.util.ElementScanner6;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
@@ -242,16 +245,18 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        if(getFCLposition() == 0 && climbBrakeMotor.isFwdLimitSwitchClosed() == 0)
+        if(climbBrakeMotor.isRevLimitSwitchClosed() == 1)
         {
-            climbBrakeMotor.set(ControlMode.PercentOutput, -.1);
+            setBrakeMotor(0);
+            setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
         }
         else
         {
-            setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
+            setBrakeMotor(-.1); //TODO make sure this value goes the right direction
+            setFirstStageMotorSpeed(0);
         }
         System.out.println(FCLEncoder.getPosition());
-        //TODO make sure this value goes the right direction
+        
     }
 
     public void climbDown()
@@ -260,11 +265,16 @@ public class Climber
         // arms go down
         // setFirstStageMotorSpeed(-1);
         //^robot value
-        setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         System.out.println(FCLEncoder.getPosition());
-        if(getFCLposition() == 0)
+        if(FCLBackwardLimitSwitch.isPressed() == true)
         {
-            // climbBrakeMotor.set(ControlMode.PercentOutput, .1);
+            setBrakeMotor(.1);
+            setFirstStageMotorSpeed(0);
+        }
+        else
+        {
+            setBrakeMotor(0);
+            setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         }
         //^Test value
         // DriverStation.reportError("Climber going down", false);
