@@ -74,13 +74,13 @@ public void run()
     // allocate fixed size array with parameter at least as large as the number
     // of data points - minimum of 2 points
     // Notice the LUT CTOR argument is maximum table size - change it if it needs to be larger
-    LUT pixelsToInchesTable = new LUT(10);
+    LUT pixelsToUnitsTable = new LUT(10);
 
-    for(int i = 0; i < Constant.pixelsToInchesTable.length; i++)
+    for(int i = 0; i < Constant.pixelsToUnitsTable.length; i++)
     {
-      pixelsToInchesTable.add(Constant.pixelsToInchesTable[i][0], Constant.pixelsToInchesTable[i][1]);
+      pixelsToUnitsTable.add(Constant.pixelsToUnitsTable[i][0], Constant.pixelsToUnitsTable[i][1]);
     }
-    System.out.println("[Camera Pixels To Inches To Hub] " + pixelsToInchesTable); // print the whole table
+    System.out.println("[Camera Pixels To Units To Hub] " + pixelsToUnitsTable); // print the whole table
 
     // Mats are very memory expensive. Lets reuse this Mat.
     Mat mat = new Mat();
@@ -131,8 +131,13 @@ public void run()
       ArrayList<MatOfPoint> filteredContours;
       filteredContours = new ArrayList<MatOfPoint>(gripPipeline.filterContoursOutput());
 
+      // System.out.println(filteredContours.size() + " Contours found");
+      // SmartDashboard.putNumber("#contours", filteredContours.size());
+
       // Check if no contours were found in the camera frame.
       if (filteredContours.isEmpty()) {
+        // no contours found
+
         if(displayTargetContours)
         {
           Core.transpose(mat, mat); // camera is rotated so make image look right for humans
@@ -147,12 +152,8 @@ public void run()
           nextTargetData.isFreshData = true;
           nextTargetData.isTargetFound = false;
       } else {
-          // contours were found
-          // System.out.println(filteredContours.size() + " Contours found");
-
-          // Loop through all contours taking them out of Mat and into ArrayList with everything we want
-          ArrayList<ContourData> contourData = new ArrayList<ContourData>();
-          
+          // contours found
+                    
           if(displayTargetContours)
           {
             // Draw center-line
@@ -168,18 +169,15 @@ public void run()
             listBoxContour = new ArrayList<MatOfPoint>();
           }
 
+          // Loop through all contours taking them out of Mat and into ArrayList with everything we want
+          ArrayList<ContourData> contourData = new ArrayList<ContourData>();
           filteredContours.forEach((cd)->contourData.add(new ContourData(cd))); // get out of Mat form
 
             // if no contours, say no target
             // if one contour, use that one to center
             // if two contours, center on their average
-            // if three or more contours,
-            //  if largest contour located between the 2nd and 3rd largest then center on that one largest
-            //  otherwise center on the average of the 2 largest contours.
-
-            // Also try sliding window to "bin" contours or other clustering techniques
-            //  ideally all contours line up in the same x value spread by the different y
-            //  keep the set with the largest number in the same X; toss out the rest
+            // if three or more contours use sliding window to find most contours straight across image
+            //    then average the ones in the window
 
             // initial values in case not set elsewhere
             double targetCenterX = -1;
@@ -190,7 +188,7 @@ public void run()
               targetCenterX = contourData.get(0).centerX;
               targetCenterY = contourData.get(0).centerY;
 
-              if(displayTargetContours) // list of good contour's boxes to draw
+              if(displayTargetContours) // list of contour's box to draw
               {
               listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1],contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
               }
@@ -201,45 +199,106 @@ public void run()
               targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
               targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
 
-              if(displayTargetContours) // list of good contour's boxes to draw
+              if(displayTargetContours) // list of good contours' boxes to draw
               {
               listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
               listBoxContour.add(new MatOfPoint(contourData.get(1).boxPts[0], contourData.get(1).boxPts[1], contourData.get(1).boxPts[2], contourData.get(1).boxPts[3]));
               }
             } // end 2 contours
-            else // 3  or more contours
+            else // 3  or more contours for now - may be reduced after windowing
             {
-              contourData.sort(ContourData.compareArea()); // sort by area size, order large to small
-              // System.out.println(contourData.get(0).area);
-              // System.out.println("contourData");contourData.forEach((data)->System.out.println(data));
+              contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
+              // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
+              // setup sliding window
+              int scanWindow = Constant.targetCameraWidth/5;
+              int scanStep =  scanWindow/3;
 
-              // is #0 (max area contour) located between #1 and #2 in the Y-axis?
-              if(
-                ((contourData.get(0).centerY < contourData.get(1).centerY) &&
-                  (contourData.get(0).centerY > contourData.get(2).centerY)    )  ||
-                  ((contourData.get(0).centerY > contourData.get(1).centerY) &&
-                  (contourData.get(0).centerY < contourData.get(2).centerY)    )     )
-              {
-                  targetCenterX = contourData.get(0).centerX;
-                  targetCenterY = contourData.get(0).centerY;
+              int countPointsMax = -1; // count of points in highest count window
+              ArrayList<ContourData> windowedContourData = new ArrayList<ContourData>();
 
-                  if(displayTargetContours) // list of good contour's boxes to draw
-                  {
-                  listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
-                  }
-              }
-              else
+              var start = (int)(contourData.get(0).centerX) - scanStep - 1; // start 1 window below 1st data point
+              var stop = (int)(contourData.get(contourData.size()-1).centerX) + scanStep + 1; // stop 1 window past last data point
+              for(int window = start; window <= stop; window+=scanStep) // sliding window
               {
-                targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
-                targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
-                
-                if(displayTargetContours) // list of good contour's boxes to draw
+                int countPoints = 0; // initialize count of points in this window
+                for(int point = 0; point < contourData.size(); point++) // check all points to see if in this window
                 {
-                listBoxContour.add(new MatOfPoint(contourData.get(0).boxPts[0], contourData.get(0).boxPts[1], contourData.get(0).boxPts[2], contourData.get(0).boxPts[3]));
-                listBoxContour.add(new MatOfPoint(contourData.get(1).boxPts[0], contourData.get(1).boxPts[1], contourData.get(1).boxPts[2], contourData.get(1).boxPts[3]));
+                  if((contourData.get(point).centerX >= window) && (contourData.get(point).centerX < (window + scanWindow)))
+                  {
+                    countPoints++; // count this point in this window
+                  }
                 }
-    
+
+                // check for new max number of points in window and process it - the last new max will win, though
+                if(countPoints > countPointsMax)
+                {
+                   countPointsMax = countPoints; //  new max window count
+                   windowedContourData.clear(); // clear previous max
+
+                  // check all points again to see if in this window - faster, easier to repeat new max loops than to save data every time
+                  for(int point = 0; point < contourData.size(); point++)
+                  {
+                    if((contourData.get(point).centerX >= window) && (contourData.get(point).centerX < (window + scanWindow)))
+                    {
+                      windowedContourData.add(contourData.get(point)); // all points in this new max window
+                    }
+                  }
+                }
               }
+              // System.out.println(windowedContourData); // the contours in max window
+
+              // picking center by size and location of contour (below) seemed good but there was a lot of jitter with bad
+              // tape; this was tested without benefit of the windowing scheme but don't bother retesting since averaging
+              // the contours in the window reduces jitter so a big chunk is commented out
+
+              // windowedContourData.sort(ContourData.compareArea()); // sort by area size, order large to small
+              // System.out.println(windowedContourData.get(0).area);
+              // System.out.println("windowedContourData");windowedContourData.forEach((data)->System.out.println(data));
+
+              // // is #0 (max area contour) located between #1 and #2 in the Y-axis?
+              // if(
+              //   ((windowedContourData.get(0).centerY < windowedContourData.get(1).centerY) &&
+              //     (windowedContourData.get(0).centerY > windowedContourData.get(2).centerY)    )  ||
+              //     ((windowedContourData.get(0).centerY > windowedContourData.get(1).centerY) &&
+              //     (windowedContourData.get(0).centerY < windowedContourData.get(2).centerY)    )     )
+              // {
+              //     targetCenterX = windowedContourData.get(0).centerX;
+              //     targetCenterY = windowedContourData.get(0).centerY;
+
+              //     if(displayTargetContours) // list of good contour's boxes to draw
+              //     {
+              //     listBoxContour.add(new MatOfPoint(windowedContourData.get(0).boxPts[0], windowedContourData.get(0).boxPts[1], windowedContourData.get(0).boxPts[2], windowedContourData.get(0).boxPts[3]));
+              //     }
+              // }
+              // else
+              // {
+              //   targetCenterX = (windowedContourData.get(0).centerX + windowedContourData.get(1).centerX)/2.;
+              //   targetCenterY = (windowedContourData.get(0).centerY + windowedContourData.get(1).centerY)/2.;
+                
+              //   if(displayTargetContours) // list of good contour's boxes to draw
+              //   {
+              //   listBoxContour.add(new MatOfPoint(windowedContourData.get(0).boxPts[0], windowedContourData.get(0).boxPts[1], windowedContourData.get(0).boxPts[2], windowedContourData.get(0).boxPts[3]));
+              //   listBoxContour.add(new MatOfPoint(windowedContourData.get(1).boxPts[0], windowedContourData.get(1).boxPts[1], windowedContourData.get(1).boxPts[2], windowedContourData.get(1).boxPts[3]));
+              //   }
+              // }
+
+              // average all contours in the max window
+              targetCenterX = 0; // initialize centering totals
+              targetCenterY = 0;
+
+              for(ContourData wcd : windowedContourData)
+              {
+                targetCenterX += wcd.centerX; // total x and y values
+                targetCenterY += wcd.centerY;
+                if(displayTargetContours) // list of good contours' boxes to draw
+                {
+                  // add to list of good contour's boxes to draw
+                  listBoxContour.add(new MatOfPoint(wcd.boxPts[0], wcd.boxPts[1], wcd.boxPts[2], wcd.boxPts[3]));
+                }
+              }
+              targetCenterX /= windowedContourData.size(); // average x and y values are the target center (we are hopeful)
+              targetCenterY /= windowedContourData.size();
+
             } // end 3 or more contours
           
             //Draw all the contours that we use in yellow
@@ -279,7 +338,7 @@ public void run()
                 nextTargetData.isTargetFound = false;
             } else {
                 // target still in view - good set of data
-                nextTargetData.hubDistance = pixelsToInchesTable.lookup(targetCenterX);
+                nextTargetData.hubDistance = pixelsToUnitsTable.lookup(targetCenterX);
                 nextTargetData.isFreshData = true;
                 nextTargetData.isTargetFound = true;
             }
@@ -291,7 +350,7 @@ public void run()
 
               // display the pixels and distance on image for reviewing or revising the conversion table
               Imgproc.putText(mat,
-                String.format("%3.0f px = %3.0funits", targetCenterX, nextTargetData.hubDistance),
+                String.format("%3.0f px", targetCenterX, nextTargetData.hubDistance),
                 new Point(1, 12),
                 Imgproc.FONT_HERSHEY_SIMPLEX, 0.4,
                 new Scalar(255, 255, 255), 1);
@@ -556,3 +615,29 @@ public void run()
     //       return "[Cluster] datum " + datum + ", label " + label + ", center " + center;
     //      }
     //    }
+
+    /////////////////////
+            
+// if(false)
+// {
+// // density binning for outliers
+// ArrayList<DataNode> dpoints = new ArrayList<DataNode>();
+// int i = 0;
+// for(ContourData cd : contourData)
+// {
+//   dpoints.add(new DataNode(String.format("%04d", i++), new double[]{cd.centerX, 0.}));
+// }
+
+// List<DataNode> nodeList = OutlierNodeDetect.outlierNodeDetect(dpoints);
+// // list must be sorted descending for this remove to work right.
+// nodeList.forEach
+//   (
+//   (DataNode node) ->
+//   {
+//     if(node.getLof() == Double.NaN || node.getLof() >= 1.0)
+//     {
+//       contourData.remove(Integer.parseInt(node.getNodeName()));
+//     }
+//   }
+//   );
+// }

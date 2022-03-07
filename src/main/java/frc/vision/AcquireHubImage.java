@@ -178,4 +178,4 @@ public class AcquireHubImage  implements Runnable
     // });
 
 //    watchdog.enable();
-// watchdog.reset(); // made it to the end fo the loop
+// watchdog.reset(); // made it to the end of the loop

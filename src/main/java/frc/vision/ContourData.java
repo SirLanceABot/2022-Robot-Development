@@ -57,6 +57,25 @@ class ContourData
       };
     }
 
+    /**
+     * Compares two contour's centerX
+     *
+     * @return the Comparator that defines this ordering on points
+     */
+    public static Comparator<ContourData> compareCenterX()
+    {
+      return new Comparator<ContourData>()
+      {
+        @Override
+        public int compare(ContourData cd1, ContourData cd2)
+        {
+          if(cd1.centerX >  cd2.centerX) return  1;
+          if(cd1.centerX <  cd2.centerX) return -1;
+          return 0; // they are equal or it's the first add to TreeSet
+        }
+      };
+    }
+
     public String toString()
     {
         return String.format("COG (" + centerX + ", " + centerY + ") area " + area);
