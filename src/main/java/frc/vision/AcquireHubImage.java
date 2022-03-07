@@ -160,22 +160,3 @@ public class AcquireHubImage  implements Runnable
     
 // parking lot for good junk
 /* pscp  -v lvuser@roborio-4237-frc.local:/home/lvuser/camerid.txt  c:\\users\\rkt\\cameraid.txt*/
-//MjpegServer server = CameraServer.startAutomaticCapture(TargetCamera); // save the server to enable changing quality, etc.
-//System.out.println("targetcamera" + TargetCamera.getConfigJson());
-
-// import edu.wpi.first.wpilibj.Watchdog;
-    // // restart vision if any watchdog tripped; Exit - should restart itself by WPILib server stuff
-    // static Watchdog watchdog = new Watchdog(2., () -> {
-    //   // // redirect standard error output to a file and append if it exists
-    //   // try {
-    //   //     System.setErr(new PrintStream(new BufferedOutputStream(new FileOutputStream("/home/pi/VisionErrors.txt", true)), true));
-    //   // } catch (FileNotFoundException e) {
-    //   //     e.printStackTrace();
-    //   // }
-    //   var watchdogMsg = "Watchdog barked for AcquireHubImage - exiting";
-    //   System.out.println(watchdogMsg);
-    //   // System.exit(1);
-    // });
-
-//    watchdog.enable();
-// watchdog.reset(); // made it to the end of the loop

@@ -39,7 +39,7 @@ class ContourData
     }
 
     /**
-     * Compares two contour's areas
+     * Compares two contour's areas - sort descending
      *
      * @return the Comparator that defines this ordering on points
      */
@@ -58,7 +58,7 @@ class ContourData
     }
 
     /**
-     * Compares two contour's centerX
+     * Compares two contour's centerX - sort ascending
      *
      * @return the Comparator that defines this ordering on points
      */
