@@ -39,7 +39,7 @@ public class ShooterVisionData
     public static double getDistance(double pixels)
     {
         //this empty loop makes sure the pixels of the index is greater than the passed pixels
-        for (index = 0; pixels <= shooterVisionData.get(index).pixels; index++)
+        for (index = 0; pixels >= shooterVisionData.get(index).pixels; index++)
         {
 
         }

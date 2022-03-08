@@ -49,7 +49,7 @@ public class TeleopMode implements ModeTransition
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Testing variable
-    private static final double SHOOTER_SPEED = 0.3;
+    private static final double SHOOTER_SPEED = 0.5;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -259,7 +259,7 @@ public class TeleopMode implements ModeTransition
                 }
 
                 // SHOOTER.outputShroudLimit();
-                SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
+                // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
             }
 
             // if(SHOOTER != null && SHUTTLE != null)

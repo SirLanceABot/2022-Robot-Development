@@ -40,7 +40,7 @@ public class ShroudData
     public static double getAngle(double voltage)
     {
         //this empty loop makes sure the voltage of the index is greater than the passed voltage
-        for (index = 0; voltage <= shroudData.get(index).voltage; index++)
+        for (index = 0; voltage >= shroudData.get(index).voltage; index++)
         {
 
         }

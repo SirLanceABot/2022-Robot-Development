@@ -19,6 +19,9 @@ public class TrajectoryData
     private static int index;
     private static double distanceRatio;
 
+    private static final double FEET_TO_METERS = 0.3048;
+
+    //IN METERS
     private double distance;
     private double speed;
     private double angle;
@@ -33,14 +36,19 @@ public class TrajectoryData
     public static void dataInit()
     {
         //put all data points here, DISTANCE MUST BE IN ORDER FROM LOWEST TO HIGHEST
-        trajectoryData.add(new TrajectoryData(0.0, 0.0, 0.0));
+        trajectoryData.add(new TrajectoryData(0.0 * FEET_TO_METERS, 0.0, 0.0));
+        trajectoryData.add(new TrajectoryData(2.0 * FEET_TO_METERS, 2700.0, -235.0));
+        trajectoryData.add(new TrajectoryData(4.0 * FEET_TO_METERS, 2800.0, -220.0));
+        trajectoryData.add(new TrajectoryData(6.0 * FEET_TO_METERS, 3100.0, -200.0));
+        trajectoryData.add(new TrajectoryData(8.0 * FEET_TO_METERS, 3300.0, -190.0));
+        trajectoryData.add(new TrajectoryData(10.0 * FEET_TO_METERS, 3500.0, -180.0));
     }
 
     //speed in rpms
     public static double getSpeed(double distance)
     {
         //this loop makes sure the distance of the index is greater than the passed distance
-        for (index = 0; distance <= trajectoryData.get(index).distance; index++)
+        for (index = 0; distance >= trajectoryData.get(index).distance; index++)
         {
 
         }
@@ -56,7 +64,7 @@ public class TrajectoryData
     public static double getAngle(double distance)
     {
         //this empty loop makes sure the distance of the index is greater than the passed distance
-        for (index = 0; distance <= trajectoryData.get(index).distance; index++)
+        for (index = 0; distance >= trajectoryData.get(index).distance; index++)
         {
 
         }

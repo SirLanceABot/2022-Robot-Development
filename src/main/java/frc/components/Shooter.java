@@ -69,20 +69,22 @@ public class Shooter
     private static final double DROP_SHOT_SPEED = Constant.DROP_SHOT_SPEED;
 
     //TODO: Tune PID values
-    private static final double kP = 0.4;
+    private static final double kP = 0.14;
     private static final double kI = 0.000000;
     private static final double kD = 0.0000000;
-    private static final double kF = 5.0;
+    private static final double kF = 0.035;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
     private static final double HUB_ALIGNMENT_THRESHOLD = Constant.HUB_ALIGNMENT_THRESHOLD;
     //TODO: Actual gear ratio goes here
-    private static final double FLYWHEEL_GEAR_RATIO = 60.0 / 16.0;
+    private static final double FLYWHEEL_GEAR_RATIO = 60.0 / 24.0;
 
     //m/s and degrees
-    private static double desiredLaunchSpeed = 2750.0;
-    private static double desiredLaunchAngle = -150.0;
+    private static double desiredLaunchSpeed = 3300.0;
+    private static double desiredLaunchAngle = -190.0;
+
+
 
     private static double currentFlywheelSpeed = 0.0;
     private static double currentShroudAngle = 0.0;
@@ -95,10 +97,13 @@ public class Shooter
     //number of consecutive checsk required for the shuttle to empty cargo into the shooter
     private static int requiredChecks = 3;
 
+    private static boolean isShroudDown = false;
+
     //flywheel.getSelectedSensorVelocity() returns ticks/100ms by default, so we convert to ticks/ms, ticks/s, ticks/min, rot/min, and gear ratio
     //i *think* you divide gear ratio because you're finding flywheel speed given motor speed
-    private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 4096.0) / FLYWHEEL_GEAR_RATIO;
+    private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 2048.0) * FLYWHEEL_GEAR_RATIO;
 
+    private static final double FEET_TO_METERS = 0.3048;
 
     // *** CLASS CONSTRUCTOR ***
     public Shooter(int flywheelMotorPort, int shroudMotorPort)
@@ -142,7 +147,7 @@ public class Shooter
 
         //comment out if using a PID
         // flywheelMotor.configOpenloopRamp(0.5);
-        flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+        // flywheelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
 
         //increase framerate for sensor velocity checks (currently at 100ms)
     }
@@ -174,7 +179,8 @@ public class Shooter
     //speeds are all in rpm
     private void setFlywheelSpeed(double speed)
     {
-        System.out.println("Speed: " + speed);
+        System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
+        System.out.println("Shroud value: " + measureShroudSensorValue());
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
     }
 
@@ -182,13 +188,14 @@ public class Shooter
     public void setFlywheelSpeedNew(double speed)
     {
         flywheelMotor.set(ControlMode.PercentOutput, speed);
-        System.out.println("Flywheel: Encoder " + flywheelMotor.getSelectedSensorPosition());
+        System.out.println("Flywheel Velocity: " + measureFlywheelSpeed());
+        System.out.println("Shroud Value: " + measureShroudSensorValue());
     }
 
     //return value is in rpm
     public double measureFlywheelSpeed()
     {
-        return flywheelMotor.getSelectedSensorVelocity();
+        return flywheelMotor.getSelectedSensorVelocity() * TICK_TO_RPM;
     }
     
     public boolean isFlywheelReady()
@@ -206,8 +213,10 @@ public class Shooter
         //     calculateLaunchTrajectory();
         // }
 
+        calculateLaunchTrajectory();
+
         setFlywheelSpeed(desiredLaunchSpeed);
-        // setShroudAngle(desiredLaunchAngle);
+        setShroudAngle(desiredLaunchAngle);
 
         System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
         System.out.println("Shroud value: " + measureShroudSensorValue());
@@ -241,7 +250,8 @@ public class Shooter
 
     private void calculateLaunchTrajectory()
     {
-        distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
+        // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
+        distance = 9.5 * FEET_TO_METERS;
 
         desiredLaunchSpeed = TrajectoryData.getSpeed(distance);
         desiredLaunchAngle = TrajectoryData.getAngle(distance);
@@ -259,19 +269,32 @@ public class Shooter
         shroudMotor.set(ControlMode.PercentOutput, speed);
     }
 
+    public void stopShroud()
+    {
+        setShroudMotorSpeed(0.0);
+    }
+
     private void setShroudAngle(double angle)
     {
-        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
+        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 50.0)
+        {
+            setShroudMotorSpeed(0.75);
+        }
+        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
         {
             setShroudMotorSpeed(0.25);
         }
-        else if (angle - measureShroudAngle() < SHROUD_ANGLE_THRESHOLD)
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 50.0)
+        {
+            setShroudMotorSpeed(-0.75);
+        }
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD)
         {
             setShroudMotorSpeed(-0.25);
         }
         else
         {
-            setShroudMotorSpeed(0.0);
+            stopShroud();
         }
     }
 

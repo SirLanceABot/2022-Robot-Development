@@ -63,9 +63,9 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        firstStageClimbMotorPort = 7;   // Used ONLY for testing
+        // firstStageClimbMotorPort = 7;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
-        climbBrakeMotorPort = 0; //Used ONLY for testing
+        // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
@@ -234,11 +234,13 @@ public class Climber
 
     public void shutDown()
     {
+        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
         if(firstStageClimbMotorLeader.getOutputCurrent() > 15.00)
         {
-            setFirstStageMotorSpeed(.25);
+            setFirstStageMotorSpeed(.35);
         }
         else
+        
         {
             setFirstStageMotorSpeed(0.0);
         }
@@ -252,17 +254,19 @@ public class Climber
         //arms go up
         // setFirstStageMotorSpeed(.25);
         //^robot value
-        if(climbBrakeMotor.isRevLimitSwitchClosed() == 1)
-        {
-            setBrakeMotor(0);
-            // setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
-            setFirstStageMotorSpeed(.1);
-        }
-        else
-        {
-            setBrakeMotor(-.1); //TODO make sure this value goes the right direction
-            setFirstStageMotorSpeed(0);
-        }
+        // if(climbBrakeMotor.isRevLimitSwitchClosed() == 1)
+        // {
+        //     setBrakeMotor(0);
+        //     setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
+        //     // setFirstStageMotorSpeed(.1);
+        // }
+        // else
+        // {
+        //     setBrakeMotor(-.1); //TODO make sure this value goes the right direction
+        //     setFirstStageMotorSpeed(0);
+        // }
+        setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
+        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
         
     }
 
@@ -285,6 +289,7 @@ public class Climber
         //     // setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // }
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
+        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
