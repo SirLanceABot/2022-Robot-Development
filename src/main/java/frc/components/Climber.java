@@ -63,9 +63,9 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        // firstStageClimbMotorPort = 7;   // Used ONLY for testing
+        firstStageClimbMotorPort = 7;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
-        // climbBrakeMotorPort = 0; //Used ONLY for testing
+        climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
@@ -234,7 +234,14 @@ public class Climber
 
     public void shutDown()
     {
-        setFirstStageMotorSpeed(0.0);
+        if(firstStageClimbMotorLeader.getOutputCurrent() > 15.00)
+        {
+            setFirstStageMotorSpeed(.25);
+        }
+        else
+        {
+            setFirstStageMotorSpeed(0.0);
+        }
         setBrakeMotor(0.0);
         //TODO add whatever motors start getting used to this
     }
@@ -248,14 +255,14 @@ public class Climber
         if(climbBrakeMotor.isRevLimitSwitchClosed() == 1)
         {
             setBrakeMotor(0);
-            setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
+            // setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
+            setFirstStageMotorSpeed(.1);
         }
         else
         {
             setBrakeMotor(-.1); //TODO make sure this value goes the right direction
             setFirstStageMotorSpeed(0);
         }
-        System.out.println(FCLEncoder.getPosition());
         
     }
 
@@ -265,17 +272,19 @@ public class Climber
         // arms go down
         // setFirstStageMotorSpeed(-1);
         //^robot value
-        System.out.println(FCLEncoder.getPosition());
-        if(FCLBackwardLimitSwitch.isPressed() == true)
-        {
-            setBrakeMotor(.1);
-            setFirstStageMotorSpeed(0);
-        }
-        else
-        {
-            setBrakeMotor(0);
-            setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
-        }
+        // if(FCLBackwardLimitSwitch.isPressed() == true)
+        // {
+        //     // setBrakeMotor(.1);
+            
+        //     setFirstStageMotorSpeed(0);
+        // }
+        // else
+        // {
+        //     setBrakeMotor(0);
+        //     setFirstStageMotorSpeed(-.5);
+        //     // setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
+        // }
+        setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
