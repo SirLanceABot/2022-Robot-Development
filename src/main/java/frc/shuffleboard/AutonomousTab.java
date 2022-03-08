@@ -120,7 +120,7 @@ public class AutonomousTab
         autonomousTab.add(orderOfOperationsBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
             .withPosition(9,0)
-            .withSize(8, 2);
+            .withSize(14, 2);
     }
 
     /**

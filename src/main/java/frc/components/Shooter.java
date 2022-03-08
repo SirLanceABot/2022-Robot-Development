@@ -91,6 +91,8 @@ public class Shooter
 
     private static double distance;
 
+    private static double autonomousDistance;
+
     //number of consecutive checks saying the shooter is ready to shoot
     private static int successfulChecks = 0;
 
@@ -211,17 +213,27 @@ public class Shooter
 
     public void shoot(Hub hub)
     {
-        // updateVisionData();
+        updateVisionData();
 
-        // if (isDataFresh())
-        // {
-        //     calculateLaunchTrajectory();
-        // }
+        if (isDataFresh())
+        {
+            calculateLaunchTrajectory(hub);
+        }
 
         // calculateLaunchTrajectory(hub);
 
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
+
+        // System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
+        // System.out.println("Shroud value: " + measureShroudSensorValue());
+
+        // checkIsShooterReady();
+    }
+
+    public void shoot(Hub hub, double distance)
+    {
+        calculateLaunchTrajectory(hub, distance);
 
         // System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
         // System.out.println("Shroud value: " + measureShroudSensorValue());
@@ -258,6 +270,11 @@ public class Shooter
         // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
         distance = 0.0 * FEET_TO_METERS;
 
+        calculateLaunchTrajectory(hub, distance);
+    }
+
+    private void calculateLaunchTrajectory(Hub hub, double distance)
+    {
         if (hub == Hub.kLower)
         {
             desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance);

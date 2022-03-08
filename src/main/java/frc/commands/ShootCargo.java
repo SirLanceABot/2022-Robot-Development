@@ -45,15 +45,17 @@ public class ShootCargo implements Command
     {
         System.out.println(this);
 
+        
+
         isFinished = false;
-        cargoShotSimulation = 0;
+        // cargoShotSimulation = 0;
     }
 
     public void execute()
     {
         distanceShotSimulation = distance_meters;
         cargoShotSimulation++;
-        System.out.println("Cargo shot into " + hub.level + " hub at a distance of " + distanceShotSimulation + " m");
+        System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distanceShotSimulation + " m");
         
         if(cargoShotSimulation == numberOfCargo)
         {

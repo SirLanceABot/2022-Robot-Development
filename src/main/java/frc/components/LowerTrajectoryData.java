@@ -38,6 +38,7 @@ public class LowerTrajectoryData
         //put all data points here, DISTANCE MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must be at least two data points to work
         trajectoryData.add(new LowerTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
+        trajectoryData.add(new LowerTrajectoryData(2.0 * FEET_TO_METERS, 2800.0, -200.0));
     }
 
     //speed in rpms
