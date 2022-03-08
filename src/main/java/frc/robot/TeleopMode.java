@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.Intake;
 import frc.components.Climber;
+import frc.components.EventGenerator;
 import frc.drivetrain.Drivetrain;
 import frc.components.Shooter;
 import frc.components.Shuttle;
@@ -46,6 +47,8 @@ public class TeleopMode implements ModeTransition
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
+
+    private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Testing variable
@@ -183,19 +186,16 @@ public class TeleopMode implements ModeTransition
                 //     INTAKE.stopArm();
                 // }
             }
-
-            // Running the shuttle
-            if (SHUTTLE != null)
-            {
-                // TODO: Make this not here
-                boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
-                
-                // SHUTTLEFSM.fancyRun(shoot);
-            }
         }
 
         if(OPERATOR_CONTROLLER != null)
         {
+            // Manual shoot
+            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+            {
+                SHUTTLEFSM.feedCargo();
+            }
+
             if(SHUTTLE != null)
             {
                 // running the shuttle
@@ -224,19 +224,13 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
-                    // SHUTTLE.run();
+                    // Do what the Shuttle has requested
+                    SHUTTLEFSM.runMotorRequests();
                 }
             }
 
             if(SHOOTER != null)
             {
-                // Running the shuttle
-                if (SHUTTLE != null)
-                {
-                    // TODO: Make this not here
-                    SHUTTLEFSM.fancyRun();
-                }
-
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
                     SHOOTER.shoot(Shooter.Hub.kLower);
@@ -255,11 +249,6 @@ public class TeleopMode implements ModeTransition
                 {
                     SHOOTER.stopFlywheel();
                 }
-
-                // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
-                // {
-                //     SHUTTLEFSM.feedCargo();
-                // }
 
                 // SHOOTER.outputShroudLimit();
                 // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
@@ -307,6 +296,16 @@ public class TeleopMode implements ModeTransition
             }
         }
         
+        // Generate events
+        if(EVENT_GENERATOR != null)
+        {
+            EVENT_GENERATOR.determineEvents();
+        }
+        // Run ShuttleFSM to generate motor requests
+        if(SHUTTLEFSM != null)
+        {
+            SHUTTLEFSM.run();
+        }
     }
 
     /**

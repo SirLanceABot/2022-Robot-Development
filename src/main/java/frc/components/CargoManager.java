@@ -236,16 +236,9 @@ public class CargoManager
         return currentCargoManagerState;
     }
 
-    /**
-     * Fancier run
-     */
-    public void fancierRun()
+    public void run()
     {
-        // TODO: Put into several run methods in teleop, also add request system for the doActions
-
-        // TODO: Only call once
-        EVENT_GENERATOR.determineEvents();
-
+        // Get CargoManagerEvent
         Events.CargoManagerEvent determinedCargoManagerEvent = EVENT_GENERATOR.getCargoManagerEvent();
         
         // Prints out the event if there is one

@@ -173,7 +173,7 @@ public class DfifeTest implements MyTest
         // shuttle.fancyRun(event);
 
         // SHUTTLEFSM.fancyRun(shoot);
-        SHUTTLEFSM.fancyRun();
+        SHUTTLEFSM.run();
     }
 
     /*

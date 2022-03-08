@@ -24,8 +24,6 @@ public class EventGenerator
     private static final SensorValues PREVIOUS_SENSOR_VALUES = new SensorValues();
     private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
 
-    private DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
-
     private Events.ShuttleEvent shuttleEvent = Events.ShuttleEvent.NONE;
     private Events.CargoManagerEvent cargoManagerEvent = Events.CargoManagerEvent.NONE;
 

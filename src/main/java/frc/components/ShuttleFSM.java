@@ -360,20 +360,12 @@ public class ShuttleFSM
         return feedCargo;
     }
 
-    public MotorStage getMotorRequests()
+    /**
+     * Run the FSM
+     */
+    public void run()
     {
-        return motorRequests;
-    }
-
-    // @Deprecated
-    public void fancyRun()
-    {
-        // TODO: Put into several run methods in teleop
-
-        // TODO: Only call once
-        // Remove this call to outer layer
-        EVENT_GENERATOR.determineEvents();
-
+        // Get ShuttleEvent
         Events.ShuttleEvent determinedShuttleEvent = EVENT_GENERATOR.getShuttleEvent();
         
         // Prints out the event if there is one
@@ -384,25 +376,32 @@ public class ShuttleFSM
 
         // Send event to FSM
         checkStateChange(determinedShuttleEvent);
+    }
 
-        // FIXME Make sure that requests do not get whiped out because one of the doActions does not set one motor
-        // TODO: Move this to an outer layer where will use flags to run motors, also need to make getMotorRequest()
-        if (motorRequests.stageOne)
+    /**
+     * Runs the Shuttle based on FSM
+     */
+    public void runMotorRequests()
+    {
+        if (SHUTTLE != null)
         {
-            SHUTTLE.forwardStageOne();
-        }
-        else
-        {
-            SHUTTLE.stopStageOne();
-        }
+            if (motorRequests.stageOne)
+            {
+                SHUTTLE.forwardStageOne();
+            }
+            else
+            {
+                SHUTTLE.stopStageOne();
+            }
 
-        if (motorRequests.stageTwo)
-        {
-            SHUTTLE.forwardStageTwo();
-        }
-        else
-        {
-            SHUTTLE.stopStageTwo();
+            if (motorRequests.stageTwo)
+            {
+                SHUTTLE.forwardStageTwo();
+            }
+            else
+            {
+                SHUTTLE.stopStageTwo();
+            }
         }
     }
 }
