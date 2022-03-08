@@ -1,5 +1,18 @@
 package frc.vision;
 
+/*
+
+  This class starts the bulk of the camera processing.
+
+  It starts the Target camera server, the human intake camera server, defines the
+  ShuffleBoard layout for Vision information and then creates its child thread
+  TargetSelection to process the target camera image which identifies the target
+  and measures the target location (angle, distance).
+
+  This class then enters an "infinite" loop to acquire target camera images.
+
+*/
+
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -50,8 +63,12 @@ public class AcquireHubImage  implements Runnable
     TargetCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     TargetCamera.setResolution(Constant.targetCameraWidth, Constant.targetCameraHeight); // 10fps ok
     TargetCamera.setFPS(10);
-    TargetCamera.setExposureManual(0);
- 
+    TargetCamera.setExposureManual(0); // This is a critical camera parameter set here.
+
+    // The first image filter is the camera exposure is set to nearly "off" so only the very
+    // brightest objects leave the camera.  This assumes a bright light is illuminating the
+    // target and nothing else.  Retro-reflective tape and a headlight are used to do this.
+  
     // Tell the CameraServer to send to the dashboard for debugging
     if(displayTargetCamera)
     {
@@ -119,7 +136,7 @@ public class AcquireHubImage  implements Runnable
     targetSelectionThread = new Thread(targetSelection, "TargetSelection");
     final int parentPriority = Thread.currentThread().getPriority();
     targetSelectionThread.setPriority(parentPriority-1);
-    //  targetSelectionThread.setDaemon(true);
+    targetSelectionThread.setDaemon(true);
     targetSelectionThread.start();
     // END start thread to process target camera and locate target
 

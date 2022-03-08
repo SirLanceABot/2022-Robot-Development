@@ -1,5 +1,41 @@
 package frc.vision;
 
+/*
+
+ Camera Vision Process identifies the target and its position with respect to the camera.
+
+ It produces an angle of deviation between the camera and target and distance to the target.
+
+ Those data are presented in visual form on the Shuffleboard and are available programmatically
+ for automated driving the robot toward the target for accurate shooting.
+
+ Camera Vision also connects the intake camera for human vision to the Shuffleboard.
+
+ Camera Vision Processing starts here with the instantiation of this Vision class.
+
+ The Vision class constructor spawns all the tasks for Vision except for two periodic
+ functions defined in Robot to run on a different cycle than the rest of Vision.
+
+ The two exceptions are the polling of the ShuffleBoard for the camera calibration often
+ enough to avoid irritating humans entering the number and running Java garbage collection
+ every few seconds to free up the native memory allocated by OpenCV Mats.
+
+ Vision Processing is two child threads from this parent.  One thread captures the
+ target camera image and the other thread processes new images as fast as it can to
+ identify the target.
+
+ Flow of this Vision class:
+ 
+ Establishes the ShuffleBoard Camera tab
+
+ Creates the AcquireHubImage thread that acquires the target camera image and starts
+ the rest of the image processing including the human intake camera and target identification.
+
+ This class also provides the home for acquiring the camera calibration from the ShuffleBoard
+ and passing that data to its uses.
+
+*/
+
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
