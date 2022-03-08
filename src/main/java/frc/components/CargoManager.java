@@ -91,8 +91,8 @@ public class CargoManager
         {
             void doAction()
             {
-                // Send shoot event to ShuttleFSM, turn off LED
-                
+                // Set feedCargo flag to true, turn off LED
+                SHUTTLEFSM.feedCargo();
             }
         };
 
@@ -102,7 +102,7 @@ public class CargoManager
         // methods each state can use in common because the code is the same in this example
         // void doEnter()
         // {
-        //    System.out.println("entering state " + this.name());
+        //     System.out.println("entering state " + this.name());
         // }
 
         // void doExit()
@@ -122,21 +122,21 @@ public class CargoManager
     {
         // Transition table
         // transition name (current state, event, new state)
-        TRANSITION_1  (State.NOTHING,	            Events.CargoManagerEvent.INTAKE_OUT,	                        State.INTAKE_DOWN),
-        TRANSITION_2  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.RUN_ROLLER,	                        State.INTAKING),
-        TRANSITION_3  (State.INTAKING,	            Events.CargoManagerEvent.STOP_ROLLER,	                        State.INTAKE_DOWN),
-        TRANSITION_4  (State.INTAKING,	            Events.CargoManagerEvent.INTAKE_IN,	                            State.INTAKE_UP),
-        TRANSITION_5  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.INTAKE_IN,	                            State.INTAKE_UP),
-        TRANSITION_6  (State.INTAKE_UP,	            Events.CargoManagerEvent.INTAKE_OUT,	                        State.INTAKE_DOWN),
+        TRANSITION_1  (State.NOTHING,	            Events.CargoManagerEvent.ARM_TOGGLE,	                        State.INTAKE_DOWN),
+        TRANSITION_2  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.ROLLER_TOGGLE,	                        State.INTAKING),
+        TRANSITION_3  (State.INTAKING,	            Events.CargoManagerEvent.ROLLER_TOGGLE,	                        State.INTAKE_DOWN),
+        TRANSITION_4  (State.INTAKING,	            Events.CargoManagerEvent.ARM_TOGGLE,	                        State.INTAKE_UP),
+        TRANSITION_5  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.ARM_TOGGLE,	                        State.INTAKE_UP),
+        TRANSITION_6  (State.INTAKE_UP,	            Events.CargoManagerEvent.ARM_TOGGLE,	                        State.INTAKE_DOWN),
         TRANSITION_7  (State.INTAKING,	            Events.CargoManagerEvent.SHUTTLE_FULL,	                        State.INTAKE_UP),
         TRANSITION_8  (State.INTAKE_DOWN,	        Events.CargoManagerEvent.SHUTTLE_FULL,	                        State.INTAKE_UP),
         TRANSITION_9  (State.INTAKING,	            Events.CargoManagerEvent.SHOOT_IS_CALLED,	                    State.COMMENCING_FIRING),
         TRANSITION_10 (State.INTAKE_UP,	            Events.CargoManagerEvent.SHOOT_IS_CALLED,	                    State.COMMENCING_FIRING),
-        TRANSITION_11 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.SHOOTER_READY,	                    State.CENTERING_HUB),
+        TRANSITION_11 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.SHOOTER_READY,	                        State.CENTERING_HUB),
         TRANSITION_12 (State.CENTERING_HUB,	        Events.CargoManagerEvent.HUB_IS_CENTERED,	                    State.SHOOTING),
-        TRANSITION_13 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED_AND_SHOOTER_READY,	State.SHOOTING),
+        TRANSITION_13 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED_AND_SHOOTER_READY,	    State.SHOOTING),
         TRANSITION_14 (State.COMMENCING_FIRING,	    Events.CargoManagerEvent.HUB_IS_CENTERED,	                    State.PREPARING_SHOOTER),
-        TRANSITION_15 (State.PREPARING_SHOOTER,	Events.CargoManagerEvent.SHOOTER_READY,	                    State.SHOOTING),
+        TRANSITION_15 (State.PREPARING_SHOOTER,	    Events.CargoManagerEvent.SHOOTER_READY,	                        State.SHOOTING),
         TRANSITION_16 (State.SHOOTING,	            Events.CargoManagerEvent.SHOT_ONE_OF_TWO,	                    State.PREPARING_SHOOTER),
         TRANSITION_17 (State.SHOOTING,	            Events.CargoManagerEvent.SHUTTLE_EMPTY,	                        State.NOTHING);
         
@@ -175,6 +175,7 @@ public class CargoManager
     // *** CLASS & INSTANCE VARIABLES ***
     // Use events to run state machine
     private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Current state
     private State currentCargoManagerState;
@@ -196,6 +197,10 @@ public class CargoManager
 
     // *** CLASS & INSTANCE METHODS ***
 
+    /**
+     * Transition to a new currentState if the event triggers it
+     * @param event
+     */
     public void checkStateChange(Events.CargoManagerEvent event)
     {
         // make the transition to a new currentState if an event triggered it
@@ -214,20 +219,42 @@ public class CargoManager
             // currentCargoManagerState.doExit(); // exit current state
             currentCargoManagerState = newCargoManagerState; // switch states
             // currentCargoManagerState.doEnter(); // initiate new state
-            currentCargoManagerState.doAction();
+            // currentCargoManagerState.doAction();
 
             System.out.println("State: " + currentCargoManagerState);
         }
         // move above doAction to below to always run it
-        // currentFanState.doAction(); // always maintain current state or the new state as determined above
+        currentCargoManagerState.doAction(); // always maintain current state or the new state as determined above
     }
 
     /**
-     * getter for the CargoManager current state
+     * Getter for the CargoManager current state
      * @return the current cargo manager state
      */
     public State getCurrentState()
     {
         return currentCargoManagerState;
+    }
+
+    /**
+     * Fancier run
+     */
+    public void fancierRun()
+    {
+        // TODO: Put into several run methods in teleop, also add request system for the doActions
+
+        // TODO: Only call once
+        EVENT_GENERATOR.determineEvents();
+
+        Events.CargoManagerEvent determinedCargoManagerEvent = EVENT_GENERATOR.getCargoManagerEvent();
+        
+        // Prints out the event if there is one
+        if (determinedCargoManagerEvent != Events.CargoManagerEvent.NONE)
+        {
+            System.out.println("Event name: " + determinedCargoManagerEvent);
+        }
+
+        // Send event to FSM
+        checkStateChange(determinedCargoManagerEvent);
     }
 }

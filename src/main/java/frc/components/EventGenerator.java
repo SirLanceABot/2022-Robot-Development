@@ -2,6 +2,7 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.controls.DriverController;
 import frc.robot.RobotContainer;
 
 public class EventGenerator 
@@ -19,8 +20,11 @@ public class EventGenerator
 
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // TODO: Change this to two objects instead of one
     private static final SensorValues PREVIOUS_SENSOR_VALUES = new SensorValues();
     private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
+
+    private DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
 
     private Events.ShuttleEvent shuttleEvent = Events.ShuttleEvent.NONE;
     private Events.CargoManagerEvent cargoManagerEvent = Events.CargoManagerEvent.NONE;
@@ -37,23 +41,26 @@ public class EventGenerator
 
     // *** CLASS & INSTANCE METHODS ***
 
-    public void determineEvents(boolean shoot)
+    public void determineEvents()
     {
         // Update data of input for event generation
-        CURRENT_SENSOR_VALUES.updateValues();
+        if(CURRENT_SENSOR_VALUES != null)
+        {
+            CURRENT_SENSOR_VALUES.updateValues();
+        }
 
         // Call each component's determineEvent
-        determineShuttleEvent(shoot);
-        // determineCargoManagerEvent();
+        determineShuttleEvent();
+        determineCargoManagerEvent();
     }
 
     // Determine what event based on proximity sensors and if shoot command is given
-    // FIXME: Use controller in here to get shoot
-    private void determineShuttleEvent(boolean shoot)
+    private void determineShuttleEvent()
     {
         boolean currentShuttleIntakeSensorValue = CURRENT_SENSOR_VALUES.getShuttleIntake();
         boolean currentShuttleStageOneSensorValue = CURRENT_SENSOR_VALUES.getShuttleStageOne();
         boolean currentShuttleStageTwoSensorValue = CURRENT_SENSOR_VALUES.getShuttleStageTwo();
+        boolean currentIsFeedCargoRequested = CURRENT_SENSOR_VALUES.getIsFeedCargoRequested();
 
         // Initially say there is no event then continue to look for an event
         Events.ShuttleEvent determinedEvent = Events.ShuttleEvent.NONE;
@@ -98,9 +105,18 @@ public class EventGenerator
 
             PREVIOUS_SENSOR_VALUES.setShuttleStageTwo(currentShuttleStageTwoSensorValue);
         }
-        else if(shoot)
+        else if(currentIsFeedCargoRequested != PREVIOUS_SENSOR_VALUES.getIsFeedCargoRequested())
         {
-            determinedEvent = Events.ShuttleEvent.SHOOT_IS_CALLED;
+            if (currentIsFeedCargoRequested)
+            {
+                determinedEvent = Events.ShuttleEvent.FEED_CARGO;
+            }
+            else
+            {
+                // Do not feed cargo
+            }
+
+            PREVIOUS_SENSOR_VALUES.setIsFeedCargoRequested(currentIsFeedCargoRequested);
         }
 
         shuttleEvent = determinedEvent;
@@ -113,24 +129,19 @@ public class EventGenerator
     
     public void determineCargoManagerEvent()
     {
-        // TODO: Make event generators for all the events below
-        /*
-        SHUTTLE_EMPTY,
-        SHOT_ONE_OF_TWO,
-        SHUTTLE_FULL,
-        HUB_IS_CENTERED_AND_SHOOTER_READY,
-        SHOOTER_READY,
-        HUB_IS_CENTERED,
-        SHOOT_IS_CALLED,
-        INTAKE_OUT,
-        INTAKE_IN,
-        RUN_ROLLER,
-        STOP_ROLLER;
-        */
+        // Store current values to variables to save on getter calls
 
+        // Sensor input
         int currentCargoCount = CURRENT_SENSOR_VALUES.getCargoCount();
         boolean currentIsShooterReady = CURRENT_SENSOR_VALUES.getIsShooterReady();
         boolean currentIsHubCentered = CURRENT_SENSOR_VALUES.getIsHubCentered();
+
+        // Controller input
+        boolean currentShootControllerInput = CURRENT_SENSOR_VALUES.getShootControllerInput();
+        boolean currentArmToggleControllerInput = CURRENT_SENSOR_VALUES.getArmToggleControllerInput();
+        boolean currentRollerToggleControllerInput = CURRENT_SENSOR_VALUES.getRollerToggleControllerInput();
+
+        // Store previous values to variables to save on getter calls
 
         int previousCargoCount = PREVIOUS_SENSOR_VALUES.getCargoCount();
 
@@ -197,11 +208,49 @@ public class EventGenerator
     
             PREVIOUS_SENSOR_VALUES.setIsHubCentered(currentIsHubCentered);
         }
+        // Controller input is lower priority than sensors
+        else if(currentShootControllerInput != PREVIOUS_SENSOR_VALUES.getShootControllerInput())
+        {
+            if (currentShootControllerInput)
+            {
+                determinedEvent = Events.CargoManagerEvent.SHOOT_IS_CALLED;
+            }
+            else
+            {
+                // Shoot not called
+            }
+    
+            PREVIOUS_SENSOR_VALUES.setShootControllerInput(currentShootControllerInput);
+        }
+        else if(currentArmToggleControllerInput != PREVIOUS_SENSOR_VALUES.getArmToggleControllerInput())
+        {
+            if (currentArmToggleControllerInput)
+            {
+                determinedEvent = Events.CargoManagerEvent.ARM_TOGGLE;
+            }
+            else
+            {
+                // Don't toggle arm
+            }
+    
+            PREVIOUS_SENSOR_VALUES.setArmToggleControllerInput(currentArmToggleControllerInput);
+        }
+        else if(currentRollerToggleControllerInput != PREVIOUS_SENSOR_VALUES.getRollerToggleControllerInput())
+        {
+            if (currentRollerToggleControllerInput)
+            {
+                determinedEvent = Events.CargoManagerEvent.ROLLER_TOGGLE;
+            }
+            else
+            {
+                // Don't toggle roller
+            }
+    
+            PREVIOUS_SENSOR_VALUES.setRollerToggleControllerInput(currentRollerToggleControllerInput);
+        }
 
         cargoManagerEvent = determinedEvent;
     }
-
-    // TODO: Add controller events
 
     public Events.CargoManagerEvent getCargoManagerEvent()
     {

@@ -12,10 +12,8 @@ public class Events
         SHOOTER_READY,
         HUB_IS_CENTERED,
         SHOOT_IS_CALLED,
-        INTAKE_OUT,
-        INTAKE_IN,
-        RUN_ROLLER,
-        STOP_ROLLER;
+        ARM_TOGGLE,
+        ROLLER_TOGGLE;
 
     }
 
@@ -28,6 +26,6 @@ public class Events
         STAGE_ONE_FULL_SENSOR_DEACTIVATES,
         STAGE_TWO_FULL_SENSOR_ACTIVATES,
         STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-        SHOOT_IS_CALLED;
+        FEED_CARGO;
     }
 }

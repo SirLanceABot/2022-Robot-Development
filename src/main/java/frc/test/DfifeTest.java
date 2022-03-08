@@ -49,22 +49,21 @@ public class DfifeTest implements MyTest
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
-    private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
-    private static Events.ShuttleEvent[] array =
-    {
-        Events.ShuttleEvent.NONE,
-        Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-        Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this event and base it on something else?
-        Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,
-        Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,
-        Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,
-        Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-        Events.ShuttleEvent.SHOOT_IS_CALLED
-    };
+    // private static Events.ShuttleEvent[] array =
+    // {
+    //     Events.ShuttleEvent.NONE,
+    //     Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
+    //     Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES, // FIXME Remove this event and base it on something else?
+    //     Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,
+    //     Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_DEACTIVATES,
+    //     Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,
+    //     Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,
+    //     Events.ShuttleEvent.FEED_CARGO
+    // };
     
-    private Events.ShuttleEvent event;
+    // private Events.ShuttleEvent event;
 
     private boolean previousButtonA = false;
     private boolean previousButtonB = false;
@@ -167,15 +166,17 @@ public class DfifeTest implements MyTest
     // Testing FSM out
     private void FSMTestingV2()
     {
-        boolean shoot = DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftTrigger) > 0.5;
+        // boolean shoot = DRIVER_CONTROLLER.getRawAxis(Xbox.Axis.kLeftTrigger) > 0.5;
 
         // Determine an event based on controller input
         // event = determineEventFromController(shoot);
         // shuttle.fancyRun(event);
 
-        SHUTTLEFSM.fancyRun(shoot);
+        // SHUTTLEFSM.fancyRun(shoot);
+        SHUTTLEFSM.fancyRun();
     }
 
+    /*
     // Returns a determined event from the controller input
     private Events.ShuttleEvent determineEventFromController(boolean shoot)
     {
@@ -224,7 +225,7 @@ public class DfifeTest implements MyTest
         }
         else if(shoot)
         {
-            determinedEvent = Events.ShuttleEvent.SHOOT_IS_CALLED;
+            determinedEvent = Events.ShuttleEvent.FEED_CARGO;
         };
 
         return determinedEvent;
@@ -264,6 +265,7 @@ public class DfifeTest implements MyTest
 
         previousStateOfButton = currentStateOfButton;
     }
+    */
 
     private void measureABXY()
     {

@@ -34,8 +34,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Request stage one and two to be turned off
-                motorRequest.stageOne = false;
-                motorRequest.stageTwo = false;
+                motorRequests.stageOne = false;
+                motorRequests.stageTwo = false;
 
                 cargoCount = 0;
             }
@@ -46,8 +46,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Run stage one and two
-                motorRequest.stageOne = true;
-                motorRequest.stageTwo = true;
+                motorRequests.stageOne = true;
+                motorRequests.stageTwo = true;
 
                 cargoCount = 1;
             }
@@ -58,8 +58,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Turn off stage one and two
-                motorRequest.stageOne = false;
-                motorRequest.stageTwo = false;
+                motorRequests.stageOne = false;
+                motorRequests.stageTwo = false;
 
                 cargoCount = 1;
             }
@@ -95,8 +95,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Turn off stage one and run stage two
-                motorRequest.stageOne = false;
-                motorRequest.stageTwo = true;
+                motorRequests.stageOne = false;
+                motorRequests.stageTwo = true;
 
                 cargoCount = 2;
             }
@@ -107,8 +107,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Run stage two and turn off stage one
-                motorRequest.stageOne = false;
-                motorRequest.stageTwo = true;
+                motorRequests.stageOne = false;
+                motorRequests.stageTwo = true;
 
                 cargoCount = 1;
             }
@@ -119,8 +119,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Run stage one and turn off stage two
-                motorRequest.stageOne = true;
-                motorRequest.stageTwo = false;
+                motorRequests.stageOne = true;
+                motorRequests.stageTwo = false;
 
                 cargoCount = 2;
             }
@@ -131,8 +131,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Turn off stage one and two
-                motorRequest.stageOne = false;
-                motorRequest.stageTwo = false;
+                motorRequests.stageOne = false;
+                motorRequests.stageTwo = false;
 
                 cargoCount = 2;
             }
@@ -143,8 +143,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Run stage one and two
-                motorRequest.stageOne = true;
-                motorRequest.stageTwo = true;
+                motorRequests.stageOne = true;
+                motorRequests.stageTwo = true;
 
                 cargoCount = 2;
             }
@@ -156,8 +156,8 @@ public class ShuttleFSM
             void doAction()
             {
                 // Run stage one and two
-                motorRequest.stageOne = true;
-                motorRequest.stageTwo = true;
+                motorRequests.stageOne = true;
+                motorRequests.stageTwo = true;
 
                 cargoCount = 1;
             }
@@ -167,10 +167,13 @@ public class ShuttleFSM
         abstract void doAction();
         
         // methods each state can use in common because the code is the same in this example
-        // void doEnter()
-        // {
-        //    System.out.println("entering state " + this.name());
-        // }
+        void doEnter()
+        {
+            // System.out.println("entering state " + this.name());
+            
+            // Set flag for feedCargo to false as have used event if needed
+            feedCargo = false;
+        }
 
         // void doExit()
         // {
@@ -197,11 +200,11 @@ public class ShuttleFSM
         TRANSITION_2D (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,	               State.STORING_CARGO_IN_STAGE_ONE),
         TRANSITION_2E (State.STORING_CARGO_IN_STAGE_TWO_FROM_TWO,	Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,	               State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO),
         TRANSITION_2F (State.CARGO_STORED_IN_STAGE_ONE_AND_STORING_IN_STAGE_TWO,	Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
-        TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_TWO),
+        TRANSITION_3  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.FEED_CARGO,                                        State.SHOOTING_CARGO_FROM_STAGE_TWO),
         TRANSITION_4  (State.SHOOTING_CARGO_FROM_STAGE_TWO,         Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.NO_CARGO_STORED),
         TRANSITION_5  (State.CARGO_STORED_IN_STAGE_TWO,             Events.ShuttleEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,     State.STORING_CARGO_IN_STAGE_ONE),
         TRANSITION_6  (State.STORING_CARGO_IN_STAGE_ONE,            Events.ShuttleEvent.STAGE_ONE_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_ONE_AND_TWO),
-        TRANSITION_7  (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.SHOOT_IS_CALLED,                                   State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO),
+        TRANSITION_7  (State.CARGO_STORED_IN_STAGE_ONE_AND_TWO,     Events.ShuttleEvent.FEED_CARGO,                                        State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO),
         TRANSITION_8  (State.SHOOTING_CARGO_FROM_STAGE_ONE_AND_TWO, Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_DEACTIVATES,                 State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE),
         TRANSITION_9  (State.STORING_CARGO_IN_STAGE_TWO_FROM_ONE,   Events.ShuttleEvent.STAGE_TWO_FULL_SENSOR_ACTIVATES,                   State.CARGO_STORED_IN_STAGE_TWO);
 
@@ -247,12 +250,11 @@ public class ShuttleFSM
     // Current state
     private State currentShuttleState;
 
-    private static final MotorStage motorRequest = new MotorStage();
+    private static final MotorStage motorRequests = new MotorStage();
 
     private static int cargoCount = 0;
-
-    // TODO: Figure out if this is needed or should be the "determinedEvent"
-    private Events.ShuttleEvent event;
+    // Tracks inserting cargo into the flywheel, related to FEED_CARGO event
+    private static boolean feedCargo = false;
 
     // *** CLASS CONSTRUCTOR ***
     public ShuttleFSM()
@@ -260,8 +262,8 @@ public class ShuttleFSM
         System.out.println(fullClassName + " : Constructor Started");
 
         // Initialize motor commands to stop
-        motorRequest.stageOne = false;
-        motorRequest.stageTwo = false;
+        motorRequests.stageOne = false;
+        motorRequests.stageTwo = false;
 
         // Intital state of the FSM
         // currentShuttleState = State.NO_CARGO_STORED;
@@ -275,6 +277,10 @@ public class ShuttleFSM
 
     // *** CLASS & INSTANCE METHODS ***
 
+    /**
+     * Transition to a new currentState if the event triggers it
+     * @param event
+     */
     public void checkStateChange(Events.ShuttleEvent event)
     {
         // make the transition to a new currentState if an event triggered it
@@ -292,17 +298,17 @@ public class ShuttleFSM
             // change states
             // currentShuttleState.doExit(); // exit current state
             currentShuttleState = newShuttleState; // switch states
-            // currentShuttleState.doEnter(); // initiate new state
+            currentShuttleState.doEnter(); // initiate new state
             currentShuttleState.doAction();
 
             System.out.println("State: " + currentShuttleState);
         }
         // move above doAction to below to always run it
-        // currentFanState.doAction(); // always maintain current state or the new state as determined above
+        // currentShuttleState.doAction(); // always maintain current state or the new state as determined above
     }
 
     /**
-     * getter for the Shuttle current state
+     * Getter for the Shuttle current state
      * @return the current shuttle state
      */
     public State getCurrentState()
@@ -341,25 +347,47 @@ public class ShuttleFSM
         return cargoCount;
     }
 
-    // public void fancyRun(Events.event event)
-    public void fancyRun(boolean shoot)
+    /**
+     * Sets a flag for an event to generate, set to false by ShuttleFSM
+     */
+    public void feedCargo()
     {
-        EVENT_GENERATOR.determineEvents(shoot);
+        feedCargo = true;
+    }
 
-        Events.ShuttleEvent event = EVENT_GENERATOR.getShuttleEvent();
+    public boolean isFeedCargoRequested()
+    {
+        return feedCargo;
+    }
+
+    public MotorStage getMotorRequests()
+    {
+        return motorRequests;
+    }
+
+    // @Deprecated
+    public void fancyRun()
+    {
+        // TODO: Put into several run methods in teleop
+
+        // TODO: Only call once
+        // Remove this call to outer layer
+        EVENT_GENERATOR.determineEvents();
+
+        Events.ShuttleEvent determinedShuttleEvent = EVENT_GENERATOR.getShuttleEvent();
         
         // Prints out the event if there is one
-        if (event != Events.ShuttleEvent.NONE)
+        if (determinedShuttleEvent != Events.ShuttleEvent.NONE)
         {
-            System.out.println("Event name: " + event);
+            System.out.println("Event name: " + determinedShuttleEvent);
         }
 
         // Send event to FSM
-        checkStateChange(event);
+        checkStateChange(determinedShuttleEvent);
 
         // FIXME Make sure that requests do not get whiped out because one of the doActions does not set one motor
         // TODO: Move this to an outer layer where will use flags to run motors, also need to make getMotorRequest()
-        if (motorRequest.stageOne)
+        if (motorRequests.stageOne)
         {
             SHUTTLE.forwardStageOne();
         }
@@ -368,7 +396,7 @@ public class ShuttleFSM
             SHUTTLE.stopStageOne();
         }
 
-        if (motorRequest.stageTwo)
+        if (motorRequests.stageTwo)
         {
             SHUTTLE.forwardStageTwo();
         }

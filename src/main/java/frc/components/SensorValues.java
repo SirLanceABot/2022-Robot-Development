@@ -2,6 +2,8 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.controls.DriverController;
+import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
 
 public class SensorValues 
@@ -22,16 +24,23 @@ public class SensorValues
     // *** CLASS & INSTANCE VARIABLES ***
 
     // Component objects
+    private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
 
     // Separated by component
 
+    // DriverController
+    private boolean shootControllerInput = false;
+    private boolean armToggleControllerInput = false;
+    private boolean rollerToggleControllerInput = false;
+
     // Shuttle
     private boolean shuttleIntakeSensorValue = false;
     private boolean shuttleStageOneSensorValue = false;
     private boolean shuttleStageTwoSensorValue = false;
+    private boolean isFeedCargoRequested = false;
 
     // CargoManager
     private int cargoCount = 0;
@@ -51,15 +60,55 @@ public class SensorValues
 
     public void updateValues()
     {
+        // DriverController
+        if (DRIVER_CONTROLLER != null)
+        {
+            // TODO: Refactor names if necessary
+            shootControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+            armToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle);
+            rollerToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
+        }
+
         // Shuttle
-        shuttleIntakeSensorValue = SHUTTLE.measureIntakeSensor();
-        shuttleStageOneSensorValue = SHUTTLE.measureStageOneSensor();
-        shuttleStageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
+        if (SHUTTLE != null)
+        {
+            shuttleIntakeSensorValue = SHUTTLE.measureIntakeSensor();
+            shuttleStageOneSensorValue = SHUTTLE.measureStageOneSensor();
+            shuttleStageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
+        }
+        if(SHUTTLEFSM != null)
+        {
+            isFeedCargoRequested = SHUTTLEFSM.isFeedCargoRequested();
+        }
 
         // CargoManager
-        // cargoCount = SHUTTLEFSM.getCargoCount();
-        isShooterReady = false; // TODO: Use Elliot's code
-        isHubCentered = false;
+        if (SHUTTLEFSM != null)
+        {
+            cargoCount = SHUTTLEFSM.getCargoCount();
+        }
+
+        if (SHOOTER != null)
+        {
+            isShooterReady = false; // TODO: Use Elliot's code
+            isHubCentered = false;
+        }
+    }
+
+    // DriverController setters
+
+    public void setShootControllerInput(boolean shootControllerInput)
+    {
+        this.shootControllerInput = shootControllerInput;
+    }
+
+    public void setArmToggleControllerInput(boolean armToggleControllerInput)
+    {
+        this.armToggleControllerInput = armToggleControllerInput;
+    }
+
+    public void setRollerToggleControllerInput(boolean rollerToggleControllerInput)
+    {
+        this.rollerToggleControllerInput = rollerToggleControllerInput;
     }
 
     // Shuttle setters
@@ -79,6 +128,11 @@ public class SensorValues
         this.shuttleStageTwoSensorValue = shuttleStageTwoSensorValue;
     }
 
+    public void setIsFeedCargoRequested(boolean isFeedCargoRequested)
+    {
+        this.isFeedCargoRequested = isFeedCargoRequested;
+    }
+
     // CargoManager setters
 
     public void setCargoCount(int cargoCount)
@@ -94,6 +148,23 @@ public class SensorValues
     public void setIsHubCentered(boolean isHubCentered)
     {
         this.isHubCentered = isHubCentered;
+    }
+
+    // DriverController getters
+
+    public boolean getShootControllerInput()
+    {
+        return shootControllerInput;
+    }
+
+    public boolean getArmToggleControllerInput()
+    {
+        return armToggleControllerInput;
+    }
+
+    public boolean getRollerToggleControllerInput()
+    {
+        return rollerToggleControllerInput;
     }
 
     // Shuttle getters
@@ -123,6 +194,15 @@ public class SensorValues
     public boolean getShuttleStageTwo()
     {
         return shuttleStageTwoSensorValue;
+    }
+
+    /**
+     * Is feed cargo requested for ShuttleFSM
+     * @return isFeedCargoRequested
+     */
+    public boolean getIsFeedCargoRequested()
+    {
+        return isFeedCargoRequested;
     }
 
     // CargoManager getters
