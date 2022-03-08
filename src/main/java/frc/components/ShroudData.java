@@ -31,8 +31,9 @@ public class ShroudData
     public static void dataInit()
     {
         //put all data points here, VOLTAGE MUST BE IN ORDER FROM LOWEST TO HIGHEST
-        //must start at 0.0 voltage
-        shroudData.add(new ShroudData(0.0, 0.0));
+        //must start with lower limit and end with upper limit, DO NOT LEAVE OUT
+        shroudData.add(new ShroudData(-1000.0, -1000.0));
+        shroudData.add(new ShroudData(1000.0, 1000.0));
     }
 
     //angle is in degrees in standard position

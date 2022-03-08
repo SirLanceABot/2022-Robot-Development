@@ -49,7 +49,7 @@ public class TeleopMode implements ModeTransition
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Testing variable
-    private static final double SHOOTER_SPEED = 0.1;
+    private static final double SHOOTER_SPEED = 0.3;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -190,7 +190,7 @@ public class TeleopMode implements ModeTransition
                 // TODO: Make this not here
                 boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
                 
-                SHUTTLEFSM.fancyRun(shoot);
+                // SHUTTLEFSM.fancyRun(shoot);
             }
         }
 
@@ -230,20 +230,32 @@ public class TeleopMode implements ModeTransition
 
             if(SHOOTER != null)
             {
+                // Running the shuttle
+                if (SHUTTLE != null)
+                {
+                    // TODO: Make this not here
+                    boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
+                    
+                    SHUTTLEFSM.fancyRun(shoot);
+                }
+
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
-                    {
-                        SHOOTER.setFlywheelSpeedNew(-SHOOTER_SPEED);
-                    }
-                    else
-                    {
-                        SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
-                    }
+                    SHOOTER.shoot();
+                    // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
+                    
+                    // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
+                    // {
+                    //     // SHOOTER.setFlywheelSpeedNew(-SHOOTER_SPEED);
+                    // }
+                    // else
+                    // {
+                    //     SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
+                    // }
                 }
                 else
                 {
-                    SHOOTER.setFlywheelSpeedNew(0.0);
+                    SHOOTER.stopFlywheel();
                 }
 
                 // SHOOTER.outputShroudLimit();
