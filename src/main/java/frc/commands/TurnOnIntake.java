@@ -44,13 +44,13 @@ public class TurnOnIntake implements Command
     {
         INTAKE.moveArmOut();
 
-        // if (INTAKE.isArmOut())
-        // {
-        //     INTAKE.intakeRoller();
+        if (INTAKE.isArmOut())
+        {
+            INTAKE.intakeRoller();
 
-        //     System.out.println("Intake is on");
-        //     isFinished = true;
-        // }
+            System.out.println("Intake is on");
+            isFinished = true;
+        }
         
         // isIntakeOn = true;
 

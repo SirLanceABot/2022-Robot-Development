@@ -45,11 +45,11 @@ public class TurnOffIntake implements Command
         INTAKE.turnOffRoller();
         INTAKE.moveArmIn();
 
-        // if(INTAKE.isArmIn())
-        // {
-        //     System.out.println("Intake is off");
-        //     isFinished = true;
-        // }
+        if(INTAKE.isArmIn())
+        {
+            System.out.println("Intake is off");
+            isFinished = true;
+        }
         
         // isIntakeOff = true;
 
