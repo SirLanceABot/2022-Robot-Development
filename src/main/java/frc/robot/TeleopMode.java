@@ -234,9 +234,7 @@ public class TeleopMode implements ModeTransition
                 if (SHUTTLE != null)
                 {
                     // TODO: Make this not here
-                    boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
-                    
-                    SHUTTLEFSM.fancyRun(shoot);
+                    SHUTTLEFSM.fancyRun();
                 }
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
