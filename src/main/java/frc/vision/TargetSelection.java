@@ -130,6 +130,7 @@ public void run()
       // The gripPipeline creates an array of contours that must be searched to find the target.
       ArrayList<MatOfPoint> filteredContours;
       filteredContours = new ArrayList<MatOfPoint>(gripPipeline.filterContoursOutput());
+      // filteredContours = new ArrayList<MatOfPoint>(gripPipeline.filterContoursOutput());
 
       // System.out.println(filteredContours.size() + " Contours found");
       // SmartDashboard.putNumber("#contours", filteredContours.size());
