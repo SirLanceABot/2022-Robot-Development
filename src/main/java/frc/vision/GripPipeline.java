@@ -95,7 +95,7 @@ public class GripPipeline {
 		double filterContoursMaxWidth = 1000.0;
 		double filterContoursMinHeight = 3.0;
 		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {75.22388059701493, 100.0};
+		double[] filterContoursSolidity = {65.22388059701493, 100.0};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
 		double filterContoursMinRatio = 0.25;
