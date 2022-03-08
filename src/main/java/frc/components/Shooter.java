@@ -81,8 +81,8 @@ public class Shooter
     private static final double FLYWHEEL_GEAR_RATIO = 60.0 / 24.0;
 
     //m/s and degrees
-    private static double desiredLaunchSpeed = 3300.0;
-    private static double desiredLaunchAngle = -190.0;
+    private static double desiredLaunchSpeed = 2000.0;
+    private static double desiredLaunchAngle = -235.0;
 
 
 
@@ -118,7 +118,7 @@ public class Shooter
         configFlywheelMotor();
         configShroudMotor();
 
-        TrajectoryData.dataInit();
+        UpperTrajectoryData.dataInit();
         ShroudData.dataInit();
         ShooterVisionData.dataInit();
     }
@@ -179,8 +179,8 @@ public class Shooter
     //speeds are all in rpm
     private void setFlywheelSpeed(double speed)
     {
-        System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        System.out.println("Shroud value: " + measureShroudSensorValue());
+        // System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
+        // System.out.println("Shroud value: " + measureShroudSensorValue());
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
     }
 
@@ -206,6 +206,11 @@ public class Shooter
 
     public void shoot()
     {
+        shoot(Hub.kUpper);
+    }
+
+    public void shoot(Hub hub)
+    {
         // updateVisionData();
 
         // if (isDataFresh())
@@ -213,13 +218,13 @@ public class Shooter
         //     calculateLaunchTrajectory();
         // }
 
-        calculateLaunchTrajectory();
+        // calculateLaunchTrajectory(hub);
 
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
-        System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
-        System.out.println("Shroud value: " + measureShroudSensorValue());
+        // System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
+        // System.out.println("Shroud value: " + measureShroudSensorValue());
 
         // checkIsShooterReady();
     }
@@ -248,13 +253,21 @@ public class Shooter
         // desiredLaunchSpeed = 0.0;
     }
 
-    private void calculateLaunchTrajectory()
+    private void calculateLaunchTrajectory(Hub hub)
     {
         // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
-        distance = 9.5 * FEET_TO_METERS;
+        distance = 0.0 * FEET_TO_METERS;
 
-        desiredLaunchSpeed = TrajectoryData.getSpeed(distance);
-        desiredLaunchAngle = TrajectoryData.getAngle(distance);
+        if (hub == Hub.kLower)
+        {
+            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance);
+            desiredLaunchAngle = LowerTrajectoryData.getAngle(distance);
+        }
+        else if (hub == Hub.kUpper)
+        {
+            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance);
+            desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
+        }
     }
 
     //this speed is in percent output

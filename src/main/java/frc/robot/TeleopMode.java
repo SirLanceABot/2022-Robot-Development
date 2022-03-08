@@ -239,7 +239,7 @@ public class TeleopMode implements ModeTransition
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    SHOOTER.shoot();
+                    SHOOTER.shoot(Shooter.Hub.kLower);
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
                     // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
@@ -255,6 +255,11 @@ public class TeleopMode implements ModeTransition
                 {
                     SHOOTER.stopFlywheel();
                 }
+
+                // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+                // {
+                //     SHUTTLEFSM.feedCargo();
+                // }
 
                 // SHOOTER.outputShroudLimit();
                 // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));

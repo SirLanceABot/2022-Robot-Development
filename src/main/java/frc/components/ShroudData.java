@@ -40,12 +40,14 @@ public class ShroudData
     public static double getAngle(double voltage)
     {
         //this empty loop makes sure the voltage of the index is greater than the passed voltage
-        for (index = 0; voltage >= shroudData.get(index).voltage; index++)
+        for (index = 0; voltage >= shroudData.get(index).voltage && index < shroudData.size(); index++)
         {
 
         }
 
         //distance in between current index and index one position behind, should be number from 0.0 to 1.0, not including 1.0
+        //number is negative if input is below lowest point
+        //number is above 1 if input is above highest point
         voltageRatio = (voltage - shroudData.get(index - 1).voltage) / (shroudData.get(index).voltage - shroudData.get(index - 1).voltage);
 
         //multiplies voltageRatio by the difference in angles between current index and previous index, and then adds the base angle

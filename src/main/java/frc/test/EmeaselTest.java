@@ -63,7 +63,7 @@ public class EmeaselTest implements MyTest
 
         // // System.out.println(RobotController.getVoltage5V() + " " + shooter.measureShroudAngle());
 
-        SHOOTER.shoot();
+        SHOOTER.shoot(Shooter.Hub.kUpper);
         System.out.println(SHOOTER.measureFlywheelSpeed());
     }
 

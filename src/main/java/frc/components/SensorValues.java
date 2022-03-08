@@ -3,7 +3,9 @@ package frc.components;
 import java.lang.invoke.MethodHandles;
 
 import frc.controls.DriverController;
+import frc.controls.OperatorController;
 import frc.controls.DriverController.DriverButtonAction;
+import frc.controls.OperatorController.OperatorButtonAction;
 import frc.robot.RobotContainer;
 
 public class SensorValues 
@@ -25,6 +27,7 @@ public class SensorValues
 
     // Component objects
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+    private static final OperatorController OPERATOR_CONTROLLER = RobotContainer.OPERATOR_CONTROLLER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
@@ -32,9 +35,11 @@ public class SensorValues
     // Separated by component
 
     // DriverController
-    private boolean shootControllerInput = false;
     private boolean armToggleControllerInput = false;
     private boolean rollerToggleControllerInput = false;
+
+    // OperatorController
+    private boolean shootControllerInput = false;
 
     // Shuttle
     private boolean shuttleIntakeSensorValue = false;
@@ -64,7 +69,7 @@ public class SensorValues
         if (DRIVER_CONTROLLER != null)
         {
             // TODO: Refactor names if necessary
-            shootControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+            shootControllerInput = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
             armToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle);
             rollerToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
         }

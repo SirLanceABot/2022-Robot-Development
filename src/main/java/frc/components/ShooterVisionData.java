@@ -39,12 +39,23 @@ public class ShooterVisionData
     public static double getDistance(double pixels)
     {
         //this empty loop makes sure the pixels of the index is greater than the passed pixels
-        for (index = 0; pixels >= shooterVisionData.get(index).pixels; index++)
+        for (index = 0; pixels >= shooterVisionData.get(index).pixels && index < shooterVisionData.size(); index++)
         {
 
         }
 
+        if (index == 0)
+        {
+            index++;
+        }
+        else if (index == shooterVisionData.size())
+        {
+            index--;
+        }
+
         //distance in between current index and index one position behind, should be number from 0.0 to 1.0, not including 1.0
+        //number is negative if input is below lowest point
+        //number is above 1 if input is above highest point
         pixelRatio = (pixels - shooterVisionData.get(index - 1).pixels) / (shooterVisionData.get(index).pixels - shooterVisionData.get(index - 1).pixels);
 
         //multiplies pixelRatio by the difference in distance between current index and previous index, and then adds the base distance
