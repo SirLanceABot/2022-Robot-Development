@@ -33,6 +33,13 @@ public class Climber
     //FIXME For the st. joe match, we're only gonna go up to the second bar
 
     // *** CLASS & INSTANCE VARIABLES ***
+    private enum MovementType
+    {
+        kOff, kMoving, kClimbing, kNone
+    }
+
+    private MovementType movementType;
+    //Motors
     //Talon 
     private final TalonSRX climbBrakeMotor;
     //NEO 550
@@ -63,9 +70,9 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        // firstStageClimbMotorPort = 7;   // Used ONLY for testing
+        firstStageClimbMotorPort = 3;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
-        // climbBrakeMotorPort = 0; //Used ONLY for testing
+        climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
@@ -223,6 +230,26 @@ public class Climber
     // }
 
     //Everything Else
+    private MovementType findMovement()
+    {
+        if(firstStageClimbMotorLeader.getOutputCurrent() >= 20)
+        {
+            return(MovementType.kClimbing);
+        }
+        else if(firstStageClimbMotorLeader.getOutputCurrent() < 20 || firstStageClimbMotorLeader.getOutputCurrent() > 0)
+        {
+            return(MovementType.kMoving);
+        }
+        else if(firstStageClimbMotorLeader.getOutputCurrent() == 0)
+        {
+            return(MovementType.kOff);
+        }
+        else
+        {
+            return(MovementType.kNone);
+        }
+       
+    }
     private void setFirstStageMotorSpeed(double speed)
     {
         firstStageClimbMotorLeader.set(speed);
@@ -231,21 +258,19 @@ public class Climber
     {
         climbBrakeMotor.set(ControlMode.PercentOutput, speed);
     }
-
     public void shutDown()
     {
-        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
-        if(firstStageClimbMotorLeader.getOutputCurrent() > 15.00)
+        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        if(movementType == MovementType.kMoving) //FIXME: This needs to be kClimbing when testing robot
         {
             setFirstStageMotorSpeed(.35);
         }
         else
-        
         {
             setFirstStageMotorSpeed(0.0);
+            //movementType = MovementType.kOff;
         }
         setBrakeMotor(0.0);
-        //TODO add whatever motors start getting used to this
     }
 
     public void climbUp()
@@ -265,8 +290,9 @@ public class Climber
         //     setBrakeMotor(-.1); //TODO make sure this value goes the right direction
         //     setFirstStageMotorSpeed(0);
         // }
+        movementType = findMovement();
         setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
-        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
+        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         
     }
 
@@ -279,7 +305,6 @@ public class Climber
         // if(FCLBackwardLimitSwitch.isPressed() == true)
         // {
         //     // setBrakeMotor(.1);
-            
         //     setFirstStageMotorSpeed(0);
         // }
         // else
@@ -288,8 +313,9 @@ public class Climber
         //     setFirstStageMotorSpeed(-.5);
         //     // setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // }
+        movementType = findMovement();
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
-        System.out.println(firstStageClimbMotorLeader.getOutputCurrent());
+        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
