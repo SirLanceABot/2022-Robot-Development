@@ -14,10 +14,11 @@ public class LowerTrajectoryData
         System.out.println("Loading: " + fullClassName);
     }
 
-    private static ArrayList<LowerTrajectoryData> trajectoryData = new ArrayList<LowerTrajectoryData>();
+    private static ArrayList<LowerTrajectoryData> lowerTrajectoryData = new ArrayList<LowerTrajectoryData>();
 
     private static int index;
     private static double distanceRatio;
+    private static boolean flag;
 
     private static final double FEET_TO_METERS = 0.3048;
 
@@ -37,25 +38,30 @@ public class LowerTrajectoryData
     {
         //put all data points here, DISTANCE MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must be at least two data points to work
-        trajectoryData.add(new LowerTrajectoryData(0.0 * FEET_TO_METERS, 1500.0, -215.0));
-        trajectoryData.add(new LowerTrajectoryData(2.0 * FEET_TO_METERS, 1700.0, -170.0));
-        trajectoryData.add(new LowerTrajectoryData(4.0 * FEET_TO_METERS, 1850.0, -150.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(0.0 * FEET_TO_METERS, 1500.0, -215.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(2.0 * FEET_TO_METERS, 1700.0, -170.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(4.0 * FEET_TO_METERS, 1850.0, -150.0));
     }
 
     //speed in rpms
     public static double getSpeed(double distance)
     {
-        //this loop makes sure the distance of the index is greater than the passed distance
-        for (index = 0; distance >= trajectoryData.get(index).distance && index < trajectoryData.size(); index++)
-        {
+        flag = true;
 
+        //this loop makes sure the distance of the index is greater than the passed distance
+        for (index = 0; index < lowerTrajectoryData.size() && flag; index++)
+        {
+            if (distance < lowerTrajectoryData.get(index).distance)
+            {
+                flag = false;
+            }
         }
 
         if (index == 0)
         {
             index++;
         }
-        else if (index == trajectoryData.size())
+        else if (index == lowerTrajectoryData.size())
         {
             index--;
         }
@@ -63,26 +69,31 @@ public class LowerTrajectoryData
         //distance in between current index and index one position behind, number from 0.0 to 1.0, not including 1.0
         //number is negative if input is below lowest point
         //number is above 1 if input is above highest point
-        distanceRatio = (distance - trajectoryData.get(index - 1).distance) / (trajectoryData.get(index).distance - trajectoryData.get(index - 1).distance);
+        distanceRatio = (distance - lowerTrajectoryData.get(index - 1).distance) / (lowerTrajectoryData.get(index).distance - lowerTrajectoryData.get(index - 1).distance);
 
         //multiplies distanceRatio by the difference in speeds between current index and previous index, and then adds the base speed
-        return distanceRatio * (trajectoryData.get(index).speed - trajectoryData.get(index - 1).speed) + trajectoryData.get(index - 1).speed;
+        return distanceRatio * (lowerTrajectoryData.get(index).speed - lowerTrajectoryData.get(index - 1).speed) + lowerTrajectoryData.get(index - 1).speed;
     }
 
     //angle is in degrees in standard position
     public static double getAngle(double distance)
     {
-        //this empty loop makes sure the distance of the index is greater than the passed distance
-        for (index = 0; distance >= trajectoryData.get(index).distance && index < trajectoryData.size(); index++)
-        {
+        flag = true;
 
+        //this loop makes sure the distance of the index is greater than the passed distance
+        for (index = 0; index < lowerTrajectoryData.size() && flag; index++)
+        {
+            if (distance < lowerTrajectoryData.get(index).distance)
+            {
+                flag = false;
+            }
         }
 
         if (index == 0)
         {
             index++;
         }
-        else if (index == trajectoryData.size())
+        else if (index == lowerTrajectoryData.size())
         {
             index--;
         }
@@ -90,9 +101,9 @@ public class LowerTrajectoryData
         //distance in between current index and index one position behind, should be number from 0.0 to 1.0, not including 1.0
         //number is negative if input is below lowest point
         //number is above 1 if input is above highest point
-        distanceRatio = (distance - trajectoryData.get(index - 1).distance) / (trajectoryData.get(index).distance - trajectoryData.get(index - 1).distance);
+        distanceRatio = (distance - lowerTrajectoryData.get(index - 1).distance) / (lowerTrajectoryData.get(index).distance - lowerTrajectoryData.get(index - 1).distance);
 
         //multiplies distanceRatio by the difference in angles between current index and previous index, and then adds the base angle
-        return distanceRatio * (trajectoryData.get(index).angle - trajectoryData.get(index - 1).angle) + trajectoryData.get(index - 1).angle;
+        return distanceRatio * (lowerTrajectoryData.get(index).angle - lowerTrajectoryData.get(index - 1).angle) + lowerTrajectoryData.get(index - 1).angle;
     }
 }

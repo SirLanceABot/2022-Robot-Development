@@ -192,6 +192,8 @@ public class TeleopMode implements ModeTransition
                 // {
                 //     INTAKE.stopArm();
                 // }
+
+                System.out.println("INTAKE POSITION " + INTAKE.getArmPosition());
             }
             
         // TODO: Remove this?
@@ -263,6 +265,7 @@ public class TeleopMode implements ModeTransition
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
+                    SHOOTER.turnOnLED();
                     SHOOTER.shoot(Shooter.Hub.kLower);
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
@@ -277,6 +280,7 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
+                    SHOOTER.turnOffLED();
                     SHOOTER.stopFlywheel();
                 }
 

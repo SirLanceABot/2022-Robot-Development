@@ -18,6 +18,7 @@ public class ShroudData
 
     private static int index;
     private static double voltageRatio;
+    private static boolean flag;
 
     private double voltage;
     private double angle;
@@ -38,10 +39,15 @@ public class ShroudData
     //angle is in degrees in standard position
     public static double getAngle(double voltage)
     {
-        //this empty loop makes sure the voltage of the index is greater than the passed voltage
-        for (index = 0; voltage >= shroudData.get(index).voltage && index < shroudData.size(); index++)
-        {
+        flag = true;
 
+        //this loop makes sure the voltage of the index is greater than the passed voltage
+        for (index = 0; index < shroudData.size(); index++)
+        {
+            if (voltage < shroudData.get(index).voltage)
+            {
+                flag = false;
+            }
         }
 
         if (index == 0)

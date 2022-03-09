@@ -121,6 +121,7 @@ public class Shooter
         configShroudMotor();
 
         UpperTrajectoryData.dataInit();
+        LowerTrajectoryData.dataInit();
         ShroudData.dataInit();
         ShooterVisionData.dataInit();
     }
@@ -213,6 +214,7 @@ public class Shooter
 
     public void shoot(Hub hub)
     {
+        // //vision code
         // updateVisionData();
 
         // if (isDataFresh())
@@ -220,7 +222,7 @@ public class Shooter
         //     calculateLaunchTrajectory(hub);
         // }
 
-        // calculateLaunchTrajectory(hub);
+        calculateLaunchTrajectory(hub);
 
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
@@ -261,8 +263,9 @@ public class Shooter
 
     private void calculateLaunchTrajectory(Hub hub)
     {
+        // //vision code
         // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
-        distance = 0.0 * FEET_TO_METERS;
+        distance = 8.0 * FEET_TO_METERS;
 
         calculateLaunchTrajectory(hub, distance);
     }

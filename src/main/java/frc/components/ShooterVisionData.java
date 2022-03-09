@@ -18,6 +18,7 @@ public class ShooterVisionData
 
     private static int index;
     private static double pixelRatio;
+    private static boolean flag;
 
     private double pixels;
     private double distance;
@@ -38,10 +39,15 @@ public class ShooterVisionData
 
     public static double getDistance(double pixels)
     {
-        //this empty loop makes sure the pixels of the index is greater than the passed pixels
-        for (index = 0; pixels >= shooterVisionData.get(index).pixels && index < shooterVisionData.size(); index++)
-        {
+        flag = true;
 
+        //this loop makes sure the pixels of the index is greater than the passed pixels
+        for (index = 0; index < shooterVisionData.size() && flag; index++)
+        {
+            if (pixels < shooterVisionData.get(index).pixels)
+            {
+                flag = false;
+            }
         }
 
         if (index == 0)

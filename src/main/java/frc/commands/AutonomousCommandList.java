@@ -47,8 +47,8 @@ public class AutonomousCommandList
 
     private static final double DRIVE_SPEED = 1.0;  // meters per second (+/-)
     private static final double SHORT_DISTANCE = 2.0;   // meters (+)
-    private static final double MEDIUM_DISTANCE = 3.0;  // meters (+)
-    private static final double LONG_DISTANCE = 5.0;    // meters (+)
+    private static final double MEDIUM_DISTANCE = 2.0;  // meters (+)
+    private static final double LONG_DISTANCE = 2.0;    // meters (+)
 
 
     // *** CLASS CONSTRUCTOR ***

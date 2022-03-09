@@ -35,26 +35,26 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useFullRobot               = false;
     
-    private static final boolean useDrivetrain              = false;
-    private static final boolean useIntake                  = false;
-    private static final boolean useShooter                 = false;
-    private static final boolean useShuttle                 = false;
-    private static final boolean useClimber                 = false;
+    private static final boolean useDrivetrain              = true;
+    private static final boolean useIntake                  = true;
+    private static final boolean useShooter                 = true;
+    private static final boolean useShuttle                 = true;
+    private static final boolean useClimber                 = true;
     
-    private static final boolean useSensorValues            = false;
-    private static final boolean useEventGenerator          = false;
+    private static final boolean useSensorValues            = true;
+    private static final boolean useEventGenerator          = true;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = false;
+    private static final boolean useShuttleFSM              = true;
 
 
-    private static final boolean useDriverController        = false;
-    private static final boolean useOperatorController      = false;
+    private static final boolean useDriverController        = true;
+    private static final boolean useOperatorController      = true;
 
-    private static final boolean useMainShuffleboard        = false;
-    private static final boolean useAutonomousTabData       = false;
-    private static final boolean useAutonomousCommandList   = false;
+    private static final boolean useMainShuffleboard        = true;
+    private static final boolean useAutonomousTabData       = true;
+    private static final boolean useAutonomousCommandList   = true;
 
-    private static final boolean useVision                  = false;
+    private static final boolean useVision                  = true;
 
 
     // *** ROBOT OBJECT DECLARATION ***
