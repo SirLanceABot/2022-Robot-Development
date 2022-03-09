@@ -172,7 +172,7 @@ public class ShuttleFSM
             // System.out.println("entering state " + this.name());
             
             // Set flag for feedCargo to false as have used event if needed
-            feedCargo = false;
+            // feedCargo = false;
         }
 
         // void doExit()
@@ -353,16 +353,62 @@ public class ShuttleFSM
     public void feedCargo()
     {
         feedCargo = true;
+        // Debugging feedCargo
+        // System.out.println("It has been fed and is now " + feedCargo);
     }
 
     public boolean isFeedCargoRequested()
     {
+        // Debugging feedCargo
+        // System.out.println("isFeedCargoRequested and returns " + feedCargo);
         return feedCargo;
+    }
+    
+    public void fancyRun(boolean shoot)
+    {
+        // TODO: Put into several run methods in teleop
+
+        // TODO: Only call once
+        // Remove this call to outer layer
+        EVENT_GENERATOR.determineEvents(shoot);
+
+        Events.ShuttleEvent determinedShuttleEvent = EVENT_GENERATOR.getShuttleEvent();
+
+        // Prints out the event if there is one
+        if (determinedShuttleEvent != Events.ShuttleEvent.NONE)
+        {
+            System.out.println("Event name: " + determinedShuttleEvent);
+        }
+
+        // Send event to FSM
+        checkStateChange(determinedShuttleEvent);
+
+        // FIXME Make sure that requests do not get whiped out because one of the doActions does not set one motor
+        // TODO: Move this to an outer layer where will use flags to run motors, also need to make getMotorRequest()
+        if (motorRequests.stageOne)
+        {
+            SHUTTLE.forwardStageOne();
+        }
+        else
+        {
+            SHUTTLE.stopStageOne();
+        }
+
+        if (motorRequests.stageTwo)
+        {
+            SHUTTLE.forwardStageTwo();
+        }
+        else
+        {
+            SHUTTLE.stopStageTwo();
+        }
     }
 
     /**
      * Run the FSM
      */
+    /*
+    // TODO: Break this stuff out of fancyrun for this
     public void run()
     {
         // Get ShuttleEvent
@@ -381,6 +427,7 @@ public class ShuttleFSM
     /**
      * Runs the Shuttle based on FSM
      */
+    /*
     public void runMotorRequests()
     {
         if (SHUTTLE != null)
@@ -404,4 +451,5 @@ public class ShuttleFSM
             }
         }
     }
+    */
 }

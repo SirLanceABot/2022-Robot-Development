@@ -48,7 +48,7 @@ public class TeleopMode implements ModeTransition
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
-    private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
+    // private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     // Testing variable
@@ -80,6 +80,13 @@ public class TeleopMode implements ModeTransition
      */
     public void periodic()
     {
+        
+        if(DRIVETRAIN != null)
+        {
+            // Testing navX
+            // System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
+        }
+
         if(DRIVER_CONTROLLER != null)
         {
             DRIVER_CONTROLLER.checkRumbleEvent();
@@ -186,15 +193,27 @@ public class TeleopMode implements ModeTransition
                 //     INTAKE.stopArm();
                 // }
             }
+            
+        // TODO: Remove this?
+        // Running the shuttle
+        if (SHUTTLE != null)
+        {
+            // TODO: Make this not here
+            boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+
+            // SHUTTLEFSM.fancyRun(shoot);
         }
 
         if(OPERATOR_CONTROLLER != null)
         {
+            // TODO: Fix this feedCargo
             // Manual shoot
-            if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
-            {
-                SHUTTLEFSM.feedCargo();
-            }
+            // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot))
+            // {
+            //     SHUTTLEFSM.feedCargo();
+            //     // Debugging feedCargo
+            //     // System.out.println("Feed cargo request");
+            // }
 
             if(SHUTTLE != null)
             {
@@ -224,13 +243,24 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
+                    // TODO: Break this stuff out of fancyrun for this
                     // Do what the Shuttle has requested
-                    SHUTTLEFSM.runMotorRequests();
+                    // SHUTTLEFSM.runMotorRequests();
                 }
             }
 
             if(SHOOTER != null)
             {
+                // TODO: Remove this?
+                // Running the shuttle
+                if (SHUTTLE != null)
+                {
+                    boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
+
+                    // TODO: Make this not here
+                    SHUTTLEFSM.fancyRun(shoot);
+                }
+
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
                     SHOOTER.shoot(Shooter.Hub.kLower);
@@ -294,8 +324,10 @@ public class TeleopMode implements ModeTransition
                     CLIMBER.shutDown();
                 }
             }
-        }
+        }}
         
+        // TODO: Break this stuff out of fancyrun for this
+        /*
         // Generate events
         if(EVENT_GENERATOR != null)
         {
@@ -306,6 +338,7 @@ public class TeleopMode implements ModeTransition
         {
             SHUTTLEFSM.run();
         }
+        */
     }
 
     /**

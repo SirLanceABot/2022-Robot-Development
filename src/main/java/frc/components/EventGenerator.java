@@ -39,7 +39,7 @@ public class EventGenerator
 
     // *** CLASS & INSTANCE METHODS ***
 
-    public void determineEvents()
+    public void determineEvents(boolean shoot)
     {
         // Update data of input for event generation
         if(CURRENT_SENSOR_VALUES != null)
@@ -48,18 +48,24 @@ public class EventGenerator
         }
 
         // Call each component's determineEvent
-        determineShuttleEvent();
+        determineShuttleEvent(shoot);
         determineCargoManagerEvent();
     }
 
     // Determine what event based on proximity sensors and if shoot command is given
-    private void determineShuttleEvent()
+    private void determineShuttleEvent(boolean shoot)
     {
         boolean currentShuttleIntakeSensorValue = CURRENT_SENSOR_VALUES.getShuttleIntake();
         boolean currentShuttleStageOneSensorValue = CURRENT_SENSOR_VALUES.getShuttleStageOne();
         boolean currentShuttleStageTwoSensorValue = CURRENT_SENSOR_VALUES.getShuttleStageTwo();
         boolean currentIsFeedCargoRequested = CURRENT_SENSOR_VALUES.getIsFeedCargoRequested();
 
+        // Debugging feedCargo
+        // if (currentIsFeedCargoRequested)
+        // {
+        //     System.out.println("Feed cargo requsted: " + currentIsFeedCargoRequested);
+        // }
+        
         // Initially say there is no event then continue to look for an event
         Events.ShuttleEvent determinedEvent = Events.ShuttleEvent.NONE;
 
@@ -103,10 +109,18 @@ public class EventGenerator
 
             PREVIOUS_SENSOR_VALUES.setShuttleStageTwo(currentShuttleStageTwoSensorValue);
         }
+        else if(shoot)
+        {
+            determinedEvent = Events.ShuttleEvent.FEED_CARGO;
+        }
+        // TODO: Make this work
+        /*
         else if(currentIsFeedCargoRequested != PREVIOUS_SENSOR_VALUES.getIsFeedCargoRequested())
         {
             if (currentIsFeedCargoRequested)
             {
+                // Debugging feedCargo
+                // System.out.println("FEEEEEEEEEEEEEEEEEEEEEEEDED"); // testing
                 determinedEvent = Events.ShuttleEvent.FEED_CARGO;
             }
             else
@@ -116,6 +130,7 @@ public class EventGenerator
 
             PREVIOUS_SENSOR_VALUES.setIsFeedCargoRequested(currentIsFeedCargoRequested);
         }
+        */
 
         shuttleEvent = determinedEvent;
     }

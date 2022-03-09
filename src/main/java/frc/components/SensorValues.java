@@ -202,6 +202,8 @@ public class SensorValues
      */
     public boolean getIsFeedCargoRequested()
     {
+        // Debugging feedCargo
+        // System.out.println("Gotten value of isFeedCargoRequested " + isFeedCargoRequested);
         return isFeedCargoRequested;
     }
 
