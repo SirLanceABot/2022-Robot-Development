@@ -2,6 +2,7 @@ package frc.components;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.constants.Constant;
 import frc.controls.DriverController;
 import frc.controls.DriverController.DriverButtonAction;
 import frc.robot.RobotContainer;
@@ -18,8 +19,38 @@ public class SensorValues
     }
 
     // *** INNER ENUMS and INNER CLASSES ***
+    private class DebouncedBoolean
+    {
+        boolean lastValue;
+        int counter;
 
-    
+        DebouncedBoolean(boolean initialValue)
+        {
+            lastValue = initialValue;
+        }
+
+        public void update(boolean currentValue)
+        {
+            if (currentValue != lastValue)
+            {
+                counter++;
+            }
+            else
+            {
+                counter = 0;
+            }
+
+            if (counter >= Constant.DEBOUNCE_THRESHOLD)
+            {
+                lastValue = !lastValue;
+            }
+        }
+
+        public boolean get()
+        {
+            return lastValue;
+        }
+    }
 
     // *** CLASS & INSTANCE VARIABLES ***
 
