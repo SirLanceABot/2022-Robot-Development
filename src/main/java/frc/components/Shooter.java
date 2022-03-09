@@ -81,8 +81,8 @@ public class Shooter
     private static final double FLYWHEEL_GEAR_RATIO = 60.0 / 24.0;
 
     //m/s and degrees
-    private static double desiredLaunchSpeed = 2000.0;
-    private static double desiredLaunchAngle = -235.0;
+    private static double desiredLaunchSpeed = 1850.0;
+    private static double desiredLaunchAngle = -150.0;
 
 
 
@@ -181,9 +181,9 @@ public class Shooter
     //speeds are all in rpm
     private void setFlywheelSpeed(double speed)
     {
-        // System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        // System.out.println("Shroud value: " + measureShroudSensorValue());
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
+        System.out.println("Shroud value: " + measureShroudSensorValue());
     }
 
     //DO NOT USE UNLESS IN TELEOP MODE
@@ -213,32 +213,26 @@ public class Shooter
 
     public void shoot(Hub hub)
     {
-        updateVisionData();
+        // updateVisionData();
 
-        if (isDataFresh())
-        {
-            calculateLaunchTrajectory(hub);
-        }
+        // if (isDataFresh())
+        // {
+        //     calculateLaunchTrajectory(hub);
+        // }
 
         // calculateLaunchTrajectory(hub);
 
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
-        // System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
-        // System.out.println("Shroud value: " + measureShroudSensorValue());
-
-        // checkIsShooterReady();
+        checkIsShooterReady();
     }
 
     public void shoot(Hub hub, double distance)
     {
         calculateLaunchTrajectory(hub, distance);
 
-        // System.out.println("Flywheel velocity: " + flywheelMotor.getSelectedSensorVelocity());
-        // System.out.println("Shroud value: " + measureShroudSensorValue());
-
-        // checkIsShooterReady();
+        checkIsShooterReady();
     }
 
     public void startLongShot()
@@ -284,6 +278,24 @@ public class Shooter
         {
             desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance);
             desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
+        }
+
+        if (desiredLaunchSpeed < 0.0)
+        {
+            desiredLaunchSpeed = 0.0;
+        }
+        else if (desiredLaunchSpeed > 10000.0)
+        {
+            desiredLaunchSpeed = 10000.0;
+        }
+        
+        if (desiredLaunchAngle < -235.0)
+        {
+            desiredLaunchAngle = -235.0;
+        }
+        else if (desiredLaunchAngle > -110.0)
+        {
+            desiredLaunchAngle = -110.0;
         }
     }
 
@@ -385,8 +397,7 @@ public class Shooter
 
     private void checkIsShooterReady()
     {
-        //TODO: darren wants to remove isHubAligned()
-        if (isFlywheelReady() && isShroudReady() && isHubAligned())
+        if (isFlywheelReady() && isShroudReady())
         {
             successfulChecks++;
         }

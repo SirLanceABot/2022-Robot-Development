@@ -67,7 +67,7 @@ public class Intake
     private double desiredRollerSpeed;
     private double rollerSpeed;
 
-    private static final double intakeSpeed = 0.4;//Constant.INTAKE_SPEED;
+    private static final double intakeSpeed = 0.3;//Constant.INTAKE_SPEED;
     private static final double armSpeed = 0.2;
 
 

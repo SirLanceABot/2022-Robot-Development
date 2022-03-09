@@ -24,6 +24,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.MathUtil;
 
 import frc.constants.Constant;
+import frc.constants.Port;
 
 public class SwerveModule
 {
@@ -77,11 +78,11 @@ public class SwerveModule
         moduleName = smd.moduleName;
 
         System.out.println(fullClassName + " : Constructor Started >> " + moduleName);
-        driveMotor = new TalonFX(smd.driveMotorChannel);
+        driveMotor = new TalonFX(smd.driveMotorChannel, Port.Motor.CAN_BUS);
         driveMotorInverted = smd.driveMotorInverted;
-        turnEncoder = new CANCoder(smd.turnEncoderChannel);  
+        turnEncoder = new CANCoder(smd.turnEncoderChannel, Port.Motor.CAN_BUS);  
         turnEncoderOffset = smd.turnEncoderOffset;
-        turnMotor = new TalonFX(smd.turnMotorChannel);
+        turnMotor = new TalonFX(smd.turnMotorChannel, Port.Motor.CAN_BUS);
 
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
         configDriveTalon();

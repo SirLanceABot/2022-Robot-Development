@@ -37,7 +37,7 @@ public class Drivetrain extends RobotDriveBase
     private final SwerveModule backLeft;// = new SwerveModule(Port.Module.BACK_LEFT);
     private final SwerveModule backRight;// = new SwerveModule(Port.Module.BACK_RIGHT);
 
-    private final AHRS navX;// = new AHRS(SerialPort.Port.kUSB);
+    public final AHRS navX;// = new AHRS(SerialPort.Port.kUSB);
 
     // private static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     //         frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
