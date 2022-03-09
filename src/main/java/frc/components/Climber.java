@@ -70,9 +70,9 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        firstStageClimbMotorPort = 3;   // Used ONLY for testing
+        // firstStageClimbMotorPort = 3;   // Used ONLY for testing
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
-        climbBrakeMotorPort = 0; //Used ONLY for testing
+        // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
@@ -261,9 +261,9 @@ public class Climber
     public void shutDown()
     {
         System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
-        if(movementType == MovementType.kMoving) //FIXME: This needs to be kClimbing when testing robot
+        if(movementType == MovementType.kClimbing) //FIXME: This needs to be kClimbing when testing robot
         {
-            setFirstStageMotorSpeed(.35);
+            setFirstStageMotorSpeed(-0.20);
         }
         else
         {
@@ -290,9 +290,10 @@ public class Climber
         //     setBrakeMotor(-.1); //TODO make sure this value goes the right direction
         //     setFirstStageMotorSpeed(0);
         // }
-        movementType = findMovement();
+        // movementType = findMovement();
+        movementType = MovementType.kNone;
         setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
-        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         
     }
 
@@ -313,7 +314,12 @@ public class Climber
         //     setFirstStageMotorSpeed(-.5);
         //     // setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // }
-        movementType = findMovement();
+        double current = firstStageClimbMotorLeader.getOutputCurrent();
+        if(current > 15.0)
+            movementType = MovementType.kClimbing;
+        else
+            movementType = MovementType.kNone;
+        
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         //^Test value

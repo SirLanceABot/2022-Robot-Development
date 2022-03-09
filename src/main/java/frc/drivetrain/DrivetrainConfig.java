@@ -1,5 +1,6 @@
 package frc.drivetrain;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort;
 
 public class DrivetrainConfig
@@ -8,13 +9,15 @@ public class DrivetrainConfig
     public final SwerveModuleConfig frontRightSwerveModule;
     public final SwerveModuleConfig backLeftSwerveModule;
     public final SwerveModuleConfig backRightSwerveModule;
-    public final SerialPort.Port navXChannel;
+    // public final SerialPort.Port navXChannel;
+    public final I2C.Port navXChannel;
 
     public DrivetrainConfig(SwerveModuleConfig frontLeftSwerveModule,
                           SwerveModuleConfig frontRightSwerveModule,
                           SwerveModuleConfig backLeftSwerveModule,
                           SwerveModuleConfig backRightSwerveModule,
-                          SerialPort.Port navXChannel)
+                        //   SerialPort.Port navXChannel)
+                          I2C.Port navXChannel)
     {
         this.frontLeftSwerveModule = frontLeftSwerveModule;
         this.frontRightSwerveModule = frontRightSwerveModule;

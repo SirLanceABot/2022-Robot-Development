@@ -182,6 +182,11 @@ public class Drivetrain extends RobotDriveBase
         feedWatchdog();
     }
 
+    public void printNavX()
+    {
+        System.out.println("Yaw: " + navX.getYaw());
+    }
+
     @Override
     public String getDescription()
     {

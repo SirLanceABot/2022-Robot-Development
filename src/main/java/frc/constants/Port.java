@@ -1,6 +1,7 @@
 package frc.constants;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.components.ShuttleConfig;
 import frc.drivetrain.DrivetrainConfig;
@@ -56,7 +57,8 @@ public final class Port
 
         public static final int PDH_CAN_ID                  =  1;
 
-        private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
+        // private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
+        private static final I2C.Port NAV_X = I2C.Port.kMXP;
     }
 
     public static class Controller

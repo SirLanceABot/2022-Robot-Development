@@ -22,7 +22,7 @@ public final class Constant
     public static final double INTAKE_SPEED = 0.5;
 
     public static final double CLIMBER_UP_SPEED = 0.5;
-    public static final double CLIMBER_DOWN_SPEED = 0.5;
+    public static final double CLIMBER_DOWN_SPEED = .75;
 
 
     public static final double INCHES_TO_METERS = 0.0254;
@@ -51,7 +51,7 @@ public final class Constant
     // FIXME Check the max speeds and accelerations
     public static final double MAX_DRIVE_SPEED = 4.4; // meters per second
     public static final double MAX_MODULE_TURN_SPEED = 1080.0; // degrees per second, this is 3.0 rev/sec, used to be 1980 and 5.5 rev/sec
-    public static final double MAX_ROBOT_TURN_SPEED = 360.0; // FIXME to more accurate degrees per second, this is 2 rev/sec, used to be 1080 and 3 rev/sec
+    public static final double MAX_ROBOT_TURN_SPEED = 180.0;//360.0; // FIXME to more accurate degrees per second, this is 2 rev/sec, used to be 1080 and 3 rev/sec
     public static final double MAX_MODULE_TURN_ACCELERATION = 1728.0; // degrees per second per second, this is 4.8 rev/sec^2, used to be 17280 and 48 rev/sec^2
     // FIXME Changing radians to degrees, same measurements but in radians
     // public static final double MAX_MODULE_TURN_SPEED = 35.0; // radians per second
