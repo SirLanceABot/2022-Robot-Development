@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.Shooter;
 import frc.robot.RobotContainer;
+import frc.components.ShuttleFSM;
 
 public class ShootCargo implements Command 
 {
@@ -19,14 +20,16 @@ public class ShootCargo implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private int numberOfCargo;
+    private int cargoShot = 0;
     private double distance_meters;
     private Shooter.Hub hub;
     private boolean isFinished;
 
     // These variables are only used to simulate cargo being shot
-    private int cargoShotSimulation = 0;
-    private double distanceShotSimulation = 0.0;
+    // private int cargoShotSimulation = 0;
+    // private double distanceShotSimulation = 0.0;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -45,7 +48,7 @@ public class ShootCargo implements Command
     {
         System.out.println(this);
 
-        
+        SHOOTER.shoot(hub, distance_meters);
 
         isFinished = false;
         // cargoShotSimulation = 0;
@@ -53,14 +56,21 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        distanceShotSimulation = distance_meters;
-        cargoShotSimulation++;
-        System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distanceShotSimulation + " m");
+        if(SHOOTER.isShooterReady())
+        {
+            SHUTTLEFSM.feedCargo();
+
+            System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distance_meters + " m");
+            cargoShot++;
+        }
         
-        if(cargoShotSimulation == numberOfCargo)
+        if ((cargoShot == numberOfCargo) || (numberOfCargo == 0))
         {
             isFinished = true;
         }
+
+        // distanceShotSimulation = distance_meters;
+        // cargoShotSimulation++;
     }
 
     public boolean isFinished()
@@ -70,7 +80,7 @@ public class ShootCargo implements Command
 
     public void end()
     {
-
+        SHOOTER.stopFlywheel();
     }
 
     public String toString()
