@@ -335,21 +335,29 @@ public class Shooter
 
     private void setShroudAngle(double angle)
     {
-        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 50.0)
+        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 30.0)
         {
             setShroudMotorSpeed(0.75);
         }
-        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
+        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 5.0)
         {
             setShroudMotorSpeed(0.25);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 50.0)
+        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
+        {
+            setShroudMotorSpeed(0.1);
+        }
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 30.0)
         {
             setShroudMotorSpeed(-0.75);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD)
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 5.0)
         {
             setShroudMotorSpeed(-0.25);
+        }
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD)
+        {
+            setShroudMotorSpeed(-0.1);
         }
         else
         {

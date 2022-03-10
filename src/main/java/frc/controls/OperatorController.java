@@ -24,10 +24,10 @@ public class OperatorController extends Logitech
         
 
         kShuttleOverride(Button.k9), 
-        kShuttle1stStageOn(Button.k3),
-        kShuttle2ndStageOn(Button.k4),
-        kShuttle1stStageOff(Button.k5),
-        kShuttle2ndStageOff(Button.k6),
+        kShuttle1stStageForward(Button.k3),
+        kShuttle2ndStageForward(Button.k4),
+        kShuttle1stStageReverse(Button.k5),
+        kShuttle2ndStageReverse(Button.k6),
 
         kClimbUp(Button.k10),
         kClimbDown(Button.k11),

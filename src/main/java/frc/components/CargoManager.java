@@ -92,7 +92,7 @@ public class CargoManager
             void doAction()
             {
                 // Set feedCargo flag to true, turn off LED
-                SHUTTLEFSM.feedCargo();
+                SHUTTLEFSM.requestFeedCargo();
             }
         };
 

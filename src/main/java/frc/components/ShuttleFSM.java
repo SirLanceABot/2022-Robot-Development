@@ -365,7 +365,7 @@ public class ShuttleFSM
     /**
      * Sets a flag for an event to generate, set to false by ShuttleFSM
      */
-    public void feedCargo()
+    public void requestFeedCargo()
     {
         feedCargo = true;
         // Debugging feedCargo

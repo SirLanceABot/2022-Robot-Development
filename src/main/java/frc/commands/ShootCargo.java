@@ -58,7 +58,7 @@ public class ShootCargo implements Command
     {
         if(SHOOTER.isShooterReady())
         {
-            SHUTTLEFSM.feedCargo();
+            SHUTTLEFSM.requestFeedCargo();
 
             System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distance_meters + " m");
             cargoShot++;

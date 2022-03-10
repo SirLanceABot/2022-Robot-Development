@@ -57,6 +57,10 @@ public class TeleopMode implements ModeTransition
     // Testing variable
     private static final double SHOOTER_SPEED = 0.5;
 
+    // TODO: Make roller toggle also need to make manual shooter controls
+    // Toggle variables
+    private static boolean rollerToggle = false;
+
 
     // *** CLASS CONSTRUCTOR ***
     public TeleopMode()
@@ -231,31 +235,48 @@ public class TeleopMode implements ModeTransition
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
                 {
                     // SHUTTLE.overrideFSM();
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOn))
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageForward))
                     {
                         SHUTTLE.forwardStageOne();
                     }
 
-                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOn))
+                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageReverse))
                     {
-                        SHUTTLE.forwardStageTwo();
+                        SHUTTLE.reverseStageOne();
                     }
 
-                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageOff))
+                    else
                     {
                         SHUTTLE.stopStageOne();
                     }
 
-                    else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageOff))
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageForward))
+                    {
+                        SHUTTLE.forwardStageTwo();
+                    }
+
+                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageReverse))
+                    {
+                        SHUTTLE.reverseStageTwo();
+                    }
+
+                    else
                     {
                         SHUTTLE.stopStageTwo();
                     }
+
+                    SHUTTLEFSM.measureAndSetCurrentState();
                 }
                 else
                 {
                     // TODO: Break this stuff out of fancyrun for this
                     // Do what the Shuttle has requested
                     // SHUTTLEFSM.runMotorRequests();
+
+                    boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
+
+                    // TODO: Make this not here
+                    SHUTTLEFSM.fancyRun(shoot);
                 }
             }
 
@@ -265,10 +286,10 @@ public class TeleopMode implements ModeTransition
                 // Running the shuttle
                 if (SHUTTLE != null)
                 {
-                    boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
+                    // boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
 
-                    // TODO: Make this not here
-                    SHUTTLEFSM.fancyRun(shoot);
+                    // // TODO: Make this not here
+                    // SHUTTLEFSM.fancyRun(shoot);
                 }
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
