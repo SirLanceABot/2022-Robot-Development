@@ -40,7 +40,7 @@ public class DriverController extends Xbox
         //kIntake(Button.kRightBumper),
 
         // kNoAction(Button.kBack),
-        // kNoAction(Button.kStart),
+        kNoAction(Button.kStart),
 
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),

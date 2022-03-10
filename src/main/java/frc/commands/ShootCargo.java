@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import frc.components.Shooter;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ShootCargo implements Command 
@@ -22,6 +23,7 @@ public class ShootCargo implements Command
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
+    private static final PowerDistribution PDH = RobotContainer.PDH;
     private Timer timer = new Timer();
     private int numberOfCargo;
     private int cargoShot = 0;
@@ -48,6 +50,8 @@ public class ShootCargo implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
+        PDH.setSwitchableChannel(true);
+
         System.out.println(this);
 
         timer.reset();
@@ -94,6 +98,8 @@ public class ShootCargo implements Command
 
     public void end()
     {
+        PDH.setSwitchableChannel(false);
+
         timer.stop();
         SHOOTER.stopFlywheel();
     }

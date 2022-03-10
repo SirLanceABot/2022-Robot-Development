@@ -123,7 +123,7 @@ public class AutonomousCommandList
             {
                 if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kLower));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kUpper));
                 }
                 else
                 {
@@ -134,13 +134,13 @@ public class AutonomousCommandList
 
         if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kShootFirst)
         {
-            addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kLower));
+            addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kUpper));
         }
     }
 
     private void shootMoveShoot()
     {
-        addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kLower));
+        addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kUpper));
 
         if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
         {

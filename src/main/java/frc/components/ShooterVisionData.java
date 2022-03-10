@@ -35,21 +35,21 @@ public class ShooterVisionData
     {
         //put all data points here, PIXELS MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must start at 0.0 pixels
-        shooterVisionData.add(new ShooterVisionData(45.0, 2.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(64.0, 3.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(77.0, 4.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(86.0, 5.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(96.0, 6.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(105.0, 7.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(111.0, 8.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(118.0, 9.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(123.0, 10.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(129.0, 11.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(132.0, 12.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(136.0, 13.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(139.0, 14.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(141.0, 15.0 * FEET_TO_METERS));
-        shooterVisionData.add(new ShooterVisionData(143.0, 16.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(31.0, 2.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(51.0, 3.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(63.0, 4.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(75.0, 5.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(83.0, 6.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(94.0, 7.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(101.0, 8.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(107.0, 9.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(111.0, 10.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(115.0, 11.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(119.0, 12.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(123.0, 13.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(126.0, 14.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(129.0, 15.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(133.0, 16.0 * FEET_TO_METERS));
     }
 
 
