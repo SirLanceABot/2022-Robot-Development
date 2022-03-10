@@ -260,7 +260,7 @@ public class Climber
     }
     public void shutDown()
     {
-        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         if(movementType == MovementType.kClimbing) //FIXME: This needs to be kClimbing when testing robot
         {
             setFirstStageMotorSpeed(-0.20);
@@ -321,7 +321,7 @@ public class Climber
             movementType = MovementType.kNone;
         
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
-        System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction

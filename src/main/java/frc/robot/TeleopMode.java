@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.components.Intake;
 import frc.components.Climber;
 import frc.components.EventGenerator;
@@ -51,6 +52,8 @@ public class TeleopMode implements ModeTransition
     // private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
+    private static final PowerDistribution PDH = RobotContainer.PDH;
+
     // Testing variable
     private static final double SHOOTER_SPEED = 0.5;
 
@@ -84,7 +87,7 @@ public class TeleopMode implements ModeTransition
         if(DRIVETRAIN != null)
         {
             // Testing navX
-            // System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
+            System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
         }
 
         if(DRIVER_CONTROLLER != null)
@@ -193,7 +196,7 @@ public class TeleopMode implements ModeTransition
                 //     INTAKE.stopArm();
                 // }
 
-                System.out.println("INTAKE POSITION " + INTAKE.getArmPosition());
+                // System.out.println("INTAKE POSITION " + INTAKE.getArmPosition());
             }
             
         // TODO: Remove this?
@@ -265,8 +268,10 @@ public class TeleopMode implements ModeTransition
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    SHOOTER.turnOnLED();
-                    SHOOTER.shoot(Shooter.Hub.kLower);
+                    PDH.setSwitchableChannel(true);
+                    // SHOOTER.turnOnLED();
+                    // Change to kLower or kUpper to determine shot type
+                    SHOOTER.shoot(Shooter.Hub.kUpper);
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
                     // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
@@ -280,7 +285,8 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
-                    SHOOTER.turnOffLED();
+                    PDH.setSwitchableChannel(false);
+                    // SHOOTER.turnOffLED();
                     SHOOTER.stopFlywheel();
                 }
 

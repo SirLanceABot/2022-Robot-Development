@@ -5,6 +5,8 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.vision.Vision;
 
@@ -38,6 +40,7 @@ public class Robot extends TimedRobot
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Vision VISION = RobotContainer.VISION;
+    private static final PowerDistribution PDH = RobotContainer.PDH;
 
     private static final DisabledMode disabled = new DisabledMode();
     private static final TestMode test = new TestMode();
@@ -61,6 +64,8 @@ public class Robot extends TimedRobot
     {
         System.out.println("\n\n2022-Robot-Development\n\n");
         robotState = RobotState.kRobotInit;
+        
+        PDH.setSwitchableChannel(false);
         
         if(VISION != null)
         {

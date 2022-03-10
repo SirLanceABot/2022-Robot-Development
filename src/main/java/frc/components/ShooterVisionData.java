@@ -23,6 +23,8 @@ public class ShooterVisionData
     private double pixels;
     private double distance;
 
+    private static final double FEET_TO_METERS = 0.3048;
+
     private ShooterVisionData(double pixels, double distance)
     {
         this.pixels = pixels;
@@ -33,7 +35,21 @@ public class ShooterVisionData
     {
         //put all data points here, PIXELS MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must start at 0.0 pixels
-        shooterVisionData.add(new ShooterVisionData(0.0, 0.0));
+        shooterVisionData.add(new ShooterVisionData(45.0, 2.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(64.0, 3.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(77.0, 4.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(86.0, 5.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(96.0, 6.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(105.0, 7.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(111.0, 8.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(118.0, 9.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(123.0, 10.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(129.0, 11.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(132.0, 12.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(136.0, 13.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(139.0, 14.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(141.0, 15.0 * FEET_TO_METERS));
+        shooterVisionData.add(new ShooterVisionData(143.0, 16.0 * FEET_TO_METERS));
     }
 
 

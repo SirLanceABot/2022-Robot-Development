@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.constants.*;
+import frc.robot.RobotContainer;
 import frc.vision.TargetData;
 import frc.vision.VisionData;
 
@@ -58,7 +59,7 @@ public class Shooter
     // TODO: the shroud Sensor will be plugged into the TalonSRX and thus will not be an AnalogInput
     // private static final AnalogInput shroudSensor = new AnalogInput(Port.Sensor.SHOOTER_SHROUD);
 
-    private static final PowerDistribution PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
+    private static final PowerDistribution PDH = RobotContainer.PDH;
 
     private TargetData myWorkingCopyOfTargetData;
 
@@ -215,15 +216,19 @@ public class Shooter
     public void shoot(Hub hub)
     {
         // //vision code
-        // updateVisionData();
+        updateVisionData();
 
-        // if (isDataFresh())
-        // {
-        //     calculateLaunchTrajectory(hub);
-        // }
+        // Comment this out to test for new data and set the variables up above
+        if (isDataFresh())
+        {
+            System.out.println("DATA IS FRESH");
+            calculateLaunchTrajectory(hub);
+        }
 
-        calculateLaunchTrajectory(hub);
+        // calculateLaunchTrajectory(hub);
 
+        System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
+        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
@@ -263,9 +268,10 @@ public class Shooter
 
     private void calculateLaunchTrajectory(Hub hub)
     {
-        // //vision code
-        // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
-        distance = 8.0 * FEET_TO_METERS;
+        //vision code
+        distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
+        System.out.println("DISTANCE: " + myWorkingCopyOfTargetData.getPortDistance());
+        // distance = 8.0 * FEET_TO_METERS;
 
         calculateLaunchTrajectory(hub, distance);
     }
@@ -384,6 +390,7 @@ public class Shooter
 
     public boolean isDataFresh()
     {
+        
         return myWorkingCopyOfTargetData.isFreshData();
     }
 
