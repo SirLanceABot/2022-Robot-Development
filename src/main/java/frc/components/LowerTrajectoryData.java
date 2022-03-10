@@ -39,8 +39,9 @@ public class LowerTrajectoryData
         //put all data points here, DISTANCE MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must be at least two data points to work
         lowerTrajectoryData.add(new LowerTrajectoryData(0.0 * FEET_TO_METERS, 1500.0, -215.0));
-        lowerTrajectoryData.add(new LowerTrajectoryData(2.0 * FEET_TO_METERS, 1700.0, -170.0));
-        lowerTrajectoryData.add(new LowerTrajectoryData(4.0 * FEET_TO_METERS, 1850.0, -150.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(2.0 * FEET_TO_METERS, 1800.0, -170.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(4.0 * FEET_TO_METERS, 2000.0, -150.0));
+        lowerTrajectoryData.add(new LowerTrajectoryData(6.0 * FEET_TO_METERS, 2200.0, -130.0));
     }
 
     //speed in rpms

@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.commands.AutonomousCommandList;
 import frc.components.CargoManager;
 import frc.components.Climber;
@@ -35,11 +37,11 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useFullRobot               = false;
     
-    private static final boolean useDrivetrain              = true;
+    private static final boolean useDrivetrain              = false;
     private static final boolean useIntake                  = true;
     private static final boolean useShooter                 = true;
     private static final boolean useShuttle                 = true;
-    private static final boolean useClimber                 = true;
+    private static final boolean useClimber                 = false;
     
     private static final boolean useSensorValues            = true;
     private static final boolean useEventGenerator          = true;
@@ -77,6 +79,8 @@ public final class RobotContainer
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
 
     public static final Vision VISION;
+
+    public static final PowerDistribution PDH;
    
 
     // *** ROBOT OBJECT INSTANTIATION ***
@@ -102,6 +106,8 @@ public final class RobotContainer
         AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
 
         VISION = useFullRobot || useVision ? new Vision() : null;
+
+        PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
     }
 
 

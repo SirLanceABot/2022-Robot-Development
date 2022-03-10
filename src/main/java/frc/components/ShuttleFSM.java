@@ -268,6 +268,7 @@ public class ShuttleFSM
         // Intital state of the FSM
         // currentShuttleState = State.NO_CARGO_STORED;
         currentShuttleState = measureCurrentState();
+        System.out.println("Initial shuttle state: " + currentShuttleState);
         // Make a motor request that will be processed once enabled
         currentShuttleState.doAction();
         
@@ -316,25 +317,39 @@ public class ShuttleFSM
         return currentShuttleState;
     }
 
+    /**
+     * Measures sensors and sets the currentShuttleState
+     */
+    public void measureAndSetCurrentState()
+    {
+        currentShuttleState = measureCurrentState();
+        System.out.println("New measured shuttle state: " + currentShuttleState);
+        // Make a motor request that will be processed
+        currentShuttleState.doAction();
+    }
+
     public State measureCurrentState()
     {
+        boolean stageOneSensorValue = SHUTTLE.measureStageOneSensor();
+        boolean stageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
+
         State measuredState = State.NO_CARGO_STORED;
 
         // Measure sensor values to determine initial state
-        if (!CURRENT_SENSOR_VALUES.getShuttleStageOne() && !CURRENT_SENSOR_VALUES.getShuttleStageTwo())
+        if (!stageOneSensorValue && !stageTwoSensorValue)
         {
             measuredState = State.NO_CARGO_STORED;
         }
-        else if (CURRENT_SENSOR_VALUES.getShuttleStageOne() && !CURRENT_SENSOR_VALUES.getShuttleStageTwo())
+        else if (stageOneSensorValue && !stageTwoSensorValue)
         {
             // Cargo is stored in stage one, but we want it to be stored in stage two so just say we're doing that
             measuredState = State.STORING_CARGO_IN_STAGE_TWO;
         }
-        else if (!CURRENT_SENSOR_VALUES.getShuttleStageOne() && CURRENT_SENSOR_VALUES.getShuttleStageTwo())
+        else if (!stageOneSensorValue && stageTwoSensorValue)
         {
             measuredState = State.CARGO_STORED_IN_STAGE_TWO;
         }
-        else if (CURRENT_SENSOR_VALUES.getShuttleStageOne() && CURRENT_SENSOR_VALUES.getShuttleStageTwo())
+        else if (stageOneSensorValue && stageTwoSensorValue)
         {
             measuredState = State.CARGO_STORED_IN_STAGE_ONE_AND_TWO;
         }

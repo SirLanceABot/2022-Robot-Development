@@ -40,10 +40,13 @@ public class UpperTrajectoryData
         //must be at least two data points to work
         upperTrajectoryData.add(new UpperTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
         upperTrajectoryData.add(new UpperTrajectoryData(2.0 * FEET_TO_METERS, 2700.0, -235.0));
-        upperTrajectoryData.add(new UpperTrajectoryData(4.0 * FEET_TO_METERS, 2800.0, -220.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(4.0 * FEET_TO_METERS, 2900.0, -220.0));
         upperTrajectoryData.add(new UpperTrajectoryData(6.0 * FEET_TO_METERS, 3100.0, -200.0));
         upperTrajectoryData.add(new UpperTrajectoryData(8.0 * FEET_TO_METERS, 3300.0, -190.0));
         upperTrajectoryData.add(new UpperTrajectoryData(10.0 * FEET_TO_METERS, 3500.0, -180.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(12.0 * FEET_TO_METERS, 3600.0, -170.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(14.0 * FEET_TO_METERS, 3700.0, -160.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(16.0 * FEET_TO_METERS, 3900.0, -150.0));
     }
 
     //speed in rpms

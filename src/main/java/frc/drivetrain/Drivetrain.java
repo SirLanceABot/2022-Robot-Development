@@ -70,7 +70,7 @@ public class Drivetrain extends RobotDriveBase
 
         navX.reset();
         odometry.resetPosition(new Pose2d(), navX.getRotation2d());
-        setSafetyEnabled(true);
+        // setSafetyEnabled(true);
     }
 
 

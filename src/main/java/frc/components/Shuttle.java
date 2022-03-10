@@ -36,16 +36,16 @@ public class Shuttle
     // private static CANEncoder stageOneMotorEncoder = stageOneMotor.getEncoder();
     // private static CANEncoder stageTwoMotorEncoder = stageTwoMotor.getEncoder();
 
-    // Used for debouncing
-    private int intakeSensorActivateCount = 0;
-    private int intakeSensorDeactivateCount = 0;
-    private boolean debouncedIntakeSensor = false;
-    private int stageOneSensorActivateCount = 0;
-    private int stageOneSensorDeactivateCount = 0;
-    private boolean debouncedStageOneSensor = false;
-    private int stageTwoSensorActivateCount = 0;
-    private int stageTwoSensorDeactivateCount = 0;
-    private boolean debouncedStageTwoSensor = false;
+    // Used for debouncing methods in here
+    // private int intakeSensorActivateCount = 0;
+    // private int intakeSensorDeactivateCount = 0;
+    // private boolean debouncedIntakeSensor = false;
+    // private int stageOneSensorActivateCount = 0;
+    // private int stageOneSensorDeactivateCount = 0;
+    // private boolean debouncedStageOneSensor = false;
+    // private int stageTwoSensorActivateCount = 0;
+    // private int stageTwoSensorDeactivateCount = 0;
+    // private boolean debouncedStageTwoSensor = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -159,90 +159,114 @@ public class Shuttle
      * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
+    // public boolean measureIntakeSensor()
+    // {
+    //     // TODO: Move the debouncing to SensorValues class
+    //     if (!intakeSensor.get())
+    //     {
+    //         intakeSensorActivateCount++;
+    //         intakeSensorDeactivateCount = 0;
+    //     }
+    //     else
+    //     {
+    //         intakeSensorActivateCount = 0;
+    //         intakeSensorDeactivateCount++;
+    //     }
+
+    //     if (intakeSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedIntakeSensor = true;
+    //     }
+    //     else if (intakeSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedIntakeSensor = false;
+    //     }
+
+    //     return debouncedIntakeSensor;
+    // }
+
+    /**
+     * True means sensor is picking something up which is why we are taking opposite
+     */
     public boolean measureIntakeSensor()
     {
-        // TODO: Move the debouncing to SensorValues class
-        if (!intakeSensor.get())
-        {
-            intakeSensorActivateCount++;
-            intakeSensorDeactivateCount = 0;
-        }
-        else
-        {
-            intakeSensorActivateCount = 0;
-            intakeSensorDeactivateCount++;
-        }
-
-        if (intakeSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedIntakeSensor = true;
-        }
-        else if (intakeSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedIntakeSensor = false;
-        }
-
-        return debouncedIntakeSensor;
+        return !intakeSensor.get();
     }
 
     /**
      * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
+    // public boolean measureStageOneSensor()
+    // {
+    //     // TODO: Move the debouncing to SensorValues class
+    //     if (!stageOneSensor.get())
+    //     {
+    //         stageOneSensorActivateCount++;
+    //         stageOneSensorDeactivateCount = 0;
+    //     }
+    //     else
+    //     {
+    //         stageOneSensorActivateCount = 0;
+    //         stageOneSensorDeactivateCount++;
+    //     }
+
+    //     if (stageOneSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedStageOneSensor = true;
+    //     }
+    //     else if (stageOneSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedStageOneSensor = false;
+    //     }
+
+    //     return debouncedStageOneSensor;
+    // }
+
+    /**
+     * True means sensor is picking something up which is why we are taking opposite
+     */
     public boolean measureStageOneSensor()
     {
-        // TODO: Move the debouncing to SensorValues class
-        if (!stageOneSensor.get())
-        {
-            stageOneSensorActivateCount++;
-            stageOneSensorDeactivateCount = 0;
-        }
-        else
-        {
-            stageOneSensorActivateCount = 0;
-            stageOneSensorDeactivateCount++;
-        }
-
-        if (stageOneSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedStageOneSensor = true;
-        }
-        else if (stageOneSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedStageOneSensor = false;
-        }
-
-        return debouncedStageOneSensor;
+        return !stageOneSensor.get();
     }
     
     /**
      * Debounced
      * True means sensor is picking something up which is why we are taking opposite
      */
+    // public boolean measureStageTwoSensor()
+    // {
+    //     // TODO: Move the debouncing to SensorValues class
+    //     if (!stageTwoSensor.get())
+    //     {
+    //         stageTwoSensorActivateCount++;
+    //         stageTwoSensorDeactivateCount = 0;
+    //     }
+    //     else
+    //     {
+    //         stageTwoSensorActivateCount = 0;
+    //         stageTwoSensorDeactivateCount++;
+    //     }
+
+    //     if (stageTwoSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedStageTwoSensor = true;
+    //     }
+    //     else if (stageTwoSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
+    //     {
+    //         debouncedStageTwoSensor = false;
+    //     }
+
+    //     return debouncedStageTwoSensor;
+    // }
+
+    /**
+     * True means sensor is picking something up which is why we are taking opposite
+     */
     public boolean measureStageTwoSensor()
     {
-        // TODO: Move the debouncing to SensorValues class
-        if (!stageTwoSensor.get())
-        {
-            stageTwoSensorActivateCount++;
-            stageTwoSensorDeactivateCount = 0;
-        }
-        else
-        {
-            stageTwoSensorActivateCount = 0;
-            stageTwoSensorDeactivateCount++;
-        }
-
-        if (stageTwoSensorActivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedStageTwoSensor = true;
-        }
-        else if (stageTwoSensorDeactivateCount >= Constant.DEBOUNCE_THRESHOLD)
-        {
-            debouncedStageTwoSensor = false;
-        }
-
-        return debouncedStageTwoSensor;
+        return !stageTwoSensor.get();
     }
     
     // TODO: Make toString()

@@ -76,6 +76,11 @@ public class TeleopMode implements ModeTransition
             DRIVER_CONTROLLER.resetRumbleCounter();
             DRIVETRAIN.resetEncoders();
         }
+
+        if (SHUTTLEFSM != null)
+        {
+            SHUTTLEFSM.measureAndSetCurrentState();
+        }
     }
 
     /**
@@ -87,7 +92,7 @@ public class TeleopMode implements ModeTransition
         if(DRIVETRAIN != null)
         {
             // Testing navX
-            System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
+            // System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
         }
 
         if(DRIVER_CONTROLLER != null)
@@ -268,6 +273,9 @@ public class TeleopMode implements ModeTransition
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
+                    // Used to test the shooter values
+                    // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+
                     PDH.setSwitchableChannel(true);
                     // SHOOTER.turnOnLED();
                     // Change to kLower or kUpper to determine shot type

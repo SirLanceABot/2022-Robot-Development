@@ -184,8 +184,8 @@ public class Shooter
     private void setFlywheelSpeed(double speed)
     {
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
-        System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        System.out.println("Shroud value: " + measureShroudSensorValue());
+        // System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
+        // System.out.println("Shroud value: " + measureShroudSensorValue());
     }
 
     //DO NOT USE UNLESS IN TELEOP MODE
@@ -242,6 +242,14 @@ public class Shooter
         checkIsShooterReady();
     }
 
+    public void testShoot(double desiredLaunchSpeed, double desiredLaunchAngle)
+    {
+        System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
+        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
+    }
+
     public void startLongShot()
     {
         setFlywheelSpeed(LONG_SHOT_SPEED);
@@ -270,7 +278,7 @@ public class Shooter
     {
         //vision code
         distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
-        System.out.println("DISTANCE: " + myWorkingCopyOfTargetData.getPortDistance());
+        System.out.println("DISTANCE: " + distance);
         // distance = 8.0 * FEET_TO_METERS;
 
         calculateLaunchTrajectory(hub, distance);

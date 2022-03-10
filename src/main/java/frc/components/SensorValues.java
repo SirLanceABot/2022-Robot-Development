@@ -42,7 +42,7 @@ public class SensorValues
 
             if (counter >= Constant.DEBOUNCE_THRESHOLD)
             {
-                lastValue = !lastValue;
+                lastValue = currentValue;
             }
         }
 
@@ -68,9 +68,12 @@ public class SensorValues
     private boolean rollerToggleControllerInput = false;
 
     // Shuttle
-    private boolean shuttleIntakeSensorValue = false;
-    private boolean shuttleStageOneSensorValue = false;
-    private boolean shuttleStageTwoSensorValue = false;
+    // private boolean shuttleIntakeSensorValue = false;
+    // private boolean shuttleStageOneSensorValue = false;
+    // private boolean shuttleStageTwoSensorValue = false;
+    private DebouncedBoolean shuttleIntakeSensorValue = new DebouncedBoolean(false);
+    private DebouncedBoolean shuttleStageOneSensorValue = new DebouncedBoolean(false);
+    private DebouncedBoolean shuttleStageTwoSensorValue = new DebouncedBoolean(false);
     private boolean isFeedCargoRequested = false;
 
     // CargoManager
@@ -103,9 +106,14 @@ public class SensorValues
         // Shuttle
         if (SHUTTLE != null)
         {
-            shuttleIntakeSensorValue = SHUTTLE.measureIntakeSensor();
-            shuttleStageOneSensorValue = SHUTTLE.measureStageOneSensor();
-            shuttleStageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
+            // shuttleIntakeSensorValue = SHUTTLE.measureIntakeSensor();
+            // shuttleStageOneSensorValue = SHUTTLE.measureStageOneSensor();
+            // shuttleStageTwoSensorValue = SHUTTLE.measureStageTwoSensor();
+
+            // TODO: Use DebouncedBooleans
+            shuttleIntakeSensorValue.update(SHUTTLE.measureIntakeSensor());
+            shuttleStageOneSensorValue.update(SHUTTLE.measureStageOneSensor());
+            shuttleStageTwoSensorValue.update(SHUTTLE.measureStageTwoSensor());
         }
         if(SHUTTLEFSM != null)
         {
@@ -146,17 +154,20 @@ public class SensorValues
 
     public void setShuttleIntake(boolean shuttleIntakeSensorValue)
     {
-        this.shuttleIntakeSensorValue = shuttleIntakeSensorValue;
+        // this.shuttleIntakeSensorValue = shuttleIntakeSensorValue;
+        this.shuttleIntakeSensorValue.update(shuttleIntakeSensorValue);
     }
 
     public void setShuttleStageOne(boolean shuttleStageOneSensorValue)
     {
-        this.shuttleStageOneSensorValue = shuttleStageOneSensorValue;
+        // this.shuttleStageOneSensorValue = shuttleStageOneSensorValue;
+        this.shuttleStageOneSensorValue.update(shuttleStageOneSensorValue);
     }
 
     public void setShuttleStageTwo(boolean shuttleStageTwoSensorValue)
     {
-        this.shuttleStageTwoSensorValue = shuttleStageTwoSensorValue;
+        // this.shuttleStageTwoSensorValue = shuttleStageTwoSensorValue;
+        this.shuttleStageTwoSensorValue.update(shuttleStageTwoSensorValue);
     }
 
     public void setIsFeedCargoRequested(boolean isFeedCargoRequested)
@@ -204,27 +215,51 @@ public class SensorValues
      * True means sensor is active
      * @return shuttleIntakeSensorValue
      */
+    // public boolean getShuttleIntake()
+    // {
+    //     return shuttleIntakeSensorValue;
+    // }
+    /**
+     * True means sensor is active
+     * @return shuttleIntakeSensorValue
+     */
     public boolean getShuttleIntake()
     {
-        return shuttleIntakeSensorValue;
+        return shuttleIntakeSensorValue.get();
     }
 
     /**
      * True means sensor is active
      * @return shuttleStageOneSensorValue
      */
+    // public boolean getShuttleStageOne()
+    // {
+    //     return shuttleStageOneSensorValue;
+    // }
+    /**
+     * True means sensor is active
+     * @return shuttleStageOneSensorValue
+     */
     public boolean getShuttleStageOne()
     {
-        return shuttleStageOneSensorValue;
+        return shuttleStageOneSensorValue.get();
     }
 
     /**
      * True means sensor is active
      * @return shuttleStageTwoSensorValue
      */
+    // public boolean getShuttleStageTwo()
+    // {
+    //     return shuttleStageTwoSensorValue;
+    // }
+    /**
+     * True means sensor is active
+     * @return shuttleStageTwoSensorValue
+     */
     public boolean getShuttleStageTwo()
     {
-        return shuttleStageTwoSensorValue;
+        return shuttleStageTwoSensorValue.get();
     }
 
     /**
