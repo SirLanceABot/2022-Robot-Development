@@ -105,31 +105,42 @@ public class TeleopMode implements ModeTransition
 
             if(DRIVETRAIN != null)
             {
-                // TODO : Add slew rate limiter
-                double drivePowerLimit = 0.6;
-                double turnPowerLimit = 0.1;
-                double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
-                double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
-                double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
+                {
+                    DRIVETRAIN.drive(0.0, 0.0, -0.5, true);
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
+                {
+                    DRIVETRAIN.drive(0.0, 0.0, 0.5, true);
+                }
+                else
+                {
+                    // TODO : Add slew rate limiter
+                    double drivePowerLimit = 0.6;
+                    double turnPowerLimit = 0.1;
+                    double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
+                    double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
+                    double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
 
-                // Scales down the input power
-                // TODO : Add button for full power
-                drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+                    // Scales down the input power
+                    // TODO : Add button for full power
+                    drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
 
-                xSpeed *= drivePowerLimit;
-                ySpeed *= drivePowerLimit;
-                turn *= turnPowerLimit;
+                    xSpeed *= drivePowerLimit;
+                    ySpeed *= drivePowerLimit;
+                    turn *= turnPowerLimit;
 
-                DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
+                    DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
 
-                // running the drivetrain
-                // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
+                    // running the drivetrain
+                    // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
 
-                // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
+                    // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
 
-                // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+                    // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
 
-                // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+                    // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+                }
             }
 
             // Running the intake
@@ -235,12 +246,12 @@ public class TeleopMode implements ModeTransition
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleOverride))
                 {
                     // SHUTTLE.overrideFSM();
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageForward))
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleStageOneForward))
                     {
                         SHUTTLE.forwardStageOne();
                     }
 
-                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle1stStageReverse))
+                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleStageOneReverse))
                     {
                         SHUTTLE.reverseStageOne();
                     }
@@ -250,12 +261,12 @@ public class TeleopMode implements ModeTransition
                         SHUTTLE.stopStageOne();
                     }
 
-                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageForward))
+                    if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleStageTwoForward))
                     {
                         SHUTTLE.forwardStageTwo();
                     }
 
-                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttle2ndStageReverse))
+                    else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShuttleStageTwoReverse))
                     {
                         SHUTTLE.reverseStageTwo();
                     }
@@ -292,15 +303,17 @@ public class TeleopMode implements ModeTransition
                     // SHUTTLEFSM.fancyRun(shoot);
                 }
 
-                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
                     // Used to test the shooter values
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
 
                     PDH.setSwitchableChannel(true);
                     // SHOOTER.turnOnLED();
+
                     // Change to kLower or kUpper to determine shot type
-                    SHOOTER.shoot(Shooter.Hub.kUpper);
+                    SHOOTER.shoot(Shooter.Hub.kUpper); //SHOOT
+
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
                     // if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kTurnOnShooterToggle))
@@ -311,6 +324,12 @@ public class TeleopMode implements ModeTransition
                     // {
                     //     SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     // }
+                }
+                else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
+                {
+                    PDH.setSwitchableChannel(false);
+
+                    SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                 }
                 else
                 {
@@ -350,11 +369,11 @@ public class TeleopMode implements ModeTransition
             if(CLIMBER != null)
             {
                 // running the climber
-                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbUp))
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbExtend))
                 {
                     CLIMBER.climbUp();
                 }
-                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbDown))
+                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbRetract))
                 {
                     CLIMBER.climbDown();
                 }

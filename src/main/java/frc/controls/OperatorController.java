@@ -17,21 +17,22 @@ public class OperatorController extends Logitech
     // *** INNER ENUMS and INNER CLASSES ***
     public static enum OperatorButtonAction
     {
+        kPrepareShooter(Button.k7),
         kShoot(Button.k1),
-        kShooterOverride(Button.k7),
-        kTurnOnShooterToggle(Button.k8),
-        kShootBallToggle(Button.k2),
+        kShooterOverride(Button.k2),
+        // Slider ShroudAngle and FlywheelRPM in Axis
         
 
         kShuttleOverride(Button.k9), 
-        kShuttle1stStageForward(Button.k3),
-        kShuttle2ndStageForward(Button.k4),
-        kShuttle1stStageReverse(Button.k5),
-        kShuttle2ndStageReverse(Button.k6),
+        kShuttleStageOneForward(Button.k3),
+        kShuttleStageOneReverse(Button.k5),
+        kShuttleStageTwoForward(Button.k4),
+        kShuttleStageTwoReverse(Button.k6),
 
-        kClimbUp(Button.k10),
-        kClimbDown(Button.k11),
-        kClimbShutDown(Button.k12),
+        kClimbExtend(Button.k11),
+        kClimbRetract(Button.k12),
+        // kClimbShutDown(Button.k12), //Not in use
+        // kTurnOnShooterToggle(Button.k8), // Not in use
         
 
         // kOffTarget(Button.k3),

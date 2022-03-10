@@ -239,6 +239,9 @@ public class Shooter
     {
         calculateLaunchTrajectory(hub, distance);
 
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
+
         checkIsShooterReady();
     }
 

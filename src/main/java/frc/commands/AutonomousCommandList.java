@@ -49,6 +49,7 @@ public class AutonomousCommandList
     private static final double SHORT_DISTANCE = 2.0;   // meters (+)
     private static final double MEDIUM_DISTANCE = 2.0;  // meters (+)
     private static final double LONG_DISTANCE = 2.0;    // meters (+)
+    private static final double JITTER_DISTANCE = 0.05; // meters (+)
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -94,8 +95,9 @@ public class AutonomousCommandList
             
             if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
             {
+                addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
                 addCommand(new TurnOnIntake());
-                addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
+                addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
                 // addCommand(new StopDriving());
                 addCommand(new TurnOffIntake());
             }
@@ -121,7 +123,7 @@ public class AutonomousCommandList
             {
                 if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kUpper));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kLower));
                 }
                 else
                 {
@@ -145,8 +147,9 @@ public class AutonomousCommandList
             addCommand(new Wait(AUTONOMOUS_TAB_DATA.moveDelay.value));
         }
 
+        addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
         addCommand(new TurnOnIntake());
-        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
+        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
         // addCommand(new StopDriving());
         addCommand(new TurnOffIntake());
 

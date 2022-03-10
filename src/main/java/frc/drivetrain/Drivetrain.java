@@ -2,7 +2,10 @@ package frc.drivetrain;
 
 import java.lang.invoke.MethodHandles;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
+import frc.constants.Port;
 
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,7 +40,8 @@ public class Drivetrain extends RobotDriveBase
     private final SwerveModule backLeft;// = new SwerveModule(Port.Module.BACK_LEFT);
     private final SwerveModule backRight;// = new SwerveModule(Port.Module.BACK_RIGHT);
 
-    public final AHRS navX;// = new AHRS(SerialPort.Port.kUSB);
+    private final WPI_Pigeon2 gyro; //Pigeon2
+    // public final AHRS gyro;// = new AHRS(SerialPort.Port.kUSB); //navX
 
     // private static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     //         frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
@@ -61,15 +65,16 @@ public class Drivetrain extends RobotDriveBase
         backLeft = new SwerveModule(dd.backLeftSwerveModule);
         backRight = new SwerveModule(dd.backRightSwerveModule);
 
-        navX = new AHRS(dd.navXChannel);
+        gyro = new WPI_Pigeon2(Port.Sensor.PIGEON, Port.Motor.CAN_BUS);
+        // navX = new AHRS(dd.navXChannel);
 
         kinematics = new SwerveDriveKinematics(dd.frontLeftSwerveModule.moduleLocation, dd.frontRightSwerveModule.moduleLocation,
                                                 dd.backLeftSwerveModule.moduleLocation, dd.backRightSwerveModule.moduleLocation);
 
-        odometry = new SwerveDriveOdometry(kinematics, navX.getRotation2d());
+        odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
 
-        navX.reset();
-        odometry.resetPosition(new Pose2d(), navX.getRotation2d());
+        gyro.reset();
+        odometry.resetPosition(new Pose2d(), gyro.getRotation2d());
         // setSafetyEnabled(true);
     }
 
@@ -99,7 +104,7 @@ public class Drivetrain extends RobotDriveBase
         SwerveModuleState[] swerveModuleStates;
 
         if(fieldRelative)
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turn, navX.getRotation2d());
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turn, gyro.getRotation2d());
         else
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turn);
         
@@ -157,7 +162,7 @@ public class Drivetrain extends RobotDriveBase
     public void updateOdometry()
     {
         odometry.update(
-            navX.getRotation2d(),
+            gyro.getRotation2d(),
             frontLeft.getState(),
             frontRight.getState(),
             backLeft.getState(),
@@ -184,7 +189,7 @@ public class Drivetrain extends RobotDriveBase
 
     public void printNavX()
     {
-        System.out.println("Yaw: " + navX.getYaw());
+        System.out.println("Yaw: " + gyro.getYaw());
     }
 
     @Override

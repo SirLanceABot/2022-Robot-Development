@@ -3,6 +3,8 @@ package frc.commands;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.RobotContainer;
+import frc.components.ShuttleFSM;
 
 public class Wait implements Command 
 {
@@ -18,6 +20,7 @@ public class Wait implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private Timer timer = new Timer();
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private double waitTime_seconds;
     private boolean isFinished;
     
@@ -43,6 +46,8 @@ public class Wait implements Command
 
     public void execute()
     {
+        SHUTTLEFSM.fancyRun(false);
+
         System.out.printf("Wait time: %5.2f seconds\n", timer.get());
 
         if(timer.get() > waitTime_seconds)

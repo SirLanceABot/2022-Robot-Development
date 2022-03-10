@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.Intake;
 import frc.robot.RobotContainer;
+import frc.components.ShuttleFSM;
 
 public class TurnOffIntake implements Command 
 {
@@ -19,6 +20,7 @@ public class TurnOffIntake implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Intake INTAKE = RobotContainer.INTAKE;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private boolean isFinished;
 
     // This variable is only used to simulate the intake being off
@@ -42,6 +44,8 @@ public class TurnOffIntake implements Command
 
     public void execute()
     {
+        SHUTTLEFSM.fancyRun(false);
+
         INTAKE.turnOffRoller();
         INTAKE.moveArmIn();
 

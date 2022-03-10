@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.drivetrain.Drivetrain;
 import frc.robot.RobotContainer;
+import frc.components.ShuttleFSM;
 
 public class DriveStraight implements Command 
 {
@@ -19,6 +20,7 @@ public class DriveStraight implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private double speed_metersPerSecond;
     private double distance_meters;
     private boolean isFinished;
@@ -52,6 +54,8 @@ public class DriveStraight implements Command
 
     public void execute()
     {
+        SHUTTLEFSM.fancyRun(false);
+
         // distanceDrivenSimulation += 0.05;
         // System.out.printf("Distance driven: %5.2f meters\n", distanceDrivenSimulation);
 

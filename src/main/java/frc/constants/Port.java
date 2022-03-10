@@ -59,6 +59,7 @@ public final class Port
         public static final int PDH_CAN_ID                  =  1;
 
         private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
+        public static final int PIGEON = 0;
         // private static final I2C.Port NAV_X = I2C.Port.kMXP;
         // private static final SPI.Port NAV_X = SPI.Port.kMXP;
     }

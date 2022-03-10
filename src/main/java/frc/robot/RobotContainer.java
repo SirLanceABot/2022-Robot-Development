@@ -41,7 +41,7 @@ public final class RobotContainer
     private static final boolean useIntake                  = true;
     private static final boolean useShooter                 = true;
     private static final boolean useShuttle                 = true;
-    private static final boolean useClimber                 = false;
+    private static final boolean useClimber                 = true;
     
     private static final boolean useSensorValues            = true;
     private static final boolean useEventGenerator          = true;

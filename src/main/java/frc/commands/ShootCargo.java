@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import frc.components.Shooter;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ShootCargo implements Command 
 {
@@ -21,6 +22,7 @@ public class ShootCargo implements Command
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
+    private Timer timer = new Timer();
     private int numberOfCargo;
     private int cargoShot = 0;
     private double distance_meters;
@@ -48,7 +50,8 @@ public class ShootCargo implements Command
     {
         System.out.println(this);
 
-        SHOOTER.shoot(hub, distance_meters);
+        timer.reset();
+        timer.start();
 
         isFinished = false;
         // cargoShotSimulation = 0;
@@ -56,15 +59,26 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        if(SHOOTER.isShooterReady())
+        SHOOTER.shoot(hub);
+
+        // if(SHOOTER.isShooterReady())
+
+        if(timer.get() > 2.0)
         {
-            SHUTTLEFSM.requestFeedCargo();
+            timer.reset();
+
+            // SHUTTLEFSM.requestFeedCargo();
+            SHUTTLEFSM.fancyRun(true);
 
             System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distance_meters + " m");
             cargoShot++;
         }
+        else
+        {
+            SHUTTLEFSM.fancyRun(false);
+        }
         
-        if ((cargoShot == numberOfCargo) || (numberOfCargo == 0))
+        if ((cargoShot == numberOfCargo) && (timer.get() > 1.0))
         {
             isFinished = true;
         }
@@ -80,6 +94,7 @@ public class ShootCargo implements Command
 
     public void end()
     {
+        timer.stop();
         SHOOTER.stopFlywheel();
     }
 
