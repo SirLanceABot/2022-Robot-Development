@@ -219,9 +219,9 @@ public class Shooter
         updateVisionData();
 
         // Comment this out to test for new data and set the variables up above
-        if (isDataFresh())
+        if (isDataFresh() && isTargetFound())
         {
-            System.out.println("DATA IS FRESH");
+            System.out.println("CONTOURS FOUND");
             calculateLaunchTrajectory(hub);
         }
 
@@ -409,8 +409,12 @@ public class Shooter
 
     public boolean isDataFresh()
     {
-        
         return myWorkingCopyOfTargetData.isFreshData();
+    }
+
+    public boolean isTargetFound()
+    {
+        return myWorkingCopyOfTargetData.isTargetFound();
     }
 
     //positive is looking left of the hub, negative is looking right (think unit circle)

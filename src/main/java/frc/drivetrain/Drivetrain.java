@@ -74,6 +74,7 @@ public class Drivetrain extends RobotDriveBase
         odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
 
         gyro.reset();
+        setGyro180();
         odometry.resetPosition(new Pose2d(), gyro.getRotation2d());
         // setSafetyEnabled(true);
     }
@@ -146,7 +147,7 @@ public class Drivetrain extends RobotDriveBase
 
         if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))
         {
-            drive(velocity, 0.0, 0.0, true);
+            drive(velocity, 0.0, 0.0, false);
         }
         else
         {
@@ -187,6 +188,18 @@ public class Drivetrain extends RobotDriveBase
         feedWatchdog();
     }
 
+    public void resetGyro()
+    {
+        gyro.reset();
+        System.out.println("GYRO RESET");
+    }
+
+    public void setGyro180()
+    {
+        gyro.setYaw(180);
+        System.out.println("GYRO RESET 180 degree");
+    }
+
     public void printNavX()
     {
         System.out.println("Yaw: " + gyro.getYaw());
@@ -197,4 +210,5 @@ public class Drivetrain extends RobotDriveBase
     {
         return "Swerve Drivetrain";
     }
+
 }

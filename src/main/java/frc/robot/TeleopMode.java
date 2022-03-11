@@ -130,7 +130,14 @@ public class TeleopMode implements ModeTransition
                     ySpeed *= drivePowerLimit;
                     turn *= turnPowerLimit;
 
-                    DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
+                    if (DRIVER_CONTROLLER.getAction(DriverAxisAction.kRobotOriented) == 1.0)
+                    {
+                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, false);
+                    }
+                    else
+                    {
+                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
+                    }
 
                     // running the drivetrain
                     // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
@@ -140,6 +147,11 @@ public class TeleopMode implements ModeTransition
                     // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
 
                     // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+                }
+
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kResetGyro))
+                {
+                    DRIVETRAIN.resetGyro();
                 }
             }
 

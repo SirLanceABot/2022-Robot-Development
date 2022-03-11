@@ -51,6 +51,8 @@ public class DriverController extends Xbox
         kCrawlLeft(Button.kX),
         kCrawlRight(Button.kY),
 
+        kResetGyro(Button.kStart),
+
         //If logitech used by driver
         // kIntakeReverse(Button.k5),
         // kIntakeOn(Button.k3),
@@ -72,6 +74,8 @@ public class DriverController extends Xbox
         kMoveX (Axis.kLeftX, 0.15, 0.0, 1.0, true, AxisScale.kLinear),
 
         kRotate(Axis.kRightX, 0.18, 0.0, 1.0, true, AxisScale.kSquared),
+
+        kRobotOriented(Axis.kLeftTrigger, 0.2, 0.0, 1.0, false, AxisScale.kLinear),
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
         //kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),

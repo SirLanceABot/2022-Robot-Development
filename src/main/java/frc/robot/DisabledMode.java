@@ -46,7 +46,7 @@ public class DisabledMode implements ModeTransition
      */
     public void periodic()
     {
-        if (robotState == RobotState.kDisabledAfterRobotInit && MAIN_SHUFFLEBOARD != null)
+        if (MAIN_SHUFFLEBOARD != null)
         {
             boolean isNewData = MAIN_SHUFFLEBOARD.wasSendDataButtonPressed();
 
