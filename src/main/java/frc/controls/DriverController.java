@@ -45,7 +45,8 @@ public class DriverController extends Xbox
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
 
-        kShoot(Button.kLeftTrigger),
+        kRobotOriented(Button.kLeftTrigger),
+        kAutoAim(Button.kRightTrigger),
         //kNoAction(Button.kRightTrigger),
 
         kCrawlLeft(Button.kX),
@@ -75,11 +76,12 @@ public class DriverController extends Xbox
 
         kRotate(Axis.kRightX, 0.18, 0.0, 1.0, true, AxisScale.kSquared),
 
-        kRobotOriented(Axis.kLeftTrigger, 0.2, 0.0, 1.0, false, AxisScale.kLinear),
+        // kRobotOriented(Axis.kLeftTrigger, 0.2, 0.0, 1.0, false, AxisScale.kLinear),
+        // kAutoAim(Axis.kRightTrigger, 0.2, 0.0, 1.0, false, AxisScale.kLinear),
         // kNoAction(Axis.kRightY, 0.1, 0.0, 1.0, true, AxisScale.kLinear),
 
         //kExtendIntake(Axis.kLeftTrigger, 0.2, 0.3, 0.5, false, AxisScale.kLinear),
-        kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
+        // kDriverBoost(Axis.kRightTrigger, 0.2, 0.3, 1.0, false, AxisScale.kLinear)
 
         //If logitech used by driver
         //kMoveY(Axis.kYAxis, 0.2, 0.3, 0.5, false, AxisScale.kLinear),

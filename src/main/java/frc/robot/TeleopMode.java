@@ -61,6 +61,8 @@ public class TeleopMode implements ModeTransition
     // Toggle variables
     private static boolean rollerToggle = false;
 
+    private static double angleToTurn;
+
 
     // *** CLASS CONSTRUCTOR ***
     public TeleopMode()
@@ -105,7 +107,25 @@ public class TeleopMode implements ModeTransition
 
             if(DRIVETRAIN != null)
             {
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim))
+                {
+                    if (!SHOOTER.isHubAligned())
+                    {
+                        angleToTurn = SHOOTER.getHubAngle();
+
+                        System.out.println("ANGLE TO TURN: " + angleToTurn);
+
+                        if (angleToTurn > 0.0)
+                        {
+                            DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
+                        }
+                        else if (angleToTurn < 0.0)
+                        {
+                            DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
+                        }
+                    }
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
                 {
                     DRIVETRAIN.drive(0.0, 0.0, -0.5, true);
                 }
@@ -124,13 +144,13 @@ public class TeleopMode implements ModeTransition
 
                     // Scales down the input power
                     // TODO : Add button for full power
-                    drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+                    // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
 
                     xSpeed *= drivePowerLimit;
                     ySpeed *= drivePowerLimit;
                     turn *= turnPowerLimit;
 
-                    if (DRIVER_CONTROLLER.getAction(DriverAxisAction.kRobotOriented) == 1.0)
+                    if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented))
                     {
                         DRIVETRAIN.drive(xSpeed, ySpeed, turn, false);
                     }
@@ -236,7 +256,7 @@ public class TeleopMode implements ModeTransition
         if (SHUTTLE != null)
         {
             // TODO: Make this not here
-            boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+            boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented);
 
             // SHUTTLEFSM.fancyRun(shoot);
         }
@@ -251,6 +271,15 @@ public class TeleopMode implements ModeTransition
             //     // Debugging feedCargo
             //     // System.out.println("Feed cargo request");
             // }
+
+            if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLight) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+            {
+                PDH.setSwitchableChannel(true);
+            }
+            else
+            {
+                PDH.setSwitchableChannel(false);
+            }
 
             if(SHUTTLE != null)
             {
@@ -320,7 +349,6 @@ public class TeleopMode implements ModeTransition
                     // Used to test the shooter values
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
 
-                    PDH.setSwitchableChannel(true);
                     // SHOOTER.turnOnLED();
 
                     // Change to kLower or kUpper to determine shot type
@@ -339,13 +367,10 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    PDH.setSwitchableChannel(false);
-
                     SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                 }
                 else
                 {
-                    PDH.setSwitchableChannel(false);
                     // SHOOTER.turnOffLED();
                     SHOOTER.stopFlywheel();
                 }

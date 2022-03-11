@@ -98,7 +98,7 @@ public class SensorValues
         if (DRIVER_CONTROLLER != null)
         {
             // TODO: Refactor names if necessary
-            shootControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kShoot);
+            shootControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented);
             armToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle);
             rollerToggleControllerInput = DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff);
         }

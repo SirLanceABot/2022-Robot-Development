@@ -420,7 +420,14 @@ public class Shooter
     //positive is looking left of the hub, negative is looking right (think unit circle)
     public double getHubAngle()
     {
-        return myWorkingCopyOfTargetData.getAngleToTurn();
+        if (myWorkingCopyOfTargetData.isTargetFound())
+        {
+            return myWorkingCopyOfTargetData.getAngleToTurn();
+        }
+        else
+        {
+            return 0.0;
+        }
     }
 
     public boolean isHubAligned()
