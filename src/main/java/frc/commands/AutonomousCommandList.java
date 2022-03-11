@@ -11,6 +11,7 @@ import frc.shuffleboard.AutonomousTabData.OrderOfOperations;
 import frc.shuffleboard.AutonomousTabData.PickUpCargo;
 import frc.shuffleboard.AutonomousTabData.ShootDelay;
 import frc.shuffleboard.AutonomousTabData.ShootCargoAmount;
+import frc.shuffleboard.AutonomousTabData.Hub;
 import frc.components.Shooter;
 
 
@@ -46,9 +47,9 @@ public class AutonomousCommandList
     private static final ArrayList<Command> commandList = new ArrayList<>();
 
     private static final double DRIVE_SPEED = 1.0;  // meters per second (+/-)
-    private static final double SHORT_DISTANCE = 2.0;   // meters (+)
-    private static final double MEDIUM_DISTANCE = 2.0;  // meters (+)
-    private static final double LONG_DISTANCE = 2.0;    // meters (+)
+    private static final double SHORT_DISTANCE = 1.2;   // meters (+)
+    private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
+    private static final double LONG_DISTANCE = 1.2;    // meters (+)
     private static final double JITTER_DISTANCE = 0.05; // meters (+)
 
 
@@ -83,7 +84,6 @@ public class AutonomousCommandList
         }
     }
 
-    // TODO: get actual drive speeds and distances
     private void move()
     {
         if (AUTONOMOUS_TAB_DATA.moveOffTarmac == MoveOffTarmac.kYes)
@@ -98,6 +98,7 @@ public class AutonomousCommandList
                 addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
                 addCommand(new TurnOnIntake());
                 addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+                addCommand(new Wait(2.0));
                 // addCommand(new StopDriving());
                 addCommand(new TurnOffIntake());
             }
@@ -109,9 +110,10 @@ public class AutonomousCommandList
         }
     }
 
-    // TODO: get actual shooter distances
     private void shoot()
     {
+        Shooter.Hub hub = AUTONOMOUS_TAB_DATA.hub == Hub.kUpper ? Shooter.Hub.kUpper : Shooter.Hub.kLower;
+
         if (AUTONOMOUS_TAB_DATA.shootDelay != ShootDelay.k0)
         {
              addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
@@ -123,24 +125,26 @@ public class AutonomousCommandList
             {
                 if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, Shooter.Hub.kUpper));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, LONG_DISTANCE, hub));
                 }
                 else
                 {
-                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, MEDIUM_DISTANCE, Shooter.Hub.kUpper));
+                    addCommand(new ShootCargo(AUTONOMOUS_TAB_DATA.shootCargoAmount.value, MEDIUM_DISTANCE, hub));
                 }
             }
         }
 
         if (AUTONOMOUS_TAB_DATA.orderOfOperations == OrderOfOperations.kShootFirst)
         {
-            addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kUpper));
+            addCommand(new ShootCargo(1, SHORT_DISTANCE, hub));
         }
     }
 
     private void shootMoveShoot()
     {
-        addCommand(new ShootCargo(1, SHORT_DISTANCE, Shooter.Hub.kUpper));
+        Shooter.Hub hub = AUTONOMOUS_TAB_DATA.hub == Hub.kUpper ? Shooter.Hub.kUpper : Shooter.Hub.kLower;
+
+        addCommand(new ShootCargo(1, SHORT_DISTANCE, hub));
 
         if (AUTONOMOUS_TAB_DATA.moveDelay != MoveDelay.k0)
         {
@@ -150,6 +154,7 @@ public class AutonomousCommandList
         addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
         addCommand(new TurnOnIntake());
         addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+        addCommand(new Wait(2.0));
         // addCommand(new StopDriving());
         addCommand(new TurnOffIntake());
 
@@ -158,7 +163,7 @@ public class AutonomousCommandList
              addCommand(new Wait(AUTONOMOUS_TAB_DATA.shootDelay.value));
         }
 
-        addCommand(new ShootCargo(1, LONG_DISTANCE, Shooter.Hub.kUpper));
+        addCommand(new ShootCargo(1, LONG_DISTANCE, hub));
     }
 
     private void addCommand(Command command)

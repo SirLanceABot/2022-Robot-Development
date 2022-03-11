@@ -74,7 +74,7 @@ public class Drivetrain extends RobotDriveBase
         odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
 
         gyro.reset();
-        setGyro180();
+        setGyro(180.0);
         odometry.resetPosition(new Pose2d(), gyro.getRotation2d());
         // setSafetyEnabled(true);
     }
@@ -194,10 +194,10 @@ public class Drivetrain extends RobotDriveBase
         System.out.println("GYRO RESET");
     }
 
-    public void setGyro180()
+    public void setGyro(double angle)
     {
-        gyro.setYaw(180);
-        System.out.println("GYRO RESET 180 degree");
+        gyro.setYaw(angle);
+        System.out.println("GYRO RESET AT " + angle);
     }
 
     public void printNavX()

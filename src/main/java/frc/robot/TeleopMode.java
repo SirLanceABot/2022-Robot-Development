@@ -57,6 +57,8 @@ public class TeleopMode implements ModeTransition
     // Testing variable
     private static final double SHOOTER_SPEED = 0.5;
 
+    private static final double FEET_TO_METERS = 0.3048;
+
     // TODO: Make roller toggle also need to make manual shooter controls
     // Toggle variables
     private static boolean rollerToggle = false;
@@ -107,7 +109,7 @@ public class TeleopMode implements ModeTransition
 
             if(DRIVETRAIN != null)
             {
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim))
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
                     if (!SHOOTER.isHubAligned())
                     {
@@ -136,7 +138,7 @@ public class TeleopMode implements ModeTransition
                 else
                 {
                     // TODO : Add slew rate limiter
-                    double drivePowerLimit = 0.6;
+                    double drivePowerLimit = 0.8;
                     double turnPowerLimit = 0.1;
                     double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
                     double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
@@ -367,7 +369,8 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    SHOOTER.shoot(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                 }
                 else
                 {

@@ -66,6 +66,8 @@ public class ShootCargo implements Command
 
     public void execute()
     {
+        SHOOTER.shoot(hub);
+
         // Auto aiming
         if (!SHOOTER.isHubAligned())
         {
@@ -80,8 +82,6 @@ public class ShootCargo implements Command
                 DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
             }
         }
-
-        SHOOTER.shoot(hub);
 
         // if(SHOOTER.isShooterReady())
 

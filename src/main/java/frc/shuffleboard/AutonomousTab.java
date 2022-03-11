@@ -40,6 +40,7 @@ public class AutonomousTab
     private SendableChooser<AutonomousTabData.MoveOffTarmac> moveOffTarmacBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.MoveDelay> moveDelayBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.PickUpCargo> pickUpCargoBox = new SendableChooser<>();
+    private SendableChooser<AutonomousTabData.Hub> hubBox = new SendableChooser<>();
      
     private NetworkTableEntry successfulDownload;
     private NetworkTableEntry errorMessageBox;
@@ -63,6 +64,7 @@ public class AutonomousTab
         createMoveOffTarmacBox();
         createMoveDelayBox();
         createPickUpCargoBox();
+        createHubBox();
         
         createSendDataButton();
         successfulDownload = createSuccessfulDownloadBox();
@@ -90,7 +92,8 @@ public class AutonomousTab
         
         //add options to  Box
         startingLocationBox.addOption("Left", AutonomousTabData.StartingLocation.kLeft);
-        startingLocationBox.setDefaultOption("Middle", AutonomousTabData.StartingLocation.kMiddle);
+        startingLocationBox.setDefaultOption("Middle Left", AutonomousTabData.StartingLocation.kMiddleLeft);
+        startingLocationBox.setDefaultOption("Middle Right", AutonomousTabData.StartingLocation.kMiddleRight);
         startingLocationBox.addOption("Right", AutonomousTabData.StartingLocation.kRight);
 
         //put the widget on the shuffleboard
@@ -234,6 +237,23 @@ public class AutonomousTab
         autonomousTab.add(pickUpCargoBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
             .withPosition(13, 3) //.withPosition(1, 9)
+            .withSize(4, 2);
+    }
+
+    private void createHubBox()
+    {
+        //create and name the Box
+        SendableRegistry.add(hubBox, "Hub");
+        SendableRegistry.setName(hubBox, "Hub");
+
+        //add options to Box
+        hubBox.addOption("Lower", AutonomousTabData.Hub.kLower);
+        hubBox.setDefaultOption("Upper", AutonomousTabData.Hub.kUpper);
+
+        //put the widget on the shuffleboard
+        autonomousTab.add(hubBox)
+            .withWidget(BuiltInWidgets.kSplitButtonChooser)
+            .withPosition(13, 6)
             .withSize(4, 2);
     }
 

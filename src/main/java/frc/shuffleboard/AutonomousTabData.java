@@ -7,7 +7,7 @@ public class AutonomousTabData
 {
     public static enum StartingLocation
     {
-        kLeft, kMiddle, kRight;
+        kLeft, kMiddleLeft, kMiddleRight, kRight;
     }
 
     //-------------------------------------------------------------------//
@@ -69,13 +69,19 @@ public class AutonomousTabData
         kYes, kNo;
     }
 
-    public StartingLocation startingLocation = StartingLocation.kMiddle;
+    public static enum Hub
+    {
+        kUpper, kLower;
+    }
+
+    public StartingLocation startingLocation = StartingLocation.kMiddleRight;
     public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
     public ShootCargoAmount shootCargoAmount = ShootCargoAmount.k0;
     public ShootDelay shootDelay = ShootDelay.k0;
     public MoveOffTarmac moveOffTarmac = MoveOffTarmac.kYes;
     public MoveDelay moveDelay = MoveDelay.k0;
     public PickUpCargo pickUpCargo = PickUpCargo.kNo;
+    public Hub hub = Hub.kUpper;
 
     public String toString()
     {
@@ -103,5 +109,6 @@ public class AutonomousTabData
         moveOffTarmac = atd.moveOffTarmac;
         moveDelay = atd.moveDelay;
         pickUpCargo = atd.pickUpCargo;
+        hub = atd.hub;
     }
 }

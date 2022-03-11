@@ -3,6 +3,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import frc.commands.AutonomousCommandList;
+import frc.drivetrain.Drivetrain;
 import frc.robot.Robot.RobotState;
 import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.MainShuffleboard;
@@ -22,6 +23,7 @@ public class DisabledMode implements ModeTransition
     private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
     private static final AutonomousTabData AUTONOMOUS_TAB_DATA = RobotContainer.AUTONOMOUS_TAB_DATA;
     private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
+    private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     
     private RobotState robotState;
 
@@ -57,6 +59,25 @@ public class DisabledMode implements ModeTransition
 
                 AUTONOMOUS_COMMAND_LIST.build();
                 System.out.println(AUTONOMOUS_COMMAND_LIST);
+
+                if (DRIVETRAIN != null)
+                {
+                    switch (AUTONOMOUS_TAB_DATA.startingLocation)
+                    {
+                        case kLeft:
+                            DRIVETRAIN.setGyro(180.0 - 45.7); //set
+                            break;
+                        case kMiddleLeft:
+                            DRIVETRAIN.setGyro(180.0 + 1.5); //set
+                            break;
+                        case kMiddleRight:
+                            DRIVETRAIN.setGyro(180.0 + 23.97); //set
+                            break;
+                        case kRight:
+                            DRIVETRAIN.setGyro(180.0 + 91.47); //set
+                            break;
+                    }
+                }
             }
         }
     }
