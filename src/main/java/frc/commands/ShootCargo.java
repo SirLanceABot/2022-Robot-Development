@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import frc.components.Shooter;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import frc.drivetrain.Drivetrain;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -23,12 +24,14 @@ public class ShootCargo implements Command
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
+    private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     private static final PowerDistribution PDH = RobotContainer.PDH;
     private Timer timer = new Timer();
     private int numberOfCargo;
     private int cargoShot = 0;
     private double distance_meters;
     private Shooter.Hub hub;
+    private double angleToTurn;
     private boolean isFinished;
 
     // These variables are only used to simulate cargo being shot
@@ -63,6 +66,21 @@ public class ShootCargo implements Command
 
     public void execute()
     {
+        // Auto aiming
+        if (!SHOOTER.isHubAligned())
+        {
+            angleToTurn = SHOOTER.getHubAngle();
+
+            if (angleToTurn > 0.0)
+            {
+                DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
+            }
+            else if (angleToTurn < 0.0)
+            {
+                DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
+            }
+        }
+
         SHOOTER.shoot(hub);
 
         // if(SHOOTER.isShooterReady())
