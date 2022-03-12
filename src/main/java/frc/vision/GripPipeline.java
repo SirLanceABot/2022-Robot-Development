@@ -26,6 +26,8 @@ import org.opencv.objdetect.*;
 public class GripPipeline {
 
 	//Outputs
+	private Mat rgbThresholdOutput = new Mat();
+	private Mat maskOutput = new Mat();
 	private Mat blurOutput = new Mat();
 	private Mat hsvThresholdOutput = new Mat();
 	private Mat cvErode0Output = new Mat();
@@ -42,8 +44,20 @@ public class GripPipeline {
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
 	public void process(Mat source0) {
+		// Step RGB_Threshold0:
+		Mat rgbThresholdInput = source0;
+		double[] rgbThresholdRed = {0.0, 250.45454545454547};
+		double[] rgbThresholdGreen = {0.0, 250.45454545454547};
+		double[] rgbThresholdBlue = {0.0, 250.45454545454547};
+		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
+
+		// Step Mask0:
+		Mat maskInput = source0;
+		Mat maskMask = rgbThresholdOutput;
+		mask(maskInput, maskMask, maskOutput);
+
 		// Step Blur0:
-		Mat blurInput = source0;
+		Mat blurInput = maskOutput;
 		BlurType blurType = BlurType.get("Box Blur");
 		double blurRadius = 1.8018018018018018;
 		blur(blurInput, blurType, blurRadius, blurOutput);
@@ -77,7 +91,7 @@ public class GripPipeline {
 		Mat cvErode1Src = cvDilateOutput;
 		Mat cvErode1Kernel = new Mat();
 		Point cvErode1Anchor = new Point(-1, -1);
-		double cvErode1Iterations = 1;
+		double cvErode1Iterations = 1.0;
 		int cvErode1Bordertype = Core.BORDER_CONSTANT;
 		Scalar cvErode1Bordervalue = new Scalar(-1);
 		cvErode(cvErode1Src, cvErode1Kernel, cvErode1Anchor, cvErode1Iterations, cvErode1Bordertype, cvErode1Bordervalue, cvErode1Output);
@@ -102,6 +116,22 @@ public class GripPipeline {
 		double filterContoursMaxRatio = 1.2;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
+	}
+
+	/**
+	 * This method is a generated getter for the output of a RGB_Threshold.
+	 * @return Mat output from RGB_Threshold.
+	 */
+	public Mat rgbThresholdOutput() {
+		return rgbThresholdOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Mask.
+	 * @return Mat output from Mask.
+	 */
+	public Mat maskOutput() {
+		return maskOutput;
 	}
 
 	/**
@@ -160,6 +190,33 @@ public class GripPipeline {
 		return filterContoursOutput;
 	}
 
+
+	/**
+	 * Segment an image based on color ranges.
+	 * @param input The image on which to perform the RGB threshold.
+	 * @param red The min and max red.
+	 * @param green The min and max green.
+	 * @param blue The min and max blue.
+	 * @param output The image in which to store the output.
+	 */
+	private void rgbThreshold(Mat input, double[] red, double[] green, double[] blue,
+		Mat out) {
+		Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2RGB);
+		Core.inRange(out, new Scalar(red[0], green[0], blue[0]),
+			new Scalar(red[1], green[1], blue[1]), out);
+	}
+
+	/**
+	 * Filter out an area of an image using a binary mask.
+	 * @param input The image on which the mask filters.
+	 * @param mask The binary image that is used to filter.
+	 * @param output The image in which to store the output.
+	 */
+	private void mask(Mat input, Mat mask, Mat output) {
+		mask.convertTo(mask, CvType.CV_8UC1);
+		Core.bitwise_xor(output, output, output);
+		input.copyTo(output, mask);
+	}
 
 	/**
 	 * An indication of which type of filter to use for a blur.
