@@ -80,6 +80,7 @@ public class DriveStraight implements Command
     {
         DRIVETRAIN.configOpenLoopRamp(FAST_RAMP_RATE);
         DRIVETRAIN.stopMotor();
+        DRIVETRAIN.resetEncoders();
     }
 
     public String toString()

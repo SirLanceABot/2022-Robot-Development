@@ -17,7 +17,7 @@ public final class Constant
     public static final double SHROUD_ANGLE_THRESHOLD = 2.0;
 
     //max amount of error in degrees for being aligned with the hub
-    public static final double HUB_ALIGNMENT_THRESHOLD = 3.0;
+    public static final double HUB_ALIGNMENT_THRESHOLD = 2.0;
 
     public static final double INTAKE_SPEED = 0.5;
 

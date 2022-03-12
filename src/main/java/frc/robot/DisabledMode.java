@@ -41,6 +41,11 @@ public class DisabledMode implements ModeTransition
     public void init()
     {
         robotState = Robot.getRobotState();
+
+        if (DRIVETRAIN != null)
+        {
+            DRIVETRAIN.resetEncoders();
+        }
     }
 
     /**

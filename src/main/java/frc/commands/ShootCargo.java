@@ -73,14 +73,16 @@ public class ShootCargo implements Command
         {
             angleToTurn = SHOOTER.getHubAngle();
 
-            if (angleToTurn > 0.0)
-            {
-                DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
-            }
-            else if (angleToTurn < 0.0)
-            {
-                DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
-            }
+            DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
+
+            // if (angleToTurn > 0.0)
+            // {
+            //     DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
+            // }
+            // else if (angleToTurn < 0.0)
+            // {
+            //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
+            // }
         }
 
         // if(SHOOTER.isShooterReady())
