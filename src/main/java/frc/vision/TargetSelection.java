@@ -467,3 +467,19 @@ public void run()
 // parking lot of junk
 // contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
 // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
+
+// contours might look prettier but it doesn't much change the recognition of them
+// sharpen
+
+// cvSharpen(blurOutput, blurOutput);
+
+// private void cvSharpen(Mat src, Mat out)
+// {
+//   Mat sharpenFilter = new Mat(3, 3, CvType.CV_8S);
+//       sharpenFilter.put(0, 0,
+//           -1, -1, -1, // also tried 0, -1, 0, -1, 5, -1, 0, -1, 0
+//           -1,  9, -1,
+//           -1, -1, -1 
+//       );
+//   Imgproc.filter2D(src, out, src.depth(), sharpenFilter);
+// }
