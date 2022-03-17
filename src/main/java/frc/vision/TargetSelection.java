@@ -291,12 +291,10 @@ public void run()
               listBoxContour.add(new MatOfPoint(contourData.get(1).boxPts[0], contourData.get(1).boxPts[1], contourData.get(1).boxPts[2], contourData.get(1).boxPts[3]));
               }
             } // end 2 contours
-            else // 3  or more contours for now - may be reduced after windowing
+          else // 3  or more contours for now - may be reduced after windowing
           { // center on likely symmetric group across the image
-            
-              contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
-              // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
-              // setup sliding window
+          
+            // setup sliding window
             int scanWindow = Constant.targetCameraWidth/7; // 6 or 7 might be appropriate?  tune FIXME:
             int scanStep =  scanWindow/4; // guesstimate  FIXME:
 
@@ -465,3 +463,7 @@ public void run()
   } // end run method
 
   } // end outer class TargetSelection
+
+// parking lot of junk
+// contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
+// System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
