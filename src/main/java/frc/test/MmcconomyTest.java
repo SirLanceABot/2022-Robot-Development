@@ -32,8 +32,8 @@ public class MmcconomyTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    //private static final Intake INTAKE = RobotContainer.INTAKE;
-    private static final Climber CLIMBER = RobotContainer.CLIMBER;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
+    // private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Joystick JOYSTICK = new Joystick(0);
 
 
@@ -61,15 +61,15 @@ public class MmcconomyTest implements MyTest
     {
         if(JOYSTICK.getRawButton(1))
         {
-            CLIMBER.climbUp();
+            INTAKE.pMoveArmIn();
         }
         else if(JOYSTICK.getRawButton(2))
         {
-            CLIMBER.climbDown();
+            INTAKE.pMoveArmOut();;
         }
         else
         {
-            CLIMBER.shutDown();
+            INTAKE.pMoveArmOff();
         }
     }
 

@@ -1,11 +1,17 @@
 package frc.components;
 
 import com.revrobotics.CANSparkMax;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +67,12 @@ public class Intake
     private final RelativeEncoder armsEncoder;// = armsMotor.getEncoder();
     private final SparkMaxLimitSwitch armsForwardLimitSwitch;
     private final SparkMaxLimitSwitch armsBackwardLimitSwitch;
+
+    //private final Solenoid armSolenoid = new Solenoid(2, 3);
+    private PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
+    private final DoubleSolenoid armsSolenoid = new DoubleSolenoid(0, moduleType, 0, 1);
+    //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
+    //TODO figure out what testing values are for fwd and rev channels, options are 0,1,2,3
 
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
@@ -157,6 +169,21 @@ public class Intake
     private void setArmVelocity(double velocity)
     {
         armsMotor.set(velocity);
+    }
+
+    public void pMoveArmOut()
+    {
+        armsSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void pMoveArmIn()
+    {
+        armsSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void pMoveArmOff()
+    {
+        armsSolenoid.set(DoubleSolenoid.Value.kOff);
     }
 
     //not getters and setters?
