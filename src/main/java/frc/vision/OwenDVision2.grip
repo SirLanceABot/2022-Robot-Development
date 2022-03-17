@@ -105,7 +105,7 @@
       </grip:Input>
       <grip:Input step="6" socket="7">
         <value>
-          <double>65.22388059701493</double>
+          <double>60.22388059701493</double>
           <double>100.0</double>
         </value>
       </grip:Input>
@@ -116,7 +116,7 @@
         <value>0.0</value>
       </grip:Input>
       <grip:Input step="6" socket="10">
-        <value>0.25</value>
+        <value>0.2</value>
       </grip:Input>
       <grip:Input step="6" socket="11">
         <value>1.2</value>

@@ -5,32 +5,50 @@ import java.util.Comparator;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.RotatedRect;
+import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
 class ContourData
 {
 
     double area;
-    Point center;
     double centerX;
     double centerY;
-    Point[] boxPts = new Point[4]; // maybe not used
-    double angle; // could use angle to double check position but not now
+    Point tl;
+    Point br;
+    Point[] boxPts = new Point[4];
  
     ContourData(MatOfPoint contour)
     {
-        RotatedRect rotatedRect;
+      // RotatedRect rotatedRect;
+      // MatOfPoint2f NewMtx = new MatOfPoint2f(contour.toArray());
+      // rotatedRect = Imgproc.minAreaRect(NewMtx); // create angled bounding rectangle
+      // NewMtx.release();
+
+      // this.area = rotatedRect.size.area();
+      // this.center = rotatedRect.center;
+      // this.centerX = rotatedRect.center.x;
+      // this.centerY = rotatedRect.center.y;
+      // rotatedRect.points(this.boxPts);
+      // this.angle = rotatedRect.angle;
+
         MatOfPoint2f NewMtx = new MatOfPoint2f(contour.toArray());
-        rotatedRect = Imgproc.minAreaRect(NewMtx); // create angled bounding rectangle
+      Rect r = Imgproc.boundingRect(NewMtx); // create upright bounding rectangle
         NewMtx.release();
 
-        this.area = rotatedRect.size.area();
-        this.center = rotatedRect.center;
-        this.centerX = rotatedRect.center.x;
-        this.centerY = rotatedRect.center.y;
-        rotatedRect.points(this.boxPts);
-        this.angle = rotatedRect.angle;
+      // 0 1
+      // 3 2
+      this.boxPts[0] = r.tl();
+      this.boxPts[1] = new Point(r.br().x, r.tl().y);
+      this.boxPts[2] = r.br();
+      this.boxPts[3] = new Point(r.tl().x, r.br().y);
+
+      this.area = r.area();
+      this.centerX = (r.tl().x + r.br().x)/2;
+      this.centerY = (r.tl().y + r.br().y)/2;
+      this.tl = r.tl();
+      this.br = r.br();
+
     }
 
     public double getArea(ContourData cd)
@@ -78,6 +96,7 @@ class ContourData
 
     public String toString()
     {
-        return String.format("COG (" + centerX + ", " + centerY + ") area " + area);
+        return String.format("tl (" + tl.x + ", " + tl.y + ") br (" +br.x + ", " + br.y +
+                           ") COG (" + centerX + ", " + centerY + ") area " + area);
     }
 }

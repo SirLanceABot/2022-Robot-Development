@@ -8,7 +8,7 @@ package frc.vision;
  * modify the TargetSelection class, and modify this class.
  * 
  * @author FRC Team 4237
- * @version 2019.01.28.14.20
+ * @version 2022
  */
 public class TargetData
 {

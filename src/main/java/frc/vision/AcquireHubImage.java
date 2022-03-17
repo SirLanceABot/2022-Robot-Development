@@ -18,9 +18,10 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.cscore.CameraServerJNI;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -58,12 +59,18 @@ public class AcquireHubImage  implements Runnable
   public void run() {
 
     /********start target camera******* */
+    /*                                  */
     // The Registered Trademark looks right in VSC but it isn't "/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0"
     UsbCamera TargetCamera = new UsbCamera("TargetCamera", "/dev/v4l/by-id/usb-Microsoft_Microsoft\u00AE_LifeCam_HD-3000-video-index0");
     TargetCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     TargetCamera.setResolution(Constant.targetCameraWidth, Constant.targetCameraHeight); // 10fps ok
     TargetCamera.setFPS(10);
+    TargetCamera.setWhiteBalanceManual(4800); // around green
+    TargetCamera.setBrightness(0);
     TargetCamera.setExposureManual(0); // This is a critical camera parameter set here.
+    int cameraHandle = TargetCamera.getHandle();
+    CameraServerJNI.setProperty(CameraServerJNI.getSourceProperty(cameraHandle, "contrast"), 100);
+    CameraServerJNI.setProperty(CameraServerJNI.getSourceProperty(cameraHandle, "saturation"), 100);
 
     // The first image filter is the camera exposure is set to nearly "off" so only the very
     // brightest objects leave the camera.  This assumes a bright light is illuminating the
@@ -81,28 +88,33 @@ public class AcquireHubImage  implements Runnable
     
     // Mats are very memory expensive. Lets reuse this Mat.
     Mat mat = new Mat();
+    /*                                     */
     /*******END start target camera******* */
 
 
     /********start intake camera for human driver******* */
+    /*                                                   */
     // has to be after the other camera because first one is lost - BUG??
     //  - automatically acquires and passes through the image
     // mjpeg stream address at http://roboRIO-4237-FRC.local:118x/?action=stream
     // x auto sequence starts at 1  (port 1181)
+    
     UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
     IntakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     IntakeCamera.setResolution(Constant.intakeCameraWidth, Constant.intakeCameraHeight);
     IntakeCamera.setFPS(30);
+   
     // MjpegServer intakeCameraServer = CameraServer.startAutomaticCapture(IntakeCamera); // why not use this one?  can't remember
     MjpegServer intakeCameraServer = CameraServer.addServer("IntakeServer");
     intakeCameraServer.setSource(IntakeCamera);
     intakeCameraServer.setCompression(35); // 35 about as low as you can go for seeing to drive with low bit rate and little lag
+    /*                                                          */
     /********END of start intake camera for human driver******* */
 
 
-    // start shuffleboard stuff
-
-    // Widget in Shuffleboard Tab
+    /*****start shuffleboard stuff*****/
+    /*                                */
+    // Intake Camera Widget in Shuffleboard Tab
     synchronized(Vision.tabLock)
     {
       CameraWidget cw = new CameraWidget(Vision.cameraTab);
@@ -113,8 +125,6 @@ public class AcquireHubImage  implements Runnable
       
       Shuffleboard.update();
     }
-
-    // END start intake camera
 
     // Get an angle Calibration from Shuffleboard
     synchronized(Vision.tabLock)
@@ -128,7 +138,8 @@ public class AcquireHubImage  implements Runnable
       
       Shuffleboard.update();
     }
-    // end shuffleboard stuff
+    /*                              */
+    /*****END shuffleboard stuff*****/
 
   
     // start thread to start target camera and process to locate target
@@ -141,7 +152,7 @@ public class AcquireHubImage  implements Runnable
     // END start thread to process target camera and locate target
 
 
-    // acquire target camera images
+    // infinite loop to acquire target camera images
     while (!Thread.interrupted())
     {
       // Tell the CvSink to grab a frame from the camera and put it

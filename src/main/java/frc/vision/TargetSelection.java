@@ -68,12 +68,11 @@ package frc.vision;
   are best for accuracy but there isn't enough CPU time available for many steps.
 
   The strip with the most objects is declared the winner.  The angle is based on the
-  average position of all the objects in the strip and the distance is based on the
+  position of the edge objects in the strip and the distance is based on the
   location of the strip.
 
-  Conceivably multiple strips have the same maximum number of objects.  The first strip
-  with that maximum number wins.  I think that is the toward the bottom of the image as
-  mentioned above but that would have to be verified if it's important.
+  Conceivably multiple strips have the same maximum number of objects.  The strip with
+  the largest contour area beats others.
 
   The angle and distance are calculated from camera parameters and the location of the
   objects in the camera image.
@@ -118,11 +117,10 @@ public class TargetSelection implements Runnable {
       System.out.println("Loading: " + fullClassName);
   }
 
-  // set this display to false for match play to save Ethernet bandwidth
-  // Probably put in config parameters such Constants class or SmartDashboard inputs
+  // save Ethernet bandwidth back to the DriverStation if false but then you can't see what's happening
   boolean displayTargetContours = true;
 
-  // This object is used to send the OpenCV processed image to the Dashboard if desired
+  // This object is used to send the OpenCV processed image to the Dashboard if desired w/ displayTargetContours = true
   private CvSource outputStream;
     
   GripPipeline gripPipeline = new GripPipeline();
@@ -135,7 +133,7 @@ public void run()
     {
       // define our generated image the same size as the camera but rotated - doesn't have to be but easier
       
-      // same as putVideo but we need the server returned instead of the source
+      // same as putVideo method but we need the server returned instead of the source
       //outputStream = CameraServer.putVideo("TargetContours", Constant.targetCameraWidth, Constant.targetCameraHeight);
 
       outputStream = new CvSource("TargetContours", VideoMode.PixelFormat.kMJPEG,
@@ -181,10 +179,10 @@ public void run()
     {
       // find the target
       // compute the angle to turn to align and the distance
-      // send 4 pieces of data to whatever is driving this beast
-      // angle to turn, distance to target, frame sequence number, time of acquisition
+      // send data to whatever is driving this beast
+      // angle to turn, distance to target, frame sequence number, fresh indicator, target found indicator
 
-      AcquireHubImage.image.getImage(mat);
+      AcquireHubImage.image.getImage(mat); // get the buffered image that magically appears for us
 
 // fake contours to test
 // Imgproc.rectangle(mat, new Point(10, 10), new Point(20, 30), new Scalar(0, 255, 40), 2, Imgproc.LINE_4);
@@ -247,7 +245,7 @@ public void run()
             // Positive thickness means not filled, negative thickness means filled.
             // Draw all the contours that gripPipeline found in red
             // Later we'll draw over the ones we use in yellow
-            Imgproc.drawContours(mat, filteredContours, -1, new Scalar(0, 0, 255), 1); // red
+            Imgproc.drawContours(mat, filteredContours, -1, new Scalar(0, 0, 255), 1); // red for GRIP contours
 
             listBoxContour = new ArrayList<MatOfPoint>();
           }
@@ -257,19 +255,20 @@ public void run()
           filteredContours.forEach((cd)->contourData.add(new ContourData(cd))); // get out of Mat form
 
             // if no contours, say no target
-            // if one contour, use that one to center
-            // if two contours, center on their average
-            // if three or more contours use sliding window to find most contours straight across image
-            //    then average the ones in the window
+          // if one contour, center on that one
+          // if two contours, center on their group width
+          // if three or more contours use sliding window down the image to find the most contours
+          //  straight across image then center on the group width in that scanning window. After
+          //  most contours the preference to break ties is largest total area of contours.
 
             // initial values in case not set elsewhere
             double targetCenterX = -1;
             double targetCenterY = -1;
 
-            if(filteredContours.size() == 1)
-            {
-              targetCenterX = contourData.get(0).centerX;
-              targetCenterY = contourData.get(0).centerY;
+          if(contourData.size() == 1)
+          { // center on the extremes of the one box - not much to go on but it's all we have
+            targetCenterX = (contourData.get(0).tl.x + contourData.get(0).br.x)/2.;
+            targetCenterY = (contourData.get(0).tl.y + contourData.get(0).br.y)/2.;
 
               if(displayTargetContours) // list of contour's box to draw
               {
@@ -277,10 +276,14 @@ public void run()
               }
             } // end one contour
             else
-            if(filteredContours.size() == 2)
-            {
-              targetCenterX = (contourData.get(0).centerX + contourData.get(1).centerX)/2.;
-              targetCenterY = (contourData.get(0).centerY + contourData.get(1).centerY)/2.;
+          if(contourData.size() == 2)
+          { // center on the extremes of the two boxes - crude approximation at edges but don't care about edges
+            // no idea if these two boxes go together in the same stripe or if they overlap but again it's
+            // all we have to go on
+            targetCenterX = (Math.min(contourData.get(0).tl.x, contourData.get(1).tl.x) +
+                              Math.max(contourData.get(0).br.x, contourData.get(1).br.x))/2.;
+            targetCenterY = (Math.min(contourData.get(0).tl.y, contourData.get(1).tl.y) +
+                              Math.max(contourData.get(0).br.y, contourData.get(1).br.y))/2.;
 
               if(displayTargetContours) // list of good contours' boxes to draw
               {
@@ -289,100 +292,98 @@ public void run()
               }
             } // end 2 contours
             else // 3  or more contours for now - may be reduced after windowing
-            {
+          { // center on likely symmetric group across the image
+            
               contourData.sort(ContourData.compareCenterX()); // sort by center X, order small to large X
               // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
               // setup sliding window
-              int scanWindow = Constant.targetCameraWidth/6;
-              int scanStep =  scanWindow/4;
+            int scanWindow = Constant.targetCameraWidth/7; // 6 or 7 might be appropriate?  tune FIXME:
+            int scanStep =  scanWindow/4; // guesstimate  FIXME:
 
-              int countPointsMax = -1; // count of points in highest count window
+            int countPointsMax = -1; // initial count of points in highest count window
+            double groupAreaMax = -1; // area of all contours in this window - used to break ties on contour counts
+
               ArrayList<ContourData> windowedContourData = new ArrayList<ContourData>();
 
-              var start = (int)(contourData.get(0).centerX) - scanStep - 1; // start 1 window below 1st data point
-              var stop = (int)(contourData.get(contourData.size()-1).centerX) + scanStep + 1; // stop 1 window past last data point
-              for(int window = start; window <= stop; window+=scanStep) // sliding window
+            for(int window = 0; window < Constant.intakeCameraWidth; window+=scanStep) // the whole screen
               {
-                int countPoints = 0; // initialize count of points in this window
-                for(int point = 0; point < contourData.size(); point++) // check all points to see if in this window
+              int countContours = 0; // initialize count of contours in this window
+              double groupArea = 0.; // initialize area of all contours in this window
+              for(int contour = 0; contour < contourData.size(); contour++)
+              { // check all contours to see which are completely in this window
+                if((contourData.get(contour).tl.x >= window) && (contourData.get(contour).br.x < (window + scanWindow)))
                 {
-                  if((contourData.get(point).centerX >= window) && (contourData.get(point).centerX < (window + scanWindow)))
-                  {
-                    countPoints++; // count this point in this window
+                  countContours++; // count this contour in this window
+                  // there is a risk to relying on the count of contours. At long distances the contours get
+                  // small and might merge into one big one at the low resolution.  The count would be small
+                  // although the contours would be valid and large through merging.
+                  groupArea += contourData.get(contour).area; //count this area in the window
                   }
                 }
 
-                // check for new max number of points in window and process it - the first new max is retained
-                if(countPoints > countPointsMax)
+              // check for new max number of points in window and process it
+              // if same max number of contours in a group, then retain the group with the largest group area
+              if((countContours > countPointsMax) || (countContours == countPointsMax && groupArea > groupAreaMax))
                 {
-                   countPointsMax = countPoints; //  new max window count
+                  countPointsMax = countContours; //  new max window count
+                  groupAreaMax = groupArea; // area of new max window count
                    windowedContourData.clear(); // clear previous max
 
-                  // check all points again to see if in this window - faster, easier to repeat new max loops than to save data every time
+                // check all contours again to see if completely in this window
+                // faster, easier to repeat new max loops than to save data every time in above loop
                   for(int point = 0; point < contourData.size(); point++)
                   {
-                    if((contourData.get(point).centerX >= window) && (contourData.get(point).centerX < (window + scanWindow)))
+                  if((contourData.get(point).tl.x >= window) && (contourData.get(point).br.x < (window + scanWindow)))
                     {
-                      windowedContourData.add(contourData.get(point)); // all points in this new max window
+                    windowedContourData.add(contourData.get(point)); // list of points in this new max window
                     }
                   }
                 }
               }
               // System.out.println(windowedContourData); // the contours in max window
 
-              // picking center by size and location of contour (below) seemed good but there was a lot of jitter with bad
-              // tape; this was tested without benefit of the windowing scheme but don't bother retesting since averaging
-              // the contours in the window reduces jitter so a big chunk is commented out
-
-              // windowedContourData.sort(ContourData.compareArea()); // sort by area size, order large to small
-              // System.out.println(windowedContourData.get(0).area);
-              // System.out.println("windowedContourData");windowedContourData.forEach((data)->System.out.println(data));
-
-              // // is #0 (max area contour) located between #1 and #2 in the Y-axis?
-              // if(
-              //   ((windowedContourData.get(0).centerY < windowedContourData.get(1).centerY) &&
-              //     (windowedContourData.get(0).centerY > windowedContourData.get(2).centerY)    )  ||
-              //     ((windowedContourData.get(0).centerY > windowedContourData.get(1).centerY) &&
-              //     (windowedContourData.get(0).centerY < windowedContourData.get(2).centerY)    )     )
-              // {
-              //     targetCenterX = windowedContourData.get(0).centerX;
-              //     targetCenterY = windowedContourData.get(0).centerY;
-
-              //     if(displayTargetContours) // list of good contour's boxes to draw
-              //     {
-              //     listBoxContour.add(new MatOfPoint(windowedContourData.get(0).boxPts[0], windowedContourData.get(0).boxPts[1], windowedContourData.get(0).boxPts[2], windowedContourData.get(0).boxPts[3]));
-              //     }
-              // }
-              // else
-              // {
-              //   targetCenterX = (windowedContourData.get(0).centerX + windowedContourData.get(1).centerX)/2.;
-              //   targetCenterY = (windowedContourData.get(0).centerY + windowedContourData.get(1).centerY)/2.;
+            // find center of the group of contours in the max window
                 
-              //   if(displayTargetContours) // list of good contour's boxes to draw
-              //   {
-              //   listBoxContour.add(new MatOfPoint(windowedContourData.get(0).boxPts[0], windowedContourData.get(0).boxPts[1], windowedContourData.get(0).boxPts[2], windowedContourData.get(0).boxPts[3]));
-              //   listBoxContour.add(new MatOfPoint(windowedContourData.get(1).boxPts[0], windowedContourData.get(1).boxPts[1], windowedContourData.get(1).boxPts[2], windowedContourData.get(1).boxPts[3]));
-              //   }
-              // }
-
-              // average all contours in the max window
               targetCenterX = 0; // initialize centering totals
               targetCenterY = 0;
 
-              for(ContourData wcd : windowedContourData)
+            // if still more than 4 contours sort by contour area large to small and keep the 4 largest contours
+            // picked four because that many contours are clearly seen head on; 1 or 2 other small ones might be
+            // seen at the edges and they don't contribute much to centering and might jitter so drop them
+            if(windowedContourData.size() > 4)
+            {
+              windowedContourData.sort(ContourData.compareArea()); // sort by area size, order large to small
+            }
+              // find min and max x and y of the 4 (at most) largest areas of individual contours (not group area)
+              double minX = 999999.;
+              double maxX = -1.;
+              double minY = 999999.;
+              double maxY = -1.;
+
+              for(int i = 0; i < Math.min(4, windowedContourData.size()); i++)
               {
-                targetCenterX += wcd.centerX; // total x and y values
-                targetCenterY += wcd.centerY;
+                if(windowedContourData.get(i).tl.x < minX) minX = windowedContourData.get(i).tl.x;               
+                if(windowedContourData.get(i).br.x > maxX) maxX = windowedContourData.get(i).br.x;
+                if(windowedContourData.get(i).tl.y < minY) minY = windowedContourData.get(i).tl.y;            
+                if(windowedContourData.get(i).br.y > maxY) maxY = windowedContourData.get(i).br.y;
+
                 if(displayTargetContours) // list of good contours' boxes to draw
                 {
                   // add to list of good contour's boxes to draw
-                  listBoxContour.add(new MatOfPoint(wcd.boxPts[0], wcd.boxPts[1], wcd.boxPts[2], wcd.boxPts[3]));
+                  listBoxContour.add(new MatOfPoint(
+                    windowedContourData.get(i).boxPts[0],
+                    windowedContourData.get(i).boxPts[1],
+                    windowedContourData.get(i).boxPts[2],
+                    windowedContourData.get(i).boxPts[3]));
                 }
               }
-              targetCenterX /= windowedContourData.size(); // average x and y values are the target center (we are hopeful)
-              targetCenterY /= windowedContourData.size();
 
-            } // end 3 or more contours
+              targetCenterX = (minX + maxX)/2.; // average x and y values are the target center (we are hopeful)
+              targetCenterY = (minY + maxY)/2.;
+
+             // System.out.println(windowedContourData.size() + " " + targetCenterX + ", " + targetCenterY);
+
+           } // end 3 or more contours at the start - some might have been tossed out   
           
             //Draw all the contours that we use in yellow
             if(displayTargetContours)
@@ -401,7 +402,7 @@ public void run()
                 }
               }
 
-            // Find the degrees to turn the turret by finding the difference between the
+            // Find the degrees to turn the shooter by finding the difference between the
             // horizontal center of the camera frame and the horizontal center of the target.
             // calibrateAngle is the difference between what the camera sees as the retro-reflective
             // tape target and where the Cargo actually hits - the skew of the shooting process or
