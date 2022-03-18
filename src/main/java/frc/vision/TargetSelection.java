@@ -90,6 +90,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 // import org.opencv.core.CvException;
 // import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -116,6 +117,8 @@ public class TargetSelection implements Runnable {
   {
       System.out.println("Loading: " + fullClassName);
   }
+
+  boolean displayHistogram = true; // helps with "tuning"
 
   // save Ethernet bandwidth back to the DriverStation if false but then you can't see what's happening
   boolean displayTargetContours = true;
@@ -237,6 +240,14 @@ public void run()
                     
           if(displayTargetContours)
           {
+            if(displayHistogram)
+            {
+              Hist hist = new Hist();
+              Mat mask = Mat.zeros(mat.size(), CvType.CV_8UC1); // start mask with all zeros (skip all pixels)
+              Imgproc.drawContours(mask, filteredContours, -1, new Scalar(255), -1); // set the mask with the contours
+              hist.displayHist(gripPipeline.hsvOutput(), mat, mask, new String[]{"H", "S", "V"}); // get the HSV histogram of the whole image (the contour we are hopeful)
+            }
+
             // Draw center-line
             Imgproc.line(mat, new Point(0,Constant.targetCameraHeight/2.) , 
               new Point(Constant.targetCameraWidth,Constant.targetCameraHeight/2.), new Scalar(255, 255, 255),

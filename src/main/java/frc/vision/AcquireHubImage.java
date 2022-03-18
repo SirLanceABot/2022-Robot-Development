@@ -69,7 +69,7 @@ public class AcquireHubImage  implements Runnable
     TargetCamera.setBrightness(0);
     TargetCamera.setExposureManual(0); // This is a critical camera parameter set here.
     int cameraHandle = TargetCamera.getHandle();
-    CameraServerJNI.setProperty(CameraServerJNI.getSourceProperty(cameraHandle, "contrast"), 100);
+    CameraServerJNI.setProperty(CameraServerJNI.getSourceProperty(cameraHandle, "contrast"), 74);
     CameraServerJNI.setProperty(CameraServerJNI.getSourceProperty(cameraHandle, "saturation"), 100);
 
     // The first image filter is the camera exposure is set to nearly "off" so only the very

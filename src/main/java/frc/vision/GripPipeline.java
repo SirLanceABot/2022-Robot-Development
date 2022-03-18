@@ -25,7 +25,9 @@ import org.opencv.objdetect.*;
 */
 public class GripPipeline {
 
+
 	//Outputs
+	private Mat hsvOutput = new Mat();
 	private Mat rgbThresholdOutput = new Mat();
 	private Mat maskOutput = new Mat();
 	private Mat blurOutput = new Mat();
@@ -64,9 +66,9 @@ public class GripPipeline {
 
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = blurOutput;
-		double[] hsvThresholdHue = {40.46762589928058, 80.17064846416382};
-		double[] hsvThresholdSaturation = {199.50539568345323, 255.0};
-		double[] hsvThresholdValue = {13.758992805755396, 255.0};
+		double[] hsvThresholdHue = {38., 80.};
+		double[] hsvThresholdSaturation = {199., 255.};
+		double[] hsvThresholdValue = {13., 255.};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
@@ -109,7 +111,7 @@ public class GripPipeline {
 		double filterContoursMaxWidth = 1000.0;
 		double filterContoursMinHeight = 3.0;
 		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {60.22388059701493, 100.0};
+		double[] filterContoursSolidity = {40., 100.0};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
 		double filterContoursMinRatio = 0.2;
@@ -190,6 +192,10 @@ public class GripPipeline {
 		return filterContoursOutput;
 	}
 
+	public Mat hsvOutput()
+	{
+		return hsvOutput;
+	}
 
 	/**
 	 * Segment an image based on color ranges.
@@ -294,7 +300,8 @@ public class GripPipeline {
 	 */
 	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
 	    Mat out) {
-		Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
+			Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
+		out.copyTo(hsvOutput);
 		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
 			new Scalar(hue[1], sat[1], val[1]), out);
 	}
