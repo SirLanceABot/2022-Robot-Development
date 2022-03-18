@@ -100,6 +100,7 @@ public class AcquireHubImage  implements Runnable
     // x auto sequence starts at 1  (port 1181)
     
     UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-KYE_Systems_Corp._USB_Camera_200901010001-video-index0");
+    // UsbCamera IntakeCamera = new UsbCamera("IntakeCamera", "/dev/v4l/by-id/usb-046d_081a_985FA790-video-index0"); // rkt Logitech
     IntakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     IntakeCamera.setResolution(Constant.intakeCameraWidth, Constant.intakeCameraHeight);
     IntakeCamera.setFPS(30);

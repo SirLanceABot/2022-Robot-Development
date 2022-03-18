@@ -92,7 +92,6 @@ import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 // import org.opencv.core.CvException;
-// import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -105,6 +104,7 @@ import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.VideoMode;
 // import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 import frc.constants.Constant;
 
 public class TargetSelection implements Runnable {
@@ -305,6 +305,8 @@ public void run()
           else // 3  or more contours for now - may be reduced after windowing
           { // center on likely symmetric group across the image
           
+            // System.out.println("centerX");contourData.forEach((data)->System.out.println(data.centerX));
+
             // setup sliding window
             int scanWindow = Constant.targetCameraWidth/7; // 6 or 7 might be appropriate?  tune FIXME:
             int scanStep =  scanWindow/4; // guesstimate  FIXME:
