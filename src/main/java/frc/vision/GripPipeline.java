@@ -27,7 +27,7 @@ public class GripPipeline {
 
 
 	//Outputs
-	private Mat hsvOutput = new Mat();
+	// private Mat hsvOutput = new Mat();
 	private Mat rgbThresholdOutput = new Mat();
 	private Mat maskOutput = new Mat();
 	private Mat blurOutput = new Mat();
@@ -192,10 +192,10 @@ public class GripPipeline {
 		return filterContoursOutput;
 	}
 
-	public Mat hsvOutput()
-	{
-		return hsvOutput;
-	}
+	// public Mat hsvOutput()
+	// {
+	// 	return hsvOutput;
+	// }
 
 	/**
 	 * Segment an image based on color ranges.
@@ -301,7 +301,7 @@ public class GripPipeline {
 	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
 	    Mat out) {
 			Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
-		out.copyTo(hsvOutput);
+		// out.copyTo(hsvOutput);
 		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
 			new Scalar(hue[1], sat[1], val[1]), out);
 	}
