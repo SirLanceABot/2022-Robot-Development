@@ -15,7 +15,7 @@ class Hist {
 /**
  * 
  * @param mat Assume 3 channels that can be BGR, HSV, etc since any 3 channel data are displayed.
- *   Histogram is overlaid in the corner of the input image.
+ *   Histogram is overlaid in the corner of the dst image.
  */
     public void displayHist(Mat mat, Mat dst, Mat mask, String[] label) {
     Mat histImage = new Mat();
@@ -52,13 +52,15 @@ class Hist {
     Imgproc.calcHist(matList, new MatOfInt(1), mask, gHist, new MatOfInt(histSize), histRange, accumulate);
     Imgproc.calcHist(matList, new MatOfInt(2), mask, rHist, new MatOfInt(histSize), histRange, accumulate);
 
+    matList.clear();
+    
     //System.out.println("bHist = " + bHist + "gHist = " + gHist + "rHist = " + rHist); // each 128x1 float 1 channel
     //! [Compute the histograms]
 
     // [Draw the histograms for B, G and R]
 
     int histW = 90; // pixels width
-    int histH = 50; // pixels height
+    int histH = 24; // pixels height
     histImage = new Mat( histH, histW, CvType.CV_8UC3, new Scalar( 0,0,0) );
 
     int binW = (int) Math.round((double) histW / histSize); // bin width in pixels not the data values
@@ -71,43 +73,9 @@ class Hist {
     Core.normalize(rHist, rHist, 0, histImage.rows()/3, Core.NORM_MINMAX);
     //! [Normalize the result to ( 0, histImage.rows )]
 
-    //! [Draw for all channels - each channel has its own space]
-
-    float[] bHistData = new float[(int) (bHist.total() * bHist.channels())];
-    bHist.get(0, 0, bHistData);
-
-    float[] gHistData = new float[(int) (gHist.total() * gHist.channels())];
-    gHist.get(0, 0, gHistData);
-
-    float[] rHistData = new float[(int) (rHist.total() * rHist.channels())]; // safety allocate but should be 128 bins x 1 histogram x 1 channel
-    rHist.get(0, 0, rHistData);
-
-    Imgproc.putText(histImage, label[0], new Point(10, histH/3 - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 1);
-    Imgproc.putText(histImage, label[1], new Point(10, histH*2/3 - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 1);
-    Imgproc.putText(histImage, label[2], new Point(10, histH - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 1);
-    
-    for( int i = 1; i < histSize; i++ ) {
-        Imgproc.line(histImage.submat(0, histH/3, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(bHistData[i - 1])),
-        new Point(binW * (i), histH/3 - Math.round(bHistData[i])), new Scalar(255, 0, 0), 2, Imgproc.LINE_4);
-
-        Imgproc.line(histImage.submat(histH/3, histH*2/3, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(gHistData[i - 1])),
-        new Point(binW * (i), histH/3 - Math.round(gHistData[i])), new Scalar(0, 255, 0), 2, Imgproc.LINE_4);
-
-        Imgproc.line(histImage.submat(histH*2/3, histH, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(rHistData[i - 1])),
-        new Point(binW * (i), histH/3 - Math.round(rHistData[i])), new Scalar(0, 0, 255), 2, Imgproc.LINE_4);
-
-        // Core.MinMaxLocResult rHistMinMax = Core.minMaxLoc(rHist);
-        // System.out.println("rHist " + rHistMinMax.minLoc + " " + rHistMinMax.minVal + " " + rHistMinMax.maxLoc + " " + rHistMinMax.maxVal);
-
-        // System.out.print(
-        // binW * (i - 1) + " " +
-        // (histH - Math.round(rHistData[i - 1])) + " ");
-    }
-
     // draw grid
     for (int idxC = 0; idxC <=histW; idxC+=10) {
         Imgproc.line (histImage, new Point(idxC, 0), new Point(idxC, histImage.rows()), new Scalar(255, 255, 255), 1, Imgproc.LINE_4);
-
     }
 
     // draw hue strip if first label seems to be for Hue
@@ -128,6 +96,39 @@ class Hist {
         subMatStrip.release();
     }
 
+    //! [Draw for all channels - each channel has its own space]
+
+    float[] bHistData = new float[(int) (bHist.total() * bHist.channels())];
+    bHist.get(0, 0, bHistData);
+
+    float[] gHistData = new float[(int) (gHist.total() * gHist.channels())];
+    gHist.get(0, 0, gHistData);
+
+    float[] rHistData = new float[(int) (rHist.total() * rHist.channels())]; // safety allocate but should be 128 bins x 1 histogram x 1 channel
+    rHist.get(0, 0, rHistData);
+
+    Imgproc.putText(histImage, label[0], new Point(10, histH/3 - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.3, new Scalar(255, 255, 255), 1);
+    Imgproc.putText(histImage, label[1], new Point(10, histH*2/3 - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.3, new Scalar(255, 255, 255), 1);
+    Imgproc.putText(histImage, label[2], new Point(10, histH - 2), Imgproc.FONT_HERSHEY_SIMPLEX, 0.3, new Scalar(255, 255, 255), 1);
+    
+    for( int i = 1; i < histSize; i++ ) {
+        Imgproc.line(histImage.submat(0, histH/3, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(bHistData[i - 1])),
+        new Point(binW * (i), histH/3 - Math.round(bHistData[i])), new Scalar(255, 0, 0), 1, Imgproc.LINE_4);
+
+        Imgproc.line(histImage.submat(histH/3, histH*2/3, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(gHistData[i - 1])),
+        new Point(binW * (i), histH/3 - Math.round(gHistData[i])), new Scalar(0, 255, 0), 1, Imgproc.LINE_4);
+
+        Imgproc.line(histImage.submat(histH*2/3, histH, 0, histW), new Point(binW * (i - 1), histH/3 - Math.round(rHistData[i - 1])),
+        new Point(binW * (i), histH/3 - Math.round(rHistData[i])), new Scalar(0, 0, 255), 1, Imgproc.LINE_4);
+
+        // Core.MinMaxLocResult rHistMinMax = Core.minMaxLoc(rHist);
+        // System.out.println("rHist " + rHistMinMax.minLoc + " " + rHistMinMax.minVal + " " + rHistMinMax.maxLoc + " " + rHistMinMax.maxVal);
+
+        // System.out.print(
+        // binW * (i - 1) + " " +
+        // (histH - Math.round(rHistData[i - 1])) + " ");
+    }
+
     //! [Draw for all channels]
     // end histogram of image mat before any other drawing on mat
 
@@ -142,13 +143,9 @@ class Hist {
     histImage.release();
     histRange.release();
     subMat.release();
-    while(!matList.isEmpty()) { // should be just 1 entry but maybe above logic was changed so release them all
-        matList.get(0).release();
-        matList.remove(0);
-    }
 
     //
-    // END RGB HISTOGRAM OF IMAGE - except the presentation of it a couple of lines below
+    // END RGB HISTOGRAM OF IMAGE
     //////////////////////////////////////
     }
 }
