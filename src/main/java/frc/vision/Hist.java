@@ -133,7 +133,8 @@ class Hist {
     // end histogram of image mat before any other drawing on mat
 
     Mat subMat = new Mat(); // place for small image inserted into large image
-    subMat = dst.submat(0, histImage.rows(), 0, histImage.cols()); // define the
+    int offset = 20; // place the histogram down the image
+    subMat = dst.submat(0+offset, histImage.rows()+offset, 0, histImage.cols()); // define the
     // insert area on the main image
     if( ! histImage.empty() )
     {

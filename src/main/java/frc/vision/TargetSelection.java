@@ -128,7 +128,7 @@ public class TargetSelection implements Runnable {
 
   TargetData nextTargetData = new TargetData();
 
-  private boolean calibrateMode = true;
+  private boolean calibrateMode = true; // FIXME: set true for test mode
 
 public void run()
     {
@@ -459,13 +459,16 @@ public void run()
         // update the target information with best data or the initialized no contour data
         VisionData.targetData.set(nextTargetData);
 
-        if(calibrateMode) // calibration - run in test mode
-        {
-          new Calibration().calibrate(mat, matDisplay, filteredContours);
-        }
 
         if(displayTargetContours)
         {
+        if(calibrateMode)
+        {
+            Core.transpose(mat, mat); // flipped matDisplay above; must flip mat to match it
+            Core.flip(mat, mat, 1);
+            new Calibration().calibrate(mat, matDisplay, filteredContours); // get calibration info
+        }
+
           outputStream.putFrame(matDisplay); // Give the output stream a new image to display
         }
     }    // end "infinite" loop

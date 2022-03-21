@@ -14,8 +14,9 @@ import org.opencv.core.TermCriteria;
 
 public class Calibration
 {
-    final boolean makeClusters = true;
-    final boolean displayHistogram = true; // helps with "tuning"
+    final private boolean makeClusters = true;
+    final private boolean displayHistogram = true; // helps with "tuning"
+    final private boolean displayClusterColor = false; // it's a busy display
     Mat hsvMat = new Mat();
 
     public void calibrate(Mat mat, Mat matDisplay, ArrayList<MatOfPoint> filteredContours)
@@ -92,8 +93,11 @@ public class Calibration
       int kClusters = 8;
       Mat matDisplayTemp = new Mat(matDisplay.rows(), matDisplay.cols(), matDisplay.type());
       Cluster.getClusters(hsv, kClusters, matDisplayTemp);
+      if(displayClusterColor)
+      {
       Imgproc.cvtColor(matDisplayTemp, matDisplayTemp, Imgproc.COLOR_HSV2BGR);
       Core.addWeighted(matDisplayTemp, .10, matDisplay, .90, 0, matDisplay);
+      }
     }
 }
 
