@@ -116,8 +116,6 @@ public class TargetSelection implements Runnable {
       System.out.println("Loading: " + fullClassName);
   }
 
-  // boolean displayHistogram = true; // helps with "tuning"
-
   // save Ethernet bandwidth back to the DriverStation if false but then you can't see what's happening
   boolean displayTargetContours = true;
 
@@ -128,7 +126,7 @@ public class TargetSelection implements Runnable {
 
   TargetData nextTargetData = new TargetData();
 
-  private boolean calibrateMode = true; // FIXME: set true for test mode
+  private boolean calibrateMode = false; // FIXME: set true for test mode
 
 public void run()
     {
