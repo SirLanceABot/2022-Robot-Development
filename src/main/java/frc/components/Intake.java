@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -68,10 +69,13 @@ public class Intake
     private final SparkMaxLimitSwitch armsForwardLimitSwitch;
     private final SparkMaxLimitSwitch armsBackwardLimitSwitch;
 
-    //private final Solenoid armSolenoid = new Solenoid(2, 3);
+    // private final Solenoid armOutSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0); 
+    // private final Solenoid armInSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
     private PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
-    private final DoubleSolenoid armsSolenoid = new DoubleSolenoid(0, moduleType, 0, 1);
+    private final DoubleSolenoid armsInSolenoid = new DoubleSolenoid(0, moduleType, 0, 1);
+    private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 2, 3);
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
+    //TODO Add a compressor controller as mentioned in the documentation
     //TODO figure out what testing values are for fwd and rev channels, options are 0,1,2,3
 
     private ArmPosition armPosition;
@@ -173,17 +177,29 @@ public class Intake
 
     public void pMoveArmOut()
     {
-        armsSolenoid.set(DoubleSolenoid.Value.kForward);
+        // armsSolenoid.set(DoubleSolenoid.Value.kForward);
+        // armOutSolenoid.set(false);
+        // armInSolenoid.set(true);
+        armsInSolenoid.set(Value.kForward);
+        armsOutSolenoid.set(Value.kReverse);
     }
 
     public void pMoveArmIn()
     {
-        armsSolenoid.set(DoubleSolenoid.Value.kReverse);
+        // armsSolenoid.set(Value.kReverse);
+        // armOutSolenoid.set(true);
+        // armInSolenoid.set(false);
+        armsInSolenoid.set(Value.kReverse);
+        armsOutSolenoid.set(Value.kForward);
     }
 
     public void pMoveArmOff()
     {
-        armsSolenoid.set(DoubleSolenoid.Value.kOff);
+        // armsSolenoid.set(Value.kOff);
+        // armOutSolenoid.set(false);
+        // armInSolenoid.set(false);
+        armsInSolenoid.set(Value.kReverse);
+        armsOutSolenoid.set(Value.kReverse);
     }
 
     //not getters and setters?

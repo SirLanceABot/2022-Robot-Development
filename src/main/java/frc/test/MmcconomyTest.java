@@ -59,6 +59,19 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
+        if(JOYSTICK.getRawButton(3))
+        {
+            INTAKE.intakeRoller();
+        }
+        else if(JOYSTICK.getRawButton(4))
+        {
+            INTAKE.outtakeRoller();
+        }
+        else
+        {
+            INTAKE.turnOffRoller();
+        }
+        
         if(JOYSTICK.getRawButton(1))
         {
             INTAKE.pMoveArmIn();
