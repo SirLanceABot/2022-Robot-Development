@@ -18,6 +18,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.constants.Constant;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -70,13 +71,8 @@ public class Intake
    
 
     // private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private static final CANSparkMax armsMotor = new CANSparkMax(Port.Motor.INTAKE_ARMS_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax rollerMotor;// = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    private final CANSparkMax armsMotor;// = new CANSparkMax(5, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // ^these fellas are for when I'm testing with a boxbot
-    private final RelativeEncoder armsEncoder;// = armsMotor.getEncoder();
-    private final SparkMaxLimitSwitch armsForwardLimitSwitch;
-    private final SparkMaxLimitSwitch armsBackwardLimitSwitch;
 
     // private final Solenoid armOutSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0); 
     // private final Solenoid armInSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
@@ -99,26 +95,15 @@ public class Intake
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Intake(int rollerMotorPort, int armsMotorPort)
+    public Intake(int rollerMotorPort)
     {
         System.out.println("Intake Created");
 
         // rollerMotorPort = 1;  // Used ONLY for testing
-        // armsMotorPort = 7;    // Used ONLY for testing
 
         rollerMotor = new CANSparkMax(rollerMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        armsMotor = new CANSparkMax(armsMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         
-        configArmsMotor();
         configRollerMotor();
-
-        armsBackwardLimitSwitch = armsMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        armsBackwardLimitSwitch.enableLimitSwitch(true);
-        armsForwardLimitSwitch = armsMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        armsForwardLimitSwitch.enableLimitSwitch(true);
-
-        armsEncoder = armsMotor.getEncoder();
-        armsEncoder.setPosition(0);
     }
 
     // *** CLASS & INSTANCE METHODS ***
@@ -142,28 +127,6 @@ public class Intake
         System.out.println("Configurated");
     }
 
-    private void configArmsMotor()
-    {
-        System.out.println("configurating arms motor");
-    
-        armsMotor.restoreFactoryDefaults();
-        armsMotor.setInverted(false);
-        armsMotor.setIdleMode(IdleMode.kBrake); // you gotta import IdleMode before you do this
-    
-        armsMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        armsMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        armsMotor.setSoftLimit(SoftLimitDirection.kForward, 103); // DF 3/06/22
-        armsMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
-    
-        // armsEncoder.setPosition(0);
-        
-    
-        armsMotor.setOpenLoopRampRate(0.1);
-        armsMotor.setSmartCurrentLimit(40);
-        
-        System.out.println("Configurated");
-    }
-
     //getters
     public ArmPosition getArmPosition()
     {
@@ -181,20 +144,52 @@ public class Intake
         rollerMotor.set(velocity); // it has to be between 1.0 and -1.0
     }
 
-    private void setArmVelocity(double velocity)
-    {
-        armsMotor.set(velocity);
-    }
     //compressor controls
-    public void compressorOff()
+    /**
+     * Disables the compressor automatic control loop
+     */
+    public void compressorDisable()
     {
         controlCompressor.disable();
     }
 
-    public void compressorOn()
+    /**
+     * Enables the compressor automatic control loop
+     */
+    public void compressorEnable()
     {
         controlCompressor.enableDigital();
     }
+
+    /**
+     * Returns true if compressor is disabled
+     * 
+     * @return isCompressorDisabled
+     */
+    public boolean isCompressorDisabled()
+    {
+        return !controlCompressor.enabled();
+    }
+
+    public boolean isCompressorRunning()
+    {
+        return (controlCompressor.getCurrent() > Constant.COMPRESSOR_RUNNING_AMPS);
+    }
+
+    /**
+     * @deprecated
+     * A method for testing the amps pulled by compressor
+     */
+    public void outputCompressorCurrent()
+    {
+        double compressorCurrent = controlCompressor.getCurrent();
+
+        if (compressorCurrent != 0.0)
+        {
+            System.out.println("Compressor current: " + compressorCurrent);
+        }
+    }
+
     //pnumeatic controls
     public void pMoveArmOut()
     {
@@ -240,7 +235,7 @@ public class Intake
 
     public boolean isArmIn()
     {
-    //    return armsBackwardLimitSwitch.isPressed();
+        //return armsBackwardLimitSwitch.isPressed();
         if(armsInSolenoid.get() == Value.kReverse && armsOutSolenoid.get() == Value.kForward)
         {
             return(true);
@@ -269,118 +264,9 @@ public class Intake
         // System.out.println("Roller Off");
     }
 
-    //100:1 gearbox
-    public void moveArmOut()
-    {
-        setArmVelocity(armSpeed);
-    }
-
-    public void moveArmIn()
-    {
-        setArmVelocity(-armSpeed);
-    }
-
-    public void stopArm()
-    {
-        setArmVelocity(0.0);
-    }
-
     public double MeasureMotorSpeed(CANSparkMax motor)
     {
         return(motor.get()); 
-    }
-
-    public double getArmMotorRotations()
-    {
-        // 4096 ticks per rev
-        // ^I don't know what that means lmao
-        return armsEncoder.getPosition();
-    }
-
-    // public void moveArmOut(double desiredPosition) 
-    // //FELLA MOVES 5 INCHES
-    // //The motor has a diameter of .49in and a circumference of 1.54in
-    // //I forgot the gear ratio lol
-    // {
-    //     desiredPosition -= .05;
-    //     System.out.println("Moving arms out...");
-    //     setArmSpeed(0.1);
-    //     double p = armsEncoder.getPosition();
-    //     int c = 0;
-    //     boolean forceQuit = false;
-    //     while(armsEncoder.getPosition() < desiredPosition && forceQuit == false/*5.19480519481*50/3*/) //Both getPostion and desiredPostion SHOULD be in the unit of rotations //50/3 is the gear ratio
-    //     {
-    //         if(p != armsEncoder.getPosition())
-    //         {
-    //             c = 0;
-    //             p = armsEncoder.getPosition();
-    //             System.out.println("moving out, position of: " + armsEncoder.getPosition());
-                
-    //         }
-    //         else if(armsEncoder.getPosition() >= desiredPosition-.8)
-    //         {
-    //             c++;
-    //             System.out.println("C is: " + c);
-    //         }
-    //         if(armsEncoder.getPosition() > desiredPosition-.80)
-    //         {
-    //             setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
-    //         }
-    //         if(c >= 13 && armsEncoder.getPosition() >= desiredPosition-.2)
-    //         {
-    //             System.out.println("Force quit");
-    //             forceQuit = true;
-    //         }
-    //     }
-        
-    //     setArmSpeed(0.0);
-    //     System.out.println("Final position: " + armsEncoder.getPosition());
-    //     System.out.println("Arms are out!");
-    //     armPosition = ArmPosition.kOut;
-        
-    // }
-    
-    // public void moveArmIn(double desiredPosition) //FELLA MOVES 8 INCHES
-    // {
-    //     desiredPosition += .05;
-    //     System.out.println("Moving arms In...");
-    //     setArmSpeed(-0.1);
-    //     double p = armsEncoder.getPosition();
-    //     int c = 0;
-    //     boolean forceQuit = false;
-    //     if(armsEncoder.getPosition() > desiredPosition && forceQuit == false) //Both getPostion and 0 SHOULD be in the unit of rotations
-    //     {
-    //         if(p!=armsEncoder.getPosition())
-    //         {
-    //             c = 0;
-    //             p = armsEncoder.getPosition();
-    //             System.out.println("Moving in, position of: " + armsEncoder.getPosition());
-    //         }
-    //         else if(armsEncoder.getPosition() >= desiredPosition+.8)
-    //         {
-    //             c++;
-    //             System.out.println("C is "+ c);
-    //         }
-    //         if(armsEncoder.getPosition() > desiredPosition+.80)
-    //         {
-    //             setArmSpeed((desiredPosition-armsEncoder.getPosition())/desiredPosition);
-    //         }
-    //         if(c >= 13 && armsEncoder.getPosition() >= desiredPosition+.2)
-    //         {
-    //             System.out.println("Force Quit");
-    //             forceQuit = true;
-    //         }
-           
-    //     }
-    //     setArmSpeed(0.0);
-    //     System.out.println("Arms in!");
-    //     armPosition = ArmPosition.kIn;
-    // } 
-
-    public void outputArmLimit()
-    {
-        System.out.println("Arm: Encoder " + armsEncoder.getPosition());
-        // System.out.println("Arm: Forward Limit Switch " + armsForwardLimitSwitch.isPressed() + ", Backward Limit Switch " + armsBackwardLimitSwitch.isPressed());
     }
 
     public String toString()
@@ -388,7 +274,7 @@ public class Intake
         String thisthing = "";
         thisthing += String.format("------------------------------------------------------------\n");
         thisthing += String.format("%-20s%-20s%",  "Arms Position", "Arms Speed");
-        thisthing += String.format("%-20s%-20s%", this.armPosition, armsMotor.get()+"\n");
+        thisthing += String.format("%-20s%-20s%", this.armPosition, "wow \n");
         thisthing += String.format("------------------------------------------------------------\n");
         thisthing += String.format("%-20s%-20s%-20s%", "RollerDirection", "DesiredRollerSpeed", "RollerSpeed\n");
         thisthing += String.format("%-20s%-20s%-20s%", this.rollerDirection, this.desiredRollerSpeed, this.rollerSpeed+"\n");

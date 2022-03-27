@@ -19,6 +19,7 @@ public final class Constant
     //max amount of error in degrees for being aligned with the hub
     public static final double HUB_ALIGNMENT_THRESHOLD = 2.0;
 
+    public static final double COMPRESSOR_RUNNING_AMPS = 0.0;
     public static final double INTAKE_SPEED = 0.5;
 
     public static final double CLIMBER_UP_SPEED = 0.5;

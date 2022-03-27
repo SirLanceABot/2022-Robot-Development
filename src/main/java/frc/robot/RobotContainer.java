@@ -87,7 +87,7 @@ public final class RobotContainer
     static
     {
         DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.DrivetrainSetup.DRIVETRAIN_DATA) : null;
-        INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER, Port.Motor.INTAKE_ARMS_MOTOR) : null;
+        INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER) : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter(Port.Motor.SHOOTER_FLYWHEEL, Port.Motor.SHOOTER_SHROUD) : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
         CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER, Port.Motor.CLIMBER_BRAKE_MOTOR) : null;

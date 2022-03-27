@@ -61,15 +61,15 @@ public class MmcconomyTest implements MyTest
     {
         if(JOYSTICK.getRawButton(3))
         {
-            INTAKE.intakeRoller();
+            INTAKE.compressorDisable();
         }
         else if(JOYSTICK.getRawButton(4))
         {
-            INTAKE.outtakeRoller();
+            INTAKE.compressorEnable();
         }
         else
         {
-            INTAKE.turnOffRoller();
+            
         }
         
         if(JOYSTICK.getRawButton(1))
