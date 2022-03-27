@@ -225,15 +225,15 @@ public class TeleopMode implements ModeTransition
 
                 if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
                 {
-                    INTAKE.moveArmOut();
+                    INTAKE.pMoveArmOut();
                 }
                 else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
                 {
-                    INTAKE.moveArmIn();
+                    INTAKE.pMoveArmIn();
                 }
                 else
                 {
-                    INTAKE.stopArm();
+                    INTAKE.pMoveArmOff();
                 }
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
