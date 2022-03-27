@@ -48,7 +48,7 @@ public class TurnOnIntake implements Command
     {
         SHUTTLEFSM.fancyRun(false);
 
-        INTAKE.moveArmOut();
+        INTAKE.pMoveArmOut();
 
         if (INTAKE.isArmOut())
         {

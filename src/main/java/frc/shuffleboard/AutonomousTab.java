@@ -93,7 +93,7 @@ public class AutonomousTab
         //add options to  Box
         startingLocationBox.addOption("Left", AutonomousTabData.StartingLocation.kLeft);
         startingLocationBox.setDefaultOption("Middle Left", AutonomousTabData.StartingLocation.kMiddleLeft);
-        startingLocationBox.setDefaultOption("Middle Right", AutonomousTabData.StartingLocation.kMiddleRight);
+        startingLocationBox.addOption("Middle Right", AutonomousTabData.StartingLocation.kMiddleRight);
         startingLocationBox.addOption("Right", AutonomousTabData.StartingLocation.kRight);
 
         //put the widget on the shuffleboard
@@ -117,13 +117,14 @@ public class AutonomousTab
         orderOfOperationsBox.addOption("Shoot First", AutonomousTabData.OrderOfOperations.kShootFirst);
         orderOfOperationsBox.setDefaultOption("Move First", AutonomousTabData.OrderOfOperations.kMoveFirst);
         orderOfOperationsBox.addOption("Shoot Move Shoot", AutonomousTabData.OrderOfOperations.kShootMoveShoot);
+        orderOfOperationsBox.addOption("4-Ball Auto", AutonomousTabData.OrderOfOperations.kFourBallAuto);
         orderOfOperationsBox.addOption("Do Nothing", AutonomousTabData.OrderOfOperations.kDoNothing);
 
         //put the widget on the Shuffleboard
         autonomousTab.add(orderOfOperationsBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
             .withPosition(9,0)
-            .withSize(14, 2);
+            .withSize(16, 2);
     }
 
     /**

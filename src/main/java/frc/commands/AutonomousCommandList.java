@@ -50,6 +50,7 @@ public class AutonomousCommandList
     private static final double SHORT_DISTANCE = 1.2;   // meters (+)
     private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
     private static final double LONG_DISTANCE = 1.2;    // meters (+)
+    private static final double XLONG_DISTANCE = 1.2;    // meters (+)
     private static final double JITTER_DISTANCE = 0.05; // meters (+)
 
 
@@ -79,6 +80,9 @@ public class AutonomousCommandList
         case kShootMoveShoot:
             shootMoveShoot();
             break;
+        case kFourBallAuto:
+            fourBallAuto();
+            break;
         case kDoNothing:
             break;
         }
@@ -95,9 +99,10 @@ public class AutonomousCommandList
             
             if (AUTONOMOUS_TAB_DATA.pickUpCargo == PickUpCargo.kYes)
             {
-                addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
+                // addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
                 addCommand(new TurnOnIntake());
-                addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+                // addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+                addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
                 addCommand(new Wait(2.0));
                 // addCommand(new StopDriving());
                 addCommand(new TurnOffIntake());
@@ -151,9 +156,10 @@ public class AutonomousCommandList
             addCommand(new Wait(AUTONOMOUS_TAB_DATA.moveDelay.value));
         }
 
-        addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
+        // addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
         addCommand(new TurnOnIntake());
-        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+        // addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE - JITTER_DISTANCE));
+        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
         addCommand(new Wait(2.0));
         // addCommand(new StopDriving());
         addCommand(new TurnOffIntake());
@@ -164,6 +170,21 @@ public class AutonomousCommandList
         }
 
         addCommand(new ShootCargo(1, LONG_DISTANCE, hub));
+    }
+
+    private void fourBallAuto()
+    {
+        addCommand(new TurnOnIntake());
+        addCommand(new DriveStraight(DRIVE_SPEED, LONG_DISTANCE));
+        addCommand(new Wait(2.0));
+        addCommand(new TurnOffIntake());
+        addCommand(new ShootCargo(2, LONG_DISTANCE, Shooter.Hub.kUpper));
+        // addCommand(new Rotate(18.97));
+        addCommand(new TurnOnIntake());
+        // addCommand(new DriveVector(DRIVE_SPEED, 3.982, 1.029));
+        addCommand(new Wait(5.0));
+        addCommand(new TurnOffIntake());
+        addCommand(new ShootCargo(2, XLONG_DISTANCE, Shooter.Hub.kUpper));
     }
 
     private void addCommand(Command command)

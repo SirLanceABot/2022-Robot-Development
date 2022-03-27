@@ -47,7 +47,7 @@ public class TurnOffIntake implements Command
         SHUTTLEFSM.fancyRun(false);
 
         INTAKE.turnOffRoller();
-        INTAKE.moveArmIn();
+        INTAKE.pMoveArmIn();
 
         if(INTAKE.isArmIn())
         {

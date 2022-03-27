@@ -14,7 +14,7 @@ public class AutonomousTabData
 
     public static enum OrderOfOperations
     {
-        kShootFirst, kMoveFirst, kShootMoveShoot, kDoNothing;
+        kShootFirst, kMoveFirst, kShootMoveShoot, kFourBallAuto, kDoNothing;
     }
 
     //-------------------------------------------------------------------//
