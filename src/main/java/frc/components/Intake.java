@@ -1,3 +1,11 @@
+/*Relevant Documentation:
+* https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/DoubleSolenoid.html
+* https://robotpy.readthedocs.io/projects/rev/en/stable/rev/CANSparkMax.html
+* https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
+* https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/Compressor.html
+*
+*/
+
 package frc.components;
 
 import com.revrobotics.CANSparkMax;
@@ -13,6 +21,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Compressor;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
@@ -77,6 +86,8 @@ public class Intake
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
     //TODO Add a compressor controller as mentioned in the documentation
     //TODO figure out what testing values are for fwd and rev channels, options are 0,1,2,3
+
+    private final Compressor controlCompressor = new Compressor(moduleType);
 
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
@@ -174,7 +185,17 @@ public class Intake
     {
         armsMotor.set(velocity);
     }
+    //compressor controls
+    public void compressorOff()
+    {
+        controlCompressor.disable();
+    }
 
+    public void compressorOn()
+    {
+        controlCompressor.enableDigital();
+    }
+    //pnumeatic controls
     public void pMoveArmOut()
     {
         // armsSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -206,12 +227,28 @@ public class Intake
     //7:1 gearbox
     public boolean isArmOut()
     {
-       return armsForwardLimitSwitch.isPressed();
+        //return armsForwardLimitSwitch.isPressed();
+        if(armsInSolenoid.get() == Value.kForward && armsOutSolenoid.get() == Value.kReverse)
+        {
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
     }
 
     public boolean isArmIn()
     {
-       return armsBackwardLimitSwitch.isPressed();
+    //    return armsBackwardLimitSwitch.isPressed();
+        if(armsInSolenoid.get() == Value.kReverse && armsOutSolenoid.get() == Value.kForward)
+        {
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
     }
 
     public void outtakeRoller()
