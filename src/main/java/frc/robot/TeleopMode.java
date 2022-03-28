@@ -49,7 +49,7 @@ public class TeleopMode implements ModeTransition
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
-    // private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
+    private static final EventGenerator EVENT_GENERATOR = RobotContainer.EVENT_GENERATOR;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     private static final PowerDistribution PDH = RobotContainer.PDH;
@@ -102,168 +102,20 @@ public class TeleopMode implements ModeTransition
             // Testing navX
             // System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
         }
-
-        if(DRIVER_CONTROLLER != null)
+        
+        // TODO: Break this stuff out of fancyrun for this
+        /*
+        // Generate events
+        if(EVENT_GENERATOR != null)
         {
-            DRIVER_CONTROLLER.checkRumbleEvent();
-
-            if(DRIVETRAIN != null)
-            {
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
-                {
-                    if (!SHOOTER.isHubAligned())
-                    {
-                        angleToTurn = SHOOTER.getHubAngle();
-
-                        System.out.println("ANGLE TO TURN: " + angleToTurn);
-
-                        DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
-
-                        // if (angleToTurn > 0.0)
-                        // {
-                        //     DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
-                        // }
-                        // else if (angleToTurn < 0.0)
-                        // {
-                        //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
-                        // }
-                    }
-                }
-                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
-                {
-                    DRIVETRAIN.drive(0.0, 0.0, -0.5, true);
-                }
-                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
-                {
-                    DRIVETRAIN.drive(0.0, 0.0, 0.5, true);
-                }
-                else
-                {
-                    // TODO : Add slew rate limiter
-                    double drivePowerLimit = 0.8;
-                    double turnPowerLimit = 0.1;
-                    double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
-                    double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
-                    double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
-
-                    // Scales down the input power
-                    // TODO : Add button for full power
-                    // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
-
-                    xSpeed *= drivePowerLimit;
-                    ySpeed *= drivePowerLimit;
-                    turn *= turnPowerLimit;
-
-                    if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented))
-                    {
-                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, false);
-                    }
-                    else
-                    {
-                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
-                    }
-
-                    // running the drivetrain
-                    // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
-
-                    // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
-
-                    // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
-
-                    // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
-                }
-
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kResetGyro))
-                {
-                    DRIVETRAIN.resetGyro();
-                }
-            }
-
-            // Running the intake
-            if(INTAKE != null)
-            {
-                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
-                {
-                    if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
-                    {
-                        INTAKE.outtakeRoller();
-                    }
-                    else
-                    {
-                        INTAKE.intakeRoller();
-                    }
-                }
-                else
-                {
-                    INTAKE.turnOffRoller();
-                }
-                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
-                // {
-                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
-                //     {
-                //         INTAKE.intakeRoller();
-                //     }
-                //     else
-                //     {
-                //         INTAKE.turnOffRoller();
-                //     }
-                // }
-                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
-                // {
-                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
-                //     {
-                //         INTAKE.outtakeRoller();
-                //     }
-                //     else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
-                //     {
-                //         INTAKE.intakeRoller();
-                //     }
-                // }
-                
-                // A testing line
-                // INTAKE.outputArmLimit();
-
-                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
-                {
-                    INTAKE.pMoveArmOut();
-                }
-                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
-                {
-                    INTAKE.pMoveArmIn();
-                }
-                else
-                {
-                    INTAKE.pMoveArmOff();
-                }
-
-                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
-                // {
-                //     if(INTAKE.getArmPosition() == Intake.ArmPosition.kOff || INTAKE.getArmPosition() == Intake.ArmPosition.kIn)
-                //     {
-                //         INTAKE.moveArmOut();
-                //     }
-                //     else if(INTAKE.getArmPosition() == Intake.ArmPosition.kOut)
-                //     {
-                //         INTAKE.moveArmIn();
-                //     }
-                // }
-                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
-                // {
-                //     INTAKE.stopArm();
-                // }
-
-                // System.out.println("INTAKE POSITION " + INTAKE.getArmPosition());
-            }
-            
-        // TODO: Remove this?
-        // Running the shuttle
-        if (SHUTTLE != null)
-        {
-            // TODO: Make this not here
-            boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented);
-
-            // SHUTTLEFSM.fancyRun(shoot);
+            EVENT_GENERATOR.determineEvents();
         }
+        // Run ShuttleFSM to generate motor requests
+        if(SHUTTLEFSM != null)
+        {
+            SHUTTLEFSM.run();
+        }
+        */
 
         if(OPERATOR_CONTROLLER != null)
         {
@@ -424,21 +276,171 @@ public class TeleopMode implements ModeTransition
                     CLIMBER.shutDown();
                 }
             }
-        }}
-        
-        // TODO: Break this stuff out of fancyrun for this
-        /*
-        // Generate events
-        if(EVENT_GENERATOR != null)
-        {
-            EVENT_GENERATOR.determineEvents();
         }
-        // Run ShuttleFSM to generate motor requests
-        if(SHUTTLEFSM != null)
+
+        if(DRIVER_CONTROLLER != null)
         {
-            SHUTTLEFSM.run();
+            DRIVER_CONTROLLER.checkRumbleEvent();
+
+            if(DRIVETRAIN != null)
+            {
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+                {
+                    if (!SHOOTER.isHubAligned())
+                    {
+                        angleToTurn = SHOOTER.getHubAngle();
+
+                        System.out.println("ANGLE TO TURN: " + angleToTurn);
+
+                        DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
+
+                        // if (angleToTurn > 0.0)
+                        // {
+                        //     DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
+                        // }
+                        // else if (angleToTurn < 0.0)
+                        // {
+                        //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
+                        // }
+                    }
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
+                {
+                    DRIVETRAIN.drive(0.0, 0.0, -0.5, true);
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
+                {
+                    DRIVETRAIN.drive(0.0, 0.0, 0.5, true);
+                }
+                else
+                {
+                    // TODO : Add slew rate limiter
+                    double drivePowerLimit = 0.8;
+                    double turnPowerLimit = 0.1;
+                    double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
+                    double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
+                    double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
+
+                    // Scales down the input power
+                    // TODO : Add button for full power
+                    // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+
+                    xSpeed *= drivePowerLimit;
+                    ySpeed *= drivePowerLimit;
+                    turn *= turnPowerLimit;
+
+                    if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented))
+                    {
+                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, false);
+                    }
+                    else
+                    {
+                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
+                    }
+
+                    // running the drivetrain
+                    // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
+
+                    // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
+
+                    // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+
+                    // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+                }
+
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kResetGyro))
+                {
+                    DRIVETRAIN.resetGyro();
+                }
+            }
+
+            // Running the intake
+            if(INTAKE != null)
+            {
+                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+                {
+                    if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                    {
+                        INTAKE.outtakeRoller();
+                    }
+                    else
+                    {
+                        INTAKE.intakeRoller();
+                    }
+                }
+                else
+                {
+                    INTAKE.turnOffRoller();
+                }
+                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleOnOff))
+                // {
+                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOff)
+                //     {
+                //         INTAKE.intakeRoller();
+                //     }
+                //     else
+                //     {
+                //         INTAKE.turnOffRoller();
+                //     }
+                // }
+                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                // {
+                //     if(INTAKE.getRollerDirection() == Intake.RollerDirection.kIn)
+                //     {
+                //         INTAKE.outtakeRoller();
+                //     }
+                //     else if(INTAKE.getRollerDirection() == Intake.RollerDirection.kOut)
+                //     {
+                //         INTAKE.intakeRoller();
+                //     }
+                // }
+                
+                // A testing line
+                // INTAKE.outputArmLimit();
+
+                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmOut))
+                {
+                    INTAKE.pMoveArmOut();
+                }
+                // Sensor option is lower priority so driver can override it by pressing arm out button
+                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmIn) || EVENT_GENERATOR.isIntakeSensorActive())
+                {
+                    INTAKE.pMoveArmIn();
+                }
+                else
+                {
+                    INTAKE.pMoveArmOff();
+                }
+
+                // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
+                // {
+                //     if(INTAKE.getArmPosition() == Intake.ArmPosition.kOff || INTAKE.getArmPosition() == Intake.ArmPosition.kIn)
+                //     {
+                //         INTAKE.moveArmOut();
+                //     }
+                //     else if(INTAKE.getArmPosition() == Intake.ArmPosition.kOut)
+                //     {
+                //         INTAKE.moveArmIn();
+                //     }
+                // }
+                // else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmStop))
+                // {
+                //     INTAKE.stopArm();
+                // }
+
+                // System.out.println("INTAKE POSITION " + INTAKE.getArmPosition());
+            }
+            
+            // TODO: Remove this?
+            // Running the shuttle
+            if (SHUTTLE != null)
+            {
+                // TODO: Make this not here
+                boolean shoot = DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented);
+
+                // SHUTTLEFSM.fancyRun(shoot);
+            }
         }
-        */
     }
 
     /**

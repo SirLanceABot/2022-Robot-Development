@@ -2,6 +2,24 @@ package frc.components;
 
 public class Events
 {
+    public static enum ShuttleEvent
+    {
+        NONE,
+        INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
+        INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
+        STAGE_ONE_FULL_SENSOR_ACTIVATES,
+        STAGE_ONE_FULL_SENSOR_DEACTIVATES,
+        STAGE_TWO_FULL_SENSOR_ACTIVATES,
+        STAGE_TWO_FULL_SENSOR_DEACTIVATES,
+        FEED_CARGO;
+    }
+    
+    public static enum IntakeEvent
+    {
+        NONE,
+        INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+    }
+
     public static enum CargoManagerEvent
     {
         NONE,
@@ -14,18 +32,5 @@ public class Events
         SHOOT_IS_CALLED,
         ARM_TOGGLE,
         ROLLER_TOGGLE;
-
-    }
-
-    public static enum ShuttleEvent
-    {
-        NONE,
-        INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES,
-        INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_DEACTIVATES,
-        STAGE_ONE_FULL_SENSOR_ACTIVATES,
-        STAGE_ONE_FULL_SENSOR_DEACTIVATES,
-        STAGE_TWO_FULL_SENSOR_ACTIVATES,
-        STAGE_TWO_FULL_SENSOR_DEACTIVATES,
-        FEED_CARGO;
     }
 }

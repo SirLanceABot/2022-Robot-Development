@@ -25,6 +25,7 @@ public class EventGenerator
     private static final SensorValues CURRENT_SENSOR_VALUES = RobotContainer.CURRENT_SENSOR_VALUES;
 
     private Events.ShuttleEvent shuttleEvent = Events.ShuttleEvent.NONE;
+    // private Events.IntakeEvent intakeEvent = Events.IntakeEvent.NONE;
     private Events.CargoManagerEvent cargoManagerEvent = Events.CargoManagerEvent.NONE;
 
     // *** CLASS CONSTRUCTOR ***
@@ -49,6 +50,7 @@ public class EventGenerator
 
         // Call each component's determineEvent
         determineShuttleEvent(shoot);
+        // determineIntakeEvent();
         determineCargoManagerEvent();
     }
 
@@ -138,6 +140,45 @@ public class EventGenerator
     public Events.ShuttleEvent getShuttleEvent()
     {
         return shuttleEvent;
+    }
+
+    /*
+    // Determine what event based on proximity sensor
+    private void determineIntakeEvent()
+    {
+        boolean currentShuttleIntakeSensorValue = CURRENT_SENSOR_VALUES.getShuttleIntake();
+        
+        // Initially say there is no event then continue to look for an event
+        Events.IntakeEvent determinedEvent = Events.IntakeEvent.NONE;
+
+        // Looking at sensor changes are the highest priority
+        if(currentShuttleIntakeSensorValue != PREVIOUS_SENSOR_VALUES.getShuttleIntake())
+        {
+            if (currentShuttleIntakeSensorValue)
+            {
+                determinedEvent = Events.IntakeEvent.INTAKE_CARGO_CAN_BE_SHUTTLED_SENSOR_ACTIVATES;
+            }
+            else
+            {
+                // Intake cargo can be shuttled sensor deactivates
+            }
+
+            PREVIOUS_SENSOR_VALUES.setShuttleIntake(currentShuttleIntakeSensorValue);
+        }
+
+        intakeEvent = determinedEvent;
+    }
+
+    public Events.IntakeEvent getIntakeEvent()
+    {
+        return intakeEvent;
+    }
+    */
+
+    // TODO: Move this to IntakeFSM if that ever gets made
+    public boolean isIntakeSensorActive()
+    {
+        return CURRENT_SENSOR_VALUES.getShuttleIntake();
     }
     
     public void determineCargoManagerEvent()
