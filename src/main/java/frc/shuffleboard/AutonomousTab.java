@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.components.Shooter;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
 public class AutonomousTab 
@@ -40,8 +41,8 @@ public class AutonomousTab
     private SendableChooser<AutonomousTabData.MoveOffTarmac> moveOffTarmacBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.MoveDelay> moveDelayBox = new SendableChooser<>();
     private SendableChooser<AutonomousTabData.PickUpCargo> pickUpCargoBox = new SendableChooser<>();
-    private SendableChooser<AutonomousTabData.Hub> hubBox = new SendableChooser<>();
-     
+    private SendableChooser<Shooter.Hub> hubBox = new SendableChooser<>();
+
     private NetworkTableEntry successfulDownload;
     private NetworkTableEntry errorMessageBox;
 
@@ -248,8 +249,8 @@ public class AutonomousTab
         SendableRegistry.setName(hubBox, "Hub");
 
         //add options to Box
-        hubBox.addOption("Lower", AutonomousTabData.Hub.kLower);
-        hubBox.setDefaultOption("Upper", AutonomousTabData.Hub.kUpper);
+        hubBox.addOption("Lower", Shooter.Hub.kLower);
+        hubBox.setDefaultOption("Upper", Shooter.Hub.kUpper);
 
         //put the widget on the shuffleboard
         autonomousTab.add(hubBox)

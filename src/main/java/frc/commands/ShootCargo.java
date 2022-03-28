@@ -29,7 +29,6 @@ public class ShootCargo implements Command
     private Timer timer = new Timer();
     private int numberOfCargo;
     private int cargoShot = 0;
-    private double distance_meters;
     private Shooter.Hub hub;
     private double angleToTurn;
     private boolean isFinished;
@@ -40,15 +39,13 @@ public class ShootCargo implements Command
 
 
     // *** CLASS CONSTRUCTOR ***
-    public ShootCargo(int numberOfCargo, double distance_meters, Shooter.Hub hub)
+    public ShootCargo(int numberOfCargo, Shooter.Hub hub)
     {
         this.numberOfCargo = numberOfCargo;
         this.hub = hub;
-        this.distance_meters = distance_meters;
 
         isFinished = false;
     }
-
 
     // *** CLASS & INSTANCE METHODS ***
     public void init()
@@ -94,7 +91,7 @@ public class ShootCargo implements Command
             // SHUTTLEFSM.requestFeedCargo();
             SHUTTLEFSM.fancyRun(true);
 
-            System.out.println("Cargo shot at " + hub.level + " hub at a distance of " + distance_meters + " m");
+            System.out.println("Cargo shot into " + hub.level + " hub");
             cargoShot++;
         }
         else
@@ -126,6 +123,6 @@ public class ShootCargo implements Command
 
     public String toString()
     {
-        return "ShootCargo(" + numberOfCargo + ", " + distance_meters + ", " + hub + ")";
+        return "ShootCargo(" + numberOfCargo + ", " + hub + ")";
     }
 }

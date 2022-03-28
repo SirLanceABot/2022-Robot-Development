@@ -1,5 +1,6 @@
 package frc.shuffleboard;
 
+import frc.components.Shooter;
 
 
 // Create a class to hold the data on the Shuffleboard tab
@@ -69,10 +70,10 @@ public class AutonomousTabData
         kYes, kNo;
     }
 
-    public static enum Hub
-    {
-        kUpper, kLower;
-    }
+    // public static enum Hub
+    // {
+    //     kUpper, kLower;
+    // }
 
     public StartingLocation startingLocation = StartingLocation.kMiddleRight;
     public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
@@ -81,7 +82,7 @@ public class AutonomousTabData
     public MoveOffTarmac moveOffTarmac = MoveOffTarmac.kYes;
     public MoveDelay moveDelay = MoveDelay.k0;
     public PickUpCargo pickUpCargo = PickUpCargo.kNo;
-    public Hub hub = Hub.kUpper;
+    public Shooter.Hub hub = Shooter.Hub.kUpper;
 
     public String toString()
     {

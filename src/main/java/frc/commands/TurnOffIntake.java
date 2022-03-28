@@ -21,6 +21,7 @@ public class TurnOffIntake implements Command
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
+    private boolean isMoveArmIn;
     private boolean isFinished;
 
     // This variable is only used to simulate the intake being off
@@ -28,8 +29,10 @@ public class TurnOffIntake implements Command
 
 
     // *** CLASS CONSTRUCTOR ***
-    public TurnOffIntake()
+    public TurnOffIntake(boolean isMoveArmIn)
     {
+        this.isMoveArmIn = isMoveArmIn;
+
         isFinished = false;
     }
 
@@ -47,13 +50,23 @@ public class TurnOffIntake implements Command
         SHUTTLEFSM.fancyRun(false);
 
         INTAKE.turnOffRoller();
-        INTAKE.pMoveArmIn();
 
-        if(INTAKE.isArmIn())
+        if (isMoveArmIn)
+        {
+            INTAKE.pMoveArmIn();
+
+            if(INTAKE.isArmIn())
+            {
+                System.out.println("Intake is off");
+                isFinished = true;
+            }
+        }
+        else
         {
             System.out.println("Intake is off");
             isFinished = true;
         }
+        
         
         // isIntakeOff = true;
 
