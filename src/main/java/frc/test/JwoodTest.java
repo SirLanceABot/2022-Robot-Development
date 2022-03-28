@@ -67,15 +67,15 @@ public class JwoodTest implements MyTest
         // // System.out.println("  Enc=" + armEnc);
         if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kA))
         {
-            INTAKE.moveArmIn();
+            // INTAKE.moveArmIn();
         }
         else if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kB))
         {
-            INTAKE.moveArmOut();
+            // INTAKE.moveArmOut();
         }
         else
         {
-            INTAKE.stopArm();
+            // INTAKE.stopArm();
         }
 
         // if(DRIVER_CONTROLLER.getRawButton(Xbox.Button.kX))
