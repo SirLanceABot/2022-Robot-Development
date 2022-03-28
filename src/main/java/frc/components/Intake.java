@@ -3,6 +3,7 @@
 * https://robotpy.readthedocs.io/projects/rev/en/stable/rev/CANSparkMax.html
 * https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 * https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/Compressor.html
+* https://first.wpi.edu/wpilib/allwpilib/docs/release/java/edu/wpi/first/wpilibj/DigitalInput.html
 *
 */
 
@@ -23,6 +24,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
@@ -80,8 +83,9 @@ public class Intake
     private final DoubleSolenoid armsInSolenoid = new DoubleSolenoid(0, moduleType, 0, 1);
     private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 2, 3);
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
-    //TODO Add a compressor controller as mentioned in the documentation
-    //TODO figure out what testing values are for fwd and rev channels, options are 0,1,2,3
+
+    private final DigitalInput armOutSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
+    private final DigitalInput armInSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
 
     private final Compressor controlCompressor = new Compressor(moduleType);
 
@@ -222,8 +226,7 @@ public class Intake
     //7:1 gearbox
     public boolean isArmOut()
     {
-        //return armsForwardLimitSwitch.isPressed();
-        if(armsInSolenoid.get() == Value.kForward && armsOutSolenoid.get() == Value.kReverse)
+        if(armOutSensor.get() == true)
         {
             return(true);
         }
@@ -235,8 +238,7 @@ public class Intake
 
     public boolean isArmIn()
     {
-        //return armsBackwardLimitSwitch.isPressed();
-        if(armsInSolenoid.get() == Value.kReverse && armsOutSolenoid.get() == Value.kForward)
+        if(armInSensor.get() == true)
         {
             return(true);
         }

@@ -84,6 +84,11 @@ public class MmcconomyTest implements MyTest
         {
             INTAKE.pMoveArmOff();
         }
+
+        if(JOYSTICK.getRawButton(5))
+        {
+            System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
+        }
     }
 
     /**
