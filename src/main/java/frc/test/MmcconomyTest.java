@@ -50,7 +50,7 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
-        
+        INTAKE.compressorDisable();
         
     }
 
@@ -88,6 +88,7 @@ public class MmcconomyTest implements MyTest
         if(JOYSTICK.getRawButton(5))
         {
             System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
+            // INTAKE.armInfo();
         }
     }
 

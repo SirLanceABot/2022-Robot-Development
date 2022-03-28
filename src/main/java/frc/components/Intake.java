@@ -84,8 +84,8 @@ public class Intake
     private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 2, 3);
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 
-    private final DigitalInput armOutSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
-    private final DigitalInput armInSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
+    public final DigitalInput armOutSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
+    public final DigitalInput armInSensor = new DigitalInput(0); //TODO SET THE CORRECT CHANNEL
 
     private final Compressor controlCompressor = new Compressor(moduleType);
 
@@ -224,6 +224,10 @@ public class Intake
 
     //not getters and setters?
     //7:1 gearbox
+    public void armInfo()
+    {
+        System.out.println(armInSensor.get() + " " + armOutSensor.get());
+    }
     public boolean isArmOut()
     {
         if(armOutSensor.get() == true)
