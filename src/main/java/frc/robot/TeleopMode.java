@@ -100,7 +100,7 @@ public class TeleopMode implements ModeTransition
         if(DRIVETRAIN != null)
         {
             // Testing navX
-            // System.out.println("Yaw: " + DRIVETRAIN.navX.getYaw());
+            // printNavX());
         }
         
         // TODO: Break this stuff out of fancyrun for this

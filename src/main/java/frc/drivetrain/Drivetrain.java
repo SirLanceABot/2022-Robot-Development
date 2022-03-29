@@ -9,6 +9,7 @@ import frc.constants.Port;
 
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -120,6 +121,33 @@ public class Drivetrain extends RobotDriveBase
                 swerveModuleStates[i].angle = previousSwerveModuleStates[i].angle;
             }
         }
+
+        frontLeft.setDesiredState(swerveModuleStates[0]);
+        frontRight.setDesiredState(swerveModuleStates[1]);
+        backLeft.setDesiredState(swerveModuleStates[2]);
+        backRight.setDesiredState(swerveModuleStates[3]);
+
+        previousSwerveModuleStates = swerveModuleStates;
+
+        feedWatchdog();
+    }
+    
+    /**
+     * Rotate swerve modules to an X shape to hopefully prevent being pushed 
+     */
+    @SuppressWarnings("ParameterName")
+    public void lock()
+    {
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
+        
+        // TODO: Check that this works
+        swerveModuleStates[0] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
+        swerveModuleStates[1] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        swerveModuleStates[2] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        swerveModuleStates[3] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constant.MAX_DRIVE_SPEED);
+        // printDesiredStates(swerveModuleStates);
 
         frontLeft.setDesiredState(swerveModuleStates[0]);
         frontRight.setDesiredState(swerveModuleStates[1]);
