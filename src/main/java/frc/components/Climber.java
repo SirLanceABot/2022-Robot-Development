@@ -30,8 +30,6 @@ public class Climber
         System.out.println("Loading: " + fullClassName);
     }
 
-    //FIXME For the st. joe match, we're only gonna go up to the second bar
-
     // *** CLASS & INSTANCE VARIABLES ***
     private enum MovementType
     {
@@ -45,12 +43,12 @@ public class Climber
     //NEO 550
     private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    // private final CANSparkMax secondStageClimbMotorLeader;//  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final CANSparkMax secondStageClimbMotorLeader;// = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_LEADER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private final CANSparkMax secondStageClimberFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_TWO_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private int FCLPosition; //FCL >> FirstClimberLeader
     // private int FCFPosition; //FCF >> FirstClimberFollower
-    // private int SCLPosition; //SCL >> SecondClimberLeader
+    private int SCLPosition; //SCL >> SecondClimberLeader
     // private int SCFPosition; //SCF >> SecondClimberFollower
 
     private final RelativeEncoder FCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
@@ -59,9 +57,9 @@ public class Climber
     // private static RelativeEncoder FCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch FCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch FCFBackwardLimitSwitch;
-    // private static RelativeEncoder SCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
-    // private static SparkMaxLimitSwitch SCLForwardLimitSwitch;
-    // private static SparkMaxLimitSwitch SCLBackwardLimitSwitch;
+    private static RelativeEncoder SCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
+    private static SparkMaxLimitSwitch SCLForwardLimitSwitch;
+    private static SparkMaxLimitSwitch SCLBackwardLimitSwitch;
     // private static RelativeEncoder SCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch SCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch SCFBackwardLimitSwitch;
@@ -75,6 +73,7 @@ public class Climber
         // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
 
         // climbBrakeMotor.configReverseSoftLimitThreshold(0, 0);
@@ -84,13 +83,12 @@ public class Climber
 
         FCLEncoder = firstStageClimbMotorLeader.getEncoder();
         FCLEncoder.setPosition(0);
-
-        // secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        // SCLEncoder = firstStageClimbMotorLeader.getEncoder();
+        SCLEncoder = firstStageClimbMotorLeader.getEncoder();
+        SCLEncoder.setPosition(0);
 
         // configFCF();
         configFCL();
-        //configSCL();
+        configSCL();
         //configSCF();
         System.out.println("climber constructed");
     }
@@ -127,8 +125,8 @@ public class Climber
         firstStageClimbMotorLeader.setSmartCurrentLimit(40);
     }
 
-    public void configFCF()
-    {
+    // public void configFCF()
+    // {
         // firstStageClimbMotorFollower = CANSparkMax.follow(firstStageClimbMotorLeader, false);
         // //^^ this isn't working, I'm just leaving it so the next person knows what to do with it
         // firstStageClimbMotorFollower.restoreFactoryDefaults();
@@ -149,30 +147,30 @@ public class Climber
         // FCFEncoder.setPosition(0);
         // firstStageClimbMotorFollower.setOpenLoopRampRate(0.1);
         // firstStageClimbMotorFollower.setSmartCurrentLimit(40);
-    //}
+    // }
 
-    // public void configSCL() 
-    // {
-    //     //TODO set a soft limit of however far the guy is legally allowed to move
-    //     secondStageClimberLeader.restoreFactoryDefaults();
-    //     secondStageClimberLeader.setInverted(true);
-    //     secondStageClimberLeader.setIdleMode(IdleMode.kBrake); 
+    public void configSCL() 
+    {
+        //TODO set a soft limit of however far the guy is legally allowed to move
+        secondStageClimbMotorLeader.restoreFactoryDefaults();
+        secondStageClimbMotorLeader.setInverted(true);
+        secondStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
     
-    //     secondStageClimberLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-    //     secondStageClimberLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    //     secondStageClimberLeader.setSoftLimit(SoftLimitDirection.kForward, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-    //     secondStageClimberLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
         
-    //     SCLBackwardLimitSwitch = secondStageClimberLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-    //     SCLBackwardLimitSwitch.enableLimitSwitch(false);
-    //     SCLForwardLimitSwitch = secondStageClimberLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-    //     SCLForwardLimitSwitch.enableLimitSwitch(false);
-    //     //^^Unknown if being used for now^^
-    //     SCLEncoder.setPosition(0);
-    //     secondStageClimberLeader.setOpenLoopRampRate(0.1);
-    //     secondStageClimberLeader.setSmartCurrentLimit(40);
-    // }
+        SCLBackwardLimitSwitch = secondStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        SCLBackwardLimitSwitch.enableLimitSwitch(false);
+        SCLForwardLimitSwitch = secondStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
+        SCLForwardLimitSwitch.enableLimitSwitch(false);
+        //^^Unknown if being used for now^^
+        SCLEncoder.setPosition(0);
+        secondStageClimbMotorLeader.setOpenLoopRampRate(0.1);
+        secondStageClimbMotorLeader.setSmartCurrentLimit(40);
+    }
 
     // public void configSCF() 
     // {
@@ -195,7 +193,7 @@ public class Climber
     //     SCFEncoder.setPosition(0);
     //     secondStageClimberFollower.setOpenLoopRampRate(0.1);
     //     secondStageClimberFollower.setSmartCurrentLimit(40);
-    }
+    // }
 
     //Getters
     public double getFCLposition(){
@@ -204,9 +202,9 @@ public class Climber
     // public int getFCFPosition(){
     //     return FCFPosition;
     // }
-    // public int getSCLposition(){
-    //     return SCLPosition;
-    // }
+    public int getSCLposition(){
+        return SCLPosition;
+    }
     // public int getSCFPosition(){
     //     return SCFPosition;
     // }
@@ -220,10 +218,10 @@ public class Climber
     // {
     //     this.FCFPosition = FCFPosition;
     // }
-    // public void setSCLPosition(int SCLPosition) 
-    // {
-    //     this.SCLPosition = SCLPosition;
-    // }
+    public void setSCLPosition(int SCLPosition) 
+    {
+        this.SCLPosition = SCLPosition;
+    }
     // public void setSCFPosition(int SCFPosition) 
     // {
     //     this.SCFPosition = SCFPosition;
@@ -254,6 +252,10 @@ public class Climber
     {
         firstStageClimbMotorLeader.set(speed);
     }
+    private void setSecondStageMotorSpeed(double speed)
+    {
+        secondStageClimbMotorLeader.set(speed);
+    }
     private void setBrakeMotor(double speed)
     {
         climbBrakeMotor.set(ControlMode.PercentOutput, speed);
@@ -273,7 +275,7 @@ public class Climber
         setBrakeMotor(0.0);
     }
 
-    public void climbUp()
+    public void FCLclimbUp()
     {
         //button 10
         //arms go up
@@ -297,7 +299,7 @@ public class Climber
         
     }
 
-    public void climbDown()
+    public void FCLclimbDown()
     {
         //button 11
         // arms go down
@@ -325,6 +327,17 @@ public class Climber
         //^Test value
         // DriverStation.reportError("Climber going down", false);
         //TODO make sure this value goes the right direction
+    }
+
+    //FIXME Figure out how this works along with the climbing enum and wether or not this needs the same thing
+    public void SCLclimbUp()
+    {
+        
+    }
+
+    public void SCLclimbDown()
+    {
+
     }
 
     public void grabFirstRung()

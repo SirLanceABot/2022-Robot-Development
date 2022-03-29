@@ -228,6 +228,8 @@ public class Intake
     {
         System.out.println(armInSensor.get() + " " + armOutSensor.get());
     }
+
+    //TODO Set these to the correct directions
     public boolean isArmOut()
     {
         if(armOutSensor.get() == true)
