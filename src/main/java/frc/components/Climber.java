@@ -72,6 +72,8 @@ public class Climber
         // secondStageClimbMotorPort = 7;  // Used ONLY for testing
         // climbBrakeMotorPort = 0; //Used ONLY for testing
 
+        movementType = MovementType.kOff;
+
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
@@ -83,7 +85,7 @@ public class Climber
 
         FCLEncoder = firstStageClimbMotorLeader.getEncoder();
         FCLEncoder.setPosition(0);
-        SCLEncoder = firstStageClimbMotorLeader.getEncoder();
+        SCLEncoder = secondStageClimbMotorLeader.getEncoder();
         SCLEncoder.setPosition(0);
 
         // configFCF();
@@ -263,6 +265,10 @@ public class Climber
     public void shutDown()
     {
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        if(FCLEncoder.getPosition() <= 20.0 && movementType == MovementType.kOff)
+        {
+            setFirstStageMotorSpeed(-.20);
+        }
         if(movementType == MovementType.kClimbing) //FIXME: This needs to be kClimbing when testing robot
         {
             setFirstStageMotorSpeed(-0.20);
@@ -275,7 +281,7 @@ public class Climber
         setBrakeMotor(0.0);
     }
 
-    public void FCLclimbUp()
+    public void FCLArmUp()
     {
         //button 10
         //arms go up
@@ -299,7 +305,7 @@ public class Climber
         
     }
 
-    public void FCLclimbDown()
+    public void FCLArmDown()
     {
         //button 11
         // arms go down
@@ -329,15 +335,21 @@ public class Climber
         //TODO make sure this value goes the right direction
     }
 
-    //FIXME Figure out how this works along with the climbing enum and wether or not this needs the same thing
-    public void SCLclimbUp()
+    public void SCLArmUp()
     {
-        
+        movementType = MovementType.kNone;
+        setSecondStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
     }
 
-    public void SCLclimbDown()
+    public void SCLArmDown()
     {
-
+        double current = secondStageClimbMotorLeader.getOutputCurrent();
+        if(current > 15.0)
+            movementType = MovementType.kClimbing;
+        else
+            movementType = MovementType.kNone;
+        
+        setSecondStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
     }
 
     public void grabFirstRung()
