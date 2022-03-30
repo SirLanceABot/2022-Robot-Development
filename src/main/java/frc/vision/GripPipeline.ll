@@ -11,6 +11,8 @@ Inputs
 //
 Outputs
 {
+	Mat cvTransposeOutput;
+	Mat cvFlipOutput;
 	Mat rgbThresholdOutput;
 	Mat maskOutput;
 	Mat blurOutput;
@@ -26,19 +28,34 @@ Outputs
 // Steps
 //
 
+Step CV_transpose0
+{
+    Mat cvTransposeSrc1 = source0;
+
+    cvTranspose(cvTransposeSrc1, cvTransposeOutput);
+}
+
+Step CV_flip0
+{
+    Mat cvFlipSrc = cvTransposeOutput;
+    FlipCode cvFlipFlipcode = X_AXIS;
+
+    cvFlip(cvFlipSrc, cvFlipFlipcode, cvFlipOutput);
+}
+
 Step RGB_Threshold0
 {
-    Mat rgbThresholdInput = source0;
-    List rgbThresholdRed = [0.0, 240.0];
-    List rgbThresholdGreen = [0.0, 240.0];
-    List rgbThresholdBlue = [0.0, 240.0];
+    Mat rgbThresholdInput = cvFlipOutput;
+    List rgbThresholdRed = [0.0, 178.63636363636365];
+    List rgbThresholdGreen = [0.0, 178.63636363636368];
+    List rgbThresholdBlue = [0.0, 178.63636363636363];
 
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 }
 
 Step Mask0
 {
-    Mat maskInput = source0;
+    Mat maskInput = cvFlipOutput;
     Mat maskMask = rgbThresholdOutput;
 
     mask(maskInput, maskMask, maskOutput);
@@ -57,7 +74,7 @@ Step HSV_Threshold0
 {
     Mat hsvThresholdInput = blurOutput;
     List hsvThresholdHue = [40.46762589928058, 80.17064846416382];
-    List hsvThresholdSaturation = [199.50539568345323, 255.0];
+    List hsvThresholdSaturation = [189.90087590944196, 255.0];
     List hsvThresholdValue = [13.758992805755396, 255.0];
 
     hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
@@ -68,7 +85,7 @@ Step CV_erode0
     Mat cvErode0Src = hsvThresholdOutput;
     Mat cvErode0Kernel;
     Point cvErode0Anchor = (-1, -1);
-    Double cvErode0Iterations = 1.0;
+    Double cvErode0Iterations = 0.0;
     BorderType cvErode0Bordertype = BORDER_CONSTANT;
     Scalar cvErode0Bordervalue = (-1);
 
@@ -110,17 +127,17 @@ Step Find_Contours0
 Step Filter_Contours0
 {
     ContoursReport filterContoursContours = findContoursOutput;
-    Double filterContoursMinArea = 12.0;
-    Double filterContoursMinPerimeter = 14.0;
-    Double filterContoursMinWidth = 4.0;
-    Double filterContoursMaxWidth = 1000.0;
-    Double filterContoursMinHeight = 6.0;
-    Double filterContoursMaxHeight = 1000.0;
-    List filterContoursSolidity = [60.22388059701493, 100.0];
+    Double filterContoursMinArea = 0.0;
+    Double filterContoursMinPerimeter = 0.0;
+    Double filterContoursMinWidth = 0.0;
+    Double filterContoursMaxWidth = 10000.0;
+    Double filterContoursMinHeight = 0.0;
+    Double filterContoursMaxHeight = 10000.0;
+    List filterContoursSolidity = [60.263653483992464, 100.0];
     Double filterContoursMaxVertices = 1000000.0;
     Double filterContoursMinVertices = 0.0;
-    Double filterContoursMinRatio = 0.2;
-    Double filterContoursMaxRatio = 1.2;
+    Double filterContoursMinRatio = 0.1;
+    Double filterContoursMaxRatio = 6.0;
 
     filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 }
