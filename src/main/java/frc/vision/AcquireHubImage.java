@@ -120,7 +120,8 @@ public class AcquireHubImage  implements Runnable
     {
       CameraWidget cw = new CameraWidget(Vision.cameraTab);
       cw.name("Intake");
-      cw.setLocation(0, 0, 13, 14);
+      // cw.setLocation(0, 0, 13, 14);
+      cw.setLocation(0, 0, 16, 19); // For big screen
       cw.setProperties(false, "white", false, "NONE");
       cw.createCameraShuffleboardWidget(intakeCameraServer.getSource());
       
@@ -133,7 +134,7 @@ public class AcquireHubImage  implements Runnable
       Vision.calibrate =
           Vision.cameraTab.add("Turret Calibration", 0.0)
           .withSize(4, 2)
-          .withPosition(23, 9)
+          .withPosition(28, 9)
           .withSize(4, 3)
           .getEntry();
       

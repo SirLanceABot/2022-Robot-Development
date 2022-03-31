@@ -147,7 +147,8 @@ public void run()
       {
         CameraWidget cw = new CameraWidget(Vision.cameraTab);
         cw.name("TargetContours");
-        cw.setLocation(0, 14, 13, 9);
+        // cw.setLocation(0, 14, 13, 9);
+        cw.setLocation(0, 19, 16, 9); // For big screen
         cw.setProperties(false, "white", false, "NONE");
         cw.createCameraShuffleboardWidget(openCVserver.getSource());
         
