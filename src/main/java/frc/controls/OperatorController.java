@@ -100,11 +100,11 @@ public class OperatorController extends Logitech
 
     public static enum OperatorDpadAction
     {
-        // Method(Dpad.kUp), 
-        // Method(kUpRight), 
+        UpMethod(Dpad.kUp), 
+        UpRightMethod(Dpad.kUpRight), 
         // Method(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
-        // Method(Dpad.kDown), 
+        DownMethod(Dpad.kDown), 
         // Method(Dpad.kDownLeft), 
         // Method(Dpad.kLeft), 
         // Method(Dpad.kUpLeft), 
@@ -149,6 +149,11 @@ public class OperatorController extends Logitech
     public double getAction(OperatorAxisAction axisAction)
     {
         return getRawAxis(axisAction.axis);
+    }
+
+    public boolean getAction(OperatorDpadAction dpadAction)
+    {
+        return getDpad() == dpadAction.direction;
     }
 }
     

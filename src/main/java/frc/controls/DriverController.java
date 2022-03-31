@@ -113,7 +113,7 @@ public class DriverController extends Xbox
     public static enum DriverDpadAction
     {
         UpMethod(Dpad.kUp), 
-        // Method(kUpRight), 
+        UpRightMethod(Dpad.kUpRight), 
         // Method(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
         DownMethod(Dpad.kDown), 

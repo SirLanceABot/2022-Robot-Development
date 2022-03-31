@@ -14,7 +14,9 @@ import frc.components.Intake;
 import frc.components.Climber;
 import frc.robot.RobotContainer;
 import frc.controls.DriverController;
+import frc.controls.OperatorController;
 import frc.controls.DriverController.DriverDpadAction;
+import frc.controls.OperatorController.OperatorDpadAction;
 
 
 
@@ -37,6 +39,7 @@ public class MmcconomyTest implements MyTest
     // private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final DriverController JOYSTICK = new DriverController(0);
+    private static final OperatorController NOTJOYSTICK = new OperatorController(1);
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -60,6 +63,19 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
+        if(NOTJOYSTICK.getAction(OperatorDpadAction.UpMethod))
+        {
+            System.out.println("Up");
+        }
+        else if(NOTJOYSTICK.getAction(OperatorDpadAction.DownMethod))
+        {
+            System.out.println("Down");
+        }
+        else if(NOTJOYSTICK.getAction(OperatorDpadAction.UpRightMethod))
+        {
+            System.out.println("Up Right");
+        }
+
         if(JOYSTICK.getAction(DriverDpadAction.UpMethod))
         {
             System.out.println("Up");
@@ -67,6 +83,10 @@ public class MmcconomyTest implements MyTest
         else if(JOYSTICK.getAction(DriverDpadAction.DownMethod))
         {
             System.out.println("Down");
+        }
+        else if(JOYSTICK.getAction(DriverDpadAction.UpRightMethod))
+        {
+            System.out.println("Up Right");
         }
 
         if(JOYSTICK.getRawButton(3))
