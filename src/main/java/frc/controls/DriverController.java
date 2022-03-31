@@ -110,15 +110,22 @@ public class DriverController extends Xbox
         } 
     }
 
-    public static enum DriverPOVAction
+    public static enum DriverDpadAction
     {
-        kShiftingDown(180),
-        kShiftingUp(0)
+        UpMethod(Dpad.kUp), 
+        // Method(kUpRight), 
+        // Method(Dpad.kRight), 
+        // Method(Dpad.kDownRight), 
+        DownMethod(Dpad.kDown), 
+        // Method(Dpad.kDownLeft), 
+        // Method(Dpad.kLeft), 
+        // Method(Dpad.kUpLeft), 
+        // Method(Dpad.kNone)
         ;
 
-        public final int direction;
+        public final Dpad direction;
 
-        private DriverPOVAction(int direction)
+        private DriverDpadAction(Dpad direction)
         {
             this.direction = direction;
         } 
@@ -188,9 +195,8 @@ public class DriverController extends Xbox
         return getRawAxis(axisAction.axis);
     }
 
-    public int getAction()
+    public boolean getAction(DriverDpadAction dpadAction)
     {
-        return getPOV();
+        return getDpad() == dpadAction.direction;
     }
-
 }

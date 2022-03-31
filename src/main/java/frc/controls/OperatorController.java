@@ -98,6 +98,27 @@ public class OperatorController extends Logitech
         }
     }
 
+    public static enum OperatorDpadAction
+    {
+        // Method(Dpad.kUp), 
+        // Method(kUpRight), 
+        // Method(Dpad.kRight), 
+        // Method(Dpad.kDownRight), 
+        // Method(Dpad.kDown), 
+        // Method(Dpad.kDownLeft), 
+        // Method(Dpad.kLeft), 
+        // Method(Dpad.kUpLeft), 
+        // Method(Dpad.kNone);
+        ;
+
+        public final Dpad direction;
+
+        private OperatorDpadAction(Dpad direction)
+        {
+            this.direction = direction;
+        } 
+    }
+
     // *** CLASS CONSTRUCTOR ***
     public OperatorController(int port)
     {

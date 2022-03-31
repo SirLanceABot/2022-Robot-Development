@@ -87,7 +87,7 @@ public class Intake
     public final DigitalInput armOutSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
     public final DigitalInput armInSensor = new DigitalInput(0); //TODO SET THE CORRECT CHANNEL
 
-    private final Compressor controlCompressor = new Compressor(moduleType);
+    private final Compressor compressor = new Compressor(moduleType);
 
     private ArmPosition armPosition;
     private RollerDirection rollerDirection;
@@ -154,7 +154,7 @@ public class Intake
      */
     public void compressorDisable()
     {
-        controlCompressor.disable();
+        compressor.disable();
     }
 
     /**
@@ -162,7 +162,7 @@ public class Intake
      */
     public void compressorEnable()
     {
-        controlCompressor.enableDigital();
+        compressor.enableDigital();
     }
 
     /**
@@ -172,12 +172,12 @@ public class Intake
      */
     public boolean isCompressorDisabled()
     {
-        return !controlCompressor.enabled();
+        return !compressor.enabled();
     }
 
     public boolean isCompressorRunning()
     {
-        return (controlCompressor.getCurrent() > Constant.COMPRESSOR_RUNNING_AMPS);
+        return (compressor.getCurrent() > Constant.COMPRESSOR_RUNNING_AMPS);
     }
 
     /**
@@ -186,7 +186,7 @@ public class Intake
      */
     public void outputCompressorCurrent()
     {
-        double compressorCurrent = controlCompressor.getCurrent();
+        double compressorCurrent = compressor.getCurrent();
 
         if (compressorCurrent != 0.0)
         {

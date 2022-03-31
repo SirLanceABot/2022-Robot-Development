@@ -275,7 +275,7 @@ public class TeleopMode implements ModeTransition
                 }
                 else// if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbShutDown))
                 {
-                    CLIMBER.shutDown();
+                    CLIMBER.FCLShutDown();
                 }
             }
         }

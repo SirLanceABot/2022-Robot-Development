@@ -42,6 +42,30 @@ public class Logitech extends Joystick
         }
     }
 
+    public static enum Dpad
+    {
+        kUp(0), kUpRight(45), kRight(90), kDownRight(135), kDown(180), kDownLeft(225), kLeft(270), kUpLeft(315), kNone(-1);
+
+        public final int value;
+
+        private Dpad(int value)
+        {
+            this.value = value;
+        }
+
+        public static Dpad getEnum(int value)
+        {
+            for(Dpad d : Dpad.values())
+            {
+                if(d.value == value)
+                {
+                    return d;
+                }
+            }
+            return Dpad.kNone;
+        }
+    }
+
     public static enum AxisScale
     {
         kLinear, kSquared, kCubed;
@@ -175,6 +199,11 @@ public class Logitech extends Joystick
     public boolean getRawButton(Button button)
     {
         return super.getRawButton(button.value);
+    }
+
+    public Dpad getDpad()
+    {
+        return Dpad.getEnum(getPOV());
     }
 
     /**

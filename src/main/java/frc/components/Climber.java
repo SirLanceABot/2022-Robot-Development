@@ -1,3 +1,7 @@
+/*Relevant Doucumentation:
+* https://robotpy.readthedocs.io/projects/rev/en/stable/rev/CANSparkMax.html
+*
+*/
 package frc.components;
 
 import java.lang.invoke.MethodHandles;
@@ -54,13 +58,13 @@ public class Climber
 
     private final RelativeEncoder FCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
     private SparkMaxLimitSwitch FCLForwardLimitSwitch;
-    private SparkMaxLimitSwitch FCLBackwardLimitSwitch;
+    private SparkMaxLimitSwitch FCLReverseLimitSwitch;
     // private static RelativeEncoder FCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch FCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch FCFBackwardLimitSwitch;
     private static RelativeEncoder SCLEncoder;// = firstStageClimbMotorLeader.getEncoder();
     private static SparkMaxLimitSwitch SCLForwardLimitSwitch;
-    private static SparkMaxLimitSwitch SCLBackwardLimitSwitch;
+    private static SparkMaxLimitSwitch SCLReverseLimitSwitch;
     // private static RelativeEncoder SCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch SCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch SCFBackwardLimitSwitch;
@@ -74,6 +78,7 @@ public class Climber
         // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         FCLMovementType = MovementType.kOff;
+        SCLMovementType = MovementType.kOff;
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -113,8 +118,8 @@ public class Climber
         // firstStageClimbMotorLeader.setControlFramePeriodMs(periodMs);
         // firstStageClimbMotorLeader.setPeriodicFramePeriod(frame, periodMs);
     
-        FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        FCLBackwardLimitSwitch.enableLimitSwitch(true);
+        FCLReverseLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        FCLReverseLimitSwitch.enableLimitSwitch(true);
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         FCLForwardLimitSwitch.enableLimitSwitch(true);
         
@@ -165,8 +170,8 @@ public class Climber
         secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
     
         
-        SCLBackwardLimitSwitch = secondStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        SCLBackwardLimitSwitch.enableLimitSwitch(false);
+        SCLReverseLimitSwitch = secondStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
+        SCLReverseLimitSwitch.enableLimitSwitch(false);
         SCLForwardLimitSwitch = secondStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         SCLForwardLimitSwitch.enableLimitSwitch(false);
         //^^Unknown if being used for now^^
@@ -271,7 +276,7 @@ public class Climber
     {
         FCLMovementType = MovementType.kOff;
     }
-    public void shutDown()
+    public void FCLShutDown()
     {
         switch(FCLMovementType)
         {
@@ -284,7 +289,7 @@ public class Climber
             break;
         case kReverse:
             // setFirstStageMotorSpeed(-.20);
-            if(FCLEncoder.getPosition() < 1.0 || FCLBackwardLimitSwitch.isPressed())
+            if(FCLEncoder.getPosition() < 1.0 || FCLReverseLimitSwitch.isPressed())
             {
                 setFirstStageMotorSpeed(0.0);
                 FCLMovementType = MovementType.kOff;
@@ -324,6 +329,38 @@ public class Climber
         //     setFirstStageMotorSpeed(0.0);
         //     movementType = MovementType.kOff;
         // }
+    }
+    
+    public void SCLShutDown()
+    {
+        switch(SCLMovementType)
+        {
+        case kOff:
+            if(FCLEncoder.getPosition() >= 20.0)
+            {
+                setFirstStageMotorSpeed(-.20);
+                SCLMovementType = MovementType.kReverse;
+            }
+            break;
+        case kReverse:
+            // setFirstStageMotorSpeed(-.20);
+            if(SCLEncoder.getPosition() < 1.0 || SCLReverseLimitSwitch.isPressed())
+            {
+                setFirstStageMotorSpeed(0.0);
+                SCLMovementType = MovementType.kOff;
+            }
+            break;
+        case kClimbing:
+            setFirstStageMotorSpeed(-0.20);
+            //Do not change the movement type 
+            break;
+        case kMoving:
+            setFirstStageMotorSpeed(0.0);
+            SCLMovementType = MovementType.kOff;
+            break;
+        case kNone:
+            break;
+        }
     }
 
     public void FCLArmUp()

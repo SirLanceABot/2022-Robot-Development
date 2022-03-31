@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 import frc.components.Intake;
 import frc.components.Climber;
 import frc.robot.RobotContainer;
+import frc.controls.DriverController;
+import frc.controls.DriverController.DriverDpadAction;
 
 
 
@@ -34,7 +36,7 @@ public class MmcconomyTest implements MyTest
     // *** CLASS & INSTANCE VARIABLES ***
     // private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
-    private static final Joystick JOYSTICK = new Joystick(0);
+    private static final DriverController JOYSTICK = new DriverController(0);
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -58,10 +60,19 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
+        if(JOYSTICK.getAction(DriverDpadAction.UpMethod))
+        {
+            System.out.println("Up");
+        }
+        else if(JOYSTICK.getAction(DriverDpadAction.DownMethod))
+        {
+            System.out.println("Down");
+        }
+
         if(JOYSTICK.getRawButton(3))
         {
             // INTAKE.compressorDisable();
-            CLIMBER.setMoveOff();
+            // CLIMBER.setMoveOff();
         }
         else if(JOYSTICK.getRawButton(4))
         {
@@ -86,7 +97,7 @@ public class MmcconomyTest implements MyTest
         else
         {
             // INTAKE.pMoveArmOff();
-            CLIMBER.shutDown();
+            CLIMBER.FCLShutDown();
         }
 
         if(JOYSTICK.getRawButton(5))
