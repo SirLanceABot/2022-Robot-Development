@@ -33,10 +33,11 @@ public class Climber
     // *** CLASS & INSTANCE VARIABLES ***
     private enum MovementType
     {
-        kOff, kMoving, kClimbing, kNone
+        kOff, kMoving, kClimbing, kReverse, kNone
     }
 
-    private MovementType movementType;
+    private MovementType FCLMovementType;
+    private MovementType SCLMovementType;
     //Motors
     //Talon 
     private final TalonSRX climbBrakeMotor;
@@ -68,11 +69,11 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        // firstStageClimbMotorPort = 3;   // Used ONLY for testing
-        // secondStageClimbMotorPort = 7;  // Used ONLY for testing
+        firstStageClimbMotorPort = 3;   // Used ONLY for testing
+        secondStageClimbMotorPort = 0;  // Used ONLY for testing
         // climbBrakeMotorPort = 0; //Used ONLY for testing
 
-        movementType = MovementType.kOff;
+        FCLMovementType = MovementType.kOff;
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -104,7 +105,7 @@ public class Climber
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of where motor goes
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true); //FIXME change to false after testing
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 255.0f); // DF Measured on 3/5/22
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
 
@@ -201,6 +202,10 @@ public class Climber
     public double getFCLposition(){
         return FCLEncoder.getPosition();
     }
+    public MovementType getMovementType()
+    {
+        return FCLMovementType;
+    }
     // public int getFCFPosition(){
     //     return FCFPosition;
     // }
@@ -262,23 +267,63 @@ public class Climber
     {
         climbBrakeMotor.set(ControlMode.PercentOutput, speed);
     }
+    public void setMoveOff()
+    {
+        FCLMovementType = MovementType.kOff;
+    }
     public void shutDown()
     {
-        // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
-        if(FCLEncoder.getPosition() <= 20.0 && movementType == MovementType.kOff)
+        switch(FCLMovementType)
         {
-            setFirstStageMotorSpeed(-.20);
-        }
-        if(movementType == MovementType.kClimbing) //FIXME: This needs to be kClimbing when testing robot
-        {
+        case kOff:
+            if(FCLEncoder.getPosition() >= 20.0)
+            {
+                setFirstStageMotorSpeed(-.20);
+                FCLMovementType = MovementType.kReverse;
+            }
+            break;
+        case kReverse:
+            // setFirstStageMotorSpeed(-.20);
+            if(FCLEncoder.getPosition() < 1.0 || FCLBackwardLimitSwitch.isPressed())
+            {
+                setFirstStageMotorSpeed(0.0);
+                FCLMovementType = MovementType.kOff;
+            }
+            break;
+        case kClimbing:
             setFirstStageMotorSpeed(-0.20);
-        }
-        else
-        {
+            //Do not change the movement type 
+            break;
+        case kMoving:
             setFirstStageMotorSpeed(0.0);
-            //movementType = MovementType.kOff;
+            FCLMovementType = MovementType.kOff;
+            break;
+        case kNone:
+            break;
         }
-        setBrakeMotor(0.0);
+        // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
+        // if(FCLEncoder.getPosition() >= 20.0 && movementType == MovementType.kOff)
+        // {
+        //     setFirstStageMotorSpeed(-.20);
+        //     movementType = MovementType.kReverse;
+        // }
+        // else if(movementType == MovementType.kReverse)
+        // {
+        //     setFirstStageMotorSpeed(-.20);
+        //     if(FCLEncoder.getPosition() < 1.0 || FCLBackwardLimitSwitch.isPressed())
+        //     {
+        //         movementType = MovementType.kOff;
+        //     }
+        // }
+        // else if(movementType == MovementType.kClimbing)
+        // {
+        //     setFirstStageMotorSpeed(-0.20);
+        // }
+        // else
+        // {
+        //     setFirstStageMotorSpeed(0.0);
+        //     movementType = MovementType.kOff;
+        // }
     }
 
     public void FCLArmUp()
@@ -295,11 +340,14 @@ public class Climber
         // }
         // else
         // {
-        //     setBrakeMotor(-.1); //TODO make sure this value goes the right direction
+        //     setBrakeMotor(-.1); 
         //     setFirstStageMotorSpeed(0);
         // }
         // movementType = findMovement();
-        movementType = MovementType.kNone;
+        if(FCLMovementType != MovementType.kClimbing)
+        {
+            FCLMovementType = MovementType.kMoving;
+        }
         setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         
@@ -324,20 +372,18 @@ public class Climber
         // }
         double current = firstStageClimbMotorLeader.getOutputCurrent();
         if(current > 15.0)
-            movementType = MovementType.kClimbing;
+            FCLMovementType = MovementType.kClimbing;
         else
-            movementType = MovementType.kNone;
-        
+            FCLMovementType = MovementType.kMoving;
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         //^Test value
         // DriverStation.reportError("Climber going down", false);
-        //TODO make sure this value goes the right direction
     }
 
     public void SCLArmUp()
     {
-        movementType = MovementType.kNone;
+        SCLMovementType = MovementType.kNone;
         setSecondStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
     }
 
@@ -345,9 +391,9 @@ public class Climber
     {
         double current = secondStageClimbMotorLeader.getOutputCurrent();
         if(current > 15.0)
-            movementType = MovementType.kClimbing;
+            SCLMovementType = MovementType.kClimbing;
         else
-            movementType = MovementType.kNone;
+            SCLMovementType = MovementType.kNone;
         
         setSecondStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
     }

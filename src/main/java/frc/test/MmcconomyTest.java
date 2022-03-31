@@ -32,8 +32,8 @@ public class MmcconomyTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final Intake INTAKE = RobotContainer.INTAKE;
-    // private static final Climber CLIMBER = RobotContainer.CLIMBER;
+    // private static final Intake INTAKE = RobotContainer.INTAKE;
+    private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final Joystick JOYSTICK = new Joystick(0);
 
 
@@ -50,8 +50,7 @@ public class MmcconomyTest implements MyTest
      */
     public void init()
     {
-        INTAKE.compressorDisable();
-        
+        // INTAKE.compressorDisable();
     }
 
     /**
@@ -61,11 +60,13 @@ public class MmcconomyTest implements MyTest
     {
         if(JOYSTICK.getRawButton(3))
         {
-            INTAKE.compressorDisable();
+            // INTAKE.compressorDisable();
+            CLIMBER.setMoveOff();
         }
         else if(JOYSTICK.getRawButton(4))
         {
-            INTAKE.compressorEnable();
+            // INTAKE.compressorEnable();
+            System.out.println(CLIMBER.getMovementType());
         }
         else
         {
@@ -74,20 +75,24 @@ public class MmcconomyTest implements MyTest
         
         if(JOYSTICK.getRawButton(1))
         {
-            INTAKE.pMoveArmIn();
+            // INTAKE.pMoveArmIn();
+            CLIMBER.FCLArmUp();
         }
         else if(JOYSTICK.getRawButton(2))
         {
-            INTAKE.pMoveArmOut();;
+            // INTAKE.pMoveArmOut();
+            CLIMBER.FCLArmDown();
         }
         else
         {
-            INTAKE.pMoveArmOff();
+            // INTAKE.pMoveArmOff();
+            CLIMBER.shutDown();
         }
 
         if(JOYSTICK.getRawButton(5))
         {
-            System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
+            System.out.println(CLIMBER.getFCLposition());
+            // System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
             // INTAKE.armInfo();
         }
     }
