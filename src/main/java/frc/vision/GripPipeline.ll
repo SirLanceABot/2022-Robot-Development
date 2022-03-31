@@ -46,9 +46,9 @@ Step CV_flip0
 Step RGB_Threshold0
 {
     Mat rgbThresholdInput = cvFlipOutput;
-    List rgbThresholdRed = [0.0, 178.63636363636365];
-    List rgbThresholdGreen = [0.0, 178.63636363636368];
-    List rgbThresholdBlue = [0.0, 178.63636363636363];
+    List rgbThresholdRed = [0.0, 179.99999999999997];
+    List rgbThresholdGreen = [0.0, 179.99999999999997];
+    List rgbThresholdBlue = [0.0, 180.0];
 
     rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 }
@@ -65,7 +65,7 @@ Step Blur0
 {
     Mat blurInput = maskOutput;
     BlurType blurType = BOX;
-    Double blurRadius = 1.8018018018018018;
+    Double blurRadius = 1.8867924528301887;
 
     blur(blurInput, blurType, blurRadius, blurOutput);
 }
@@ -73,8 +73,8 @@ Step Blur0
 Step HSV_Threshold0
 {
     Mat hsvThresholdInput = blurOutput;
-    List hsvThresholdHue = [40.46762589928058, 80.17064846416382];
-    List hsvThresholdSaturation = [189.90087590944196, 255.0];
+    List hsvThresholdHue = [40.46762589928058, 80.17064846416379];
+    List hsvThresholdSaturation = [89.0534182823233, 255.0];
     List hsvThresholdValue = [13.758992805755396, 255.0];
 
     hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
@@ -86,7 +86,7 @@ Step CV_erode0
     Mat cvErode0Kernel;
     Point cvErode0Anchor = (-1, -1);
     Double cvErode0Iterations = 0.0;
-    BorderType cvErode0Bordertype = BORDER_CONSTANT;
+    BorderType cvErode0Bordertype = BORDER_DEFAULT;
     Scalar cvErode0Bordervalue = (-1);
 
     cvErode(cvErode0Src, cvErode0Kernel, cvErode0Anchor, cvErode0Iterations, cvErode0Bordertype, cvErode0Bordervalue, cvErode0Output);
@@ -97,7 +97,7 @@ Step CV_dilate0
     Mat cvDilateSrc = cvErode0Output;
     Mat cvDilateKernel;
     Point cvDilateAnchor = (-1, -1);
-    Double cvDilateIterations = 2.0;
+    Double cvDilateIterations = 1.0;
     BorderType cvDilateBordertype = BORDER_CONSTANT;
     Scalar cvDilateBordervalue = (-1);
 
@@ -135,9 +135,9 @@ Step Filter_Contours0
     Double filterContoursMaxHeight = 10000.0;
     List filterContoursSolidity = [60.263653483992464, 100.0];
     Double filterContoursMaxVertices = 1000000.0;
-    Double filterContoursMinVertices = 0.0;
+    Double filterContoursMinVertices = 2.0;
     Double filterContoursMinRatio = 0.1;
-    Double filterContoursMaxRatio = 6.0;
+    Double filterContoursMaxRatio = 8.0;
 
     filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 }
