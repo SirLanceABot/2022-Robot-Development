@@ -63,7 +63,7 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        SHOOTER.shoot(hub);
+        SHOOTER.prepareShooter(hub);
 
         // Auto aiming
         if (!SHOOTER.isHubAligned())

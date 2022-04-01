@@ -182,9 +182,11 @@ public class TeleopMode implements ModeTransition
                     // SHUTTLEFSM.runMotorRequests();
 
                     boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
+                    // boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot) || SHOOTER.isShooterReady();
 
                     // TODO: Make this not here
                     SHUTTLEFSM.fancyRun(shoot);
+                    System.out.println("FANCY RUN RAN");
                 }
             }
 
@@ -208,7 +210,7 @@ public class TeleopMode implements ModeTransition
                     // SHOOTER.turnOnLED();
 
                     // Change to kLower or kUpper to determine shot type
-                    SHOOTER.shoot(Shooter.Hub.kUpper); //SHOOT
+                    SHOOTER.prepareShooter(Shooter.Hub.kUpper); //SHOOT
 
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
@@ -224,7 +226,7 @@ public class TeleopMode implements ModeTransition
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
-                    SHOOTER.shoot(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
+                    SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                 }
                 else
                 {

@@ -130,7 +130,7 @@ public class Shooter
     private void configFlywheelMotor()
     {
         flywheelMotor.configFactoryDefault();
-        flywheelMotor.setInverted(true);
+        flywheelMotor.setInverted(false);
         flywheelMotor.setNeutralMode(NeutralMode.Coast);
 
         flywheelMotor.config_kF(0, kF, TIMEOUT_MS);
@@ -183,9 +183,10 @@ public class Shooter
     //speeds are all in rpm
     private void setFlywheelSpeed(double speed)
     {
-        flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
-        // System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        // System.out.println("Shroud value: " + measureShroudSensorValue());
+        //TODO: BRING BACK TO RUN SHOOTER
+        // flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
+        System.out.println("Shroud value: " + measureShroudSensorValue());
     }
 
     //DO NOT USE UNLESS IN TELEOP MODE
@@ -208,12 +209,12 @@ public class Shooter
         return (Math.abs(desiredLaunchSpeed - currentFlywheelSpeed) <= SHOOT_SPEED_THRESHOLD);
     }
 
-    public void shoot()
+    public void prepareShooter()
     {
-        shoot(Hub.kUpper);
+        prepareShooter(Hub.kUpper);
     }
 
-    public void shoot(Hub hub)
+    public void prepareShooter(Hub hub)
     {
         // //vision code
         updateVisionData();
@@ -235,7 +236,7 @@ public class Shooter
         checkIsShooterReady();
     }
 
-    public void shoot(Hub hub, double distance)
+    public void prepareShooter(Hub hub, double distance)
     {
         calculateLaunchTrajectory(hub, distance);
 
@@ -291,12 +292,12 @@ public class Shooter
     {
         if (hub == Hub.kLower)
         {
-            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance);
+            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance) / 2; //slowed down for testing
             desiredLaunchAngle = LowerTrajectoryData.getAngle(distance);
         }
         else if (hub == Hub.kUpper)
         {
-            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance);
+            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance) / 2; //slowed down for testing
             desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
         }
 

@@ -35,7 +35,7 @@ public final class Port
         public static final int SHOOTER_SHROUD      = 14;  // JW 2/28/22
         
         public static final int CLIMBER_STAGE_ONE_LEADER    = 1;  // MM 3/02/22
-        public static final int CLIMBER_STAGE_TWO_LEADER    = 43;
+        public static final int CLIMBER_STAGE_TWO_LEADER    = 8;  // DF 3/31/22
         public static final int CLIMBER_STAGE_ONE_FOLLOWER  = 44;
         public static final int CLIMBER_STAGE_TWO_FOLLOWER  = 45;
         public static final int CLIMBER_BRAKE_MOTOR         = 15; // DF 3/05/22
