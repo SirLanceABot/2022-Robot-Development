@@ -80,12 +80,12 @@ public class Intake
     // private final Solenoid armOutSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0); 
     // private final Solenoid armInSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
     private PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
-    private final DoubleSolenoid armsInSolenoid = new DoubleSolenoid(0, moduleType, 0, 1);
-    private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 2, 3);
+    private final DoubleSolenoid armsInSolenoid = new DoubleSolenoid(0, moduleType, 5, 7); // 5 is Retract, 7 is Retract float
+    private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 4, 6); // 4 is Extend, 6 is Extend float
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 
-    public final DigitalInput armOutSensor = new DigitalInput(1); //TODO SET THE CORRECT CHANNEL
-    public final DigitalInput armInSensor = new DigitalInput(0); //TODO SET THE CORRECT CHANNEL
+    public final DigitalInput armOutSensor = new DigitalInput(4); //TODO SET THE CORRECT CHANNEL
+    public final DigitalInput armInSensor = new DigitalInput(3); //TODO SET THE CORRECT CHANNEL
 
     private final Compressor compressor = new Compressor(moduleType);
 
