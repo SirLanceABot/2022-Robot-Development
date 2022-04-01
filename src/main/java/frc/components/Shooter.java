@@ -184,7 +184,7 @@ public class Shooter
     private void setFlywheelSpeed(double speed)
     {
         //TODO: BRING BACK TO RUN SHOOTER
-        // flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
         System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
         System.out.println("Shroud value: " + measureShroudSensorValue());
     }
