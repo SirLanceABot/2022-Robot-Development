@@ -4,10 +4,17 @@ import java.lang.invoke.MethodHandles;
 
 import frc.components.Events;
 import frc.components.SensorValues;
+import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.components.ShuttleFSM;
+import frc.constants.Constant;
 import frc.controls.DriverController;
+import frc.controls.OperatorController;
 import frc.controls.Xbox;
+import frc.controls.DriverController.DriverAxisAction;
+import frc.controls.DriverController.DriverButtonAction;
+import frc.controls.OperatorController.OperatorButtonAction;
+import frc.drivetrain.Drivetrain;
 import frc.robot.RobotContainer;
 
 // TODO: Testing numbers
@@ -47,6 +54,9 @@ public class DfifeTest implements MyTest
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
+    private static final OperatorController OPERATOR_CONTROLLER = RobotContainer.OPERATOR_CONTROLLER;
+    private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final Shuttle SHUTTLE = RobotContainer.SHUTTLE;
 
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
@@ -78,6 +88,9 @@ public class DfifeTest implements MyTest
     private static int i = 0;
 
     private boolean previousStateOfButton = false;
+    
+    private static double angleToTurn;
+    private static double driveTrainRotation;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -109,7 +122,9 @@ public class DfifeTest implements MyTest
         // System.out.println("Second Stage Sensor: " + shuttle.measureStageTwoSensor());
         // testShuttleSensors();
 
-        FSMTestingV2();
+        driveTrainControlsTesting();
+
+        // FSMTestingV2();
 
         // shuttleTesting();
         // FSMTestingV1();
@@ -124,6 +139,80 @@ public class DfifeTest implements MyTest
     public void exit()
     {
 
+    }
+
+    private void driveTrainControlsTesting()
+    {
+        if(DRIVER_CONTROLLER != null)
+        {
+            DRIVER_CONTROLLER.checkRumbleEvent();
+
+            if(DRIVETRAIN != null)
+            {
+                // TODO : Add slew rate limiter
+                double drivePowerLimit = 0.8;
+                double turnPowerLimit = 0.1;
+                double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
+                double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
+                double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
+
+                // Scales down the input power
+                // TODO : Add button for full power
+                // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+
+                xSpeed *= drivePowerLimit;
+                ySpeed *= drivePowerLimit;
+                turn *= turnPowerLimit;
+
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+                {
+                    if (!SHOOTER.isHubAligned())
+                    {
+                        angleToTurn = SHOOTER.getHubAngle();
+
+                        System.out.println("ANGLE TO TURN: " + angleToTurn);
+
+                        driveTrainRotation = -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn);
+                    }
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
+                {
+                    driveTrainRotation = -0.5;
+                }
+                else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
+                {
+                    driveTrainRotation = 0.5;
+                }
+                else
+                {
+                    driveTrainRotation = turn;
+                }
+                
+                // TODO: Change this to lock control when that is made
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                {
+                    DRIVETRAIN.lock();
+                }
+                else
+                {
+                    DRIVETRAIN.drive(xSpeed, ySpeed, driveTrainRotation, !DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented));
+                }
+
+                // running the drivetrain
+                // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
+
+                // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
+
+                // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+
+                // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kResetGyro))
+                {
+                    DRIVETRAIN.resetGyro();
+                }
+            }
+        }
     }
     
     // Testing the shuttle movements without FSM
