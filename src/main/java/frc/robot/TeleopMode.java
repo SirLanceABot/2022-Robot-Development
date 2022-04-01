@@ -15,10 +15,11 @@ import frc.constants.Constant;
 import frc.controls.DriverController;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
-import frc.controls.OperatorController;
 
+import frc.controls.OperatorController;
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
+import frc.controls.OperatorController.OperatorDpadAction;
 
 
 // TODO : To make the periodic() method more manageable, ...
@@ -128,7 +129,9 @@ public class TeleopMode implements ModeTransition
             //     // System.out.println("Feed cargo request");
             // }
 
-            if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLight) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+            // TODO: Change LED to Dpad on operator controller
+            if (OPERATOR_CONTROLLER.getAction(OperatorDpadAction.kLED) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+            // if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLight) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
             {
                 PDH.setSwitchableChannel(true);
             }

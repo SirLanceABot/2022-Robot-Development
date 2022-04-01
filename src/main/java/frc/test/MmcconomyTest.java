@@ -63,7 +63,7 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
-        if(NOTJOYSTICK.getAction(OperatorDpadAction.UpMethod))
+        if(NOTJOYSTICK.getAction(OperatorDpadAction.kLED))
         {
             System.out.println("Up");
         }

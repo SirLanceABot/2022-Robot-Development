@@ -100,7 +100,7 @@ public class OperatorController extends Logitech
 
     public static enum OperatorDpadAction
     {
-        UpMethod(Dpad.kUp), 
+        kLED(Dpad.kUp), 
         UpRightMethod(Dpad.kUpRight), 
         // Method(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
