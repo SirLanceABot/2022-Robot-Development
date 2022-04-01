@@ -80,7 +80,7 @@ public class MmcconomyTest implements MyTest
         {
             System.out.println("Up");
         }
-        else if(JOYSTICK.getAction(DriverDpadAction.DownMethod))
+        else if(JOYSTICK.getAction(DriverDpadAction.kLockSwerve))
         {
             System.out.println("Down");
         }

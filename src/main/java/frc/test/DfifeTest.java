@@ -13,6 +13,7 @@ import frc.controls.OperatorController;
 import frc.controls.Xbox;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
+import frc.controls.DriverController.DriverDpadAction;
 import frc.controls.OperatorController.OperatorButtonAction;
 import frc.drivetrain.Drivetrain;
 import frc.robot.RobotContainer;
@@ -188,9 +189,9 @@ public class DfifeTest implements MyTest
                     driveTrainRotation = turn;
                 }
                 
-                // TODO: Change this to lock control when that is made
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeToggleDirection))
+                if (DRIVER_CONTROLLER.getAction(DriverDpadAction.kLockSwerve))
                 {
+                    // System.out.println("Locking swerve drive");
                     DRIVETRAIN.lock();
                 }
                 else

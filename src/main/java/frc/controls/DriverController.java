@@ -42,7 +42,7 @@ public class DriverController extends Xbox
         //kIntake(Button.kRightBumper),
 
         // kNoAction(Button.kBack),
-        kNoAction(Button.kStart),
+        // kNoAction(Button.kStart),
 
         // kDriveBoost(Button.kLeftStick),
         // kNoAction(Button.kRightStick),
@@ -116,7 +116,7 @@ public class DriverController extends Xbox
         UpRightMethod(Dpad.kUpRight), 
         // Method(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
-        DownMethod(Dpad.kDown), 
+        kLockSwerve(Dpad.kDown), 
         // Method(Dpad.kDownLeft), 
         // Method(Dpad.kLeft), 
         // Method(Dpad.kUpLeft), 

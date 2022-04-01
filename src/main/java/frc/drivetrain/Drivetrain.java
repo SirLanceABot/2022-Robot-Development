@@ -141,12 +141,12 @@ public class Drivetrain extends RobotDriveBase
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
         
         // TODO: Check that this works
-        swerveModuleStates[0] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
-        swerveModuleStates[1] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
-        swerveModuleStates[2] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
-        swerveModuleStates[3] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(315));
+        swerveModuleStates[0] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        swerveModuleStates[1] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
+        swerveModuleStates[2] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
+        swerveModuleStates[3] = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constant.MAX_DRIVE_SPEED);
+        // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constant.MAX_DRIVE_SPEED);
         // printDesiredStates(swerveModuleStates);
 
         frontLeft.setDesiredState(swerveModuleStates[0]);
