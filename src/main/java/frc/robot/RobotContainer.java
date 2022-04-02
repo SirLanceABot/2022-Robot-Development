@@ -18,6 +18,7 @@ import frc.controls.DriverController;
 import frc.controls.OperatorController;
 import frc.drivetrain.Drivetrain;
 import frc.shuffleboard.AutonomousTabData;
+import frc.shuffleboard.CameraTab;
 import frc.shuffleboard.MainShuffleboard;
 import frc.vision.Vision;
 
@@ -57,6 +58,7 @@ public final class RobotContainer
     private static final boolean useAutonomousCommandList   = true;
 
     private static final boolean useVision                  = true;
+    private static final boolean useVisionLL                = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
@@ -79,6 +81,7 @@ public final class RobotContainer
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
 
     public static final Vision VISION;
+    public static final CameraTab VISIONLL;
 
     public static final PowerDistribution PDH;
    
@@ -106,6 +109,7 @@ public final class RobotContainer
         AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
 
         VISION = useFullRobot || useVision ? new Vision() : null;
+        VISIONLL = /*useFullRobot ||*/ useVisionLL ? new CameraTab() : null;
 
         PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
     }

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.components.Shooter;
+import frc.vision.CameraWidget;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -43,16 +44,20 @@ public class CameraTab
     public CameraTab()
     {
         System.out.println(fullClassName + " : Constructor Started");
+        
+        cameraTab = Shuffleboard.getTab("Camera");
+        Shuffleboard.update();
 
         // timeRemaining = createTimeRemainingBox();
         // timeRemaining.setString("No Errors");
-        cameraTab = Shuffleboard.getTab("Camera");
-        // CameraWidget cw = new CameraWidget(cameraTab);
-        // cw.name("Intake");
-        // cw.setLocation(0, 0, 13, 14);
-        // cw.setLocation(0, 0, 16, 19); // For big screen
-        // cw.setProperties(false, "white", false, "NONE");
-        // cw.createCameraShuffleboardWidget(intakeCameraServer.getSource());
+
+        // limelight on shuffleboard
+        CameraWidget cw = new CameraWidget(cameraTab);
+        cw.name("LimeLight");
+        cw.setLocation(0, 0, 19, 24); // small screen
+        cw.setProperties(false, "white", false, "NONE");
+
+        cw.createCameraShuffleboardWidgetLL("limelight", new String[]{"http://10.42.37.11:5800"}); // could get URLs from NT
         
         Shuffleboard.update();
 
