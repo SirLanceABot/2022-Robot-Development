@@ -38,7 +38,9 @@ public class UpperTrajectoryData
     {
         //put all data points here, DISTANCE MUST BE IN ORDER FROM LOWEST TO HIGHEST
         //must be at least two data points to work
-        upperTrajectoryData.add(new UpperTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(2.0 * FEET_TO_METERS, 1360.0, -235.0));
+        upperTrajectoryData.add(new UpperTrajectoryData(10.0 * FEET_TO_METERS, 1500.0, -190.0));
 
         //OLD DATA
         // upperTrajectoryData.add(new UpperTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
