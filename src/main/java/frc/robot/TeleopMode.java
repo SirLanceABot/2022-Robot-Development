@@ -214,6 +214,19 @@ public class TeleopMode implements ModeTransition
 
                     // Change to kLower or kUpper to determine shot type
                     SHOOTER.prepareShooter(Shooter.Hub.kUpper); //SHOOT
+                    // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
+                    if (SHOOTER.isFlywheelReady())
+                    {
+                        System.out.println("==================== FLYWHEEL IS READY ===================");
+                    }
+                    if (SHOOTER.isShroudReady())
+                    {
+                        System.out.println("==================== SHROUD IS READY =====================");
+                    }
+                    if (SHOOTER.isShooterReady())
+                    {
+                        System.out.println("==================== SHOOTER IS READY ====================");
+                    }
 
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
@@ -228,7 +241,9 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    SHOOTER.testShoot(3000.0, -200.0);
+                    // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
                     // SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                     // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
                 }
@@ -417,7 +432,10 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
-                    INTAKE.pMoveArmOff();
+                    if(INTAKE.isArmOut())
+                    {
+                        INTAKE.pMoveArmFloat();
+                    }
                 }
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
