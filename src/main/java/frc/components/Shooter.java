@@ -70,16 +70,19 @@ public class Shooter
     private static final double DROP_SHOT_SPEED = Constant.DROP_SHOT_SPEED;
 
     //TODO: Tune PID values
-    private static final double kP = 0.14;
+    //original PID values are kP = 0.14 and kF = 0.035
+    //encoder ticks at 10 foot shot = 13,000
+    private static final double kP = 0.017;
     private static final double kI = 0.000000;
     private static final double kD = 0.0000000;
-    private static final double kF = 0.035;
+    private static final double kF = 0.049;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
     private static final double HUB_ALIGNMENT_THRESHOLD = Constant.HUB_ALIGNMENT_THRESHOLD;
     //TODO: Actual gear ratio goes here
-    private static final double FLYWHEEL_GEAR_RATIO = 60.0 / 24.0;
+    private static final double FLYWHEEL_GEAR_RATIO = 24.0 / 60.0;
+    // private static final double FLYWHEEL_GEAR_RATIO = 1.0; //ONLY FOR TESTING
 
     //m/s and degrees
     private static double desiredLaunchSpeed = 1850.0;
@@ -176,7 +179,7 @@ public class Shooter
 
         //comment out if using a PID
         shroudMotor.configOpenloopRamp(0.5);
-        shroudMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 40, 0.5), 10);
+        shroudMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 30, 0.02), 10);
     }
 
     // *** CLASS & INSTANCE METHODS ***
@@ -185,16 +188,19 @@ public class Shooter
     {
         //TODO: BRING BACK TO RUN SHOOTER
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+        // System.out.println("DESIRED FLYWHEEL SPEED: " + speed / TICK_TO_RPM);
+        // System.out.println("ACTUAL FLYWHEEL SPEED: " + flywheelMotor.getSelectedSensorVelocity());
         System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        System.out.println("Shroud value: " + measureShroudSensorValue());
+        // System.out.println("Shroud value: " + measureShroudSensorValue());
     }
+
 
     //DO NOT USE UNLESS IN TELEOP MODE
     public void setFlywheelSpeedNew(double speed)
     {
         flywheelMotor.set(ControlMode.PercentOutput, speed);
-        System.out.println("Flywheel Velocity: " + measureFlywheelSpeed());
-        System.out.println("Shroud Value: " + measureShroudSensorValue());
+        // System.out.println("Flywheel Velocity: " + measureFlywheelSpeed());
+        // System.out.println("Shroud Value: " + measureShroudSensorValue());
     }
 
     //return value is in rpm
@@ -222,14 +228,14 @@ public class Shooter
         // Comment this out to test for new data and set the variables up above
         if (isDataFresh() && isTargetFound())
         {
-            System.out.println("CONTOURS FOUND");
+            // System.out.println("CONTOURS FOUND");
             calculateLaunchTrajectory(hub);
         }
 
         // calculateLaunchTrajectory(hub);
 
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
-        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
+        // System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
@@ -249,7 +255,7 @@ public class Shooter
     public void testShoot(double desiredLaunchSpeed, double desiredLaunchAngle)
     {
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
-        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
+        // System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
     }
@@ -282,7 +288,7 @@ public class Shooter
     {
         //vision code
         distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
-        System.out.println("DISTANCE: " + distance);
+        // System.out.println("DISTANCE: " + distance);
         // distance = 8.0 * FEET_TO_METERS;
 
         calculateLaunchTrajectory(hub, distance);
@@ -292,12 +298,12 @@ public class Shooter
     {
         if (hub == Hub.kLower)
         {
-            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance) / 2; //slowed down for testing
+            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance) * 0.9; //slowed down for testing
             desiredLaunchAngle = LowerTrajectoryData.getAngle(distance);
         }
         else if (hub == Hub.kUpper)
         {
-            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance) / 2; //slowed down for testing
+            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance) * 0.9; //slowed down for testing
             desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
         }
 

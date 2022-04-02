@@ -84,8 +84,8 @@ public class Intake
     private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 4, 6); // 4 is Extend, 6 is Extend float
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 
-    public final DigitalInput armOutSensor = new DigitalInput(4); //TODO SET THE CORRECT CHANNEL
-    public final DigitalInput armInSensor = new DigitalInput(3); //TODO SET THE CORRECT CHANNEL
+    public final DigitalInput armOutSensor = new DigitalInput(4); //DF 4/2/22
+    public final DigitalInput armInSensor = new DigitalInput(3); //DF 4/2/22
 
     private final Compressor compressor = new Compressor(moduleType);
 
@@ -213,13 +213,19 @@ public class Intake
         armsOutSolenoid.set(Value.kForward);
     }
 
-    public void pMoveArmOff()
+    public void pMoveArmFloat()
     {
         // armsSolenoid.set(Value.kOff);
         // armOutSolenoid.set(false);
         // armInSolenoid.set(false);
         armsInSolenoid.set(Value.kReverse);
         armsOutSolenoid.set(Value.kReverse);
+    }
+
+    public void pMoveArmOff()
+    {
+        armsInSolenoid.set(Value.kOff);
+        armsOutSolenoid.set(Value.kOff);
     }
 
     //not getters and setters?

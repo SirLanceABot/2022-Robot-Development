@@ -8,6 +8,8 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.shuffleboard.MainShuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.vision.Vision;
 
 public class Robot extends TimedRobot
@@ -41,6 +43,7 @@ public class Robot extends TimedRobot
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Vision VISION = RobotContainer.VISION;
     private static final PowerDistribution PDH = RobotContainer.PDH;
+    private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
 
     private static final DisabledMode disabled = new DisabledMode();
     private static final TestMode test = new TestMode();
@@ -72,6 +75,9 @@ public class Robot extends TimedRobot
             addPeriodic(() -> VISION.getCalibration(), 2.0, 0.0180); // get camera-target/shooter calibration from shuffleboard every 2 seconds
             addPeriodic(() -> System.gc(), 5.0, 0.0182); // needed for all the OpenCV Mats
         }
+
+        SmartDashboard.putNumber("RPM", 0.0);
+        SmartDashboard.putNumber("Shroud", -235);
     }
 
     /**
@@ -80,7 +86,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic()
     {
-        
+        MAIN_SHUFFLEBOARD.updateCameraTab();
     }
 
     /**

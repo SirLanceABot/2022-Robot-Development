@@ -3,6 +3,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.components.Intake;
 import frc.components.Climber;
 import frc.components.EventGenerator;
@@ -66,6 +67,9 @@ public class TeleopMode implements ModeTransition
 
     private static double angleToTurn;
 
+    double testingRPM = 0.0;
+    double testingShroud = -235;
+
 
     // *** CLASS CONSTRUCTOR ***
     public TeleopMode()
@@ -90,6 +94,9 @@ public class TeleopMode implements ModeTransition
         {
             SHUTTLEFSM.measureAndSetCurrentState();
         }
+
+        testingRPM = SmartDashboard.getNumber("RPM", testingRPM);
+        testingShroud = SmartDashboard.getNumber("Shroud", testingShroud);
     }
 
     /**
@@ -97,7 +104,6 @@ public class TeleopMode implements ModeTransition
      */
     public void periodic()
     {
-        
         if(DRIVETRAIN != null)
         {
             // Testing navX
@@ -214,6 +220,19 @@ public class TeleopMode implements ModeTransition
 
                     // Change to kLower or kUpper to determine shot type
                     SHOOTER.prepareShooter(Shooter.Hub.kUpper); //SHOOT
+                    // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
+                    if (SHOOTER.isFlywheelReady())
+                    {
+                        System.out.println("==================== FLYWHEEL IS READY ===================");
+                    }
+                    if (SHOOTER.isShroudReady())
+                    {
+                        System.out.println("==================== SHROUD IS READY =====================");
+                    }
+                    if (SHOOTER.isShooterReady())
+                    {
+                        System.out.println("==================== SHOOTER IS READY ====================");
+                    }
 
                     // SHOOTER.setFlywheelSpeedNew(SHOOTER_SPEED);
                     
@@ -228,7 +247,10 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    // SHOOTER.testShoot(0.0, SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
+                    SHOOTER.testShoot(testingRPM, testingShroud);
+                    // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
                     // SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                     // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
                 }
@@ -417,7 +439,10 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
-                    INTAKE.pMoveArmOff();
+                    if(INTAKE.isArmOut())
+                    {
+                        INTAKE.pMoveArmFloat();
+                    }
                 }
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))

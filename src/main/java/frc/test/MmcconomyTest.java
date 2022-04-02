@@ -36,10 +36,10 @@ public class MmcconomyTest implements MyTest
     
 
     // *** CLASS & INSTANCE VARIABLES ***
-    // private static final Intake INTAKE = RobotContainer.INTAKE;
-    private static final Climber CLIMBER = RobotContainer.CLIMBER;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
+    // private static final Climber CLIMBER = RobotContainer.CLIMBER;
     private static final DriverController JOYSTICK = new DriverController(0);
-    private static final OperatorController NOTJOYSTICK = new OperatorController(1);
+    // private static final OperatorController NOTJOYSTICK = new OperatorController(1);
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -63,41 +63,41 @@ public class MmcconomyTest implements MyTest
      */
     public void periodic()
     {
-        if(NOTJOYSTICK.getAction(OperatorDpadAction.kLED))
-        {
-            System.out.println("Up");
-        }
-        else if(NOTJOYSTICK.getAction(OperatorDpadAction.DownMethod))
-        {
-            System.out.println("Down");
-        }
-        else if(NOTJOYSTICK.getAction(OperatorDpadAction.UpRightMethod))
-        {
-            System.out.println("Up Right");
-        }
+        // if(NOTJOYSTICK.getAction(OperatorDpadAction.kLED))
+        // {
+        //     System.out.println("Up");
+        // }
+        // else if(NOTJOYSTICK.getAction(OperatorDpadAction.DownMethod))
+        // {
+        //     System.out.println("Down");
+        // }
+        // else if(NOTJOYSTICK.getAction(OperatorDpadAction.UpRightMethod))
+        // {
+        //     System.out.println("Up Right");
+        // }
 
-        if(JOYSTICK.getAction(DriverDpadAction.UpMethod))
-        {
-            System.out.println("Up");
-        }
-        else if(JOYSTICK.getAction(DriverDpadAction.kLockSwerve))
-        {
-            System.out.println("Down");
-        }
-        else if(JOYSTICK.getAction(DriverDpadAction.UpRightMethod))
-        {
-            System.out.println("Up Right");
-        }
+        // if(JOYSTICK.getAction(DriverDpadAction.UpMethod))
+        // {
+        //     System.out.println("Up");
+        // }
+        // else if(JOYSTICK.getAction(DriverDpadAction.kLockSwerve))
+        // {
+        //     System.out.println("Down");
+        // }
+        // else if(JOYSTICK.getAction(DriverDpadAction.UpRightMethod))
+        // {
+        //     System.out.println("Up Right");
+        // }
 
         if(JOYSTICK.getRawButton(3))
         {
-            // INTAKE.compressorDisable();
+            INTAKE.compressorDisable();
             // CLIMBER.setMoveOff();
         }
         else if(JOYSTICK.getRawButton(4))
         {
-            // INTAKE.compressorEnable();
-            System.out.println(CLIMBER.getMovementType());
+            INTAKE.compressorEnable();
+            // System.out.println(CLIMBER.getMovementType());
         }
         else
         {
@@ -106,24 +106,24 @@ public class MmcconomyTest implements MyTest
         
         if(JOYSTICK.getRawButton(1))
         {
-            // INTAKE.pMoveArmIn();
-            CLIMBER.FCLArmUp();
+            INTAKE.pMoveArmIn();
+            // CLIMBER.FCLArmUp();
         }
         else if(JOYSTICK.getRawButton(2))
         {
-            // INTAKE.pMoveArmOut();
-            CLIMBER.FCLArmDown();
+            INTAKE.pMoveArmOut();
+            // CLIMBER.FCLArmDown();
         }
         else
         {
-            // INTAKE.pMoveArmOff();
-            CLIMBER.FCLShutDown();
+            INTAKE.pMoveArmOff();
+            // CLIMBER.FCLShutDown();
         }
 
         if(JOYSTICK.getRawButton(5))
         {
-            System.out.println(CLIMBER.getFCLposition());
-            // System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
+            // System.out.println(CLIMBER.getFCLposition());
+            System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
             // INTAKE.armInfo();
         }
     }
