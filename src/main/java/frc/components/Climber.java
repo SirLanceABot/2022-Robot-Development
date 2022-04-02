@@ -73,8 +73,8 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
     {
-        firstStageClimbMotorPort = 3;   // Used ONLY for testing
-        secondStageClimbMotorPort = 0;  // Used ONLY for testing
+        // firstStageClimbMotorPort = 3;   // Used ONLY for testing
+        // secondStageClimbMotorPort = 0;  // Used ONLY for testing
         // climbBrakeMotorPort = 0; //Used ONLY for testing
 
         FCLMovementType = MovementType.kOff;
