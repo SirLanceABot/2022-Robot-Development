@@ -162,15 +162,16 @@ public class Drivetrain extends RobotDriveBase
     /**
      * Drive a "straight" distance in meters
      * 
+     * @param startingPosition of the robot
      * @param velocity in meters per second (+ forward, - reverse)
      * @param distanceToDrive in meters
      * @return true when drive is complete
      */
-    public boolean driveStraight(double velocity, double distanceToDrive)
+    public boolean driveStraight(Translation2d startingPosition, double velocity, double distanceToDrive)
     {
         boolean isDone = false;
-        double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(new Translation2d(0,0));
-
+        double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(startingPosition);
+        
         updateOdometry();
 
         if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))
@@ -181,7 +182,81 @@ public class Drivetrain extends RobotDriveBase
         {
             stopMotor();
             isDone = true;
-            System.out.println("Dist (meters) = " + distanceDriven);
+            // System.out.println("Dist (meters) = " + distanceDriven);
+        }
+
+        return isDone;
+    }
+
+    /**
+     * Drive a "vector" distance in meters
+     * 
+     * @param startingPosition of the robot
+     * @param velocity in meters per second (+ forward, - reverse)
+     * @param distanceToDriveX in meters
+     * @param distanceToDriveY in meters
+     * @return true when drive is complete
+     */
+    public boolean driveVector(Translation2d startingPosition, double velocity, double distanceToDriveX, double distanceToDriveY)
+    {
+        boolean isDone = false;
+
+        double distanceToDrive = Math.sqrt(distanceToDriveX * distanceToDriveX + distanceToDriveY * distanceToDriveY);
+        double velocityX = distanceToDriveX / distanceToDrive;
+        double velocityY = distanceToDriveY / distanceToDrive;
+
+        double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(startingPosition);
+        
+        updateOdometry();
+
+        if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))
+        {
+            drive(velocityX, velocityY, 0.0, false);
+        }
+        else
+        {
+            stopMotor();
+            isDone = true;
+            // System.out.println("Dist (meters) = " + distanceDriven);
+        }
+
+        return isDone;
+    }
+
+    /**
+     * Drive a "straight" distance in meters
+     * 
+     * @param startingPosition of the robot
+     * @param angularVelocity in meters per second (+ forward, - reverse)
+     * @param distanceToDrive in meters
+     * @return true when drive is complete
+     */
+    public boolean turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
+    {
+        boolean isDone = false;
+        // double currentAngle = odometry.getPoseMeters().getRotation().getDegrees();
+        double currentAngle = gyro.getYaw();
+        double angleToTurn = (desiredAngle - currentAngle) % 360;
+        if (angleToTurn < -180)
+        {
+            angleToTurn += 360;
+        }
+        else if (angleToTurn > 179)
+        {
+            angleToTurn -= 360;
+        }
+        
+        updateOdometry();
+
+        if(Math.abs(angleToTurn) > angleThreshold)
+        {
+            drive(0.0, 0.0, -angleToTurn / 180.0 * (maxAngularVelocity - minAngularVelocity) + minAngularVelocity * Math.signum(-angleToTurn), false);
+        }
+        else
+        {
+            stopMotor();
+            isDone = true;
+            // System.out.println("Angle turned (degrees) = ");
         }
 
         return isDone;
@@ -198,12 +273,22 @@ public class Drivetrain extends RobotDriveBase
             backRight.getState());
     }
 
+    public Translation2d getCurrentTranslation()
+    {
+        return odometry.getPoseMeters().getTranslation();
+    }
+
     public void resetEncoders()
     {
         frontLeft.resetEncoders();
         frontRight.resetEncoders();
         backLeft.resetEncoders();
         backRight.resetEncoders();
+    }
+
+    public void resetOdometry()
+    {
+        odometry.resetPosition(new Pose2d(), new Rotation2d(gyro.getYaw()));
     }
 
     @Override

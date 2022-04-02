@@ -2,6 +2,7 @@ package frc.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.drivetrain.Drivetrain;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
@@ -27,6 +28,8 @@ public class DriveStraight implements Command
     private final double SLOW_RAMP_RATE = 0.75;
     private final double FAST_RAMP_RATE = 0.1;
 
+    private Translation2d startingPosition;
+
     // This variable is only used to simulate the distance driven
     // private double distanceDrivenSimulation = 0.0;
 
@@ -48,7 +51,8 @@ public class DriveStraight implements Command
         isFinished = false;
         // distanceDrivenSimulation = 0.0;
 
-        DRIVETRAIN.resetEncoders();
+        // DRIVETRAIN.resetEncoders();
+        startingPosition = DRIVETRAIN.getCurrentTranslation();
         DRIVETRAIN.configOpenLoopRamp(SLOW_RAMP_RATE);
     }
 
@@ -64,7 +68,7 @@ public class DriveStraight implements Command
         //     isFinished = true;
         // }
 
-        if(DRIVETRAIN.driveStraight(speed_metersPerSecond, distance_meters))
+        if(DRIVETRAIN.driveStraight(startingPosition, speed_metersPerSecond, distance_meters))
         {
             isFinished = true;
             System.out.println("Finished driving");
@@ -80,7 +84,7 @@ public class DriveStraight implements Command
     {
         DRIVETRAIN.configOpenLoopRamp(FAST_RAMP_RATE);
         DRIVETRAIN.stopMotor();
-        DRIVETRAIN.resetEncoders();
+        // DRIVETRAIN.resetEncoders();
     }
 
     public String toString()
