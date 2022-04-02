@@ -26,6 +26,7 @@ public class MainShuffleboard
     private static final DriverControllerTab DRIVER_CONTROLLER_TAB;// = new DriverControllerTab();
     private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB;// = new OperatorControllerTab();
     private static final AutonomousTab AUTONOMOUS_TAB;// = new AutonomousTab();
+    private static final CameraTab CAMERA_TAB;
 
 
     // *** OBJECT INSTANTIATION ***
@@ -34,8 +35,9 @@ public class MainShuffleboard
         // Do NOT construct these tabs if the controller is not instantiated
         DRIVER_CONTROLLER_TAB = DRIVER_CONTROLLER != null ? new DriverControllerTab() : null;
         OPERATOR_CONTROLLER_TAB = OPERATOR_CONTROLLER != null ? new OperatorControllerTab() : null;
-
+        
         AUTONOMOUS_TAB = new AutonomousTab();
+        CAMERA_TAB = new CameraTab();
     }
     
     
@@ -77,5 +79,8 @@ public class MainShuffleboard
         return AUTONOMOUS_TAB.wasSendDataButtonPressed();
     }
 
-
+    public void updateCameraTab()
+    {
+        CAMERA_TAB.updateTimeRemaining();
+    }
 }

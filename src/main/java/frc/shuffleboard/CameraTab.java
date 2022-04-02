@@ -18,6 +18,11 @@ import frc.components.Shooter;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.Timer;
+
+import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class CameraTab 
 {
@@ -31,13 +36,17 @@ public class CameraTab
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
+    // Create a Shuffleboard Tab
+    private ShuffleboardTab cameraTab = Shuffleboard.getTab("Camera");
+
+    private int oldTime = 0;
 
     // Create text output boxes
     private NetworkTableEntry timeRemaining;
     private NetworkTableEntry compressorState;
-    static ShuffleboardTab cameraTab;
 
-    private String timeRemainingNoDataMessage = "No data";
+    // private String timeRemainingData = "void";
+    private Double timeRemainingData = 0.0;
 
     // *** CLASS CONSTRUCTOR ***
     public CameraTab()
@@ -55,24 +64,32 @@ public class CameraTab
         // cw.createCameraShuffleboardWidget(intakeCameraServer.getSource());
         
         Shuffleboard.update();
+        
+        timeRemaining = createTimeRemainingBox();
+        // timeRemaining.setString("No data");
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
+    // private void makeTimeRemainingBox()
+    // {
+    //     Shuffleboard.getTab("Camera")
+    //         .add("Time remaining", timeRemainingData)
+    //         .withWidget(BuiltInWidgets.kTextView)
+    //         .withPosition(1, 10)
+    //         .withSize(26, 2)
+    //         .getEntry();
+    // }
+    
 
 
     // *** CLASS & INSTANCE METHODS ***
-    // private NetworkTableEntry createTimeRemainingBox()
-    // {
-    //     return CameraTab.add("Error Messages", timeRemainingNoDataMessage)
-    //          .withWidget(BuiltInWidgets.kTextView)
-    //          .withPosition(1, 10)
-    //          .withSize(26, 2)
-    //          .getEntry();
-    // }
-
-    public void updateTimeRemaining()
+    private NetworkTableEntry createTimeRemainingBox()
     {
-        timeRemaining.setString(timeRemainingNoDataMessage);
+        return cameraTab.add("Time Remaining", timeRemainingData.toString())
+            .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(1, 10)
+            .withSize(26, 2)
+            .getEntry();
     }
     
     // public void cameraStreamMode()
@@ -99,4 +116,19 @@ public class CameraTab
     //         .withSize(8, 2);
     // }
 
+    public void updateTimeRemaining()
+    {
+        timeRemainingData = Timer.getMatchTime();
+        int timeRemainingInt = timeRemainingData.intValue();
+
+        if (timeRemainingInt == -1)
+        {
+            timeRemaining.setString("0");
+        }
+        else if (timeRemainingInt != oldTime)
+        {
+            timeRemaining.setString("" + timeRemainingInt);
+            oldTime = timeRemainingInt;
+        }
+    }
 }
