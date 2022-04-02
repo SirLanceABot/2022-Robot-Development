@@ -19,13 +19,18 @@ public class RotateToAngle implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final double ANGLE_THRESHOLD = 1.0;
+    private double minAngularVelocity;
+    private double maxAngularVelocity;
     private double angle;
     private boolean isFinished;
 
 
     // *** CLASS CONSTRUCTOR ***
-    public RotateToAngle(double angle)
+    public RotateToAngle(double minAngularVelocity, double maxAngularVelocity, double angle)
     {
+        this.minAngularVelocity = minAngularVelocity;
+        this.maxAngularVelocity = maxAngularVelocity;
         this.angle = angle;
 
         isFinished = false;
@@ -34,15 +39,13 @@ public class RotateToAngle implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
-        // DRIVETRAIN.rotateToAngle(angle);
-
         System.out.println(this);
         isFinished = false;
     }
 
     public void execute()
     {
-        // if(DRIVETRAIN.isAtAngle(angle))
+        if(DRIVETRAIN.turnToAngle(minAngularVelocity, maxAngularVelocity, angle, ANGLE_THRESHOLD));
         {
             System.out.println("Angle is correct");
             isFinished = true;

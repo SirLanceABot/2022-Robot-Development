@@ -2,6 +2,7 @@ package frc.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.RobotContainer;
 import frc.drivetrain.Drivetrain;
 import frc.components.ShuttleFSM;
@@ -26,6 +27,7 @@ public class DriveVector implements Command
     private double yDisplacement_meters;
     private final double SLOW_RAMP_RATE = 0.75;
     private final double FAST_RAMP_RATE = 0.1;
+    private Translation2d startingPosition;
     private boolean isFinished;
 
 
@@ -45,7 +47,8 @@ public class DriveVector implements Command
         System.out.println(this);
         isFinished = false;
 
-        DRIVETRAIN.resetEncoders();
+        // DRIVETRAIN.resetEncoders();
+        startingPosition = DRIVETRAIN.getCurrentTranslation();
         DRIVETRAIN.configOpenLoopRamp(SLOW_RAMP_RATE);
     }
 
@@ -53,7 +56,7 @@ public class DriveVector implements Command
     {
         SHUTTLEFSM.fancyRun(false);
 
-        // if(DRIVETRAIN.driveVector(speed_metersPerSecond, xDisplacement_meters, yDisplacement_meters))
+        if(DRIVETRAIN.driveVector(startingPosition, speed_metersPerSecond, xDisplacement_meters, yDisplacement_meters))
         {
             System.out.println("Finished Driving");
             isFinished = true;
@@ -69,7 +72,7 @@ public class DriveVector implements Command
     {
         DRIVETRAIN.configOpenLoopRamp(FAST_RAMP_RATE);
         DRIVETRAIN.stopMotor();
-        DRIVETRAIN.resetEncoders();
+        // DRIVETRAIN.resetEncoders();
     }
 
     public String toString()

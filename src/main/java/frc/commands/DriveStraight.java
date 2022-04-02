@@ -70,8 +70,8 @@ public class DriveStraight implements Command
 
         if(DRIVETRAIN.driveStraight(startingPosition, speed_metersPerSecond, distance_meters))
         {
-            isFinished = true;
             System.out.println("Finished driving");
+            isFinished = true;
         }
     }
 

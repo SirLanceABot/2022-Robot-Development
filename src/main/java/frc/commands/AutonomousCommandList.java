@@ -50,8 +50,8 @@ public class AutonomousCommandList
     // private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
     // private static final double LONG_DISTANCE = 1.2;    // meters (+)
     // private static final double JITTER_DISTANCE = 0.05; // meters (+)
-    private static final double MIN_ANGULAR_VELOCITY = 0.2;
-    private static final double MAX_ANGULAR_VELOCITY = 0.2;
+    private static final double MIN_ANGULAR_VELOCITY = 0.2; // unknown unit
+    private static final double MAX_ANGULAR_VELOCITY = 1.0; // unknown unit
 
 
 
@@ -181,7 +181,7 @@ public class AutonomousCommandList
         addCommand(new TurnOffIntake(false));
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
         // addCommand(new DriveVectorAndRotate(DRIVE_SPEED, -4.137, -0.607, -136.25))
-        addCommand(new RotateToAngle(-136.25));
+        addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -136.25));
         addCommand(new TurnOnIntake());
         addCommand(new DriveVector(DRIVE_SPEED, -4.137, -0.607));
         addCommand(new Wait(5.0));

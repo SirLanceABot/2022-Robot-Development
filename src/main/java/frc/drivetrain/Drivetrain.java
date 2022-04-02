@@ -224,12 +224,13 @@ public class Drivetrain extends RobotDriveBase
     }
 
     /**
-     * Drive a "straight" distance in meters
+     * Turn to an angle in degrees
      * 
-     * @param startingPosition of the robot
-     * @param angularVelocity in meters per second (+ forward, - reverse)
-     * @param distanceToDrive in meters
-     * @return true when drive is complete
+     * @param minAngularVelocity the robot can turn
+     * @param maxAngularVelocity the robot can turn
+     * @param desiredAngle in degrees to turn to
+     * @param angleThreshold in degrees
+     * @return true when turn is complete
      */
     public boolean turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
     {
