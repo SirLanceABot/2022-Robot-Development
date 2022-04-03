@@ -86,7 +86,10 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic()
     {
-        MAIN_SHUFFLEBOARD.updateCameraTab();
+        if(MAIN_SHUFFLEBOARD != null)
+        {
+            MAIN_SHUFFLEBOARD.updateCameraTab();
+        }
     }
 
     /**

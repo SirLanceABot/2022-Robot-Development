@@ -7,8 +7,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
 import frc.components.Intake;
-
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -49,13 +50,29 @@ public class CameraTab
     // private String timeRemainingData = "void";
     private Double timeRemainingData = 0.0;
 
+    
+    NetworkTable table;
+
+    // example x, y, valid for shooter - not used here
+    NetworkTableEntry tx;
+    NetworkTableEntry ty;
+    NetworkTableEntry tv;
+    // actually need to read values periodically for shooter not here
+    double x;
+    double y;
+    double valid;
+
+    // manipulate the images based of shooter mode or not
+    NetworkTableEntry camMode;
+    NetworkTableEntry stream;
+
     // *** CLASS CONSTRUCTOR ***
     public CameraTab()
     {
         System.out.println(fullClassName + " : Constructor Started");
         
         cameraTab = Shuffleboard.getTab("Camera");
-        Shuffleboard.update();
+        // Shuffleboard.update();
 
         // timeRemaining = createTimeRemainingBox();
         // timeRemaining.setString("No Errors");
@@ -67,9 +84,28 @@ public class CameraTab
         cw.setProperties(false, "white", false, "NONE");
 
         cw.createCameraShuffleboardWidgetLL("limelight", new String[]{"http://10.42.37.11:5800"}); // could get URLs from NT
-        
-        Shuffleboard.update();
-        
+        // Shuffleboard.update();
+        NetworkTableInstance.getDefault().flush();
+
+        table = NetworkTableInstance.getDefault().getTable("limelight");
+
+        // example x, y, valid for shooter - not used here
+        tx = table.getEntry("tx"); // angle to turn
+        ty = table.getEntry("ty"); // related to distance
+        tv = table.getEntry("tv"); // valid target
+        // actually need to read values periodically for shooter not here
+        x = tx.getDouble(0.0);
+        y = ty.getDouble(0.0);
+        valid = tv.getDouble(0.0);
+    
+        // manipulate the images based of shooter mode or not
+        camMode = table.getEntry("camMode"); // 0 target; 1 driver
+        stream = table.getEntry("stream"); // 1 target with small intake; 2 intake with small target
+    
+        checkLLShooterMode(); // testing; this belongs in a periodic
+
+        // Shuffleboard.update();
+
         timeRemaining = createTimeRemainingBox();
         // timeRemaining.setString("No data");
 
@@ -136,4 +172,72 @@ public class CameraTab
             oldTime = timeRemainingInt;
         }
     }
+
+    boolean shooterMode = false; // testing; get the real value below
+
+    public void checkLLShooterMode()
+    {
+        if(shooterMode)
+        {
+            System.out.println("shooter Mode");
+            System.out.println("camMode " + camMode.setDouble(0.));
+            System.out.println("stream " + stream.setDouble(1.));
+        }
+        else
+        {
+            System.out.println("intake Mode");
+            camMode.setDouble(1.);
+            stream.setDouble(2.);
+        }
+    }
+/*
+NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(<value>);
+
+double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+
+if (tv < 1.0)
+{
+    m_LimelightHasValidTarget = false;
+    m_LimelightDriveCommand = 0.0;
+    m_LimelightSteerCommand = 0.0;
+}
+
+NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+NetworkTableEntry tx = table.getEntry("tx");
+NetworkTableEntry ty = table.getEntry("ty");
+NetworkTableEntry ta = table.getEntry("tv");
+
+//read values periodically
+double x = tx.getDouble(0.0);
+double y = ty.getDouble(0.0);
+double area = tv.getDouble(0.0);
+
+  
+ledMode	Sets limelight’s LED state
+0	use the LED Mode set in the current pipeline
+1	force off
+2	force blink
+3	force on
+
+camMode	Sets limelight’s operation mode
+0	Vision processor
+1	Driver Camera (Increases exposure, disables vision processing)
+
+pipeline	Sets limelight’s current pipeline
+0 .. 9	Select pipeline 0..9
+
+stream	Sets limelight’s streaming mode
+0	Standard - Side-by-side streams if a webcam is attached to Limelight
+1	PiP Main - The secondary camera stream is placed in the lower-right corner of the primary camera stream
+2	PiP Secondary - The primary camera stream is placed in the lower-right corner of the secondary camera stream
+
+snapshot	Allows users to take snapshots during a match
+0	Stop taking snapshots
+1	Take two snapshots per second
+
+*/
+
 }

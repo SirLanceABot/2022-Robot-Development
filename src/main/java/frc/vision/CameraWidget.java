@@ -5,7 +5,6 @@ import java.util.Map;
 
 import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class CameraWidget {
