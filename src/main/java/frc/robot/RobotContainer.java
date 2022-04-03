@@ -58,7 +58,7 @@ public final class RobotContainer
     private static final boolean useAutonomousCommandList   = true;
 
     private static final boolean useVision                  = true;
-    private static final boolean useVisionLL                = false;
+    private static final boolean useCameraTab               = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***
@@ -81,7 +81,7 @@ public final class RobotContainer
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
 
     public static final Vision VISION;
-    public static final CameraTab VISIONLL;
+    public static final CameraTab CAMERA_TAB;
 
     public static final PowerDistribution PDH;
    
@@ -98,7 +98,7 @@ public final class RobotContainer
         // TODO: Build in using other booleans to trigger eachother
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;
         EVENT_GENERATOR = useFullRobot || useEventGenerator ? new EventGenerator() : null;
-        CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
+        CARGO_MANAGER = /*useFullRobot ||*/ useCargoManager ? new CargoManager() : null;
         SHUTTLEFSM = useFullRobot || useShuttleFSM ? new ShuttleFSM() : null;
 
         DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
@@ -109,7 +109,7 @@ public final class RobotContainer
         AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
 
         VISION = useFullRobot || useVision ? new Vision() : null;
-        VISIONLL = /*useFullRobot ||*/ useVisionLL ? new CameraTab() : null;
+        CAMERA_TAB = /*useFullRobot ||*/ useCameraTab ? new CameraTab() : null;
 
         PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
     }
