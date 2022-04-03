@@ -84,8 +84,8 @@ public class Intake
     private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 4, 6); // 4 is Extend, 6 is Extend float
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 
-    public final DigitalInput armOutSensor = new DigitalInput(4); //DF 4/2/22
-    public final DigitalInput armInSensor = new DigitalInput(3); //DF 4/2/22
+    private final DigitalInput armOutSensor = new DigitalInput(3); //DF 4/3/22
+    private final DigitalInput armInSensor = new DigitalInput(4); //DF 4/3/22
 
     private final Compressor compressor = new Compressor(moduleType);
 
@@ -236,28 +236,14 @@ public class Intake
     }
 
     //TODO Set these to the correct directions
-    public boolean isArmOut()
+    public boolean measureArmOut()
     {
-        if(armOutSensor.get() == true)
-        {
-            return(true);
-        }
-        else
-        {
-            return(false);
-        }
+        return !armOutSensor.get();
     }
 
-    public boolean isArmIn()
+    public boolean measureArmIn()
     {
-        if(armInSensor.get() == true)
-        {
-            return(true);
-        }
-        else
-        {
-            return(false);
-        }
+        return !armInSensor.get();
     }
 
     public void outtakeRoller()
