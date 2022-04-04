@@ -70,6 +70,8 @@ public class TeleopMode implements ModeTransition
 
     double testingRPM = 0.0;
     double testingShroud = -235;
+    double testingDistance = 0.0;
+    double useTestDistance = 0.0;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -98,6 +100,8 @@ public class TeleopMode implements ModeTransition
 
         testingRPM = SmartDashboard.getNumber("RPM", testingRPM);
         testingShroud = SmartDashboard.getNumber("Shroud", testingShroud);
+        testingDistance = SmartDashboard.getNumber("Distance", testingDistance);
+        useTestDistance = SmartDashboard.getNumber("Use Test Distance (1 for yes, 0 for no)", useTestDistance);
     }
 
     /**
@@ -140,11 +144,11 @@ public class TeleopMode implements ModeTransition
             if (OPERATOR_CONTROLLER.getAction(OperatorDpadAction.kLED) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
             // if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLight) || OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
             {
-                PDH.setSwitchableChannel(true);
+                // PDH.setSwitchableChannel(true);
             }
             else
             {
-                PDH.setSwitchableChannel(false);
+                // PDH.setSwitchableChannel(false);
             }
 
             if(SHUTTLE != null)
@@ -192,7 +196,11 @@ public class TeleopMode implements ModeTransition
                     // SHUTTLEFSM.runMotorRequests();
 
                     boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot);
-                    // boolean shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot) || SHOOTER.isShooterReady();
+
+                    if (SHOOTER != null)
+                    {
+                        shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot) || SHOOTER.isShooterReady();
+                    }
 
                     // TODO: Make this not here
                     SHUTTLEFSM.fancyRun(shoot);
@@ -248,19 +256,49 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
-                    INTAKE.compressorDisable();
+                    if (INTAKE != null)
+                    {
+                        INTAKE.compressorDisable();
+                    }
+
+                    if (SHOOTER.isFlywheelReady())
+                    {
+                        System.out.println("==================== FLYWHEEL IS READY ===================");
+                    }
+                    if (SHOOTER.isShroudReady())
+                    {
+                        System.out.println("==================== SHROUD IS READY =====================");
+                    }
+                    if (SHOOTER.isShooterReady())
+                    {
+                        System.out.println("==================== SHOOTER IS READY ====================");
+                    }
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                     // SHOOTER.testShoot(0.0, SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
-                    SHOOTER.testShoot(testingRPM, testingShroud);
+                    if (useTestDistance == 1.0)
+                    {
+                        System.out.println(testingDistance);
+                        SHOOTER.prepareShooter(Shooter.Hub.kUpper, testingDistance);
+                    }
+                    else
+                    {
+                        SHOOTER.prepareShooter(testingRPM, testingShroud);
+                    }
+                    
                     // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
                     // SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));
                     // SHOOTER.setShroudMotorSpeedNew(1.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud));
                 }
                 else
                 {
-                    INTAKE.compressorEnable();
+                    if (INTAKE != null)
+                    {
+                        INTAKE.compressorEnable();
+                    }
                     // SHOOTER.turnOffLED();
                     SHOOTER.stopFlywheel();
+
+                    SHOOTER.resetShooterChecks();
                 }
 
                 // SHOOTER.outputShroudLimit();

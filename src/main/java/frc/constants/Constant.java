@@ -11,10 +11,10 @@ public final class Constant
     public static final double DROP_SHOT_SPEED = 0.0;
 
     //max amount of error allowed between desired flywheel speed and actual flywheel speed for it to shoot (in rpms)
-    public static final double SHOOT_SPEED_THRESHOLD = 100;
+    public static final double SHOOT_SPEED_THRESHOLD = 50;
 
     //max amount of error in degrees between desired and actual shroud angle
-    public static final double SHROUD_ANGLE_THRESHOLD = 2.0;
+    public static final double SHROUD_ANGLE_THRESHOLD = 5.0;
 
     //max amount of error in degrees for being aligned with the hub
     public static final double HUB_ALIGNMENT_THRESHOLD = 2.0;

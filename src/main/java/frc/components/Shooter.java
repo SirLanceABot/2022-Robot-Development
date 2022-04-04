@@ -191,7 +191,7 @@ public class Shooter
         // System.out.println("DESIRED FLYWHEEL SPEED: " + speed / TICK_TO_RPM);
         // System.out.println("ACTUAL FLYWHEEL SPEED: " + flywheelMotor.getSelectedSensorVelocity());
         System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
-        // System.out.println("Shroud value: " + measureShroudSensorValue());
+        System.out.println("Shroud value: " + measureShroudSensorValue());
     }
 
 
@@ -235,7 +235,7 @@ public class Shooter
         // calculateLaunchTrajectory(hub);
 
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
-        // System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
+        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
@@ -246,18 +246,24 @@ public class Shooter
     {
         calculateLaunchTrajectory(hub, distance);
 
+        System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
+        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
 
         checkIsShooterReady();
     }
 
-    public void testShoot(double desiredLaunchSpeed, double desiredLaunchAngle)
+    public void prepareShooter(double desiredLaunchSpeed, double desiredLaunchAngle)
     {
+        Shooter.desiredLaunchSpeed = desiredLaunchSpeed;
+        Shooter.desiredLaunchAngle = desiredLaunchAngle;
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
-        // System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
+        System.out.println("DESIRED LAUNCH ANGLE: " + desiredLaunchAngle);
         setFlywheelSpeed(desiredLaunchSpeed);
         setShroudAngle(desiredLaunchAngle);
+
+        checkIsShooterReady();
     }
 
     public void startLongShot()
@@ -298,12 +304,12 @@ public class Shooter
     {
         if (hub == Hub.kLower)
         {
-            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance) * 0.9; //slowed down for testing
+            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance); //slowed down for testing
             desiredLaunchAngle = LowerTrajectoryData.getAngle(distance);
         }
         else if (hub == Hub.kUpper)
         {
-            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance) * 0.9; //slowed down for testing
+            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance); //slowed down for testing
             desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
         }
 
@@ -345,29 +351,29 @@ public class Shooter
 
     private void setShroudAngle(double angle)
     {
-        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 30.0)
+        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 40.0)
         {
-            setShroudMotorSpeed(0.75);
+            setShroudMotorSpeed(0.8);
         }
-        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 5.0)
+        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 10.0)
         {
-            setShroudMotorSpeed(0.25);
+            setShroudMotorSpeed(0.3);
         }
         else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
         {
-            setShroudMotorSpeed(0.1);
+            setShroudMotorSpeed(0.2);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 30.0)
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 40.0)
         {
-            setShroudMotorSpeed(-0.75);
+            setShroudMotorSpeed(-0.6);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 5.0)
+        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 10.0)
         {
-            setShroudMotorSpeed(-0.25);
+            setShroudMotorSpeed(-0.2);
         }
         else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD)
         {
-            setShroudMotorSpeed(-0.1);
+            setShroudMotorSpeed(-0.15);
         }
         else
         {
@@ -452,6 +458,12 @@ public class Shooter
         {
             successfulChecks = 0;
         }
+        System.out.println("SUCCESSFUL CHECKS: " + successfulChecks);
+    }
+
+    public void resetShooterChecks()
+    {
+        successfulChecks = 0;
     }
 
     public boolean isShooterReady()

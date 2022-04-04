@@ -84,6 +84,8 @@ public class Robot extends TimedRobot
 
         SmartDashboard.putNumber("RPM", 0.0);
         SmartDashboard.putNumber("Shroud", -235);
+        SmartDashboard.putNumber("Distance", 0.0);
+        SmartDashboard.putNumber("Use Test Distance (1 for yes, 0 for no)", 0.0);
     }
 
     /**
