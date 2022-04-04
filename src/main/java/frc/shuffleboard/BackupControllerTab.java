@@ -46,9 +46,9 @@ public class BackupControllerTab
      // Create the Button object
      private SendableChooser<Boolean> sendDataButton = new SendableChooser<>();
  
-     private boolean previousStateOfSendButton = false;
-     private boolean isDataValid = true;
-     private String errorMessage = "No Errors";
+    //  private boolean previousStateOfSendButton = false;
+    //  private boolean isDataValid = true;
+    //  private String errorMessage = "No Errors";
 
      
     // *** CLASS CONSTRUCTOR ***
@@ -202,37 +202,43 @@ public class BackupControllerTab
             // .withSize(8, 2);
     }
 
-    private NetworkTableEntry createSuccessfulDownloadBox()
-    {
-        Map<String, Object> booleanBoxProperties = new HashMap<>();
-        booleanBoxProperties.put("Color when true", "Lime");
-        booleanBoxProperties.put("Color when false", "Red");
+    // private NetworkTableEntry createSuccessfulDownloadBox()
+    // {
+    //     Map<String, Object> booleanBoxProperties = new HashMap<>();
+    //     booleanBoxProperties.put("Color when true", "Lime");
+    //     booleanBoxProperties.put("Color when false", "Red");
         
-        return backupControllerTab.add("Successful Download?", false)
-             .withWidget(BuiltInWidgets.kBooleanBox)
-             .withPosition(23, 4)
-             .withSize(4, 4)
-             .withProperties(booleanBoxProperties)
-             .getEntry();
-    }
+    //     return backupControllerTab.add("Successful Download?", false)
+    //          .withWidget(BuiltInWidgets.kBooleanBox)
+    //          .withPosition(23, 4)
+    //          .withSize(4, 4)
+    //          .withProperties(booleanBoxProperties)
+    //          .getEntry();
+    // }
 
-    private NetworkTableEntry createErrorMessageBox()
+    // private NetworkTableEntry createErrorMessageBox()
+    // {
+    //     return backupControllerTab.add("Error Messages", "No Errors")
+    //          .withWidget(BuiltInWidgets.kTextView)
+    //          .withPosition(1, 10)
+    //          .withSize(26, 2)
+    //          .getEntry();
+    // }
+
+    // private void updateBackupControllerTabData()
+    // {
+    //     backupControllerTabData.compressorToggle = compressorToggleBox.getSelected();
+    //     backupControllerTabData.climbToggle = climbToggleBox.getSelected();
+    //     backupControllerTabData.intakeToggle = intakeToggleBox.getSelected();
+    //     backupControllerTabData.rollerToggle = rollerToggleBox.getSelected();
+    //     backupControllerTabData.aim = aimBox.getSelected();
+    //     backupControllerTabData.shoot = shootBox.getSelected();
+    // }
+
+    public BackupControllerTabData getBackupControllerTabData()
     {
-        return backupControllerTab.add("Error Messages", "No Errors")
-             .withWidget(BuiltInWidgets.kTextView)
-             .withPosition(1, 10)
-             .withSize(26, 2)
-             .getEntry();
-    }
-
-    
-
-
-
-
-
-
-
-
+        return backupControllerTabData;
+ 
+   }
 
 }
