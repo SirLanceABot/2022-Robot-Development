@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.commands.AutonomousCommandList;
@@ -20,11 +21,13 @@ import frc.drivetrain.Drivetrain;
 import frc.shuffleboard.AutonomousTabData;
 import frc.shuffleboard.CameraTab;
 import frc.shuffleboard.MainShuffleboard;
-import frc.vision.Vision;
+import frc.vision.Vision; 
 
 public final class RobotContainer 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    private static final DigitalInput competitionRobotFlag = new DigitalInput(9);
+
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -88,11 +91,28 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
+        final boolean isCompetitionRobot = !competitionRobotFlag.get();
+
+        final int INTAKE_ROLLER_PORT        = isCompetitionRobot ? Port.Motor.INTAKE_ROLLER : Port.MotorTesting.INTAKE_ROLLER_TEST;
+        final int INTAKE_IN_FORWARD_PORT    = isCompetitionRobot ? Port.Motor.INTAKE_IN_FORWARD : Port.MotorTesting.INTAKE_IN_FORWARD_TEST;
+        final int INTAKE_IN_REVERSE_PORT    = isCompetitionRobot ? Port.Motor.INTAKE_IN_REVERSE : Port.MotorTesting.INTAKE_IN_REVERSE_TEST;
+        final int INTAKE_OUT_FORWARD_PORT   = isCompetitionRobot ? Port.Motor.INTAKE_OUT_FORWARD : Port.MotorTesting.INTAKE_OUT_FORWARD_TEST;
+        final int INTAKE_OUT_REVERSE_PORT   = isCompetitionRobot ? Port.Motor.INTAKE_OUT_REVERSE : Port.MotorTesting.INTAKE_OUT_REVERSE_TEST;
+
+        final int SHOOTER_FLYWHEEL_PORT     = isCompetitionRobot ? Port.Motor.SHOOTER_FLYWHEEL : Port.MotorTesting.SHOOTER_FLYWHEEL_TEST;
+        final int SHOOTER_SHROUD_PORT       = isCompetitionRobot ? Port.Motor.SHOOTER_SHROUD : Port.MotorTesting.SHOOTER_SHROUD_TEST;
+
+        final int CLIMBER_STAGE_ONE_LEADEAR_PORT = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_TWO_LEADER : Port.MotorTesting.CLIMBER_STAGE_ONE_LEADER_TEST;
+        final int CLIMBER_STAGE_TWO_LEADER_PORT  = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_ONE_LEADER : Port.MotorTesting.CLIMBER_STAGE_TWO_LEADER_TEST;
+
+        final int INTAKE_MAGNET_IN_TEST_PORT  = isCompetitionRobot ? Port.Sensor.INTAKE_MAGNET_IN : Port.SensorTesting.INTAKE_MAGNET_IN_TEST;
+        final int INTAKE_MAGNET_OUT_TEST_PORT = isCompetitionRobot ? Port.Sensor.INTAKE_MAGNET_OUT : Port.SensorTesting.INTAKE_MAGNET_OUT_TEST;
+
         DRIVETRAIN = useFullRobot || useDrivetrain ? new Drivetrain(Port.DrivetrainSetup.DRIVETRAIN_DATA) : null;
-        INTAKE = useFullRobot || useIntake ? new Intake(Port.Motor.INTAKE_ROLLER) : null;
-        SHOOTER = useFullRobot || useShooter ? new Shooter(Port.Motor.SHOOTER_FLYWHEEL, Port.Motor.SHOOTER_SHROUD) : null;
+        INTAKE = useFullRobot || useIntake ? new Intake(INTAKE_ROLLER_PORT, INTAKE_IN_FORWARD_PORT, INTAKE_IN_REVERSE_PORT, INTAKE_OUT_FORWARD_PORT, INTAKE_OUT_REVERSE_PORT, INTAKE_MAGNET_IN_TEST_PORT, INTAKE_MAGNET_OUT_TEST_PORT) : null;
+        SHOOTER = useFullRobot || useShooter ? new Shooter(SHOOTER_FLYWHEEL_PORT, SHOOTER_SHROUD_PORT) : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
-        CLIMBER = useFullRobot || useClimber ? new Climber(Port.Motor.CLIMBER_STAGE_ONE_LEADER, Port.Motor.CLIMBER_STAGE_TWO_LEADER, Port.Motor.CLIMBER_BRAKE_MOTOR) : null;
+        CLIMBER = useFullRobot || useClimber ? new Climber(CLIMBER_STAGE_ONE_LEADEAR_PORT, CLIMBER_STAGE_TWO_LEADER_PORT) : null;
         
         // TODO: Build in using other booleans to trigger eachother
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;
@@ -122,7 +142,7 @@ public final class RobotContainer
 
 
     // *** CLASS & INSTANCE METHODS ***
-    public static void constructMeFirst()
+    public static void runMeFirst()
     {}
         
 }

@@ -44,7 +44,7 @@ public class Climber
     private MovementType SCLMovementType;
     //Motors
     //Talon 
-    private final TalonSRX climbBrakeMotor;
+    // private final TalonSRX climbBrakeMotor;
     //NEO 550
     private final CANSparkMax firstStageClimbMotorLeader;// = new CANSparkMax(/*Port.Motor.CLIMBER_STAGE_ONE_LEADER*/3, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     // private CANSparkMax firstStageClimbMotorFollower  = new CANSparkMax(Port.Motor.CLIMBER_STAGE_ONE_FOLLOWER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -71,18 +71,14 @@ public class Climber
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort, int climbBrakeMotorPort)
+    public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
     {
-        // firstStageClimbMotorPort = 3;   // Used ONLY for testing
-        // secondStageClimbMotorPort = 0;  // Used ONLY for testing
-        // climbBrakeMotorPort = 0; //Used ONLY for testing
-
         FCLMovementType = MovementType.kOff;
         SCLMovementType = MovementType.kOff;
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-        climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
+        // climbBrakeMotor = new TalonSRX(climbBrakeMotorPort);
 
         // climbBrakeMotor.configReverseSoftLimitThreshold(0, 0);
         // climbBrakeMotor.configForwardSoftLimitThreshold(-9, 0);
@@ -268,10 +264,10 @@ public class Climber
     {
         secondStageClimbMotorLeader.set(speed);
     }
-    private void setBrakeMotor(double speed)
-    {
-        climbBrakeMotor.set(ControlMode.PercentOutput, speed);
-    }
+    // private void setBrakeMotor(double speed)
+    // {
+    //     climbBrakeMotor.set(ControlMode.PercentOutput, speed);
+    // }
     public void setMoveOff()
     {
         FCLMovementType = MovementType.kOff;

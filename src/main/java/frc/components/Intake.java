@@ -80,12 +80,12 @@ public class Intake
     // private final Solenoid armOutSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0); 
     // private final Solenoid armInSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
     private PneumaticsModuleType moduleType = PneumaticsModuleType.CTREPCM;
-    private final DoubleSolenoid armsInSolenoid = new DoubleSolenoid(0, moduleType, 5, 7); // 5 is Retract, 7 is Retract float
-    private final DoubleSolenoid armsOutSolenoid = new DoubleSolenoid(0, moduleType, 4, 6); // 4 is Extend, 6 is Extend float
+    private final DoubleSolenoid armsInSolenoid;
+    private final DoubleSolenoid armsOutSolenoid; 
     //Module Number comes from here: https://docs.wpilib.org/en/stable/docs/software/hardware-apis/pneumatics/pneumatics.html
 
-    private final DigitalInput armOutSensor = new DigitalInput(3); //DF 4/3/22
-    private final DigitalInput armInSensor = new DigitalInput(4); //DF 4/3/22
+    private final DigitalInput armOutSensor;
+    private final DigitalInput armInSensor;
 
     private final Compressor compressor = new Compressor(moduleType);
 
@@ -99,13 +99,15 @@ public class Intake
 
 
     // *** CLASS CONSTRUCTOR ***
-    public Intake(int rollerMotorPort)
+    public Intake(int rollerMotorPort, int armsInForwardChannel, int armsInReverseChannel, int armsOutForwardChannel, int armsOutReverseChannel, int armsInSensorPort, int armsOutSensorPort)
     {
         System.out.println("Intake Created");
 
-        // rollerMotorPort = 1;  // Used ONLY for testing
-
         rollerMotor = new CANSparkMax(rollerMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        armsInSolenoid = new DoubleSolenoid(0, moduleType, armsInForwardChannel, armsInReverseChannel); // 5 is Retract, 7 is Retract float
+        armsOutSolenoid = new DoubleSolenoid(0, moduleType, armsOutForwardChannel, armsOutReverseChannel); // 4 is Extend, 6 is Extend float
+        armOutSensor = new DigitalInput(armsOutSensorPort); //DF 4/3/22
+        armInSensor = new DigitalInput(armsInSensorPort); //DF 4/3/22
         
         configRollerMotor();
     }

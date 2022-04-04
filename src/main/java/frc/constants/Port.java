@@ -11,6 +11,28 @@ import frc.drivetrain.SwerveModuleConfig;
 //TODO: Get right values for each port
 public final class Port 
 {
+    public static class MotorTesting
+    {
+        public static final int INTAKE_ROLLER_TEST            = 1;
+        public static final int INTAKE_IN_FORWARD_TEST        = 5;
+        public static final int INTAKE_IN_REVERSE_TEST        = 7;
+        public static final int INTAKE_OUT_FORWARD_TEST       = 4;
+        public static final int INTAKE_OUT_REVERSE_TEST       = 6;
+
+        public static final int SHOOTER_FLYWHEEL_TEST         = 2;  
+        public static final int SHOOTER_SHROUD_TEST           = 3;
+
+        public static final int CLIMBER_STAGE_ONE_LEADER_TEST = 4;
+        public static final int CLIMBER_STAGE_TWO_LEADER_TEST = 5;
+        
+    }
+
+    public static class SensorTesting
+    {
+        public static final int INTAKE_MAGNET_OUT_TEST       =  1;
+        public static final int INTAKE_MAGNET_IN_TEST        =  2;
+    }
+
     public static class Motor
     {
         private static final int FRONT_LEFT_DRIVE   =  7;  // MM 2/28/22
@@ -26,7 +48,10 @@ public final class Port
         private static final int BACK_RIGHT_TURN    =  3;  // MM 2/28/22
 
         public static final int INTAKE_ROLLER       =  2;  // DF 3/06/22
-        public static final int INTAKE_ARMS_MOTOR   =  5;  // MM 2/26/22
+        public static final int INTAKE_IN_FORWARD   =  5;
+        public static final int INTAKE_IN_REVERSE   =  7;
+        public static final int INTAKE_OUT_FORWARD  =  4;
+        public static final int INTAKE_OUT_REVERSE  =  6;
 
         private static final int SHUTTLE_STAGE_ONE  =  4;  // MM 2/26/22
         private static final int SHUTTLE_STAGE_TWO  = 10;  // MM 2/26/22
@@ -36,9 +61,6 @@ public final class Port
         
         public static final int CLIMBER_STAGE_ONE_LEADER    = 1;  // MM 3/02/22
         public static final int CLIMBER_STAGE_TWO_LEADER    = 8;  // DF 3/31/22
-        public static final int CLIMBER_STAGE_ONE_FOLLOWER  = 44;
-        public static final int CLIMBER_STAGE_TWO_FOLLOWER  = 45;
-        public static final int CLIMBER_BRAKE_MOTOR         = 15; // DF 3/05/22
 
         public static final String CAN_BUS = "CANivore";
     }
@@ -55,6 +77,9 @@ public final class Port
         private static final int SHUTTLE_INTAKE_SENSOR      =  0;
         private static final int SHUTTLE_STAGE_ONE_SENSOR   =  1;
         private static final int SHUTTLE_STAGE_TWO_SENSOR   =  2;
+
+        public static final int INTAKE_MAGNET_OUT           =  3;
+        public static final int INTAKE_MAGNET_IN            =  4;
 
         public static final int PDH_CAN_ID                  =  1;
 

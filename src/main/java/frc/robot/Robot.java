@@ -20,7 +20,7 @@ public class Robot extends TimedRobot
     static
     {
         System.out.println("Loading: " + fullClassName);
-        RobotContainer.constructMeFirst();
+        RobotContainer.runMeFirst();
         robotState = RobotState.kNone;
     }
 
