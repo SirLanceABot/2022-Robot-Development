@@ -123,7 +123,7 @@ public class MmcconomyTest implements MyTest
         if(JOYSTICK.getRawButton(5))
         {
             // System.out.println(CLIMBER.getFCLposition());
-            System.out.println("Is Arm Out: " + INTAKE.isArmOut() + " \nIs Arm In: " + INTAKE.isArmIn());
+            System.out.println("Is Arm Out: " + INTAKE.measureArmOut() + " \nIs Arm In: " + INTAKE.measureArmIn());
             // INTAKE.armInfo();
         }
     }

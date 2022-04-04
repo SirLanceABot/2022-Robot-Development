@@ -16,7 +16,7 @@ import frc.constants.Constant;
 import frc.controls.DriverController;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
-
+import frc.controls.DriverController.DriverDpadAction;
 import frc.controls.OperatorController;
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
@@ -66,6 +66,7 @@ public class TeleopMode implements ModeTransition
     private static boolean rollerToggle = false;
 
     private static double angleToTurn;
+    private static double driveTrainRotation;
 
     double testingRPM = 0.0;
     double testingShroud = -235;
@@ -247,6 +248,7 @@ public class TeleopMode implements ModeTransition
                 }
                 else if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShooterOverride))
                 {
+                    INTAKE.compressorDisable();
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                     // SHOOTER.testShoot(0.0, SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                     SHOOTER.testShoot(testingRPM, testingShroud);
@@ -256,6 +258,7 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
+                    INTAKE.compressorEnable();
                     // SHOOTER.turnOffLED();
                     SHOOTER.stopFlywheel();
                 }
@@ -314,6 +317,21 @@ public class TeleopMode implements ModeTransition
 
             if(DRIVETRAIN != null)
             {
+                // TODO : Add slew rate limiter
+                double drivePowerLimit = 0.8;
+                double turnPowerLimit = 0.1;
+                double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
+                double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
+                double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
+
+                // Scales down the input power
+                // TODO : Add button for full power
+                // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
+
+                xSpeed *= drivePowerLimit;
+                ySpeed *= drivePowerLimit;
+                turn *= turnPowerLimit;
+
                 if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
                     if (!SHOOTER.isHubAligned())
@@ -322,61 +340,40 @@ public class TeleopMode implements ModeTransition
 
                         System.out.println("ANGLE TO TURN: " + angleToTurn);
 
-                        DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
-
-                        // if (angleToTurn > 0.0)
-                        // {
-                        //     DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
-                        // }
-                        // else if (angleToTurn < 0.0)
-                        // {
-                        //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
-                        // }
+                        driveTrainRotation = -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn);
                     }
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
                 {
-                    DRIVETRAIN.drive(0.0, 0.0, -0.5, true);
+                    driveTrainRotation = -0.5;
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
                 {
-                    DRIVETRAIN.drive(0.0, 0.0, 0.5, true);
+                    driveTrainRotation = 0.5;
                 }
                 else
                 {
-                    // TODO : Add slew rate limiter
-                    double drivePowerLimit = 0.8;
-                    double turnPowerLimit = 0.1;
-                    double xSpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY) * Constant.MAX_DRIVE_SPEED;
-                    double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
-                    double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
-
-                    // Scales down the input power
-                    // TODO : Add button for full power
-                    // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
-
-                    xSpeed *= drivePowerLimit;
-                    ySpeed *= drivePowerLimit;
-                    turn *= turnPowerLimit;
-
-                    if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented))
-                    {
-                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, false);
-                    }
-                    else
-                    {
-                        DRIVETRAIN.drive(xSpeed, ySpeed, turn, true);
-                    }
-
-                    // running the drivetrain
-                    // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
-
-                    // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
-
-                    // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
-
-                    // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
+                    driveTrainRotation = turn;
                 }
+                
+                if (DRIVER_CONTROLLER.getAction(DriverDpadAction.kLockSwerve))
+                {
+                    // System.out.println("Locking swerve drive");
+                    DRIVETRAIN.lock();
+                }
+                else
+                {
+                    DRIVETRAIN.drive(xSpeed, ySpeed, driveTrainRotation, !DRIVER_CONTROLLER.getAction(DriverButtonAction.kRobotOriented));
+                }
+
+                // running the drivetrain
+                // DRIVETRAIN.moveYAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveY));
+
+                // DRIVETRAIN.moveXAxis(DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX));
+
+                // DRIVETRAIN.rotate(DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate));
+
+                // DRIVETRAIN.driveBoost(DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost));
 
                 if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kResetGyro))
                 {
@@ -439,11 +436,19 @@ public class TeleopMode implements ModeTransition
                 }
                 else
                 {
-                    if(INTAKE.isArmOut())
+                    if(INTAKE.measureArmOut())
                     {
-                        INTAKE.pMoveArmFloat();
+                        // System.out.println("Arm is out");
+                        // TODO: Add float
+                        // INTAKE.pMoveArmFloat();
+                    }
+                    if(INTAKE.measureArmIn())
+                    {
+                        // System.out.println("Arm is in");
                     }
                 }
+
+                // System.out.println("Arm in = " + INTAKE.measureArmOut() + ", Arm out = " + INTAKE.measureArmIn());
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
                 // {

@@ -50,7 +50,7 @@ public class TurnOnIntake implements Command
 
         INTAKE.pMoveArmOut();
 
-        if (INTAKE.isArmOut())
+        if (INTAKE.measureArmOut())
         {
             INTAKE.intakeRoller();
 

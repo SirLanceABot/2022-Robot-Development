@@ -96,7 +96,7 @@ public final class RobotContainer
         // TODO: Build in using other booleans to trigger eachother
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;
         EVENT_GENERATOR = useFullRobot || useEventGenerator ? new EventGenerator() : null;
-        CARGO_MANAGER = useFullRobot || useCargoManager ? new CargoManager() : null;
+        CARGO_MANAGER = /*useFullRobot ||*/ useCargoManager ? new CargoManager() : null;
         SHUTTLEFSM = useFullRobot || useShuttleFSM ? new ShuttleFSM() : null;
 
         DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;

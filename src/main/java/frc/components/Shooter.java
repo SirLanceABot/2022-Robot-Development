@@ -73,8 +73,8 @@ public class Shooter
     //original PID values are kP = 0.14 and kF = 0.035
     //encoder ticks at 10 foot shot = 13,000
     private static final double kP = 0.017;
-    private static final double kI = 0.000000;
-    private static final double kD = 0.0000000;
+    private static final double kI = 0.000;
+    private static final double kD = 0.000;
     private static final double kF = 0.049;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;

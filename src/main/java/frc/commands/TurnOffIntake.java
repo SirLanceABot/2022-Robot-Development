@@ -55,7 +55,7 @@ public class TurnOffIntake implements Command
         {
             INTAKE.pMoveArmIn();
 
-            if(INTAKE.isArmIn())
+            if(INTAKE.measureArmIn())
             {
                 System.out.println("Intake is off");
                 isFinished = true;
