@@ -91,7 +91,7 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
-        final boolean isCompetitionRobot = !competitionRobotFlag.get();
+        final boolean isCompetitionRobot = competitionRobotFlag.get();
 
         final int INTAKE_ROLLER_PORT        = isCompetitionRobot ? Port.Motor.INTAKE_ROLLER : Port.MotorTesting.INTAKE_ROLLER_TEST;
         final int INTAKE_IN_FORWARD_PORT    = isCompetitionRobot ? Port.Motor.INTAKE_IN_FORWARD : Port.MotorTesting.INTAKE_IN_FORWARD_TEST;
