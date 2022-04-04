@@ -79,8 +79,11 @@ public class MainShuffleboard
         return AUTONOMOUS_TAB.wasSendDataButtonPressed();
     }
 
+    // This method will be run on a slow period - say 1 second
+    // LimeLight can't take it any faster and humans don't need it fast, either.
     public void updateCameraTab()
     {
         CAMERA_TAB.updateTimeRemaining();
+        CAMERA_TAB.updateLimeLightMode();
     }
 }

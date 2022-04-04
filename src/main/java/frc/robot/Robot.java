@@ -8,8 +8,9 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.shuffleboard.MainShuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import frc.shuffleboard.MainShuffleboard;
 import frc.vision.Vision;
 
 public class Robot extends TimedRobot
@@ -76,6 +77,14 @@ public class Robot extends TimedRobot
             addPeriodic(() -> System.gc(), 5.0, 0.0182); // needed for all the OpenCV Mats
         }
 
+        // update everything on the Camera Tab on ShuffleBoard every 1 second
+        //  Send to LimeLight how to display cameras' images
+        //  Remaining match time
+        if(MAIN_SHUFFLEBOARD != null)
+        {
+            addPeriodic(() -> MAIN_SHUFFLEBOARD.updateCameraTab(), 1.0, 0.0180);
+        }
+
         SmartDashboard.putNumber("RPM", 0.0);
         SmartDashboard.putNumber("Shroud", -235);
     }
@@ -86,10 +95,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic()
     {
-        if(MAIN_SHUFFLEBOARD != null)
-        {
-            MAIN_SHUFFLEBOARD.updateCameraTab();
-        }
+
     }
 
     /**
