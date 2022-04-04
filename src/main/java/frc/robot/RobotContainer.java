@@ -53,12 +53,12 @@ public final class RobotContainer
     private static final boolean useDriverController        = true;
     private static final boolean useOperatorController      = true;
 
-    private static final boolean useMainShuffleboard        = true; // includes LimeLight Vision and much more
+    private static final boolean useMainShuffleboard        = true;
     private static final boolean useAutonomousTabData       = true;
     private static final boolean useAutonomousCommandList   = true;
 
     private static final boolean useVision                  = true; // internal Vision Process soon to be replaced by LimeLight
-
+    private static final boolean useCameraTab               = false; // LimeLight and match countdown clock
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN;
@@ -80,6 +80,7 @@ public final class RobotContainer
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
 
     public static final Vision VISION;
+    public static final CameraTab CAMERA_TAB;
 
     public static final PowerDistribution PDH;
    
@@ -107,6 +108,7 @@ public final class RobotContainer
         AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
 
         VISION = useFullRobot || useVision ? new Vision() : null;
+        CAMERA_TAB = /*useFullRobot ||*/ useCameraTab ? new CameraTab() : null;
 
         PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
     }

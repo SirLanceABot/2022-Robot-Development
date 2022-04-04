@@ -9,8 +9,6 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import frc.shuffleboard.MainShuffleboard;
 import frc.vision.Vision;
 
 public class Robot extends TimedRobot
@@ -44,7 +42,6 @@ public class Robot extends TimedRobot
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Vision VISION = RobotContainer.VISION;
     private static final PowerDistribution PDH = RobotContainer.PDH;
-    private static final MainShuffleboard MAIN_SHUFFLEBOARD = RobotContainer.MAIN_SHUFFLEBOARD;
 
     private static final DisabledMode disabled = new DisabledMode();
     private static final TestMode test = new TestMode();
@@ -80,9 +77,9 @@ public class Robot extends TimedRobot
         // update everything on the Camera Tab on ShuffleBoard every 1 second
         //  Send to LimeLight how to display cameras' images
         //  Remaining match time
-        if(MAIN_SHUFFLEBOARD != null)
+        if(RobotContainer.CAMERA_TAB != null)
         {
-            addPeriodic(() -> MAIN_SHUFFLEBOARD.updateCameraTab(), 1.0, 0.0180);
+            addPeriodic(() -> RobotContainer.CAMERA_TAB.updateCameraTab(), 1.0, 0.0180);
         }
 
         SmartDashboard.putNumber("RPM", 0.0);

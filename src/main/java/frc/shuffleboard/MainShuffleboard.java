@@ -26,7 +26,6 @@ public class MainShuffleboard
     private static final DriverControllerTab DRIVER_CONTROLLER_TAB;// = new DriverControllerTab();
     private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB;// = new OperatorControllerTab();
     private static final AutonomousTab AUTONOMOUS_TAB;// = new AutonomousTab();
-    private static final CameraTab CAMERA_TAB;
 
 
     // *** OBJECT INSTANTIATION ***
@@ -37,7 +36,6 @@ public class MainShuffleboard
         OPERATOR_CONTROLLER_TAB = OPERATOR_CONTROLLER != null ? new OperatorControllerTab() : null;
         
         AUTONOMOUS_TAB = new AutonomousTab();
-        CAMERA_TAB = new CameraTab();
     }
     
     
@@ -77,13 +75,5 @@ public class MainShuffleboard
     public boolean wasSendDataButtonPressed()
     {
         return AUTONOMOUS_TAB.wasSendDataButtonPressed();
-    }
-
-    // This method will be run on a slow period - say 1 second
-    // LimeLight can't take it any faster and humans don't need it fast, either.
-    public void updateCameraTab()
-    {
-        CAMERA_TAB.updateTimeRemaining();
-        CAMERA_TAB.updateLimeLightMode();
     }
 }

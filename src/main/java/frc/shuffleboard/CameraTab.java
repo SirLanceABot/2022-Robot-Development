@@ -2,29 +2,16 @@ package frc.shuffleboard;
 
 import java.lang.invoke.MethodHandles;
 
-import java.lang.invoke.MethodHandles;
-
-import java.util.HashMap;
-import java.util.Map;
-import frc.components.Intake;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.components.Shooter;
+
 import frc.vision.CameraWidget;
-import edu.wpi.first.util.sendable.SendableRegistry;
-
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.Timer;
-
-import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class CameraTab 
 {
@@ -73,6 +60,7 @@ public class CameraTab
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
+
     // private void makeTimeRemainingBox()
     // {
     //     Shuffleboard.getTab("Camera")
@@ -83,8 +71,6 @@ public class CameraTab
     //         .getEntry();
     // }
     
-
-
     // *** CLASS & INSTANCE METHODS ***
     private NetworkTableEntry createTimeRemainingBox()
     {
@@ -113,7 +99,7 @@ public class CameraTab
 
     public void updateLimeLightMode()
     {
-        boolean shooterMode = false; //FIXME: testing; get the real value that means shooting commenced
+        boolean shooterMode = true; //FIXME: testing; get the real value that means shooting commenced
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -147,8 +133,16 @@ public class CameraTab
         SmartDashboard.putString("valid target", valid < 1.0 ? "not found" : "found");
         }
     }
-/*
 
+    // This method will be run on a slow period - say 1 second
+    // LimeLight can't take it any faster and humans don't need it fast, either.
+    public void updateCameraTab()
+    {
+        updateTimeRemaining();
+        updateLimeLightMode();
+    }
+}
+/*
 ledMode	Sets limelight’s LED state
 0	use the LED Mode set in the current pipeline
 1	force off
@@ -172,5 +166,3 @@ snapshot	Allows users to take snapshots during a match
 1	Take two snapshots per second
 
 */
-
-}
