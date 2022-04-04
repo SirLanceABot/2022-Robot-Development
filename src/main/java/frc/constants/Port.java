@@ -67,6 +67,8 @@ public final class Port
 
     public static class Sensor
     {
+        public static final int COMPETITION_ROBOT           =  9;
+        
         private static final int FRONT_LEFT_ENCODER         =  8;
         private static final int FRONT_RIGHT_ENCODER        = 11;
         private static final int BACK_LEFT_ENCODER          =  5;
@@ -85,6 +87,7 @@ public final class Port
 
         private static final SerialPort.Port NAV_X = SerialPort.Port.kUSB;
         public static final int PIGEON = 0;
+
         // private static final I2C.Port NAV_X = I2C.Port.kMXP;
         // private static final SPI.Port NAV_X = SPI.Port.kMXP;
     }

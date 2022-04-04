@@ -26,7 +26,7 @@ import frc.vision.Vision;
 public final class RobotContainer 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-    private static final DigitalInput competitionRobotFlag = new DigitalInput(9);
+    private static final DigitalInput competitionRobotFlag = new DigitalInput(Port.Sensor.COMPETITION_ROBOT);
 
 
     // *** STATIC INITIALIZATION BLOCK ***
