@@ -97,6 +97,10 @@ public class CameraTab
         }
     }
 
+    /**
+     * This method updates the LimeLight to set how images are seen
+     * and set the LEDs
+     */
     public void updateLimeLightMode()
     {
         boolean shooterMode = true; //FIXME: testing; get the real value that means shooting commenced
@@ -105,16 +109,19 @@ public class CameraTab
 
         NetworkTableEntry camMode = table.getEntry("camMode");
         NetworkTableEntry stream = table.getEntry("stream");
-            
+        NetworkTableEntry ledMode = table.getEntry("ledMode");
+
         if(shooterMode)
         {
-            camMode.setNumber(0.); // 0 target; 1 driver
-            stream.setNumber(1.);  // 1 target with small intake; 2 intake with small target
+            camMode.setNumber(0.); // 0 target
+            stream.setNumber(1.);  // 1 target with small intake
+            ledMode.setNumber(0.); // 0 use pipeline setting
         }
         else
         {
-            camMode.setNumber(1.); // 0 target; 1 driver
-            stream.setNumber(2.);  // 1 target with small intake; 2 intake with small target
+            camMode.setNumber(1.); // 1 driver
+            stream.setNumber(2.);  // 2 intake with small target
+            ledMode.setNumber(1.); // 1 off
         }
         
         { //FIXME: this stuff will go into shooter to get the hub angle and distance 
