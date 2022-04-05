@@ -226,7 +226,7 @@ public class TeleopMode implements ModeTransition
                     {
                         INTAKE.compressorDisable();
                     }
-                    
+
                     // Used to test the shooter values
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
 
@@ -470,28 +470,28 @@ public class TeleopMode implements ModeTransition
 
                 if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmOut))
                 {
-                    INTAKE.pMoveArmOut();
+                    INTAKE.armOut();
                 }
                 // Sensor option is lower priority so driver can override it by pressing arm out button
                 else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmIn) || EVENT_GENERATOR.isIntakeSensorActive())
                 {
-                    INTAKE.pMoveArmIn();
+                    INTAKE.armIn();
                 }
                 else
                 {
                     if(INTAKE.measureArmOut())
                     {
                         // System.out.println("Arm is out");
-                        // TODO: Add float
-                        // INTAKE.pMoveArmFloat();
+                        INTAKE.pMoveArmFloat();
                     }
+
                     if(INTAKE.measureArmIn())
                     {
                         // System.out.println("Arm is in");
                     }
                 }
 
-                // System.out.println("Arm in = " + INTAKE.measureArmOut() + ", Arm out = " + INTAKE.measureArmIn());
+                // System.out.println("Arm in = " + INTAKE.measureArmIn() + ", Arm out = " + INTAKE.measureArmOut());
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
                 // {

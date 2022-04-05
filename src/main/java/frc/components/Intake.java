@@ -20,6 +20,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.constants.Constant;
+import frc.robot.RobotContainer;
+import frc.shuffleboard.CameraTab;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -71,7 +73,7 @@ public class Intake
 
 
     // *** CLASS & INSTANCE VARIABLES ***
-   
+    // private static final CameraTab CAMERA_TAB = RobotContainer.CAMERA_TAB;
 
     // private static final CANSparkMax rollerMotor = new CANSparkMax(Port.Motor.INTAKE_ROLLER, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax rollerMotor;// = new CANSparkMax(1, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -86,6 +88,8 @@ public class Intake
 
     private final DigitalInput armOutSensor;
     private final DigitalInput armInSensor;
+    
+    private static boolean isIntaking = false;
 
     private final Compressor compressor = new Compressor(moduleType);
 
@@ -230,6 +234,27 @@ public class Intake
         armsOutSolenoid.set(Value.kOff);
     }
 
+    public void armIn()
+    {
+        isIntaking = false;
+        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+
+        pMoveArmIn();
+    }
+
+    public void armOut()
+    {
+        isIntaking = true;
+        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+
+        pMoveArmOut();
+    }
+
+    public boolean getIsIntaking()
+    {
+        return isIntaking;
+    }
+
     //not getters and setters?
     //7:1 gearbox
     public void armInfo()
@@ -240,12 +265,12 @@ public class Intake
     //TODO Set these to the correct directions
     public boolean measureArmOut()
     {
-        return armOutSensor.get();
+        return !armOutSensor.get();
     }
 
     public boolean measureArmIn()
     {
-        return armInSensor.get();
+        return !armInSensor.get();
     }
 
     public void outtakeRoller()
@@ -268,7 +293,7 @@ public class Intake
 
     public double MeasureMotorSpeed(CANSparkMax motor)
     {
-        return(motor.get()); 
+        return(motor.get());
     }
 
     public String toString()
