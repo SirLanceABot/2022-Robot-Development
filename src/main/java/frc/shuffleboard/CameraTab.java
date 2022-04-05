@@ -101,10 +101,35 @@ public class CameraTab
      * This method updates the LimeLight to set how images are seen
      * and set the LEDs
      */
+    // public void updateLimeLightMode()
+    // {
+    //     boolean shooterMode = RobotContainer.SHOOTER.getIsShooting();
+    //     // boolean shooterMode = true;
+
+    //     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    //     NetworkTableEntry camMode = table.getEntry("camMode");
+    //     NetworkTableEntry stream = table.getEntry("stream");
+    //     NetworkTableEntry ledMode = table.getEntry("ledMode");
+
+    //     if(shooterMode)
+    //     {
+    //         camMode.setNumber(0.); // 0 target
+    //         stream.setNumber(1.);  // 1 target with small intake
+    //         ledMode.setNumber(3.); // 0 use pipeline setting
+    //     }
+    //     else
+    //     {
+    //         camMode.setNumber(1.); // 1 driver
+    //         stream.setNumber(2.);  // 2 intake with small target
+    //         ledMode.setNumber(3.); // 1 off
+    //     }
+    // }
+
     public void updateLimeLightMode()
     {
-        boolean shooterMode = RobotContainer.SHOOTER.getIsShooting();
-        // boolean shooterMode = true;
+        // boolean intakeMode = RobotContainer.INTAKE.getIsIntake();
+        boolean intakeMode = true;
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -112,17 +137,17 @@ public class CameraTab
         NetworkTableEntry stream = table.getEntry("stream");
         NetworkTableEntry ledMode = table.getEntry("ledMode");
 
-        if(shooterMode)
+        if(intakeMode)
         {
-            camMode.setNumber(0.); // 0 target
-            stream.setNumber(1.);  // 1 target with small intake
-            ledMode.setNumber(3.); // 0 use pipeline setting
+            camMode.setNumber(1.); // 1 driver
+            stream.setNumber(2.);  // 2 driver intake with small target
+            ledMode.setNumber(1.); // 1 off
         }
         else
         {
-            camMode.setNumber(1.); // 1 driver
-            stream.setNumber(2.);  // 2 intake with small target
-            ledMode.setNumber(3.); // 1 off
+            camMode.setNumber(0.); // 0 vision processor
+            stream.setNumber(1.);  // 1 target with small driver
+            ledMode.setNumber(3.); // 3 on
         }
     }
 
