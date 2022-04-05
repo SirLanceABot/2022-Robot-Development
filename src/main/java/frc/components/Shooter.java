@@ -77,11 +77,12 @@ public class Shooter
 
     //TODO: Tune PID values
     //original PID values are kP = 0.14 and kF = 0.035
+    //second set of PID values are kP = 0.017 and kF = 0.049
     //encoder ticks at 10 foot shot = 13,000
-    private static final double kP = 0.017;
-    private static final double kI = 0.000;
+    private static final double kP = 0.018;
+    private static final double kI = 0.0002;
     private static final double kD = 0.000;
-    private static final double kF = 0.049;
+    private static final double kF = 0.0475;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
@@ -107,7 +108,7 @@ public class Shooter
     private static int successfulChecks = 0;
 
     //number of consecutive checsk required for the shuttle to empty cargo into the shooter
-    private static int requiredChecks = 10;
+    private static int requiredChecks = 6;
 
     private static boolean isShroudDown = false;
 
