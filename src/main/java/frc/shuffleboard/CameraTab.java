@@ -128,8 +128,8 @@ public class CameraTab
 
     public void updateLimeLightMode()
     {
-        // boolean intakeMode = RobotContainer.INTAKE.getIsIntake();
-        boolean intakeMode = true;
+        boolean intakeMode = RobotContainer.INTAKE.getIsIntaking();
+        // boolean intakeMode = true;
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 

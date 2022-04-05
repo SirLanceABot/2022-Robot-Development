@@ -234,7 +234,7 @@ public class Shooter
     public void prepareShooter(Hub hub)
     {
         isShooting = true;
-        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+        // RobotContainer.CAMERA_TAB.updateLimeLightMode();
 
         // //vision code
         updateVisionData();
@@ -316,7 +316,7 @@ public class Shooter
     public void stopShooter()
     {
         isShooting = false;
-        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+        // RobotContainer.CAMERA_TAB.updateLimeLightMode();
 
         stopFlywheel();
         stopShroud();
