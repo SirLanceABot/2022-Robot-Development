@@ -222,6 +222,11 @@ public class TeleopMode implements ModeTransition
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
+                    if (INTAKE != null)
+                    {
+                        INTAKE.compressorDisable();
+                    }
+                    
                     // Used to test the shooter values
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
 
