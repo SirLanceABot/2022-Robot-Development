@@ -186,6 +186,7 @@ public class AutonomousCommandList
         addCommand(new DriveVector(DRIVE_SPEED, -4.137, -0.607));
         addCommand(new Wait(5.0));
         addCommand(new TurnOffIntake(true));
+        addCommand(new DriveVector(DRIVE_SPEED, 3.119, -0.899));
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 
