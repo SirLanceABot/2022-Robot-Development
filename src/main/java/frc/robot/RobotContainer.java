@@ -18,9 +18,13 @@ import frc.constants.Port;
 import frc.controls.DriverController;
 import frc.controls.OperatorController;
 import frc.drivetrain.Drivetrain;
+import frc.shuffleboard.AutonomousTab;
 import frc.shuffleboard.AutonomousTabData;
+import frc.shuffleboard.BackupControllerTab;
 import frc.shuffleboard.CameraTab;
+import frc.shuffleboard.DriverControllerTab;
 import frc.shuffleboard.MainShuffleboard;
+import frc.shuffleboard.OperatorControllerTab;
 import frc.vision.Vision; 
 
 public final class RobotContainer 
@@ -41,27 +45,25 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useFullRobot               = false;
     
-    private static final boolean useDrivetrain              = true;
-    private static final boolean useIntake                  = true;
-    private static final boolean useShooter                 = true;
-    private static final boolean useShuttle                 = true;
+    private static final boolean useDrivetrain              = false;
+    private static final boolean useIntake                  = false;
+    private static final boolean useShooter                 = false;
+    private static final boolean useShuttle                 = false;
     private static final boolean useClimber                 = false;
     
-    private static final boolean useSensorValues            = true;
-    private static final boolean useEventGenerator          = true;
+    private static final boolean useSensorValues            = false;
+    private static final boolean useEventGenerator          = false;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = true;
+    private static final boolean useShuttleFSM              = false;
 
-
-    private static final boolean useDriverController        = true;
-    private static final boolean useOperatorController      = true;
-
-    private static final boolean useMainShuffleboard        = true;
-    private static final boolean useAutonomousTabData       = true;
-    private static final boolean useAutonomousCommandList   = true;
+    private static final boolean useDriverController        = false;
+    private static final boolean useOperatorController      = false;
 
     private static final boolean useVision                  = false; // internal Vision Process soon to be replaced by LimeLight
-    private static final boolean useCameraTab               = true; // LimeLight and match countdown clock
+    private static final boolean useCameraTab               = false; // LimeLight and match countdown clock
+    private static final boolean useBackupControllerTab     = false;
+    private static final boolean useAutonomousTab           = false;
+
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN;
@@ -78,12 +80,16 @@ public final class RobotContainer
     public static final DriverController DRIVER_CONTROLLER;
     public static final OperatorController OPERATOR_CONTROLLER;
 
+    public static final Vision VISION;
+    public static final CameraTab CAMERA_TAB;
+    public static final DriverControllerTab DRIVER_CONTROLLER_TAB;
+    public static final OperatorControllerTab OPERATOR_CONTROLLER_TAB;
+    public static final BackupControllerTab BACKUP_CONTROLLER_TAB;
+    public static final AutonomousTab AUTONOMOUS_TAB;
+
     public static final MainShuffleboard MAIN_SHUFFLEBOARD; 
     public static final AutonomousTabData AUTONOMOUS_TAB_DATA;
     public static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST;
-
-    public static final Vision VISION;
-    public static final CameraTab CAMERA_TAB;
 
     public static final PowerDistribution PDH;
    
@@ -92,6 +98,16 @@ public final class RobotContainer
     static
     {
         final boolean isCompetitionRobot = competitionRobotFlag.get();
+        String robot = "";
+        if(isCompetitionRobot)
+            robot = "**   Competition Robot  Competition Robot   **";
+        else
+            robot = "**    Test Robot  Test Robot  Test Robot    **";
+        System.out.println("\n\n**********************************************");
+        System.out.println(robot);
+        System.out.println(robot);
+        System.out.println(robot);
+        System.out.println("**********************************************\n\n");
 
         final int INTAKE_ROLLER_PORT        = isCompetitionRobot ? Port.Motor.INTAKE_ROLLER : Port.MotorTesting.INTAKE_ROLLER_TEST;
         final int INTAKE_IN_FORWARD_PORT    = isCompetitionRobot ? Port.Motor.INTAKE_IN_FORWARD : Port.MotorTesting.INTAKE_IN_FORWARD_TEST;
@@ -123,12 +139,16 @@ public final class RobotContainer
         DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
         OPERATOR_CONTROLLER = useFullRobot || useOperatorController ? new OperatorController(Port.Controller.OPERATOR) : null;
 
-        MAIN_SHUFFLEBOARD = useFullRobot || useMainShuffleboard ? new MainShuffleboard() : null;
-        AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTabData ? new AutonomousTabData() : null;
-        AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousCommandList ? new AutonomousCommandList() : null;
-
         VISION = useFullRobot || useVision ? new Vision() : null;
         CAMERA_TAB = /*useFullRobot ||*/ useCameraTab ? new CameraTab() : null;
+        DRIVER_CONTROLLER_TAB = useFullRobot || useDriverController ? new DriverControllerTab() : null;
+        OPERATOR_CONTROLLER_TAB = useFullRobot || useOperatorController ? new OperatorControllerTab() : null;
+        BACKUP_CONTROLLER_TAB = useFullRobot || useBackupControllerTab ? new BackupControllerTab() : null;
+        AUTONOMOUS_TAB = useFullRobot || useAutonomousTab ? new AutonomousTab() : null;
+
+        MAIN_SHUFFLEBOARD = useFullRobot || useAutonomousTab || useDriverController || useOperatorController ? new MainShuffleboard() : null;
+        AUTONOMOUS_TAB_DATA = useFullRobot || useAutonomousTab ? new AutonomousTabData() : null;
+        AUTONOMOUS_COMMAND_LIST = useFullRobot || useAutonomousTab ? new AutonomousCommandList() : null;
 
         PDH = new PowerDistribution(Port.Sensor.PDH_CAN_ID, ModuleType.kRev);
     }

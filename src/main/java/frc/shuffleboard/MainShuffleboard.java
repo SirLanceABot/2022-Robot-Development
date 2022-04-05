@@ -2,8 +2,6 @@ package frc.shuffleboard;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.controls.DriverController;
-import frc.controls.OperatorController;
 import frc.robot.RobotContainer;
 
 // import frc.robot.RobotContainer;
@@ -20,23 +18,9 @@ public class MainShuffleboard
     }
 
     // *** CLASS & INSTANCE VARIABLES ***
-    private static final DriverController DRIVER_CONTROLLER = RobotContainer.DRIVER_CONTROLLER;
-    private static final OperatorController OPERATOR_CONTROLLER = RobotContainer.OPERATOR_CONTROLLER;
-
-    private static final DriverControllerTab DRIVER_CONTROLLER_TAB;// = new DriverControllerTab();
-    private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB;// = new OperatorControllerTab();
-    private static final AutonomousTab AUTONOMOUS_TAB;// = new AutonomousTab();
-
-
-    // *** OBJECT INSTANTIATION ***
-    static
-    {
-        // Do NOT construct these tabs if the controller is not instantiated
-        DRIVER_CONTROLLER_TAB = DRIVER_CONTROLLER != null ? new DriverControllerTab() : null;
-        OPERATOR_CONTROLLER_TAB = OPERATOR_CONTROLLER != null ? new OperatorControllerTab() : null;
-        
-        AUTONOMOUS_TAB = new AutonomousTab();
-    }
+    private static final DriverControllerTab DRIVER_CONTROLLER_TAB= RobotContainer.DRIVER_CONTROLLER_TAB;
+    private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = RobotContainer.OPERATOR_CONTROLLER_TAB;
+    private static final AutonomousTab AUTONOMOUS_TAB =  RobotContainer.AUTONOMOUS_TAB;
     
     
     // *** CLASS CONSTRUCTOR ***
@@ -69,11 +53,25 @@ public class MainShuffleboard
     // AUTONOMOUS TAB
     public AutonomousTabData getAutonomousTabData()
     {
-        return AUTONOMOUS_TAB.getAutonomousTabData();
+        if(AUTONOMOUS_TAB != null)
+        {
+            return AUTONOMOUS_TAB.getAutonomousTabData();
+        }
+        else
+        {
+            return new AutonomousTabData();
+        }
     }
 
     public boolean wasSendDataButtonPressed()
     {
-        return AUTONOMOUS_TAB.wasSendDataButtonPressed();
+        if(AUTONOMOUS_TAB != null)
+        {
+            return AUTONOMOUS_TAB.wasSendDataButtonPressed();
+        }
+        else
+        {
+            return false;
+        }
     }
 }

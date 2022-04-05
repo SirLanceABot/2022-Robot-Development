@@ -36,9 +36,9 @@ public class BackupControllerTab
     private SendableChooser<Boolean> compressorToggleBox = new SendableChooser<>();
     // private SendableChooser<BackupControllerTabData.ClimbToggle> climbToggleBox = new SendableChooser<>();
     // private SendableChooser<BackupControllerTabData.IntakeToggle> intakeToggleBox = new SendableChooser<>();
-    // private SendableChooser<BackupControllerTabData.RollerToggle> rollerToggleBox = new SendableChooser<>();
-    // private SendableChooser<BackupControllerTabData.Aim> aimBox = new SendableChooser<>();
-    // private SendableChooser<BackupControllerTabData.Shoot> shootBox = new SendableChooser<>();
+    // private SendableChooser<Boolean> rollerToggleBox = new SendableChooser<>();
+    // private SendableChooser<Boolean> aimBox = new SendableChooser<>();
+    // private SendableChooser<Boolean> shootBox = new SendableChooser<>();
      
     private NetworkTableEntry successfulDownload;
     private NetworkTableEntry errorMessageBox;
@@ -57,11 +57,11 @@ public class BackupControllerTab
         System.out.println(fullClassName + " : Constructor Started");
 
         createCompressorToggleBox();
-        // createClimbToggleBox();
+        createClimbToggleBox();
         // createIntakeToggletBox();
-        // createRollerToggleBox();
-        // createAimBox();
-        // createShootBox();
+        createRollerToggleBox();
+        createAimBox();
+        createShootBox();
         
         // createSendDataButton();
         // successfulDownload = createSuccessfulDownloadBox();
@@ -103,15 +103,15 @@ public class BackupControllerTab
         // SendableRegistry.add(climbToggleBox, "Climb Toggle");
         // SendableRegistry.setName(climbToggleBox, "Climb Toggle");
         
-        //add options to  Box
+        // //add options to  Box
         // climbToggleBox.setDefaultOption("Up", BackupControllerTabData.ClimbToggle.kUp);
         // climbToggleBox.addOption("Down", BackupControllerTabData.ClimbToggle.kDown);
 
-        //put the widget on the shuffleboard
+        // //put the widget on the shuffleboard
         // backupControllerTab.add(climbToggleBox)
-            // .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            // .withPosition(9, 0)
-            // .withSize(8, 2);
+        //     .withWidget(BuiltInWidgets.kSplitButtonChooser)
+        //     .withPosition(9, 0)
+        //     .withSize(8, 2);
     }
 
      /**
@@ -124,15 +124,15 @@ public class BackupControllerTab
         // SendableRegistry.add(intakeToggleBox, "Intake Toggle");
         // SendableRegistry.setName(intakeToggleBox, "Intake Toggle");
         
-        //add options to  Box
+        // //add options to  Box
         // intakeToggleBox.setDefaultOption("In", BackupControllerTabData.IntakeToggle.kIn);
         // intakeToggleBox.addOption("Out", BackupControllerTabData.IntakeToggle.kOut);
 
-        //put the widget on the shuffleboard
+        // //put the widget on the shuffleboard
         // backupControllerTab.add(intakeToggleBox)
-            // .withWidget(BuiltInWidgets.kSplitButtonCooser)
-            // .withPosition(1, 3)
-            // .withSize(8, 2);
+        //     .withWidget(BuiltInWidgets.kSplitButtonChooser)
+        //     .withPosition(1, 3)
+        //     .withSize(8, 2);
     }
 
      /**
@@ -145,15 +145,11 @@ public class BackupControllerTab
         // SendableRegistry.add(rollerToggleBox, "Roller Toggle");
         // SendableRegistry.setName(rollerToggleBox, "Roller Toggle");
         
-        //add options to  Box
-        // rollerToggleBox.setDefaultOption("On", BackupControllerTabData.RollerToggle.kOn);
-        // rollerToggleBox.addOption("Off", BackupControllerTabData.RollerToggle.kOff);
-
-        //put the widget on the shuffleboard
+        // //put the widget on the shuffleboard
         // backupControllerTab.add(rollerToggleBox)
-            // .withWidget(BuiltInWidgets.kToggleButton)
-            // .withPosition(6, 3)
-            // .withSize(8, 2);
+        //     .withWidget(BuiltInWidgets.kToggleButton)
+        //     .withPosition(6, 3)
+        //     .withSize(8, 2);
     }
 
      /**
@@ -166,15 +162,11 @@ public class BackupControllerTab
         // SendableRegistry.add(aimBox, "Aim");
         // SendableRegistry.setName(aimBox, "Aim");
         
-        //add options to  Box
-        // compressorToggleBox.setDefaultOption("Off", BackupControllerTabData.CompressorToggle.kOff);
-        // compressorToggleBox.addOption("On", BackupControllerTabData.CompressorToggle.kOn);
-
-        //put the widget on the shuffleboard
+        // //put the widget on the shuffleboard
         // backupControllerTab.add(compressorToggleBox)
-            // .withWidget(BuiltInWidgets.kToggleButton)
-            // .withPosition(0, 0)
-            // .withSize(8, 2);
+        //     .withWidget(BuiltInWidgets.kToggleButton)
+        //     .withPosition(0, 0)
+        //     .withSize(8, 2);
     }
 
      /**
@@ -186,16 +178,12 @@ public class BackupControllerTab
         //create and name the Box
         // SendableRegistry.add(shootBox, "Shoot");
         // SendableRegistry.setName(shootBox, "Shoot");
-        
-        //add options to  Box
-        // compressorToggleBox.setDefaultOption("Off", BackupControllerTabData.CompressorToggle.kOff);
-        // compressorToggleBox.addOption("On", BackupControllerTabData.CompressorToggle.kOn);
 
-        //put the widget on the shuffleboard
+        // //put the widget on the shuffleboard
         // backupControllerTab.add(compressorToggleBox)
-            // .withWidget(BuiltInWidgets.kToggleButton)
-            // .withPosition(0, 0)
-            // .withSize(8, 2);
+        //     .withWidget(BuiltInWidgets.kToggleButton)
+        //     .withPosition(0, 0)
+        //     .withSize(8, 2);
     }
 
     // private NetworkTableEntry createSuccessfulDownloadBox()
@@ -223,12 +211,12 @@ public class BackupControllerTab
 
     private void updateBackupControllerTabData()
     {
-        backupControllerTabData.compressorToggle = compressorToggleBox.getSelected();
-    //     backupControllerTabData.climbToggle = climbToggleBox.getSelected();
-    //     backupControllerTabData.intakeToggle = intakeToggleBox.getSelected();
-    //     backupControllerTabData.rollerToggle = rollerToggleBox.getSelected();
-    //     backupControllerTabData.aim = aimBox.getSelected();
-    //     backupControllerTabData.shoot = shootBox.getSelected();
+        // backupControllerTabData.compressorToggle = compressorToggleBox.getSelected();
+        // // backupControllerTabData.climbToggle = climbToggleBox.getSelected();
+        // // backupControllerTabData.intakeToggle = intakeToggleBox.getSelected();
+        // backupControllerTabData.rollerToggle = rollerToggleBox.getSelected();
+        // backupControllerTabData.aim = aimBox.getSelected();
+        // backupControllerTabData.shoot = shootBox.getSelected();
     }
 
     public BackupControllerTabData getBackupControllerTabData()
