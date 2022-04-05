@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.RobotContainer;
 import frc.vision.CameraWidget;
 
 public class CameraTab 
@@ -50,7 +50,7 @@ public class CameraTab
         // limelight on shuffleboard
         CameraWidget cw = new CameraWidget(cameraTab);
         cw.name("LimeLight");
-        cw.setLocation(0, 0, 19, 24); // small screen
+        cw.setLocation(0, 0, 16, 20); // small screen
         cw.setProperties(false, "white", false, "NONE");
 
         cw.createCameraShuffleboardWidgetLL("limelight", new String[]{"http://10.42.37.11:5800"}); // could get URLs from NT
@@ -76,8 +76,8 @@ public class CameraTab
     {
         return cameraTab.add("Time Remaining", timeRemainingData.toString())
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(1, 10)
-            .withSize(26, 2)
+            .withPosition(20, 0)
+            .withSize(4, 2)
             .getEntry();
     }
 
@@ -103,7 +103,8 @@ public class CameraTab
      */
     public void updateLimeLightMode()
     {
-        boolean shooterMode = true; //FIXME: testing; get the real value that means shooting commenced
+        boolean shooterMode = RobotContainer.SHOOTER.getIsShooting();
+        // boolean shooterMode = true;
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -115,29 +116,13 @@ public class CameraTab
         {
             camMode.setNumber(0.); // 0 target
             stream.setNumber(1.);  // 1 target with small intake
-            ledMode.setNumber(0.); // 0 use pipeline setting
+            ledMode.setNumber(3.); // 0 use pipeline setting
         }
         else
         {
             camMode.setNumber(1.); // 1 driver
             stream.setNumber(2.);  // 2 intake with small target
-            ledMode.setNumber(1.); // 1 off
-        }
-        
-        { //FIXME: this stuff will go into shooter to get the hub angle and distance 
-        NetworkTableEntry tx = table.getEntry("tx"); // angle to turn
-        NetworkTableEntry ty = table.getEntry("ty"); // related to distance to hub
-        NetworkTableEntry tv = table.getEntry("tv"); // <1. is no target (0 no target;1 target found)
-        
-        double x = tx.getDouble(0.0);
-        double y = ty.getDouble(0.0);
-        double valid = tv.getDouble(0.0);
-
-        // testing - post to SmartDashboard to see that LL is working
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightValid", valid);
-        SmartDashboard.putString("valid target", valid < 1.0 ? "not found" : "found");
+            ledMode.setNumber(3.); // 1 off
         }
     }
 

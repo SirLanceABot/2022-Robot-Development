@@ -60,8 +60,8 @@ public final class RobotContainer
     private static final boolean useAutonomousTabData       = true;
     private static final boolean useAutonomousCommandList   = true;
 
-    private static final boolean useVision                  = true; // internal Vision Process soon to be replaced by LimeLight
-    private static final boolean useCameraTab               = false; // LimeLight and match countdown clock
+    private static final boolean useVision                  = false; // internal Vision Process soon to be replaced by LimeLight
+    private static final boolean useCameraTab               = true; // LimeLight and match countdown clock
 
     // *** ROBOT OBJECT DECLARATION ***
     public static final Drivetrain DRIVETRAIN;

@@ -49,6 +49,17 @@ public class UpperTrajectoryData
         upperTrajectoryData.add(new UpperTrajectoryData(16.0 * FEET_TO_METERS, 2100.0, -170.0));
         upperTrajectoryData.add(new UpperTrajectoryData(18.0 * FEET_TO_METERS, 2400.0, -155.0));
 
+        //new
+        // upperTrajectoryData.add(new UpperTrajectoryData(4.0 * FEET_TO_METERS, 1300.0, -235.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(5.0 * FEET_TO_METERS, 1350.0, -235.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(6.0 * FEET_TO_METERS, 1400.0, -235.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(8.0 * FEET_TO_METERS, 1450.0, -220.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(10.0 * FEET_TO_METERS, 1520.0, -200.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(12.0 * FEET_TO_METERS, 1700.0, -190.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(14.0 * FEET_TO_METERS, 1950.0, -180.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(16.0 * FEET_TO_METERS, 2100.0, -170.0));
+        // upperTrajectoryData.add(new UpperTrajectoryData(18.0 * FEET_TO_METERS, 2400.0, -155.0));
+
         //OLD DATA
         // upperTrajectoryData.add(new UpperTrajectoryData(0.0 * FEET_TO_METERS, 2500.0, -235.0));
         // upperTrajectoryData.add(new UpperTrajectoryData(2.0 * FEET_TO_METERS, 2700.0, -235.0));

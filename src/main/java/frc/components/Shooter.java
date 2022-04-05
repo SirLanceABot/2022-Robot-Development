@@ -10,13 +10,19 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.constants.*;
 import frc.robot.RobotContainer;
 import frc.vision.TargetData;
 import frc.vision.VisionData;
+import frc.shuffleboard.CameraTab;
 
 
 // TODO: here are some things that need to change
@@ -101,7 +107,7 @@ public class Shooter
     private static int successfulChecks = 0;
 
     //number of consecutive checsk required for the shuttle to empty cargo into the shooter
-    private static int requiredChecks = 3;
+    private static int requiredChecks = 10;
 
     private static boolean isShroudDown = false;
 
@@ -110,6 +116,10 @@ public class Shooter
     private static final double TICK_TO_RPM = (1.0 / 100.0) * (1000.0 / 1.0) * (60.0 / 1.0) * (1.0 / 2048.0) * FLYWHEEL_GEAR_RATIO;
 
     private static final double FEET_TO_METERS = 0.3048;
+
+    private static boolean isShooting = false;
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
     // *** CLASS CONSTRUCTOR ***
     public Shooter(int flywheelMotorPort, int shroudMotorPort)
@@ -222,11 +232,19 @@ public class Shooter
 
     public void prepareShooter(Hub hub)
     {
+        isShooting = true;
+        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+
         // //vision code
         updateVisionData();
 
         // Comment this out to test for new data and set the variables up above
-        if (isDataFresh() && isTargetFound())
+        // if (isDataFresh() && isTargetFound())
+        // {
+        //     // System.out.println("CONTOURS FOUND");
+        //     calculateLaunchTrajectory(hub);
+        // }
+        if (isTargetFound())
         {
             // System.out.println("CONTOURS FOUND");
             calculateLaunchTrajectory(hub);
@@ -244,6 +262,8 @@ public class Shooter
 
     public void prepareShooter(Hub hub, double distance)
     {
+        isShooting = true;
+
         calculateLaunchTrajectory(hub, distance);
 
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
@@ -256,6 +276,8 @@ public class Shooter
 
     public void prepareShooter(double desiredLaunchSpeed, double desiredLaunchAngle)
     {
+        isShooting = true;
+
         Shooter.desiredLaunchSpeed = desiredLaunchSpeed;
         Shooter.desiredLaunchAngle = desiredLaunchAngle;
         System.out.println("DESIRED LAUNCH SPEED: " + desiredLaunchSpeed);
@@ -290,10 +312,20 @@ public class Shooter
         // desiredLaunchSpeed = 0.0;
     }
 
+    public void stopShooter()
+    {
+        isShooting = false;
+        RobotContainer.CAMERA_TAB.updateLimeLightMode();
+
+        stopFlywheel();
+        stopShroud();
+    }
+
     private void calculateLaunchTrajectory(Hub hub)
     {
         //vision code
-        distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
+        // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
+        distance = ShooterVisionData.getDistance(table.getEntry("ty").getDouble(0.0));
         // System.out.println("DISTANCE: " + distance);
         // distance = 8.0 * FEET_TO_METERS;
 
@@ -417,7 +449,21 @@ public class Shooter
 
     public void updateVisionData()
     {
-        myWorkingCopyOfTargetData = VisionData.targetData.get();
+        // myWorkingCopyOfTargetData = VisionData.targetData.get();
+
+        NetworkTableEntry tx = table.getEntry("tx"); // angle to turn
+        NetworkTableEntry ty = table.getEntry("ty"); // related to distance to hub
+        NetworkTableEntry tv = table.getEntry("tv"); // <1. is no target (0 no target;1 target found)
+        
+        double x = tx.getDouble(0.0);
+        double y = ty.getDouble(0.0);
+        double valid = tv.getDouble(0.0);
+
+        // testing - post to SmartDashboard to see that LL is working
+        SmartDashboard.putNumber("LimelightX", x);
+        SmartDashboard.putNumber("LimelightY", y);
+        SmartDashboard.putNumber("LimelightValid", valid);
+        SmartDashboard.putString("valid target", valid < 1.0 ? "not found" : "found");
     }
 
     public boolean isDataFresh()
@@ -427,15 +473,25 @@ public class Shooter
 
     public boolean isTargetFound()
     {
-        return myWorkingCopyOfTargetData.isTargetFound();
+        // return myWorkingCopyOfTargetData.isTargetFound();
+        return table.getEntry("tv").getDouble(0.0) == 1;
     }
 
     //positive is looking left of the hub, negative is looking right (think unit circle)
     public double getHubAngle()
     {
-        if (myWorkingCopyOfTargetData.isTargetFound())
+        // if (myWorkingCopyOfTargetData.isTargetFound())
+        // {
+        //     return myWorkingCopyOfTargetData.getAngleToTurn();
+        // }
+        // else
+        // {
+        //     return 0.0;
+        // }
+
+        if (isTargetFound())
         {
-            return myWorkingCopyOfTargetData.getAngleToTurn();
+            return -table.getEntry("tx").getDouble(0.0);
         }
         else
         {
@@ -469,6 +525,11 @@ public class Shooter
     public boolean isShooterReady()
     {
         return successfulChecks >= requiredChecks;
+    }
+
+    public boolean getIsShooting()
+    {
+        return isShooting;
     }
 
     public void turnOnLED()

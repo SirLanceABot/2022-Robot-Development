@@ -296,7 +296,7 @@ public class TeleopMode implements ModeTransition
                         INTAKE.compressorEnable();
                     }
                     // SHOOTER.turnOffLED();
-                    SHOOTER.stopFlywheel();
+                    SHOOTER.stopShooter();
 
                     SHOOTER.resetShooterChecks();
                 }
