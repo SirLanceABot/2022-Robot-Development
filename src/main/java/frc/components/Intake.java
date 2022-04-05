@@ -240,12 +240,12 @@ public class Intake
     //TODO Set these to the correct directions
     public boolean measureArmOut()
     {
-        return !armOutSensor.get();
+        return armOutSensor.get();
     }
 
     public boolean measureArmIn()
     {
-        return !armInSensor.get();
+        return armInSensor.get();
     }
 
     public void outtakeRoller()
