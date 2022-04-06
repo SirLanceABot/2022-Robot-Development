@@ -12,10 +12,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.vision.CameraWidget;
+import frc.components.Intake;
 
 public class CameraTab 
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    private static final Intake INTAKE = RobotContainer.INTAKE;
+
 
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
@@ -56,6 +59,7 @@ public class CameraTab
         cw.createCameraShuffleboardWidgetLL("limelight", new String[]{"http://10.42.37.11:5800"}); // could get URLs from NT
 
         timeRemaining = createTimeRemainingBox();
+        compressorState = createCompressorStateBox();
         // timeRemaining.setString("No data");
 
         System.out.println(fullClassName + ": Constructor Finished");
@@ -96,6 +100,33 @@ public class CameraTab
             oldTime = timeRemainingInt;
         }
     }
+
+    private NetworkTableEntry createCompressorStateBox()
+    {
+        return cameraTab.add("Compressor State", compressorState.toString())
+            .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(20, 20)
+            .withSize(4, 2)
+            .getEntry();
+    }
+
+    public void updateCompressorState()
+    {
+        String compressorStateString;
+        if(INTAKE.isCompressorDisabled())
+        {
+            compressorStateString = "Disabled";
+        }
+        else if(INTAKE.isCompressorRunning())
+        {
+            compressorStateString = "Running";
+        }
+        else
+        {
+            compressorStateString = "Off";
+        }
+    }
+
 
     /**
      * This method updates the LimeLight to set how images are seen
@@ -157,6 +188,7 @@ public class CameraTab
     {
         updateTimeRemaining();
         updateLimeLightMode();
+        updateCompressorState();
     }
 }
 /*
