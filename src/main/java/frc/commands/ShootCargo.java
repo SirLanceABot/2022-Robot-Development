@@ -63,6 +63,9 @@ public class ShootCargo implements Command
 
     public void execute()
     {
+        SHOOTER.startDropShot();
+        // TODO: Remove this block comment when using real autonomous
+        /*
         SHOOTER.prepareShooter(hub);
 
         // Auto aiming
@@ -81,6 +84,7 @@ public class ShootCargo implements Command
             //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
             // }
         }
+        */
 
         // if(SHOOTER.isShooterReady())
 
@@ -118,7 +122,7 @@ public class ShootCargo implements Command
         PDH.setSwitchableChannel(false);
 
         timer.stop();
-        SHOOTER.stopFlywheel();
+        SHOOTER.stopShooter(); // TODO: Perhaps call stopShooter
     }
 
     public String toString()

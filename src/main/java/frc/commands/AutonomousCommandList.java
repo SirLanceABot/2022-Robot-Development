@@ -183,10 +183,10 @@ public class AutonomousCommandList
         // addCommand(new DriveVectorAndRotate(DRIVE_SPEED, -4.137, -0.607, -136.25))
         addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -136.25));
         addCommand(new TurnOnIntake());
-        addCommand(new DriveVector(DRIVE_SPEED, -4.137, -0.607));
+        addCommand(new DriveVector(DRIVE_SPEED, 4.137, 0.607));
         addCommand(new Wait(5.0));
         addCommand(new TurnOffIntake(true));
-        addCommand(new DriveVector(DRIVE_SPEED, 3.119, -0.899));
+        addCommand(new DriveVector(DRIVE_SPEED, -3.119, 0.899));
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 

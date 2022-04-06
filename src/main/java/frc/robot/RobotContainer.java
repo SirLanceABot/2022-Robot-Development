@@ -45,24 +45,24 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useFullRobot               = false;
     
-    private static final boolean useDrivetrain              = false;
-    private static final boolean useIntake                  = false;
-    private static final boolean useShooter                 = false;
-    private static final boolean useShuttle                 = false;
+    private static final boolean useDrivetrain              = true;
+    private static final boolean useIntake                  = true;
+    private static final boolean useShooter                 = true;
+    private static final boolean useShuttle                 = true;
     private static final boolean useClimber                 = false;
     
-    private static final boolean useSensorValues            = false;
-    private static final boolean useEventGenerator          = false;
+    private static final boolean useSensorValues            = true;
+    private static final boolean useEventGenerator          = true;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = false;
+    private static final boolean useShuttleFSM              = true;
 
-    private static final boolean useDriverController        = false;
-    private static final boolean useOperatorController      = false;
+    private static final boolean useDriverController        = true;
+    private static final boolean useOperatorController      = true;
 
     private static final boolean useVision                  = false; // internal Vision Process soon to be replaced by LimeLight
-    private static final boolean useCameraTab               = false; // LimeLight and match countdown clock
+    private static final boolean useCameraTab               = true; // LimeLight and match countdown clock
     private static final boolean useBackupControllerTab     = false;
-    private static final boolean useAutonomousTab           = false;
+    private static final boolean useAutonomousTab           = true;
 
 
     // *** ROBOT OBJECT DECLARATION ***

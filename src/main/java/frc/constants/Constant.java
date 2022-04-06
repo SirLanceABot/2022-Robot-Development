@@ -8,7 +8,7 @@ public final class Constant
     //TODO: Configure shot rpm's
     public static final double LONG_SHOT_SPEED = 0.0;
     public static final double SHORT_SHOT_SPEED = 0.0;
-    public static final double DROP_SHOT_SPEED = 0.0;
+    public static final double DROP_SHOT_SPEED = 250.0;
 
     //max amount of error allowed between desired flywheel speed and actual flywheel speed for it to shoot (in rpms)
     public static final double SHOOT_SPEED_THRESHOLD = 50;

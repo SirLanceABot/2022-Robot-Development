@@ -291,18 +291,24 @@ public class Shooter
 
     public void startLongShot()
     {
+        isShooting = true;
+
         setFlywheelSpeed(LONG_SHOT_SPEED);
         setShroudAngle(30);
     }
 
     public void startShortShot()
     {
+        isShooting = true;
+        
         setFlywheelSpeed(SHORT_SHOT_SPEED);
         setShroudAngle(45);
     }
 
     public void startDropShot()
     {
+        isShooting = true;
+        
         setFlywheelSpeed(DROP_SHOT_SPEED);
         setShroudAngle(45);
     }
