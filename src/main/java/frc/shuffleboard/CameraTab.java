@@ -125,6 +125,7 @@ public class CameraTab
         {
             compressorStateString = "Off";
         }
+        compressorState.setString(compressorStateString);
     }
 
 
