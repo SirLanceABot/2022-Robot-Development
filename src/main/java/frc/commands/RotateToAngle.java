@@ -45,7 +45,9 @@ public class RotateToAngle implements Command
 
     public void execute()
     {
-        if(DRIVETRAIN.turnToAngle(minAngularVelocity, maxAngularVelocity, angle, ANGLE_THRESHOLD));
+        DRIVETRAIN.turnToAngle(minAngularVelocity, maxAngularVelocity, angle, ANGLE_THRESHOLD);
+
+        if(DRIVETRAIN.isAtAngle(angle, ANGLE_THRESHOLD))
         {
             System.out.println("Angle is correct");
             isFinished = true;

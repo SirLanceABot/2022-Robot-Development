@@ -45,8 +45,8 @@ public final class RobotContainer
     // Switch objects to true that you need to use
     private static final boolean useFullRobot               = false;
     
-    private static final boolean useDrivetrain              = true;
-    private static final boolean useIntake                  = true;
+    private static final boolean useDrivetrain              = false;
+    private static final boolean useIntake                  = false;
     private static final boolean useShooter                 = true;
     private static final boolean useShuttle                 = true;
     private static final boolean useClimber                 = false;
@@ -56,7 +56,7 @@ public final class RobotContainer
     private static final boolean useCargoManager            = false;
     private static final boolean useShuttleFSM              = true;
 
-    private static final boolean useDriverController        = true;
+    private static final boolean useDriverController        = false;
     private static final boolean useOperatorController      = true;
 
     private static final boolean useVision                  = false; // internal Vision Process replaced by LimeLight

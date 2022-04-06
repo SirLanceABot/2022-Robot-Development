@@ -211,7 +211,7 @@ public class Drivetrain extends RobotDriveBase
 
         if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))
         {
-            drive(velocityX, velocityY, 0.0, false);
+            drive(velocityX, velocityY, 0.0, true);
         }
         else
         {
@@ -232,35 +232,63 @@ public class Drivetrain extends RobotDriveBase
      * @param angleThreshold in degrees
      * @return true when turn is complete
      */
-    public boolean turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
+    public void turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
     {
         boolean isDone = false;
         // double currentAngle = odometry.getPoseMeters().getRotation().getDegrees();
         double currentAngle = gyro.getYaw();
         double angleToTurn = (desiredAngle - currentAngle) % 360;
-        if (angleToTurn < -180)
+
+        if (angleToTurn <= -180.0)
         {
-            angleToTurn += 360;
+            angleToTurn += 360.0;
         }
-        else if (angleToTurn > 179)
+        else if (angleToTurn > 180.0)
         {
-            angleToTurn -= 360;
+            angleToTurn -= 360.0;
         }
+
+        System.out.println("ANGLE TO TURN: " + angleToTurn);
         
         updateOdometry();
 
-        if(Math.abs(angleToTurn) > angleThreshold)
+        if(!isAtAngle(desiredAngle, angleThreshold))
         {
-            drive(0.0, 0.0, -angleToTurn / 180.0 * (maxAngularVelocity - minAngularVelocity) + minAngularVelocity * Math.signum(-angleToTurn), false);
+            //proportion of how close the speed will be to the max speed from the min speed, so it doesn't exceed the max speed
+            double turnSpeedProportion = angleToTurn / 30.0;
+
+            if (Math.abs(turnSpeedProportion) > 1.0)
+            {
+                turnSpeedProportion = Math.signum(turnSpeedProportion);
+            }
+
+            drive(0.0, 0.0, turnSpeedProportion * (maxAngularVelocity - minAngularVelocity) + minAngularVelocity * Math.signum(angleToTurn), true);
         }
         else
         {
             stopMotor();
-            isDone = true;
+            // isDone = true;
             // System.out.println("Angle turned (degrees) = ");
         }
 
-        return isDone;
+        // return isDone;
+    }
+
+    public boolean isAtAngle(double desiredAngle, double angleThreshold)
+    {
+        double currentAngle = gyro.getYaw();
+        double angleToTurn = (currentAngle - desiredAngle) % 360.0;
+
+        if (angleToTurn <= -180.0)
+        {
+            angleToTurn += 360.0;
+        }
+        else if (angleToTurn > 180.0)
+        {
+            angleToTurn -= 360.0;
+        }
+
+        return (Math.abs(angleToTurn) < angleThreshold);
     }
 
     /** Updates the field relative position of the robot. */
