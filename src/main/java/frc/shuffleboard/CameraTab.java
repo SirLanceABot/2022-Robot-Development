@@ -37,8 +37,8 @@ public class CameraTab
     private NetworkTableEntry timeRemaining;
     private NetworkTableEntry compressorState;
 
-    // private String timeRemainingData = "void";
     private Double timeRemainingData = 0.0;
+    String compressorStateString = "No data";
 
     // *** CLASS CONSTRUCTOR ***
     public CameraTab()
@@ -103,7 +103,7 @@ public class CameraTab
 
     private NetworkTableEntry createCompressorStateBox()
     {
-        return cameraTab.add("Compressor State", compressorState.toString())
+        return cameraTab.add("Compressor State", compressorStateString)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(20, 20)
             .withSize(4, 2)
@@ -112,7 +112,6 @@ public class CameraTab
 
     public void updateCompressorState()
     {
-        String compressorStateString;
         if(INTAKE.isCompressorDisabled())
         {
             compressorStateString = "Disabled";
@@ -125,6 +124,7 @@ public class CameraTab
         {
             compressorStateString = "Off";
         }
+
         compressorState.setString(compressorStateString);
     }
 
