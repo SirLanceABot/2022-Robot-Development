@@ -150,7 +150,7 @@ public class CameraTab
         else
         {
             camMode.setNumber(0.); // 0 vision processor
-            stream.setNumber(0.);  // 1 target with small driver
+            stream.setNumber(1.);  // 1 target with small driver
             ledMode.setNumber(0.); // 0 pipeline setting
         }
     }
