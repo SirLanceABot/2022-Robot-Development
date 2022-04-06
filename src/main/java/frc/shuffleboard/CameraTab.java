@@ -5,11 +5,12 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.RobotContainer;
 import frc.vision.CameraWidget;
 import frc.components.Intake;
@@ -44,11 +45,6 @@ public class CameraTab
     public CameraTab()
     {
         System.out.println(fullClassName + " : Constructor Started");
-        
-        cameraTab = Shuffleboard.getTab("Camera");
-
-        // timeRemaining = createTimeRemainingBox();
-        // timeRemaining.setString("No Errors");
 
         // limelight on shuffleboard
         CameraWidget cw = new CameraWidget(cameraTab);
@@ -60,21 +56,10 @@ public class CameraTab
 
         timeRemaining = createTimeRemainingBox();
         compressorState = createCompressorStateBox();
-        // timeRemaining.setString("No data");
 
         System.out.println(fullClassName + ": Constructor Finished");
     }
 
-    // private void makeTimeRemainingBox()
-    // {
-    //     Shuffleboard.getTab("Camera")
-    //         .add("Time remaining", timeRemainingData)
-    //         .withWidget(BuiltInWidgets.kTextView)
-    //         .withPosition(1, 10)
-    //         .withSize(26, 2)
-    //         .getEntry();
-    // }
-    
     // *** CLASS & INSTANCE METHODS ***
     private NetworkTableEntry createTimeRemainingBox()
     {
@@ -105,20 +90,27 @@ public class CameraTab
     {
         return cameraTab.add("Compressor State", compressorStateString)
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(20, 20)
+            .withPosition(20, 5)
             .withSize(4, 2)
             .getEntry();
     }
 
     public void updateCompressorState()
     {
-        if(INTAKE.isCompressorDisabled())
+        if(INTAKE != null)
         {
-            compressorStateString = "Disabled";
-        }
-        else if(INTAKE.isCompressorRunning())
-        {
-            compressorStateString = "Running";
+            if(INTAKE.isCompressorDisabled())
+            {
+                compressorStateString = "Disabled";
+            }
+            else if(INTAKE.isCompressorRunning())
+            {
+                compressorStateString = "Running";
+            }
+            else
+            {
+                compressorStateString = "Off";
+            }
         }
         else
         {
@@ -128,40 +120,20 @@ public class CameraTab
         compressorState.setString(compressorStateString);
     }
 
-
     /**
      * This method updates the LimeLight to set how images are seen
      * and set the LEDs
+     * 
+     * We want to be in targeting vision processing mode in Autonomous or not Intake.
+     * That is, driver mode is not autonomous and intaking (taking in).
      */
-    // public void updateLimeLightMode()
-    // {
-    //     boolean shooterMode = RobotContainer.SHOOTER.getIsShooting();
-    //     // boolean shooterMode = true;
-
-    //     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
-    //     NetworkTableEntry camMode = table.getEntry("camMode");
-    //     NetworkTableEntry stream = table.getEntry("stream");
-    //     NetworkTableEntry ledMode = table.getEntry("ledMode");
-
-    //     if(shooterMode)
-    //     {
-    //         camMode.setNumber(0.); // 0 target
-    //         stream.setNumber(1.);  // 1 target with small intake
-    //         ledMode.setNumber(3.); // 0 use pipeline setting
-    //     }
-    //     else
-    //     {
-    //         camMode.setNumber(1.); // 1 driver
-    //         stream.setNumber(2.);  // 2 intake with small target
-    //         ledMode.setNumber(3.); // 1 off
-    //     }
-    // }
 
     public void updateLimeLightMode()
     {
-        boolean intakeMode = RobotContainer.INTAKE.getIsIntaking();
-        // boolean intakeMode = true;
+        boolean driverMode = (RobotContainer.INTAKE != null) && (!DriverStation.isAutonomous()) ?
+            RobotContainer.INTAKE.getIsIntaking() : false;
+        
+        // driverMode = true; // testing force driver mode
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -169,7 +141,7 @@ public class CameraTab
         NetworkTableEntry stream = table.getEntry("stream");
         NetworkTableEntry ledMode = table.getEntry("ledMode");
 
-        if(intakeMode)
+        if(driverMode)
         {
             camMode.setNumber(1.); // 1 driver
             stream.setNumber(2.);  // 2 driver intake with small target
@@ -178,8 +150,8 @@ public class CameraTab
         else
         {
             camMode.setNumber(0.); // 0 vision processor
-            stream.setNumber(1.);  // 1 target with small driver
-            ledMode.setNumber(3.); // 3 on
+            stream.setNumber(0.);  // 1 target with small driver
+            ledMode.setNumber(0.); // 0 pipeline setting
         }
     }
 
@@ -216,3 +188,5 @@ snapshot	Allows users to take snapshots during a match
 1	Take two snapshots per second
 
 */
+
+//     boolean shooterMode = RobotContainer.SHOOTER.getIsShooting();

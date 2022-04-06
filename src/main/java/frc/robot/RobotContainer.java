@@ -59,8 +59,8 @@ public final class RobotContainer
     private static final boolean useDriverController        = true;
     private static final boolean useOperatorController      = true;
 
-    private static final boolean useVision                  = false; // internal Vision Process soon to be replaced by LimeLight
-    private static final boolean useCameraTab               = true; // LimeLight and match countdown clock
+    private static final boolean useVision                  = false; // internal Vision Process replaced by LimeLight
+    private static final boolean useCameraTab               = true; // LimeLight, compressor state and match countdown clock
     private static final boolean useBackupControllerTab     = false;
     private static final boolean useAutonomousTab           = true;
 
@@ -130,7 +130,7 @@ public final class RobotContainer
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
         CLIMBER = useFullRobot || useClimber ? new Climber(CLIMBER_STAGE_ONE_LEADEAR_PORT, CLIMBER_STAGE_TWO_LEADER_PORT) : null;
         
-        // TODO: Build in using other booleans to trigger eachother
+        // TODO: Build in using other booleans to trigger each other
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;
         EVENT_GENERATOR = useFullRobot || useEventGenerator ? new EventGenerator() : null;
         CARGO_MANAGER = /*useFullRobot ||*/ useCargoManager ? new CargoManager() : null;
@@ -139,11 +139,12 @@ public final class RobotContainer
         DRIVER_CONTROLLER = useFullRobot || useDriverController ? new DriverController(Port.Controller.DRIVER) : null;
         OPERATOR_CONTROLLER = useFullRobot || useOperatorController ? new OperatorController(Port.Controller.OPERATOR) : null;
 
-        VISION = useFullRobot || useVision ? new Vision() : null;
-        CAMERA_TAB = /*useFullRobot ||*/ useCameraTab ? new CameraTab() : null;
+        VISION = /*useFullRobot ||*/ useVision ? new Vision() : null;
+        CAMERA_TAB = useFullRobot || useCameraTab ? new CameraTab() : null;
         DRIVER_CONTROLLER_TAB = useFullRobot || useDriverController ? new DriverControllerTab() : null;
         OPERATOR_CONTROLLER_TAB = useFullRobot || useOperatorController ? new OperatorControllerTab() : null;
-        BACKUP_CONTROLLER_TAB = useFullRobot || useBackupControllerTab ? new BackupControllerTab() : null;
+        //FIXME: null pointer in BackupControllerTab so it's taken out of useFullRobot
+        BACKUP_CONTROLLER_TAB = /*useFullRobot ||*/ useBackupControllerTab ? new BackupControllerTab() : null;
         AUTONOMOUS_TAB = useFullRobot || useAutonomousTab ? new AutonomousTab() : null;
 
         MAIN_SHUFFLEBOARD = useFullRobot || useAutonomousTab || useDriverController || useOperatorController ? new MainShuffleboard() : null;
