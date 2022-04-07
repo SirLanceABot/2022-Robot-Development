@@ -21,7 +21,6 @@ public class MainShuffleboard
     private static final DriverControllerTab DRIVER_CONTROLLER_TAB= RobotContainer.DRIVER_CONTROLLER_TAB;
     private static final OperatorControllerTab OPERATOR_CONTROLLER_TAB = RobotContainer.OPERATOR_CONTROLLER_TAB;
     private static final AutonomousTab AUTONOMOUS_TAB =  RobotContainer.AUTONOMOUS_TAB;
-    private static final BackupControllerTab BACKUP_CONTROLLER_TAB = RobotContainer.BACKUP_CONTROLLER_TAB;
     
     
     // *** CLASS CONSTRUCTOR ***

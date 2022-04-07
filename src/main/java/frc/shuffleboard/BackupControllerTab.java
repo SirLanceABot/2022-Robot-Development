@@ -42,11 +42,11 @@ public class BackupControllerTab
     private SendableChooser<Boolean> aimBox = new SendableChooser<>();
     private SendableChooser<Boolean> shootBox = new SendableChooser<>();
      
-    private NetworkTableEntry successfulDownload;
-    private NetworkTableEntry errorMessageBox;
+    // private NetworkTableEntry successfulDownload;
+    // private NetworkTableEntry errorMessageBox;
 
      // Create the Button object
-     private SendableChooser<Boolean> sendDataButton = new SendableChooser<>();
+    //  private SendableChooser<Boolean> sendDataButton = new SendableChooser<>();
  
     //  private boolean previousStateOfSendButton = false;
     //  private boolean isDataValid = true;
@@ -69,7 +69,7 @@ public class BackupControllerTab
         
         // createSendDataButton();
         // successfulDownload = createSuccessfulDownloadBox();
-        successfulDownload.setBoolean(false);
+        // successfulDownload.setBoolean(false);
 
         // createMessageBox();
 
@@ -93,8 +93,8 @@ public class BackupControllerTab
         //put the widget on the shuffleboard
         backupControllerTab.add(compressorToggleBox)
             .withWidget(BuiltInWidgets.kToggleButton)
-            .withPosition(0, 0)
-            .withSize(8, 2);
+            .withPosition(0, 5)
+            .withSize(6, 4);
     }
 
      /**
@@ -104,8 +104,8 @@ public class BackupControllerTab
     private void createClimbStage1ToggleBox()
     {
         //create and name the Box
-        SendableRegistry.add(climbStage1ToggleBox, "Climb Toggle");
-        SendableRegistry.setName(climbStage1ToggleBox, "Climb Toggle");
+        SendableRegistry.add(climbStage1ToggleBox, "Climb Stage 1 Toggle");
+        SendableRegistry.setName(climbStage1ToggleBox, "Climb Stage 1 Toggle");
         
         // //add options to  Box
         climbStage1ToggleBox.setDefaultOption("Off", BackupControllerTabData.ClimbStage1Toggle.kOff);
@@ -116,15 +116,15 @@ public class BackupControllerTab
         // //put the widget on the shuffleboard
         backupControllerTab.add(climbStage1ToggleBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            .withPosition(9, 0)
-            .withSize(8, 2);
+            .withPosition(21, 0)
+            .withSize(6, 4);
     }
 
     private void createClimbStage2ToggleBox()
     {
         //create and name the Box
-        SendableRegistry.add(climbStage2ToggleBox, "Climb Toggle");
-        SendableRegistry.setName(climbStage2ToggleBox, "Climb Toggle");
+        SendableRegistry.add(climbStage2ToggleBox, "Climb Stage 2 Toggle");
+        SendableRegistry.setName(climbStage2ToggleBox, "Climb Stage 2 Toggle");
         
         // //add options to  Box
         climbStage2ToggleBox.setDefaultOption("Off", BackupControllerTabData.ClimbStage2Toggle.kOff);
@@ -135,8 +135,8 @@ public class BackupControllerTab
         // //put the widget on the shuffleboard
         backupControllerTab.add(climbStage2ToggleBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            .withPosition(9, 9)
-            .withSize(8, 2);
+            .withPosition(25, 5)
+            .withSize(6, 4);
     }
 
      /**
@@ -157,8 +157,8 @@ public class BackupControllerTab
         // //put the widget on the shuffleboard
         backupControllerTab.add(intakeToggleBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            .withPosition(1, 3)
-            .withSize(8, 2);
+            .withPosition(7, 0)
+            .withSize(6, 4);
     }
 
     private void createEnableBackupControllerBox()
@@ -174,8 +174,8 @@ public class BackupControllerTab
         // //put the widget on the shuffleboard
         backupControllerTab.add(enableBackupControllerBox)
             .withWidget(BuiltInWidgets.kSplitButtonChooser)
-            .withPosition(10, 3)
-            .withSize(8, 2);
+            .withPosition(0, 0)
+            .withSize(6, 4);
     }
 
      /**
@@ -191,8 +191,8 @@ public class BackupControllerTab
         // //put the widget on the shuffleboard
         backupControllerTab.add(rollerToggleBox)
             .withWidget(BuiltInWidgets.kToggleButton)
-            .withPosition(6, 3)
-            .withSize(8, 2);
+            .withPosition(7, 5)
+            .withSize(6, 4);
     }
 
      /**
@@ -206,10 +206,10 @@ public class BackupControllerTab
         SendableRegistry.setName(aimBox, "Aim");
         
         // //put the widget on the shuffleboard
-        backupControllerTab.add(compressorToggleBox)
+        backupControllerTab.add(aimBox)
             .withWidget(BuiltInWidgets.kToggleButton)
-            .withPosition(0, 0)
-            .withSize(8, 2);
+            .withPosition(20, 0)
+            .withSize(6, 4);
     }
 
      /**
@@ -223,10 +223,10 @@ public class BackupControllerTab
         SendableRegistry.setName(shootBox, "Shoot");
 
         // //put the widget on the shuffleboard
-        backupControllerTab.add(compressorToggleBox)
+        backupControllerTab.add(shootBox)
             .withWidget(BuiltInWidgets.kToggleButton)
-            .withPosition(0, 0)
-            .withSize(8, 2);
+            .withPosition(14, 5)
+            .withSize(6, 4);
     }
 
     // private NetworkTableEntry createSuccessfulDownloadBox()
