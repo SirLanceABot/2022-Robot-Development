@@ -177,23 +177,27 @@ public class AutonomousCommandList
     private void fourBallAuto()
     {
         addCommand(new TurnOnIntake());
-        addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
-        addCommand(new Wait(1.0));
+        // addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
+        addCommand(new DriveVector(DRIVE_SPEED, -1.142, -0.508));
+        addCommand(new Wait(0.5));
+
         addCommand(new TurnOffIntake(true));
 
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
         // addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -150.0));
         addCommand(new TurnOnIntake());
+        //measured values
         // addCommand(new DriveVector(DRIVE_SPEED, 4.137, -0.607));
 
-        addCommand(new DriveVector(DRIVE_SPEED, -3.4, -0.9));
+        addCommand(new DriveVector(DRIVE_SPEED, -3.40, -0.95));
 
         // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
 
         addCommand(new Wait(2.0));
 
         addCommand(new TurnOffIntake(true));
-        addCommand(new DriveVector(DRIVE_SPEED, 1.25, 1.2));
+        addCommand(new DriveVector(DRIVE_SPEED, 1.2, 0.0));
+
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 

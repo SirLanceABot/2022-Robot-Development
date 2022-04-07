@@ -382,8 +382,13 @@ public class TeleopMode implements ModeTransition
                         angleToTurn = SHOOTER.getHubAngle();
 
                         System.out.println("ANGLE TO TURN: " + angleToTurn);
+                        
+                        if (Math.abs(angleToTurn) > 15.0)
+                        {
+                            angleToTurn *= 15.0 / Math.abs(angleToTurn);
+                        }
 
-                        driveTrainRotation = -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn);
+                        driveTrainRotation = -angleToTurn / 15.0 * (0.4 * Math.PI - 0.1) + 0.1 * Math.signum(-angleToTurn);
                     }
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
@@ -491,8 +496,8 @@ public class TeleopMode implements ModeTransition
                     }
                 }
 
-                System.out.println("INTAKE OUT? " + INTAKE.measureArmOut());
-                System.out.println("INTAKE IN? " + INTAKE.measureArmIn());
+                // System.out.println("INTAKE OUT? " + INTAKE.measureArmOut());
+                // System.out.println("INTAKE IN? " + INTAKE.measureArmIn());
 
                 // System.out.println("Arm in = " + INTAKE.measureArmIn() + ", Arm out = " + INTAKE.measureArmOut());
 

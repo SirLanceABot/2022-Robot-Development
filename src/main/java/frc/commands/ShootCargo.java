@@ -50,7 +50,7 @@ public class ShootCargo implements Command
     // *** CLASS & INSTANCE METHODS ***
     public void init()
     {
-        PDH.setSwitchableChannel(true);
+        // PDH.setSwitchableChannel(true);
 
         System.out.println(this);
 
@@ -119,7 +119,7 @@ public class ShootCargo implements Command
 
     public void end()
     {
-        PDH.setSwitchableChannel(false);
+        // PDH.setSwitchableChannel(false);
 
         timer.stop();
         SHOOTER.stopShooter(); // TODO: Perhaps call stopShooter

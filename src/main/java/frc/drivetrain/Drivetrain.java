@@ -202,11 +202,24 @@ public class Drivetrain extends RobotDriveBase
         boolean isDone = false;
 
         double distanceToDrive = Math.sqrt(distanceToDriveX * distanceToDriveX + distanceToDriveY * distanceToDriveY);
+
         double velocityX = velocity * distanceToDriveX / distanceToDrive;
         double velocityY = velocity * distanceToDriveY / distanceToDrive;
 
         double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(startingPosition);
-        
+
+        double distanceToNearestEndpoint = Math.min(distanceDriven, distanceToDrive - distanceDriven);
+        double maxVelocity = velocity;
+        double minVelocity = 0.75
+        ;
+
+        if (distanceToNearestEndpoint < 1.0)
+        {
+            velocityX *= distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity;
+            velocityY *= distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity;
+            System.out.println("DRIVE SPEED" + distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity);
+        }
+
         updateOdometry();
 
         if(Math.abs(distanceDriven) < Math.abs(distanceToDrive))

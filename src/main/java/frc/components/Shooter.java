@@ -366,7 +366,8 @@ public class Shooter
         //vision code
         // distance = ShooterVisionData.getDistance(myWorkingCopyOfTargetData.getPortDistance());
         distance = ShooterVisionData.getDistance(table.getEntry("ty").getDouble(0.0));
-        // System.out.println("DISTANCE: " + distance);
+
+        System.out.println("DISTANCE: " + distance);
         // distance = 8.0 * FEET_TO_METERS;
 
         calculateLaunchTrajectory(hub, distance);
@@ -531,7 +532,7 @@ public class Shooter
 
         if (isTargetFound())
         {
-            return -table.getEntry("tx").getDouble(0.0);
+            return table.getEntry("tx").getDouble(0.0);
         }
         else
         {

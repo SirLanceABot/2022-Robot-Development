@@ -65,8 +65,7 @@ public class Robot extends TimedRobot
     {
         System.out.println("\n\n2022-Robot-Development\n\n");
         robotState = RobotState.kRobotInit;
-        
-        PDH.setSwitchableChannel(false);
+        // PDH.setSwitchableChannel(false);
         
         if(VISION != null)
         {
