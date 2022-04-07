@@ -18,11 +18,12 @@ public class OperatorController extends Logitech
     public static enum OperatorButtonAction
     {
         kPrepareShooter(Button.k7),
-        kLight(Button.k8),
+        kLowerHub(Button.k8),
         kShoot(Button.k1),
         kShooterOverride(Button.k2),
         // Slider ShroudAngle and FlywheelRPM in Axis
         
+        kCompressorToggle(Button.k10),
 
         kShuttleOverride(Button.k9), 
         kShuttleStageOneForward(Button.k3),

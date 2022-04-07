@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
-
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import java.lang.invoke.MethodHandles;
@@ -88,6 +88,9 @@ public class Intake
 
     private final DigitalInput armOutSensor;
     private final DigitalInput armInSensor;
+
+    private final Counter armOutSensorCounter;
+    private final Counter armInSensorCounter;
     
     private static boolean isIntaking = false;
 
@@ -112,6 +115,10 @@ public class Intake
         armsOutSolenoid = new DoubleSolenoid(0, moduleType, armsOutForwardChannel, armsOutReverseChannel); // 4 is Extend, 6 is Extend float
         armOutSensor = new DigitalInput(armsOutSensorPort); //DF 4/3/22
         armInSensor = new DigitalInput(armsInSensorPort); //DF 4/3/22
+        armOutSensorCounter = new Counter(armOutSensor);
+        armInSensorCounter = new Counter(armInSensor);
+        armOutSensorCounter.reset();
+        armInSensorCounter.reset();
         
         configRollerMotor();
     }
@@ -208,6 +215,8 @@ public class Intake
         // armInSolenoid.set(true);
         armsInSolenoid.set(Value.kForward);
         armsOutSolenoid.set(Value.kReverse);
+        
+        armInSensorCounter.reset();
     }
 
     public void pMoveArmIn()
@@ -217,6 +226,8 @@ public class Intake
         // armInSolenoid.set(false);
         armsInSolenoid.set(Value.kReverse);
         armsOutSolenoid.set(Value.kForward);
+
+        armOutSensorCounter.reset();
     }
 
     public void pMoveArmFloat()
@@ -266,11 +277,13 @@ public class Intake
     public boolean measureArmOut()
     {
         return !armOutSensor.get();
+        // return armOutSensorCounter.get() > 0;
     }
 
     public boolean measureArmIn()
     {
         return !armInSensor.get();
+        // return armInSensorCounter.get() > 0;
     }
 
     public void outtakeRoller()
@@ -294,6 +307,11 @@ public class Intake
     public double MeasureMotorSpeed(CANSparkMax motor)
     {
         return(motor.get());
+    }
+
+    public DigitalInput getArmOutSensorPort()
+    {
+        return armOutSensor;
     }
 
     public String toString()

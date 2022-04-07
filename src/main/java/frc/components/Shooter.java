@@ -82,9 +82,10 @@ public class Shooter
     private static final double kP = 0.018;
     private static final double kI = 0.0002;
     private static final double kD = 0.000;
-    private static final double kF = 0.0475;
+    private static final double kF = 0.04;
 
     private static final double SHOOT_SPEED_THRESHOLD = Constant.SHOOT_SPEED_THRESHOLD;
+    private static final double SHOOT_ANGLE_THRESHOLD = Constant.SHOOT_ANGLE_THRESHOLD;
     private static final double SHROUD_ANGLE_THRESHOLD = Constant.SHROUD_ANGLE_THRESHOLD;
     private static final double HUB_ALIGNMENT_THRESHOLD = Constant.HUB_ALIGNMENT_THRESHOLD;
     //TODO: Actual gear ratio goes here
@@ -121,6 +122,8 @@ public class Shooter
     private static boolean isShooting = false;
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    private boolean isFirstFrame = true;
 
     // *** CLASS CONSTRUCTOR ***
     public Shooter(int flywheelMotorPort, int shroudMotorPort)
@@ -199,6 +202,18 @@ public class Shooter
     {
         //TODO: BRING BACK TO RUN SHOOTER
         flywheelMotor.set(ControlMode.Velocity, speed / TICK_TO_RPM);
+
+        if (isFirstFrame && flywheelMotor.getSelectedSensorVelocity() > desiredLaunchSpeed)
+        {
+            isFirstFrame = false;
+
+            // flywheelMotor.config_kI(0, 0.001);
+            // System.out.println("========== kI RESET ==========");
+            // System.out.println("========== kI RESET ==========");
+            // System.out.println("========== kI RESET ==========");
+            // System.out.println("========== kI RESET ==========");
+            // System.out.println("========== kI RESET ==========");
+        }
         // System.out.println("DESIRED FLYWHEEL SPEED: " + speed / TICK_TO_RPM);
         // System.out.println("ACTUAL FLYWHEEL SPEED: " + flywheelMotor.getSelectedSensorVelocity());
         System.out.println("Flywheel velocity: " + measureFlywheelSpeed());
@@ -293,35 +308,53 @@ public class Shooter
     {
         isShooting = true;
 
-        setFlywheelSpeed(LONG_SHOT_SPEED);
-        setShroudAngle(30);
+        desiredLaunchSpeed = LONG_SHOT_SPEED;
+        desiredLaunchAngle = -140;
+        
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
+
+        checkIsShooterReady();
     }
 
     public void startShortShot()
     {
         isShooting = true;
         
-        setFlywheelSpeed(SHORT_SHOT_SPEED);
-        setShroudAngle(45);
+        desiredLaunchSpeed = SHORT_SHOT_SPEED;
+        desiredLaunchAngle = -200;
+        
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
+
+        checkIsShooterReady();
     }
 
     public void startDropShot()
     {
         isShooting = true;
+
+        desiredLaunchSpeed = DROP_SHOT_SPEED;
+        desiredLaunchAngle = -200;
         
-        setFlywheelSpeed(DROP_SHOT_SPEED);
-        setShroudAngle(45);
+        setFlywheelSpeed(desiredLaunchSpeed);
+        setShroudAngle(desiredLaunchAngle);
+
+        checkIsShooterReady();
     }
 
     public void stopFlywheel()
     {
         flywheelMotor.set(ControlMode.PercentOutput, 0.0);
+
+        // flywheelMotor.config_kI(0, 0.0);
         // desiredLaunchSpeed = 0.0;
     }
 
     public void stopShooter()
     {
         isShooting = false;
+        isFirstFrame = true;
         // RobotContainer.CAMERA_TAB.updateLimeLightMode();
 
         stopFlywheel();
@@ -390,25 +423,25 @@ public class Shooter
 
     private void setShroudAngle(double angle)
     {
-        if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 40.0)
+        if (angle - measureShroudAngle() > 30.0 + SHROUD_ANGLE_THRESHOLD)
         {
             setShroudMotorSpeed(0.8);
         }
-        else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD + 10.0)
+        else if (angle - measureShroudAngle() > 10.0 + SHROUD_ANGLE_THRESHOLD)
         {
-            setShroudMotorSpeed(0.3);
+            setShroudMotorSpeed(0.35);
         }
         else if (angle - measureShroudAngle() > SHROUD_ANGLE_THRESHOLD)
         {
-            setShroudMotorSpeed(0.2);
+            setShroudMotorSpeed(0.25);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 40.0)
+        else if (measureShroudAngle() - angle > 30.0 + SHROUD_ANGLE_THRESHOLD)
         {
             setShroudMotorSpeed(-0.6);
         }
-        else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD + 10.0)
+        else if (measureShroudAngle() - angle > 10.0 + SHROUD_ANGLE_THRESHOLD)
         {
-            setShroudMotorSpeed(-0.2);
+            setShroudMotorSpeed(-0.25);
         }
         else if (measureShroudAngle() - angle > SHROUD_ANGLE_THRESHOLD)
         {
@@ -451,7 +484,7 @@ public class Shooter
     public boolean isShroudReady()
     {
         currentShroudAngle = measureShroudAngle();
-        return (Math.abs(desiredLaunchAngle - currentShroudAngle) < SHROUD_ANGLE_THRESHOLD);
+        return (Math.abs(desiredLaunchAngle - currentShroudAngle) < SHOOT_ANGLE_THRESHOLD);
     }
 
     public void updateVisionData()

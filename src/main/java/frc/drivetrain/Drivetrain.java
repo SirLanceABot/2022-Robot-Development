@@ -202,8 +202,8 @@ public class Drivetrain extends RobotDriveBase
         boolean isDone = false;
 
         double distanceToDrive = Math.sqrt(distanceToDriveX * distanceToDriveX + distanceToDriveY * distanceToDriveY);
-        double velocityX = distanceToDriveX / distanceToDrive;
-        double velocityY = distanceToDriveY / distanceToDrive;
+        double velocityX = velocity * distanceToDriveX / distanceToDrive;
+        double velocityY = velocity * distanceToDriveY / distanceToDrive;
 
         double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(startingPosition);
         
@@ -342,7 +342,7 @@ public class Drivetrain extends RobotDriveBase
         System.out.println("GYRO RESET AT " + angle);
     }
 
-    public void printNavX()
+    public void printGyro()
     {
         System.out.println("Yaw: " + gyro.getYaw());
     }

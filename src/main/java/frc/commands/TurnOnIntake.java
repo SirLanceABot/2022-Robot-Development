@@ -2,9 +2,13 @@ package frc.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.Timer;
 import frc.components.Intake;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import frc.constants.Port;
+
 
 public class TurnOnIntake implements Command 
 {
@@ -22,13 +26,15 @@ public class TurnOnIntake implements Command
     private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private boolean isFinished;
+    private Timer timer = new Timer();
 
     // This variable is only used to simulate the intake being on
     // private boolean isIntakeOn = false;
 
 
     // *** CLASS CONSTRUCTOR ***
-    public TurnOnIntake()
+    public 
+    TurnOnIntake()
     {
         isFinished = false;
     }
@@ -38,7 +44,8 @@ public class TurnOnIntake implements Command
     {
         System.out.println(this);
 
-
+        // timer.reset();
+        // timer.start();
 
         isFinished = false;
         // isIntakeOn = false;

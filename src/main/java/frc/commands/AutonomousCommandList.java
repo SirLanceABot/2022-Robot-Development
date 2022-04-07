@@ -45,12 +45,13 @@ public class AutonomousCommandList
 
     private static final ArrayList<Command> commandList = new ArrayList<>();
 
-    private static final double DRIVE_SPEED = 1.0;  // meters per second (+/-)
-    private static final double SHORT_DISTANCE = 1.2;   // meters (+)
+    private static final double DRIVE_SPEED = 2.0;  // meters per second (+/-)
+    private static final double SHORT_DISTANCE = 1.25;   // meters (+)
     // private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
     // private static final double LONG_DISTANCE = 1.2;    // meters (+)
     // private static final double JITTER_DISTANCE = 0.05; // meters (+)
-    private static final double MIN_ANGULAR_VELOCITY = 0.2 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
+    private static final double MIN_ANGULAR_VELOCITY = 
+    0.2 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
     private static final double MAX_ANGULAR_VELOCITY = 0.5 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
 
 
@@ -177,21 +178,22 @@ public class AutonomousCommandList
     {
         addCommand(new TurnOnIntake());
         addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
-        addCommand(new Wait(2.0));
-        addCommand(new TurnOffIntake(false));
+        addCommand(new Wait(1.0));
+        addCommand(new TurnOffIntake(true));
+
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
-        addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -136.25));
+        // addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -150.0));
         addCommand(new TurnOnIntake());
         // addCommand(new DriveVector(DRIVE_SPEED, 4.137, -0.607));
 
-        addCommand(new DriveVector(DRIVE_SPEED, 3.918, -0.991));
+        addCommand(new DriveVector(DRIVE_SPEED, -3.4, -0.9));
 
         // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
 
-        addCommand(new Wait(5.0));
+        addCommand(new Wait(2.0));
 
         addCommand(new TurnOffIntake(true));
-        addCommand(new DriveVector(DRIVE_SPEED, -3.119, 0.899));
+        addCommand(new DriveVector(DRIVE_SPEED, 1.25, 1.2));
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 

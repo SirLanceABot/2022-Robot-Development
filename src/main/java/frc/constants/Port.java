@@ -80,7 +80,9 @@ public final class Port
         private static final int SHUTTLE_STAGE_ONE_SENSOR   =  1;
         private static final int SHUTTLE_STAGE_TWO_SENSOR   =  2;
 
+        //intake out, piston in
         public static final int INTAKE_MAGNET_OUT           =  3;
+        //intake in, piston out
         public static final int INTAKE_MAGNET_IN            =  4;
 
         public static final int PDH_CAN_ID                  =  1;

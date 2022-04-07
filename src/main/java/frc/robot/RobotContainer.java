@@ -47,22 +47,22 @@ public final class RobotContainer
     
     private static final boolean useDrivetrain              = false;
     private static final boolean useIntake                  = false;
-    private static final boolean useShooter                 = true;
-    private static final boolean useShuttle                 = true;
+    private static final boolean useShooter                 = false;
+    private static final boolean useShuttle                 = false;
     private static final boolean useClimber                 = false;
     
-    private static final boolean useSensorValues            = true;
-    private static final boolean useEventGenerator          = true;
+    private static final boolean useSensorValues            = false;
+    private static final boolean useEventGenerator          = false;
     private static final boolean useCargoManager            = false;
-    private static final boolean useShuttleFSM              = true;
+    private static final boolean useShuttleFSM              = false;
 
     private static final boolean useDriverController        = false;
-    private static final boolean useOperatorController      = true;
+    private static final boolean useOperatorController      = false;
 
     private static final boolean useVision                  = false; // internal Vision Process replaced by LimeLight
-    private static final boolean useCameraTab               = true; // LimeLight, compressor state and match countdown clock
+    private static final boolean useCameraTab               = false; // LimeLight, compressor state and match countdown clock
     private static final boolean useBackupControllerTab     = false;
-    private static final boolean useAutonomousTab           = true;
+    private static final boolean useAutonomousTab           = false;
 
 
     // *** ROBOT OBJECT DECLARATION ***

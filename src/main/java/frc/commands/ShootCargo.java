@@ -88,7 +88,7 @@ public class ShootCargo implements Command
 
         // if(SHOOTER.isShooterReady())
 
-        if(timer.get() > 2.0)
+        if((timer.get() > 1.0) && !(cargoShot == numberOfCargo))
         {
             timer.reset();
 

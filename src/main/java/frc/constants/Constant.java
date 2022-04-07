@@ -8,13 +8,15 @@ public final class Constant
     //TODO: Configure shot rpm's
     public static final double LONG_SHOT_SPEED = 0.0;
     public static final double SHORT_SHOT_SPEED = 0.0;
-    public static final double DROP_SHOT_SPEED = 250.0;
+    public static final double DROP_SHOT_SPEED = 400.0;
 
     //max amount of error allowed between desired flywheel speed and actual flywheel speed for it to shoot (in rpms)
     public static final double SHOOT_SPEED_THRESHOLD = 50;
+    //same as above but with shroud, required for auto-shoot
+    public static final double SHOOT_ANGLE_THRESHOLD = 5.0;
 
-    //max amount of error in degrees between desired and actual shroud angle
-    public static final double SHROUD_ANGLE_THRESHOLD = 10.0;
+    //max amount of error in degrees between desired and actual shroud angle, within this value, the shroud will stop adjusting
+    public static final double SHROUD_ANGLE_THRESHOLD = 5.0;
 
     //max amount of error in degrees for being aligned with the hub
     public static final double HUB_ALIGNMENT_THRESHOLD = 2.0;

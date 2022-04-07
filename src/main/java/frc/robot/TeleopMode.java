@@ -491,6 +491,9 @@ public class TeleopMode implements ModeTransition
                     }
                 }
 
+                System.out.println("INTAKE OUT? " + INTAKE.measureArmOut());
+                System.out.println("INTAKE IN? " + INTAKE.measureArmIn());
+
                 // System.out.println("Arm in = " + INTAKE.measureArmIn() + ", Arm out = " + INTAKE.measureArmOut());
 
                 // if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeExtendToggle))
