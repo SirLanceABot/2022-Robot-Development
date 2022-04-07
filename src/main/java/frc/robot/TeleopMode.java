@@ -298,7 +298,14 @@ public class TeleopMode implements ModeTransition
                 {
                     if (INTAKE != null)
                     {
-                        INTAKE.compressorEnable();
+                        if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kCompressorToggle))
+                        {
+                            INTAKE.compressorDisable();
+                        }
+                        else
+                        {
+                            INTAKE.compressorEnable();
+                        }
                     }
                     // SHOOTER.turnOffLED();
                     SHOOTER.stopShooter();
