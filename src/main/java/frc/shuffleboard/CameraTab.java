@@ -141,16 +141,23 @@ public class CameraTab
         NetworkTableEntry stream = table.getEntry("stream");
         NetworkTableEntry ledMode = table.getEntry("ledMode");
 
+        // if(true)
+        // {
+        //     camMode.setNumber(0.); // 0 vision processor
+        //     stream.setNumber(0.);  // 0 for both large side by side
+        //     ledMode.setNumber(0.); // 0 pipeline setting
+        // }
+        // else
         if(driverMode)
         {
             camMode.setNumber(1.); // 1 driver
-            stream.setNumber(2.);  // 2 driver intake with small target
-            ledMode.setNumber(1.); // 1 off
+            stream.setNumber(2.);  // 2 driver intake with small target; 0 for both large side by side
+            ledMode.setNumber(1.); // 1 off; 0 pipeline setting
         }
         else
         {
             camMode.setNumber(0.); // 0 vision processor
-            stream.setNumber(1.);  // 1 target with small driver
+            stream.setNumber(1.);  // 1 target with small driver; 0 for both large side by side
             ledMode.setNumber(0.); // 0 pipeline setting
         }
     }
