@@ -128,7 +128,10 @@ public class TeleopMode implements ModeTransition
             SHUTTLEFSM.run();
         }
         */
-
+        if(OPERATOR_CONTROLLER == null)
+        {
+            System.out.println("NO OPERATOR CONTROLLER");
+        }
         if(OPERATOR_CONTROLLER != null)
         {
             // TODO: Fix this feedCargo
@@ -233,7 +236,15 @@ public class TeleopMode implements ModeTransition
                     // SHOOTER.turnOnLED();
 
                     // Change to kLower or kUpper to determine shot type
-                    SHOOTER.prepareShooter(Shooter.Hub.kUpper); //SHOOT
+                    if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLowerHub))
+                    {
+                        SHOOTER.prepareShooter(Shooter.Hub.kLower); //SHOOT
+                    }
+                    else
+                    {
+                        SHOOTER.prepareShooter(Shooter.Hub.kUpper); //SHOOT
+                    }
+                    
                     // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
                     if (SHOOTER.isFlywheelReady())
                     {
@@ -280,14 +291,22 @@ public class TeleopMode implements ModeTransition
                     }
                     // SHOOTER.testShoot(8000.0 * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower), SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
                     // SHOOTER.testShoot(0.0, SHOOTER.measureShroudAngle() + OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShroud) * 10.0);
-                    if (useTestDistance == 1.0)
+                    // if (useTestDistance == 1.0)
+                    // {
+                    //     System.out.println(testingDistance);
+                    //     SHOOTER.prepareShooter(Shooter.Hub.kUpper, testingDistance);
+                    // }
+                    // else
+                    // {
+                    //     SHOOTER.prepareShooter(testingRPM, testingShroud);
+                    // }
+                    if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLowerHub))
                     {
-                        System.out.println(testingDistance);
-                        SHOOTER.prepareShooter(Shooter.Hub.kUpper, testingDistance);
+                        SHOOTER.prepareShooter(Shooter.Hub.kLower, 6.5 * FEET_TO_METERS);
                     }
                     else
                     {
-                        SHOOTER.prepareShooter(testingRPM, testingShroud);
+                        SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS);
                     }
                     
                     // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
@@ -341,16 +360,23 @@ public class TeleopMode implements ModeTransition
             //     }
             // }
 
+            if(CLIMBER == null)
+            {
+                System.out.println("Climber is null");
+            }
+            
             if(CLIMBER != null)
             {
                 // running the climber
-                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbExtend))
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneExtend))
                 {
+                    // System.out.println("CLIMB UP");
                     CLIMBER.FCLArmUp();
                     //SCLArmUp
                 }
-                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbRetract))
+                else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneRetract))
                 {
+                    // System.out.println("CLIMB DOWN");
                     CLIMBER.FCLArmDown();
                     //SCLArmDown
                 }
@@ -358,6 +384,21 @@ public class TeleopMode implements ModeTransition
                 {
                     CLIMBER.FCLShutDown();
                 }
+
+                /* // TODO: Use if second stage added
+                if (DRIVER_CONTROLLER.getAction(DriverDpadAction.kClimbTwoExtend))
+                {
+                    CLIMBER.SCLArmUp();
+                }
+                else if(DRIVER_CONTROLLER.getAction(DriverDpadAction.kClimbTwoRetract))
+                {
+                    CLIMBER.SCLArmDown();
+                }
+                else// if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbShutDown))
+                {
+                    CLIMBER.SCLShutDown();
+                }
+                */
             }
         }
 
@@ -374,6 +415,11 @@ public class TeleopMode implements ModeTransition
                 double ySpeed = DRIVER_CONTROLLER.getAction(DriverAxisAction.kMoveX) * Constant.MAX_DRIVE_SPEED;
                 double turn = DRIVER_CONTROLLER.getAction(DriverAxisAction.kRotate) * Constant.MAX_ROBOT_TURN_SPEED;
 
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kBoostOrAutoAim) && !OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+                {
+                    drivePowerLimit = 1.0;
+                }
+
                 // Scales down the input power
                 // TODO : Add button for full power
                 // drivePowerLimit += DRIVER_CONTROLLER.getAction(DriverAxisAction.kDriverBoost) * (1.0 - drivePowerLimit);
@@ -382,29 +428,31 @@ public class TeleopMode implements ModeTransition
                 ySpeed *= drivePowerLimit;
                 turn *= turnPowerLimit;
 
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kBoostOrAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
                     if (!SHOOTER.isHubAligned())
                     {
                         angleToTurn = SHOOTER.getHubAngle();
 
                         System.out.println("ANGLE TO TURN: " + angleToTurn);
-                        
-                        if (Math.abs(angleToTurn) > 15.0)
-                        {
-                            angleToTurn *= 15.0 / Math.abs(angleToTurn);
-                        }
 
-                        driveTrainRotation = -angleToTurn / 15.0 * (0.4 * Math.PI - 0.1) + 0.1 * Math.signum(-angleToTurn);
+                        DRIVETRAIN.turnToAngle(0.2 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() + angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
+                        
+                        // if (Math.abs(angleToTurn) > 15.0)
+                        // {
+                        //     angleToTurn *= 15.0 / Math.abs(angleToTurn);
+                        // }
+
+                        // driveTrainRotation = -angleToTurn / 15.0 * (0.4 * Math.PI - 0.1) + 0.1 * Math.signum(-angleToTurn);
                     }
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
                 {
-                    driveTrainRotation = -0.5;
+                    driveTrainRotation = -0.6;
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlLeft))
                 {
-                    driveTrainRotation = 0.5;
+                    driveTrainRotation = 0.6;
                 }
                 else
                 {
@@ -480,26 +528,29 @@ public class TeleopMode implements ModeTransition
                 // A testing line
                 // INTAKE.outputArmLimit();
 
-                if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmOut))
+                if (EVENT_GENERATOR != null)
                 {
-                    INTAKE.armOut();
-                }
-                // Sensor option is lower priority so driver can override it by pressing arm out button
-                else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmIn) || EVENT_GENERATOR.isIntakeSensorActive())
-                {
-                    INTAKE.armIn();
-                }
-                else
-                {
-                    if(INTAKE.measureArmOut())
+                    if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmOut))
                     {
-                        // System.out.println("Arm is out");
-                        INTAKE.pMoveArmFloat();
+                        INTAKE.armOut();
                     }
-
-                    if(INTAKE.measureArmIn())
+                    // Sensor option is lower priority so driver can override it by pressing arm out button
+                    else if(DRIVER_CONTROLLER.getAction(DriverButtonAction.kIntakeArmIn) || EVENT_GENERATOR.isIntakeSensorActive())
                     {
-                        // System.out.println("Arm is in");
+                        INTAKE.armIn();
+                    }
+                    else
+                    {
+                        if(INTAKE.measureArmOut())
+                        {
+                            // System.out.println("Arm is out");
+                            INTAKE.pMoveArmFloat();
+                        }
+
+                        if(INTAKE.measureArmIn())
+                        {
+                            // System.out.println("Arm is in");
+                        }
                     }
                 }
 

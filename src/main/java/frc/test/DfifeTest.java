@@ -165,7 +165,7 @@ public class DfifeTest implements MyTest
                 ySpeed *= drivePowerLimit;
                 turn *= turnPowerLimit;
 
-                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
+                if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kBoostOrAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
                     if (!SHOOTER.isHubAligned())
                     {

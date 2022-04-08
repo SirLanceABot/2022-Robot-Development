@@ -61,7 +61,7 @@ public final class RobotContainer
 
     private static final boolean useVision                  = false; // internal Vision Process replaced by LimeLight
     private static final boolean useCameraTab               = true; // LimeLight, compressor state and match countdown clock
-    private static final boolean useBackupControllerTab     = false;
+    private static final boolean useBackupControllerTab     = true;
     private static final boolean useAutonomousTab           = true;
 
 
@@ -97,7 +97,7 @@ public final class RobotContainer
     // *** ROBOT OBJECT INSTANTIATION ***
     static
     {
-        final boolean isCompetitionRobot = competitionRobotFlag.get();
+        final boolean isCompetitionRobot = true; //competitionRobotFlag.get();
         String robot = "";
         if(isCompetitionRobot)
             robot = "**   Competition Robot  Competition Robot   **";
@@ -118,8 +118,11 @@ public final class RobotContainer
         final int SHOOTER_FLYWHEEL_PORT     = isCompetitionRobot ? Port.Motor.SHOOTER_FLYWHEEL : Port.MotorTesting.SHOOTER_FLYWHEEL_TEST;
         final int SHOOTER_SHROUD_PORT       = isCompetitionRobot ? Port.Motor.SHOOTER_SHROUD : Port.MotorTesting.SHOOTER_SHROUD_TEST;
 
-        final int CLIMBER_STAGE_ONE_LEADEAR_PORT = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_TWO_LEADER : Port.MotorTesting.CLIMBER_STAGE_ONE_LEADER_TEST;
-        final int CLIMBER_STAGE_TWO_LEADER_PORT  = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_ONE_LEADER : Port.MotorTesting.CLIMBER_STAGE_TWO_LEADER_TEST;
+        // final int CLIMBER_STAGE_ONE_LEADER_PORT = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_ONE_LEADER : Port.MotorTesting.CLIMBER_STAGE_ONE_LEADER_TEST;
+        // final int CLIMBER_STAGE_TWO_LEADER_PORT  = isCompetitionRobot ? Port.Motor.CLIMBER_STAGE_TWO_LEADER : Port.MotorTesting.CLIMBER_STAGE_TWO_LEADER_TEST;
+
+        final int CLIMBER_STAGE_ONE_LEADER_PORT = Port.Motor.CLIMBER_STAGE_ONE_LEADER;
+        final int CLIMBER_STAGE_TWO_LEADER_PORT = Port.Motor.CLIMBER_STAGE_TWO_LEADER;
 
         final int INTAKE_MAGNET_IN_TEST_PORT  = isCompetitionRobot ? Port.Sensor.INTAKE_MAGNET_IN : Port.SensorTesting.INTAKE_MAGNET_IN_TEST;
         final int INTAKE_MAGNET_OUT_TEST_PORT = isCompetitionRobot ? Port.Sensor.INTAKE_MAGNET_OUT : Port.SensorTesting.INTAKE_MAGNET_OUT_TEST;
@@ -128,7 +131,7 @@ public final class RobotContainer
         INTAKE = useFullRobot || useIntake ? new Intake(INTAKE_ROLLER_PORT, INTAKE_IN_FORWARD_PORT, INTAKE_IN_REVERSE_PORT, INTAKE_OUT_FORWARD_PORT, INTAKE_OUT_REVERSE_PORT, INTAKE_MAGNET_IN_TEST_PORT, INTAKE_MAGNET_OUT_TEST_PORT) : null;
         SHOOTER = useFullRobot || useShooter ? new Shooter(SHOOTER_FLYWHEEL_PORT, SHOOTER_SHROUD_PORT) : null;
         SHUTTLE = useFullRobot || useShuttle ? new Shuttle(Port.ShuttleSetup.SHUTTLE_DATA) : null;
-        CLIMBER = useFullRobot || useClimber ? new Climber(CLIMBER_STAGE_ONE_LEADEAR_PORT, CLIMBER_STAGE_TWO_LEADER_PORT) : null;
+        CLIMBER = useFullRobot || useClimber ? new Climber(CLIMBER_STAGE_ONE_LEADER_PORT, CLIMBER_STAGE_TWO_LEADER_PORT) : null;
         
         // TODO: Build in using other booleans to trigger each other
         CURRENT_SENSOR_VALUES = useFullRobot || useSensorValues ? new SensorValues() : null;

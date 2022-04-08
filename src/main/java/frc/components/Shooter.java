@@ -109,7 +109,7 @@ public class Shooter
     private static int successfulChecks = 0;
 
     //number of consecutive checsk required for the shuttle to empty cargo into the shooter
-    private static int requiredChecks = 6;
+    private static int requiredChecks = 10;
 
     private static boolean isShroudDown = false;
 
@@ -377,12 +377,12 @@ public class Shooter
     {
         if (hub == Hub.kLower)
         {
-            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance); //slowed down for testing
+            desiredLaunchSpeed = LowerTrajectoryData.getSpeed(distance);
             desiredLaunchAngle = LowerTrajectoryData.getAngle(distance);
         }
         else if (hub == Hub.kUpper)
         {
-            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance); //slowed down for testing
+            desiredLaunchSpeed = UpperTrajectoryData.getSpeed(distance);
             desiredLaunchAngle = UpperTrajectoryData.getAngle(distance);
         }
 

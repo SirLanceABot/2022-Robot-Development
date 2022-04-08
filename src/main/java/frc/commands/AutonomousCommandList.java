@@ -50,8 +50,7 @@ public class AutonomousCommandList
     // private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
     // private static final double LONG_DISTANCE = 1.2;    // meters (+)
     // private static final double JITTER_DISTANCE = 0.05; // meters (+)
-    private static final double MIN_ANGULAR_VELOCITY = 
-    0.2 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
+    private static final double MIN_ANGULAR_VELOCITY = 0.2 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
     private static final double MAX_ANGULAR_VELOCITY = 0.5 * 2 * Math.PI; // unknown unit (I THINK RADIANS PER SECOND)
 
 

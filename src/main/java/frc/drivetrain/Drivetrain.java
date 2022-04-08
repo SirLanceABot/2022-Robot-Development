@@ -360,6 +360,11 @@ public class Drivetrain extends RobotDriveBase
         System.out.println("Yaw: " + gyro.getYaw());
     }
 
+    public double getGyro()
+    {
+        return gyro.getYaw();
+    }
+
     @Override
     public String getDescription()
     {

@@ -2,9 +2,11 @@ package frc.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import frc.components.Intake;
 import frc.components.Shooter;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import frc.constants.Constant;
 import frc.drivetrain.Drivetrain;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,6 +28,7 @@ public class ShootCargo implements Command
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     private static final PowerDistribution PDH = RobotContainer.PDH;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
     private Timer timer = new Timer();
     private int numberOfCargo;
     private int cargoShot = 0;
@@ -57,15 +60,16 @@ public class ShootCargo implements Command
         timer.reset();
         timer.start();
 
+        INTAKE.compressorDisable();
+
         isFinished = false;
         // cargoShotSimulation = 0;
     }
 
     public void execute()
     {
-        SHOOTER.startDropShot();
-        // TODO: Remove this block comment when using real autonomous
-        /*
+        // SHOOTER.startDropShot();
+        
         SHOOTER.prepareShooter(hub);
 
         // Auto aiming
@@ -73,7 +77,8 @@ public class ShootCargo implements Command
         {
             angleToTurn = SHOOTER.getHubAngle();
 
-            DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
+            // DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
+            DRIVETRAIN.turnToAngle(0.2 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() + angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
 
             // if (angleToTurn > 0.0)
             // {
@@ -84,7 +89,7 @@ public class ShootCargo implements Command
             //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
             // }
         }
-        */
+        
 
         // if(SHOOTER.isShooterReady())
 
@@ -122,6 +127,9 @@ public class ShootCargo implements Command
         // PDH.setSwitchableChannel(false);
 
         timer.stop();
+
+        INTAKE.compressorEnable();
+
         SHOOTER.stopShooter(); // TODO: Perhaps call stopShooter
     }
 
@@ -130,3 +138,4 @@ public class ShootCargo implements Command
         return "ShootCargo(" + numberOfCargo + ", " + hub + ")";
     }
 }
+

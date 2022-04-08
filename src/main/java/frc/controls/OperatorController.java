@@ -31,8 +31,8 @@ public class OperatorController extends Logitech
         kShuttleStageTwoForward(Button.k4),
         kShuttleStageTwoReverse(Button.k6),
 
-        kClimbExtend(Button.k11),
-        kClimbRetract(Button.k12),
+        kClimbOneExtend(Button.k11),
+        kClimbOneRetract(Button.k12),
         // kClimbShutDown(Button.k12), //Not in use
         // kTurnOnShooterToggle(Button.k8), // Not in use
         

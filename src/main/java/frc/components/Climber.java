@@ -106,7 +106,7 @@ public class Climber
         firstStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
 
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of where motor goes
-        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true); //FIXME change to false after testing
+        firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false); //FIXME change to false after testing
         firstStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 255.0f); // DF Measured on 3/5/22
         firstStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
 

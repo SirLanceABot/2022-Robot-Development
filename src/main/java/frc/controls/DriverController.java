@@ -48,7 +48,7 @@ public class DriverController extends Xbox
         // kNoAction(Button.kRightStick),
 
         kRobotOriented(Button.kLeftTrigger),
-        kAutoAim(Button.kRightTrigger),
+        kBoostOrAutoAim(Button.kRightTrigger),
         //kNoAction(Button.kRightTrigger),
 
         kCrawlLeft(Button.kX),
@@ -112,11 +112,12 @@ public class DriverController extends Xbox
 
     public static enum DriverDpadAction
     {
-        UpMethod(Dpad.kUp), 
+        // TODO: Implement if second climb added
+        kClimbTwoExtend(Dpad.kUp), 
         UpRightMethod(Dpad.kUpRight), 
-        // Method(Dpad.kRight), 
+        kLockSwerve(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
-        kLockSwerve(Dpad.kDown), 
+        kClimbTwoRetract(Dpad.kDown), 
         // Method(Dpad.kDownLeft), 
         // Method(Dpad.kLeft), 
         // Method(Dpad.kUpLeft), 
