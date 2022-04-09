@@ -393,7 +393,7 @@ public class TeleopMode implements ModeTransition
                     CLIMBER.FCLShutDown();
                 }
 
-                CLIMBER.measureFCLLimits();
+                // CLIMBER.measureFCLLimits();
 
                 if(OPERATOR_CONTROLLER.getAction(OperatorDpadAction.kResetClimberEncoder))
                 {

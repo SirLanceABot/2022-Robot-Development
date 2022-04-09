@@ -25,7 +25,7 @@ public final class Constant
     public static final double INTAKE_SPEED = 0.5;
 
     public static final double CLIMBER_UP_SPEED = 0.7;
-    public static final double CLIMBER_DOWN_SPEED = 0.9;
+    public static final double CLIMBER_DOWN_SPEED = 1.0;
 
 
     public static final double INCHES_TO_METERS = 0.0254;
