@@ -129,6 +129,17 @@ public class Climber
         firstStageClimbMotorLeader.setSmartCurrentLimit(40);
     }
 
+    public void measureFCLLimits()
+    {
+        System.out.println("F = " + FCLForwardLimitSwitch.isPressed() + ", R = " + FCLReverseLimitSwitch.isPressed());
+        System.out.println("Encoder value = " + FCLEncoder.getPosition());
+    }
+
+    public void resetFCLEncoder()
+    {
+        FCLEncoder.setPosition(0);
+    }
+
     // public void configFCF()
     // {
         // firstStageClimbMotorFollower = CANSparkMax.follow(firstStageClimbMotorLeader, false);
@@ -274,6 +285,8 @@ public class Climber
     }
     public void FCLShutDown()
     {
+        setFirstStageMotorSpeed(0.0);
+        /*
         switch(FCLMovementType)
         {
         case kOff:
@@ -325,6 +338,7 @@ public class Climber
         //     setFirstStageMotorSpeed(0.0);
         //     movementType = MovementType.kOff;
         // }
+        */
     }
     
     public void SCLShutDown()

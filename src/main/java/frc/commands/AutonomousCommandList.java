@@ -45,7 +45,8 @@ public class AutonomousCommandList
 
     private static final ArrayList<Command> commandList = new ArrayList<>();
 
-    private static final double DRIVE_SPEED = 2.0;  // meters per second (+/-)
+    private static final double SLOW_DRIVE_SPEED = 1.0;  // meters per second (+/-)
+    private static final double FAST_DRIVE_SPEED = 1.8;  // meters per second (+/-)
     private static final double SHORT_DISTANCE = 1.25;   // meters (+)
     // private static final double MEDIUM_DISTANCE = 1.2;  // meters (+)
     // private static final double LONG_DISTANCE = 1.2;    // meters (+)
@@ -103,14 +104,14 @@ public class AutonomousCommandList
                 // addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
                 addCommand(new TurnOnIntake());
                 // addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE - JITTER_DISTANCE));
-                addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
-                addCommand(new Wait(2.0));
+                addCommand(new DriveStraight(SLOW_DRIVE_SPEED, SHORT_DISTANCE));
+                // addCommand(new Wait(1.0));
                 // addCommand(new StopDriving());
                 addCommand(new TurnOffIntake(true));
             }
             else
             {
-                addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
+                addCommand(new DriveStraight(SLOW_DRIVE_SPEED, SHORT_DISTANCE));
                 // addCommand(new StopDriving());
             }
         }
@@ -160,7 +161,7 @@ public class AutonomousCommandList
         // addCommand(new DriveStraight(DRIVE_SPEED, JITTER_DISTANCE));
         addCommand(new TurnOnIntake());
         // addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE - JITTER_DISTANCE));
-        addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
+        addCommand(new DriveStraight(SLOW_DRIVE_SPEED, SHORT_DISTANCE));
         addCommand(new Wait(2.0));
         // addCommand(new StopDriving());
         addCommand(new TurnOffIntake(true));
@@ -176,28 +177,31 @@ public class AutonomousCommandList
     private void fourBallAuto()
     {
         addCommand(new TurnOnIntake());
-        // addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
-        addCommand(new DriveVector(DRIVE_SPEED, -1.142, -0.508));
-        addCommand(new Wait(0.5));
+            // addCommand(new DriveStraight(DRIVE_SPEED, SHORT_DISTANCE));
+        addCommand(new DriveVector(FAST_DRIVE_SPEED, -1.142, -0.508));
+        addCommand(new Wait(1.0));
 
         addCommand(new TurnOffIntake(true));
 
         addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
-        // addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -150.0));
+            // addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -150.0));
         addCommand(new TurnOnIntake());
-        //measured values
-        // addCommand(new DriveVector(DRIVE_SPEED, 4.137, -0.607));
 
-        addCommand(new DriveVector(DRIVE_SPEED, -3.40, -0.95));
+        // match 36 values
+        // addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.40, -0.95));
 
-        // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
+        // match 41 values
+        addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.70, -0.65));
 
-        addCommand(new Wait(2.0));
+            // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
+
+        // addCommand(new Wait(2.0));
+        addCommand(new Wait(5.0));
 
         addCommand(new TurnOffIntake(true));
-        addCommand(new DriveVector(DRIVE_SPEED, 1.2, 0.0));
+            // addCommand(new DriveVector(DRIVE_SPEED, 1.2, 0.0));
 
-        addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
+            // addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 
     private void addCommand(Command command)

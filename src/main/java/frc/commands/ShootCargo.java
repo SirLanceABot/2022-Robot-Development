@@ -73,12 +73,12 @@ public class ShootCargo implements Command
         SHOOTER.prepareShooter(hub);
 
         // Auto aiming
-        if (!SHOOTER.isHubAligned())
-        {
+        // if (!SHOOTER.isHubAligned())
+        // {
             angleToTurn = SHOOTER.getHubAngle();
 
             // DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
-            DRIVETRAIN.turnToAngle(0.2 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() + angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
+            DRIVETRAIN.turnToAngle(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
 
             // if (angleToTurn > 0.0)
             // {
@@ -88,12 +88,12 @@ public class ShootCargo implements Command
             // {
             //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
             // }
-        }
+        // }
         
 
         // if(SHOOTER.isShooterReady())
 
-        if((timer.get() > 1.0) && !(cargoShot == numberOfCargo))
+        if((timer.get() > 1.5) && !(cargoShot == numberOfCargo))
         {
             timer.reset();
 

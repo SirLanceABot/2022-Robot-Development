@@ -8,6 +8,7 @@ import frc.components.Intake;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
 import frc.constants.Port;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class TurnOnIntake implements Command 
@@ -33,8 +34,7 @@ public class TurnOnIntake implements Command
 
 
     // *** CLASS CONSTRUCTOR ***
-    public 
-    TurnOnIntake()
+    public TurnOnIntake()
     {
         isFinished = false;
     }
@@ -44,8 +44,8 @@ public class TurnOnIntake implements Command
     {
         System.out.println(this);
 
-        // timer.reset();
-        // timer.start();
+        timer.reset();
+        timer.start();
 
         isFinished = false;
         // isIntakeOn = false;
@@ -57,7 +57,7 @@ public class TurnOnIntake implements Command
 
         INTAKE.pMoveArmOut();
 
-        if (INTAKE.measureArmOut())
+        if ((INTAKE.measureArmOut()) || timer.get() > 3.0)
         {
             INTAKE.intakeRoller();
 
@@ -80,7 +80,7 @@ public class TurnOnIntake implements Command
 
     public void end()
     {
-
+        timer.stop();
     }
 
     public String toString()

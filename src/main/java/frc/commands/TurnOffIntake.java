@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import frc.components.Intake;
 import frc.robot.RobotContainer;
 import frc.components.ShuttleFSM;
+import edu.wpi.first.wpilibj.Timer;
 
 public class TurnOffIntake implements Command 
 {
@@ -23,6 +24,7 @@ public class TurnOffIntake implements Command
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private boolean isMoveArmIn;
     private boolean isFinished;
+    private Timer timer = new Timer();
 
     // This variable is only used to simulate the intake being off
     // private boolean isIntakeOff = false;
@@ -41,6 +43,9 @@ public class TurnOffIntake implements Command
     {
         System.out.println(this);
 
+        timer.reset();
+        timer.start();
+
         isFinished = false;
         // isIntakeOff = false;
     }
@@ -55,7 +60,7 @@ public class TurnOffIntake implements Command
         {
             INTAKE.pMoveArmIn();
 
-            if(INTAKE.measureArmIn())
+            if((INTAKE.measureArmIn()) || timer.get() > 2.0)
             {
                 System.out.println("Intake is off");
                 isFinished = true;
@@ -83,7 +88,7 @@ public class TurnOffIntake implements Command
 
     public void end()
     {
-
+        timer.stop();
     }
 
     public String toString()

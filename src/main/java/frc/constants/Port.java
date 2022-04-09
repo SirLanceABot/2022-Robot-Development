@@ -107,7 +107,8 @@ public final class Port
         // public static final SwerveModuleData BACK_LEFT = new SwerveModuleData("Back Left", 4, true, 5, -348.75, 6);
         // public static final SwerveModuleData BACK_RIGHT = new SwerveModuleData("Back Right", 1, false, 2, -101.953125, 3);
 
-        private static final double FRONT_LEFT_ENCODER_OFFSET   = -167.255859375;
+        // private static final double FRONT_LEFT_ENCODER_OFFSET   = -167.255859375; //old encoder value
+        private static final double FRONT_LEFT_ENCODER_OFFSET   = -338.730;
         private static final double FRONT_RIGHT_ENCODER_OFFSET  = -305.947265625;
         private static final double BACK_LEFT_ENCODER_OFFSET    = -348.75;
         private static final double BACK_RIGHT_ENCODER_OFFSET   = -101.953125;

@@ -19,13 +19,13 @@ public final class Constant
     public static final double SHROUD_ANGLE_THRESHOLD = 5.0;
 
     //max amount of error in degrees for being aligned with the hub
-    public static final double HUB_ALIGNMENT_THRESHOLD = 2.0;
+    public static final double HUB_ALIGNMENT_THRESHOLD = 5.0;
 
     public static final double COMPRESSOR_RUNNING_AMPS = 0.0;
     public static final double INTAKE_SPEED = 0.5;
 
-    public static final double CLIMBER_UP_SPEED = 0.5;
-    public static final double CLIMBER_DOWN_SPEED = .75;
+    public static final double CLIMBER_UP_SPEED = 0.7;
+    public static final double CLIMBER_DOWN_SPEED = 0.9;
 
 
     public static final double INCHES_TO_METERS = 0.0254;

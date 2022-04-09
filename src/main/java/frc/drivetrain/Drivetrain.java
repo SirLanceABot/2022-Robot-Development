@@ -275,6 +275,7 @@ public class Drivetrain extends RobotDriveBase
                 turnSpeedProportion = Math.signum(turnSpeedProportion);
             }
 
+            // Use calculateTurnRotation
             drive(0.0, 0.0, turnSpeedProportion * (maxAngularVelocity - minAngularVelocity) + minAngularVelocity * Math.signum(angleToTurn), true);
         }
         else
@@ -285,6 +286,47 @@ public class Drivetrain extends RobotDriveBase
         }
 
         // return isDone;
+    }
+
+    public double calculateTurnRotation(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
+    {
+        // double currentAngle = odometry.getPoseMeters().getRotation().getDegrees();
+        double currentAngle = gyro.getYaw();
+        double angleToTurn = (desiredAngle - currentAngle) % 360;
+        double angularVelocity;
+
+        if (angleToTurn <= -180.0)
+        {
+            angleToTurn += 360.0;
+        }
+        else if (angleToTurn > 180.0)
+        {
+            angleToTurn -= 360.0;
+        }
+
+        System.out.println("ANGLE TO TURN: " + angleToTurn);
+
+        if(!isAtAngle(desiredAngle, angleThreshold))
+        {
+            //proportion of how close the speed will be to the max speed from the min speed, so it doesn't exceed the max speed
+            double turnSpeedProportion = angleToTurn / 30.0;
+
+            if (Math.abs(turnSpeedProportion) > 1.0)
+            {
+                turnSpeedProportion = Math.signum(turnSpeedProportion);
+            }
+
+            angularVelocity = turnSpeedProportion * (maxAngularVelocity - minAngularVelocity) + minAngularVelocity * Math.signum(angleToTurn);
+        }
+        else
+        {
+            angularVelocity = 0.0;
+            // stopMotor();
+            // isDone = true;
+            // System.out.println("Angle turned (degrees) = ");
+        }
+
+        return angularVelocity;
     }
 
     public boolean isAtAngle(double desiredAngle, double angleThreshold)
@@ -300,6 +342,8 @@ public class Drivetrain extends RobotDriveBase
         {
             angleToTurn -= 360.0;
         }
+        System.out.println("CURRENT ANGLE: " + currentAngle);
+        System.out.println("DESIRED ANGLE: " + desiredAngle);
 
         return (Math.abs(angleToTurn) < angleThreshold);
     }

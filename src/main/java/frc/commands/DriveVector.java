@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.RobotContainer;
 import frc.drivetrain.Drivetrain;
+import frc.components.Intake;
 import frc.components.ShuttleFSM;
 
 public class DriveVector implements Command 
@@ -21,6 +22,7 @@ public class DriveVector implements Command
 
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private double speed_metersPerSecond;
     private double xDisplacement_meters;
@@ -56,6 +58,11 @@ public class DriveVector implements Command
     {
         SHUTTLEFSM.fancyRun(false);
 
+        // if (INTAKE.measureArmOut())
+        // {
+        //     INTAKE.pMoveArmFloat();
+        // }
+        
         if(DRIVETRAIN.driveVector(startingPosition, speed_metersPerSecond, xDisplacement_meters, yDisplacement_meters))
         {
             System.out.println("Finished Driving");

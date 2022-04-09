@@ -202,7 +202,7 @@ public class TeleopMode implements ModeTransition
 
                     if (SHOOTER != null)
                     {
-                        shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot) || SHOOTER.isShooterReady();
+                        shoot = OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kShoot) || (SHOOTER.isShooterReady());
                     }
 
                     // TODO: Make this not here
@@ -254,6 +254,10 @@ public class TeleopMode implements ModeTransition
                     {
                         System.out.println("==================== SHROUD IS READY =====================");
                     }
+                    if (SHOOTER.isHubAligned())
+                    {
+                        System.out.println("==================== HUB IS READY ========================");
+                    }
                     if (SHOOTER.isShooterReady())
                     {
                         System.out.println("==================== SHOOTER IS READY ====================");
@@ -284,6 +288,10 @@ public class TeleopMode implements ModeTransition
                     if (SHOOTER.isShroudReady())
                     {
                         System.out.println("==================== SHROUD IS READY =====================");
+                    }
+                    if (SHOOTER.isHubAligned())
+                    {
+                        System.out.println("==================== HUB IS READY ========================");
                     }
                     if (SHOOTER.isShooterReady())
                     {
@@ -385,6 +393,14 @@ public class TeleopMode implements ModeTransition
                     CLIMBER.FCLShutDown();
                 }
 
+                CLIMBER.measureFCLLimits();
+
+                if(OPERATOR_CONTROLLER.getAction(OperatorDpadAction.kResetClimberEncoder))
+                {
+                    System.out.println("Set climber encoder to 0.0");
+                    CLIMBER.resetFCLEncoder();
+                }
+
                 /* // TODO: Use if second stage added
                 if (DRIVER_CONTROLLER.getAction(DriverDpadAction.kClimbTwoExtend))
                 {
@@ -430,13 +446,13 @@ public class TeleopMode implements ModeTransition
 
                 if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kBoostOrAutoAim) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kPrepareShooter))
                 {
-                    if (!SHOOTER.isHubAligned())
-                    {
+                    // if (!SHOOTER.isHubAligned())
+                    // {
                         angleToTurn = SHOOTER.getHubAngle();
 
                         System.out.println("ANGLE TO TURN: " + angleToTurn);
 
-                        DRIVETRAIN.turnToAngle(0.2 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() + angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
+                        driveTrainRotation = DRIVETRAIN.calculateTurnRotation(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
                         
                         // if (Math.abs(angleToTurn) > 15.0)
                         // {
@@ -444,7 +460,7 @@ public class TeleopMode implements ModeTransition
                         // }
 
                         // driveTrainRotation = -angleToTurn / 15.0 * (0.4 * Math.PI - 0.1) + 0.1 * Math.signum(-angleToTurn);
-                    }
+                    // }
                 }
                 else if (DRIVER_CONTROLLER.getAction(DriverButtonAction.kCrawlRight))
                 {

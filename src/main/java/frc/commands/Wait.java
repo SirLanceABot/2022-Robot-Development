@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
+import frc.components.Intake;
 import frc.components.ShuttleFSM;
 
 public class Wait implements Command 
@@ -23,6 +24,7 @@ public class Wait implements Command
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private double waitTime_seconds;
     private boolean isFinished;
+    private static final Intake INTAKE = RobotContainer.INTAKE;
     
 
     // *** CLASS CONSTRUCTOR ***
@@ -46,6 +48,8 @@ public class Wait implements Command
 
     public void execute()
     {
+        INTAKE.pMoveArmFloat();
+
         SHUTTLEFSM.fancyRun(false);
 
         System.out.printf("Wait time: %5.2f seconds\n", timer.get());

@@ -105,7 +105,7 @@ public class OperatorController extends Logitech
         UpRightMethod(Dpad.kUpRight), 
         // Method(Dpad.kRight), 
         // Method(Dpad.kDownRight), 
-        DownMethod(Dpad.kDown), 
+        kResetClimberEncoder(Dpad.kDown), 
         // Method(Dpad.kDownLeft), 
         // Method(Dpad.kLeft), 
         // Method(Dpad.kUpLeft), 

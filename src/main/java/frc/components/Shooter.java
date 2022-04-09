@@ -547,7 +547,7 @@ public class Shooter
 
     private void checkIsShooterReady()
     {
-        if (isFlywheelReady() && isShroudReady())
+        if (isFlywheelReady() && isShroudReady() && isHubAligned())
         {
             successfulChecks++;
         }

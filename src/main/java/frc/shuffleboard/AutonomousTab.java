@@ -369,6 +369,8 @@ public class AutonomousTab
         boolean isMoveFirst = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kMoveFirst);
         boolean isShootFirst = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kShootFirst);
         boolean isShootMoveShoot = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kShootMoveShoot);
+        boolean isFourBallAuto = (orderOfOperationsBox.getSelected() == AutonomousTabData.OrderOfOperations.kFourBallAuto);
+        boolean isMiddleRight = (startingLocationBox.getSelected() == AutonomousTabData.StartingLocation.kMiddleRight);
 
         // if trying to pick up cargo without moving off tarmac
         if(isPickUpCargo && !isMoveOffTarmac)
@@ -424,6 +426,14 @@ public class AutonomousTab
             isValid = false;
 
             msg += "[ Cannot Shoot, Move, And Shoot Without Shooting Two Cargo ] \n";
+        }
+
+        // if trying to run four ball without starting in middle right
+        if (isFourBallAuto && !isMiddleRight)
+        {
+            isValid = false;
+
+            msg += "[ Cannot Run Four Ball Auto without Starting in Middle Right Location ] \n";
         }
         
         
