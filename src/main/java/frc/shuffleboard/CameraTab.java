@@ -132,7 +132,7 @@ public class CameraTab
     {
         boolean driverMode = (RobotContainer.INTAKE != null) && (!DriverStation.isAutonomous()) ?
             RobotContainer.INTAKE.getIsIntaking() : false;
-        // boolean isDisabled = DriverStation.isDisabled();
+        boolean isDisabled = DriverStation.isDisabled();
         
         // driverMode = true; // testing force driver mode
 
@@ -150,12 +150,11 @@ public class CameraTab
         // }
         // else
 
-        // if(isDisabled)
-        // {
-        //     ledMode.setNumber(1.); // led off
-        // }
-        // else 
-        if(driverMode)
+        if(isDisabled)
+        {
+            ledMode.setNumber(1.); // led off
+        }
+        else if(driverMode)
         {
             camMode.setNumber(1.); // 1 driver
             stream.setNumber(2.);  // 2 driver intake with small target; 0 for both large side by side

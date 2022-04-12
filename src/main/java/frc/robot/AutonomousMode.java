@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.commands.AutonomousCommandList;
 import frc.drivetrain.Drivetrain;
+import frc.shuffleboard.CameraTab;
 
 public class AutonomousMode implements ModeTransition
 {
@@ -20,6 +21,7 @@ public class AutonomousMode implements ModeTransition
     // *** CLASS & INSTANCE VARIABLES ***
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
+    private static final CameraTab CAMERA_TAB = RobotContainer.CAMERA_TAB;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -35,6 +37,11 @@ public class AutonomousMode implements ModeTransition
      */
     public void init()
     {
+        if(CAMERA_TAB != null)
+        {
+            CAMERA_TAB.updateLimeLightMode();
+        }
+
         if(AUTONOMOUS_COMMAND_LIST != null)
         {
             AUTONOMOUS_COMMAND_LIST.init();
