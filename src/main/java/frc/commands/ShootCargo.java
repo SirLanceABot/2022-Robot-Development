@@ -68,17 +68,17 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        // SHOOTER.startDropShot();
+        SHOOTER.startDropShot();
         
-        SHOOTER.prepareShooter(hub);
+        // SHOOTER.prepareShooter(hub);
 
         // Auto aiming
         // if (!SHOOTER.isHubAligned())
         // {
-            angleToTurn = SHOOTER.getHubAngle();
+            // angleToTurn = SHOOTER.getHubAngle();
 
             // DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
-            DRIVETRAIN.turnToAngle(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
+            // DRIVETRAIN.turnToAngle(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
 
             // if (angleToTurn > 0.0)
             // {

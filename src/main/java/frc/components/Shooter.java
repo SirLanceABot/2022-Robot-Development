@@ -79,6 +79,7 @@ public class Shooter
     //original PID values are kP = 0.14 and kF = 0.035
     //second set of PID values are kP = 0.017 and kF = 0.049
     //encoder ticks at 10 foot shot = 13,000
+    //Jackson PID values: kP = 0.018, kI = 0.0002, kF = 0.04
     private static final double kP = 0.018;
     private static final double kI = 0.0002;
     private static final double kD = 0.000;

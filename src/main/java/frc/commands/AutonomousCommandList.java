@@ -191,7 +191,7 @@ public class AutonomousCommandList
         // addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.40, -0.95));
 
         // match 41 values
-        addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.70, -0.65));
+        addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.70, -0.75));
 
             // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
 

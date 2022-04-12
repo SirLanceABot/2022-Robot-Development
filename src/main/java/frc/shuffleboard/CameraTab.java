@@ -65,7 +65,7 @@ public class CameraTab
     {
         return cameraTab.add("Time Remaining", timeRemainingData.toString())
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(20, 0)
+            .withPosition(24, 5)
             .withSize(4, 2)
             .getEntry();
     }

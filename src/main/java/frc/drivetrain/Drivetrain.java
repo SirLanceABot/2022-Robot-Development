@@ -210,8 +210,7 @@ public class Drivetrain extends RobotDriveBase
 
         double distanceToNearestEndpoint = Math.min(distanceDriven, distanceToDrive - distanceDriven);
         double maxVelocity = velocity;
-        double minVelocity = 0.75
-        ;
+        double minVelocity = 0.75;
 
         if (distanceToNearestEndpoint < 1.0)
         {
@@ -245,7 +244,7 @@ public class Drivetrain extends RobotDriveBase
      * @param angleThreshold in degrees
      * @return true when turn is complete
      */
-    public void turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
+    public boolean turnToAngle(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
     {
         boolean isDone = false;
         // double currentAngle = odometry.getPoseMeters().getRotation().getDegrees();
@@ -281,11 +280,59 @@ public class Drivetrain extends RobotDriveBase
         else
         {
             stopMotor();
-            // isDone = true;
+            isDone = true;
             // System.out.println("Angle turned (degrees) = ");
         }
 
-        // return isDone;
+        return isDone;
+    }
+
+    /**
+     * Drive a "vector" distance in meters and rotate to desired angle
+     * 
+     * @param startingPosition of the robot
+     * @param velocity in meters per second (+ forward, - reverse)
+     * @param distanceToDriveX in meters
+     * @param distanceToDriveY in meters
+     * @param desiredAngle in degrees in navigatioanl position
+     * @return true when drive is complete
+     */
+    public boolean driveVectorAndTurnToAngle(Translation2d startingPosition, double velocity, double distanceToDriveX, double distanceToDriveY, double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
+    {
+        boolean isDone = false;
+
+        double distanceToDrive = Math.sqrt(distanceToDriveX * distanceToDriveX + distanceToDriveY * distanceToDriveY);
+
+        double velocityX = velocity * distanceToDriveX / distanceToDrive;
+        double velocityY = velocity * distanceToDriveY / distanceToDrive;
+
+        double distanceDriven = odometry.getPoseMeters().getTranslation().getDistance(startingPosition);
+
+        double distanceToNearestEndpoint = Math.min(distanceDriven, distanceToDrive - distanceDriven);
+        double maxVelocity = velocity;
+        double minVelocity = 0.75;
+
+        if (distanceToNearestEndpoint < 1.0)
+        {
+            velocityX *= distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity;
+            velocityY *= distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity;
+            System.out.println("DRIVE SPEED" + distanceToNearestEndpoint / 1.0 * (maxVelocity - minVelocity) + minVelocity);
+        }
+
+        updateOdometry();
+
+        if(Math.abs(distanceDriven) < Math.abs(distanceToDrive) && !isAtAngle(desiredAngle, angleThreshold))
+        {
+            drive(velocityX, velocityY, calculateTurnRotation(minAngularVelocity, maxAngularVelocity, desiredAngle, angleThreshold), true);
+        }
+        else
+        {
+            stopMotor();
+            isDone = true;
+            // System.out.println("Dist (meters) = " + distanceDriven);
+        }
+
+        return isDone;
     }
 
     public double calculateTurnRotation(double minAngularVelocity, double maxAngularVelocity, double desiredAngle, double angleThreshold)
