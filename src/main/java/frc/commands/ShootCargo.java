@@ -27,7 +27,7 @@ public class ShootCargo implements Command
     private static final Shooter SHOOTER = RobotContainer.SHOOTER;
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
-    private static final PowerDistribution PDH = RobotContainer.PDH;
+    // private static final PowerDistribution PDH = RobotContainer.PDH;
     private static final Intake INTAKE = RobotContainer.INTAKE;
     private Timer timer = new Timer();
     private int numberOfCargo;
@@ -68,27 +68,27 @@ public class ShootCargo implements Command
 
     public void execute()
     {
-        SHOOTER.startDropShot();
+        // SHOOTER.startDropShot();
         
-        // SHOOTER.prepareShooter(hub);
+        SHOOTER.prepareShooter(hub);
 
         // Auto aiming
-        // if (!SHOOTER.isHubAligned())
-        // {
-            // angleToTurn = SHOOTER.getHubAngle();
+        if (!SHOOTER.isHubAligned())
+        {
+            angleToTurn = SHOOTER.getHubAngle();
 
-            // DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
-            // DRIVETRAIN.turnToAngle(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
+            DRIVETRAIN.drive(0.0, 0.0, -angleToTurn / 15.0 * (0.7 - 0.2) + 0.2 * Math.signum(-angleToTurn), true);
+            DRIVETRAIN.turnToAngle(0.1 * 2 * Math.PI, 0.5 * 2 * Math.PI, DRIVETRAIN.getGyro() - angleToTurn, Constant.HUB_ALIGNMENT_THRESHOLD);
 
-            // if (angleToTurn > 0.0)
-            // {
-            //     DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
-            // }
-            // else if (angleToTurn < 0.0)
-            // {
-            //     DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
-            // }
-        // }
+            if (angleToTurn > 0.0)
+            {
+                DRIVETRAIN.drive(0.0, 0.0, -0.3, true);
+            }
+            else if (angleToTurn < 0.0)
+            {
+                DRIVETRAIN.drive(0.0, 0.0, 0.3, true);
+            }
+        }
         
 
         // if(SHOOTER.isShooterReady())

@@ -187,21 +187,23 @@ public class AutonomousCommandList
             // addCommand(new RotateToAngle(MIN_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, -150.0));
         addCommand(new TurnOnIntake());
 
-        // match 36 values
-        // addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.40, -0.95));
-
-        // match 41 values
+        //TODO MAX THESE ARE THE VALUES YOU CHANGE IN TESTING
+        //FIXME First priority is making sure this makes it to the right spot
+        //This is going to the terminal
         addCommand(new DriveVector(FAST_DRIVE_SPEED, -3.70, -0.75));
+                                                    //  X   ,   Y   In Meters
 
             // addCommand(new DriveVector(DRIVE_SPEED, 1, 1));
 
-        // addCommand(new Wait(2.0));
-        addCommand(new Wait(5.0));
+        //wait for player to introduce the ball
+        addCommand(new Wait(2.0));
 
         addCommand(new TurnOffIntake(true));
-            // addCommand(new DriveVector(DRIVE_SPEED, 1.2, 0.0));
+        //goes toward up to make better shot
+        //TODO see if this can be decreased
+        addCommand(new DriveVector(FAST_DRIVE_SPEED, 1.2, 0.0));
 
-            // addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
+        addCommand(new ShootCargo(2, Shooter.Hub.kUpper));
     }
 
     private void addCommand(Command command)

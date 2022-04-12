@@ -91,7 +91,7 @@ public class AutonomousTabData
         str += "\n*****  AUTONOMOUS SELECTION  *****\n";
         str += "Starting Location     : "  + startingLocation   + "\n";
         str += "Order of Operations   : "  + orderOfOperations  + "\n";
-        str += "Shoot Cargo           : "  + shootCargoAmount         + "\n";
+        str += "Shoot Cargo           : "  + shootCargoAmount   + "\n";
         str += "Shoot Delay           : "  + shootDelay         + "\n";
         str += "Move Off Tarmac       : "  + moveOffTarmac      + "\n";
         str += "Move Delay            : "  + moveDelay          + "\n";
