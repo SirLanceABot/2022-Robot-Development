@@ -132,6 +132,7 @@ public class CameraTab
     {
         boolean driverMode = (RobotContainer.INTAKE != null) && (!DriverStation.isAutonomous()) ?
             RobotContainer.INTAKE.getIsIntaking() : false;
+        // boolean isDisabled = DriverStation.isDisabled();
         
         // driverMode = true; // testing force driver mode
 
@@ -148,6 +149,12 @@ public class CameraTab
         //     ledMode.setNumber(0.); // 0 pipeline setting
         // }
         // else
+
+        // if(isDisabled)
+        // {
+        //     ledMode.setNumber(1.); // led off
+        // }
+        // else 
         if(driverMode)
         {
             camMode.setNumber(1.); // 1 driver
