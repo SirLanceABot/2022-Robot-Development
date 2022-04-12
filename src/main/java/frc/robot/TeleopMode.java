@@ -8,6 +8,7 @@ import frc.components.Intake;
 import frc.components.Climber;
 import frc.components.EventGenerator;
 import frc.drivetrain.Drivetrain;
+import frc.shuffleboard.CameraTab;
 import frc.components.Shooter;
 import frc.components.Shuttle;
 import frc.components.ShuttleFSM;
@@ -55,6 +56,7 @@ public class TeleopMode implements ModeTransition
     private static final ShuttleFSM SHUTTLEFSM = RobotContainer.SHUTTLEFSM;
 
     private static final PowerDistribution PDH = RobotContainer.PDH;
+    private static final CameraTab CAMERA_TAB = RobotContainer.CAMERA_TAB;
 
     // Testing variable
     private static final double SHOOTER_SPEED = 0.5;
@@ -67,6 +69,8 @@ public class TeleopMode implements ModeTransition
 
     private static double angleToTurn;
     private static double driveTrainRotation;
+
+    private static boolean autoRunClimb = true;
 
     double testingRPM = 0.0;
     double testingShroud = -235;
@@ -87,6 +91,11 @@ public class TeleopMode implements ModeTransition
      */
     public void init()
     {
+        if(CAMERA_TAB != null)
+        {
+            CAMERA_TAB.updateLimeLightMode();
+        }
+
         if(DRIVER_CONTROLLER != null && DRIVETRAIN != null)
         {
             DRIVER_CONTROLLER.resetRumbleCounter();
@@ -376,20 +385,58 @@ public class TeleopMode implements ModeTransition
             if(CLIMBER != null)
             {
                 // running the climber
+                /* // Darren's idea
+                if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneExtend) && OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneRetract))
+                {
+                    if(!autoRunClimb)
+                    {
+                        autoRunClimb = true;
+                        System.out.println("Enabled auto climb");
+                    }
+                }
+                else */
                 if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneExtend))
                 {
                     // System.out.println("CLIMB UP");
                     CLIMBER.FCLArmUp();
+
+                    /* // Darren's idea
+                    if(autoRunClimb)
+                    {
+                        autoRunClimb = false;
+                        System.out.println("Disabled auto climb");
+                    }
+                    */
+
                     //SCLArmUp
                 }
                 else if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbOneRetract))
                 {
                     // System.out.println("CLIMB DOWN");
                     CLIMBER.FCLArmDown();
+
+                    /* // Darren's idea
+                    if(autoRunClimb)
+                    {
+                        autoRunClimb = false;
+                        System.out.println("Disabled auto climb");
+                    }
+                    */
                     //SCLArmDown
                 }
                 else// if(OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kClimbShutDown))
                 {
+                    /* // Darren's idea
+                    if(autoRunClimb)
+                    {
+                        CLIMBER.FCLHold();
+                    }
+                    else
+                    {
+                        CLIMBER.FCLStop();
+                    }
+                    */
+                    
                     CLIMBER.FCLShutDown();
                 }
 

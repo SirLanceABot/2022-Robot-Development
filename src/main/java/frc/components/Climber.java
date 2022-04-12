@@ -428,6 +428,17 @@ public class Climber
         // DriverStation.reportError("Climber going down", false);
     }
 
+    // Darren's idea
+    // public void FCLStop()
+    // {
+    //     setFirstStageMotorSpeed(0.0);
+    // }
+
+    // public void FCLHold()
+    // {
+    //     setFirstStageMotorSpeed(-Constant.CLIMBER_HOLD_SPEED);
+    // }
+
     public void SCLArmUp()
     {
         SCLMovementType = MovementType.kNone;
