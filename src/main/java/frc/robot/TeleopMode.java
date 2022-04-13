@@ -448,7 +448,7 @@ public class TeleopMode implements ModeTransition
                     CLIMBER.resetFCLEncoder();
                 }
 
-                /* // TODO: Use if second stage added
+                 // TODO: Use if second stage added
                 if (DRIVER_CONTROLLER.getAction(DriverDpadAction.kClimbTwoExtend))
                 {
                     CLIMBER.SCLArmUp();
@@ -461,7 +461,7 @@ public class TeleopMode implements ModeTransition
                 {
                     CLIMBER.SCLShutDown();
                 }
-                */
+                
             }
         }
 
