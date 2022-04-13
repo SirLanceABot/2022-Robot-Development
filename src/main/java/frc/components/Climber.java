@@ -246,10 +246,10 @@ public class Climber
     //     this.SCFPosition = SCFPosition;
     // }
 
-    private void setKOff()
+    public void setKOff()
     {
-        this.FCLMovementType = kOff;
-        this.SCLMovementType = kOff;
+        this.FCLMovementType = MovementType.kOff;
+        this.SCLMovementType = MovementType.kOff;
     }
 
     //Everything Else

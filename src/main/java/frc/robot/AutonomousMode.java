@@ -3,6 +3,7 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 
 import frc.commands.AutonomousCommandList;
+import frc.components.Climber;
 import frc.drivetrain.Drivetrain;
 import frc.shuffleboard.CameraTab;
 
@@ -22,7 +23,7 @@ public class AutonomousMode implements ModeTransition
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
     private static final CameraTab CAMERA_TAB = RobotContainer.CAMERA_TAB;
-    private static final Climber CLIMBER = RobotContainer.Climber;
+    private static final Climber CLIMBER = RobotContainer.CLIMBER;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -38,7 +39,9 @@ public class AutonomousMode implements ModeTransition
      */
     public void init()
     {
-        Climber.setKOff();
+        if(CLIMBER != null)
+            CLIMBER.setKOff();
+            
         if(CAMERA_TAB != null)
         {
             CAMERA_TAB.updateLimeLightMode();
