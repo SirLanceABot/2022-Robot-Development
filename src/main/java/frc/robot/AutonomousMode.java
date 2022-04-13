@@ -22,6 +22,7 @@ public class AutonomousMode implements ModeTransition
     private static final Drivetrain DRIVETRAIN = RobotContainer.DRIVETRAIN;
     private static final AutonomousCommandList AUTONOMOUS_COMMAND_LIST = RobotContainer.AUTONOMOUS_COMMAND_LIST;
     private static final CameraTab CAMERA_TAB = RobotContainer.CAMERA_TAB;
+    private static final Climber CLIMBER = RobotContainer.Climber;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -37,6 +38,7 @@ public class AutonomousMode implements ModeTransition
      */
     public void init()
     {
+        Climber.setKOff();
         if(CAMERA_TAB != null)
         {
             CAMERA_TAB.updateLimeLightMode();

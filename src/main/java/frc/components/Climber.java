@@ -73,8 +73,8 @@ public class Climber
     // *** CLASS CONSTRUCTOR ***
     public Climber(int firstStageClimbMotorPort, int secondStageClimbMotorPort)
     {
-        FCLMovementType = MovementType.kOff;
-        SCLMovementType = MovementType.kOff;
+        FCLMovementType = MovementType.kNone;
+        SCLMovementType = MovementType.kNone;
 
         firstStageClimbMotorLeader = new CANSparkMax(firstStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
         secondStageClimbMotorLeader = new CANSparkMax(secondStageClimbMotorPort, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -246,6 +246,12 @@ public class Climber
     //     this.SCFPosition = SCFPosition;
     // }
 
+    private void setKOff()
+    {
+        this.FCLMovementType = kOff;
+        this.SCLMovementType = kOff;
+    }
+
     //Everything Else
     private MovementType findMovement()
     {
@@ -285,11 +291,17 @@ public class Climber
     }
     public void FCLShutDown()
     {
-        setFirstStageMotorSpeed(0.0);
-        /*
+        // setFirstStageMotorSpeed(0.0);
+        
         switch(FCLMovementType)
         {
         case kOff:
+            /*
+               It should only come into teleop with kOff after auto.
+               It checks the position of the arms and if its greater than 20 
+               that means the climber is floating
+               so it starts to move the arms down.
+            */
             if(FCLEncoder.getPosition() >= 20.0)
             {
                 setFirstStageMotorSpeed(-.20);
@@ -297,7 +309,11 @@ public class Climber
             }
             break;
         case kReverse:
-            // setFirstStageMotorSpeed(-.20);
+            /*
+               You dont't need to set speed here cause you'll come in here
+               with your speed already set backwards.
+               see above
+            */
             if(FCLEncoder.getPosition() < 1.0 || FCLReverseLimitSwitch.isPressed())
             {
                 setFirstStageMotorSpeed(0.0);
@@ -305,14 +321,30 @@ public class Climber
             }
             break;
         case kClimbing:
+            /*
+                You can only come into shutdown() with kClimbing if the amperge of the motor
+                is greater that a certain amount after calling armDown()
+                It sets the motor to a velocity so that it cancels out the robot falling if not latched
+            */
             setFirstStageMotorSpeed(-0.20);
             //Do not change the movement type 
             break;
         case kMoving:
+            /*
+                Gets set when any move arm method is called and the amperage is low
+                Since the robot should be climbing of the drivers accord it doesn't
+                put the motor in any reverse velocity
+                Moves the robot to kOff because you're not pressing a button after moving.
+            */
             setFirstStageMotorSpeed(0.0);
             FCLMovementType = MovementType.kOff;
             break;
         case kNone:
+            /*
+                Should only come into this if you start in teleop
+                This lets the driver test and prepare things 
+                without the arms moving on their own
+            */
             break;
         }
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
@@ -338,11 +370,11 @@ public class Climber
         //     setFirstStageMotorSpeed(0.0);
         //     movementType = MovementType.kOff;
         // }
-        */
     }
     
     public void SCLShutDown()
     {
+        //For Type context see FCLShutDown()
         switch(SCLMovementType)
         {
         case kOff:
