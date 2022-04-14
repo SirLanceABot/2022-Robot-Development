@@ -68,6 +68,7 @@ public class Climber
     // private static RelativeEncoder SCFEncoder = firstStageClimbMotorLeader.getEncoder();
     // private static SparkMaxLimitSwitch SCFForwardLimitSwitch;
     // private static SparkMaxLimitSwitch SCFBackwardLimitSwitch;
+    private boolean AutoDone = false;
 
 
     // *** CLASS CONSTRUCTOR ***
@@ -246,33 +247,35 @@ public class Climber
     //     this.SCFPosition = SCFPosition;
     // }
 
-    public void setKOff()
+    //Asking if any part of auto has been done to any degree not if the auto has been completed
+    public void AutoDone()
     {
+        this.AutoDone = true;
         this.FCLMovementType = MovementType.kOff;
         this.SCLMovementType = MovementType.kOff;
     }
 
-    //Everything Else
-    private MovementType findMovement()
-    {
-        if(firstStageClimbMotorLeader.getOutputCurrent() >= 20)
-        {
-            return(MovementType.kClimbing);
-        }
-        else if(firstStageClimbMotorLeader.getOutputCurrent() < 20 || firstStageClimbMotorLeader.getOutputCurrent() > 0)
-        {
-            return(MovementType.kMoving);
-        }
-        else if(firstStageClimbMotorLeader.getOutputCurrent() == 0)
-        {
-            return(MovementType.kOff);
-        }
-        else
-        {
-            return(MovementType.kNone);
-        }
+    // //Everything Else
+    // private MovementType findMovement()
+    // {
+    //     if(firstStageClimbMotorLeader.getOutputCurrent() >= 20)
+    //     {
+    //         return(MovementType.kClimbing);
+    //     }
+    //     else if(firstStageClimbMotorLeader.getOutputCurrent() < 20 || firstStageClimbMotorLeader.getOutputCurrent() > 0)
+    //     {
+    //         return(MovementType.kMoving);
+    //     }
+    //     else if(firstStageClimbMotorLeader.getOutputCurrent() == 0)
+    //     {
+    //         return(MovementType.kOff);
+    //     }
+    //     else
+    //     {
+    //         return(MovementType.kNone);
+    //     }
        
-    }
+    // }
     private void setFirstStageMotorSpeed(double speed)
     {
         firstStageClimbMotorLeader.set(speed);
@@ -310,14 +313,17 @@ public class Climber
             break;
         case kReverse:
             /*
-               You dont't need to set speed here cause you'll come in here
-               with your speed already set backwards.
-               see above
+               You dont't need to set speed here cause this only 
+               checks to see if you need to go back to kOff after you've had your speed set
+               See above
             */
             if(FCLEncoder.getPosition() < 1.0 || FCLReverseLimitSwitch.isPressed())
             {
                 setFirstStageMotorSpeed(0.0);
-                FCLMovementType = MovementType.kOff;
+                if(AutoDone == true)
+                    FCLMovementType = MovementType.kOff;   
+                else
+                    FCLMovementType = MovementType.kNone;
             }
             break;
         case kClimbing:
@@ -337,14 +343,17 @@ public class Climber
                 Moves the robot to kOff because you're not pressing a button after moving.
             */
             setFirstStageMotorSpeed(0.0);
-            FCLMovementType = MovementType.kOff;
+            if(AutoDone == true)
+                FCLMovementType = MovementType.kOff;
+            else
+                FCLMovementType = MovementType.kNone;
             break;
         case kNone:
             /*
                 Should only come into this if you start in teleop
-                This lets the driver test and prepare things 
-                without the arms moving on their own
+                This acts as a defualt shutdown, it does nothing special, just shuts down
             */
+            setFirstStageMotorSpeed(0.0);
             break;
         }
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
@@ -389,7 +398,10 @@ public class Climber
             if(SCLEncoder.getPosition() < 1.0 || SCLReverseLimitSwitch.isPressed())
             {
                 setSecondStageMotorSpeed(0.0);
-                SCLMovementType = MovementType.kOff;
+                if(AutoDone == true)
+                    SCLMovementType = MovementType.kOff;
+                else
+                    SCLMovementType = MovementType.kNone;
             }
             break;
         case kClimbing:
@@ -398,9 +410,13 @@ public class Climber
             break;
         case kMoving:
             setSecondStageMotorSpeed(0.0);
-            SCLMovementType = MovementType.kOff;
+            if(AutoDone == true)
+                SCLMovementType = MovementType.kOff;
+            else
+                SCLMovementType = MovementType.kNone;
             break;
         case kNone:
+            setSecondStageMotorSpeed(0.0);
             break;
         }
     }
