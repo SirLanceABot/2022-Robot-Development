@@ -168,13 +168,13 @@ public class Climber
     {
         //TODO set a soft limit of however far the guy is legally allowed to move
         secondStageClimbMotorLeader.restoreFactoryDefaults();
-        secondStageClimbMotorLeader.setInverted(true);
+        secondStageClimbMotorLeader.setInverted(false);
         secondStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
     
-        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //TODO set a soft limit of however far the guy is legally allowed to move
+        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of however far the guy is legally allowed to move
         secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0); //TODO set a soft limit of however far the guy is legally allowed to move
-        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0.0f); //TODO set a soft limit of however far the guy is legally allowed to move
+        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
     
         
         SCLReverseLimitSwitch = secondStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
@@ -375,29 +375,29 @@ public class Climber
     public void SCLShutDown()
     {
         //For Type context see FCLShutDown()
+        System.out.println(SCLMovementType);
         switch(SCLMovementType)
         {
         case kOff:
-            if(FCLEncoder.getPosition() >= 20.0)
+            if(SCLEncoder.getPosition() >= 20.0)
             {
-                setFirstStageMotorSpeed(-.20);
+                setSecondStageMotorSpeed(-.20);
                 SCLMovementType = MovementType.kReverse;
             }
             break;
         case kReverse:
-            // setFirstStageMotorSpeed(-.20);
             if(SCLEncoder.getPosition() < 1.0 || SCLReverseLimitSwitch.isPressed())
             {
-                setFirstStageMotorSpeed(0.0);
+                setSecondStageMotorSpeed(0.0);
                 SCLMovementType = MovementType.kOff;
             }
             break;
         case kClimbing:
-            setFirstStageMotorSpeed(-0.20);
+            setSecondStageMotorSpeed(-0.20);
             //Do not change the movement type 
             break;
         case kMoving:
-            setFirstStageMotorSpeed(0.0);
+            setSecondStageMotorSpeed(0.0);
             SCLMovementType = MovementType.kOff;
             break;
         case kNone:
@@ -473,7 +473,10 @@ public class Climber
 
     public void SCLArmUp()
     {
-        SCLMovementType = MovementType.kNone;
+        if(SCLMovementType != MovementType.kClimbing)
+        {
+            SCLMovementType = MovementType.kMoving;
+        }
         setSecondStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
     }
 
@@ -483,7 +486,7 @@ public class Climber
         if(current > 15.0)
             SCLMovementType = MovementType.kClimbing;
         else
-            SCLMovementType = MovementType.kNone;
+            SCLMovementType = MovementType.kMoving;
         
         setSecondStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
     }
