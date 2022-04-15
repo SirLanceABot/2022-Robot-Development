@@ -40,7 +40,7 @@ public class AutonomousMode implements ModeTransition
     public void init()
     {
         if(CLIMBER != null)
-            CLIMBER.AutoDone();
+            // CLIMBER.AutoDone();
             
         if(CAMERA_TAB != null)
         {

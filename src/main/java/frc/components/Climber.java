@@ -120,11 +120,6 @@ public class Climber
         FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
         FCLForwardLimitSwitch.enableLimitSwitch(true);
         
-        // FCLBackwardLimitSwitch = firstStageClimbMotorLeader.getReverseLimitSwitch(Type.kNormallyOpen);
-        // FCLBackwardLimitSwitch.enableLimitSwitch(false);
-        // FCLForwardLimitSwitch = firstStageClimbMotorLeader.getForwardLimitSwitch(Type.kNormallyOpen);
-        // FCLForwardLimitSwitch.enableLimitSwitch(false);
-        // //^^Unknown if being used for now^^
         // FCLEncoder.setPosition(0);
         firstStageClimbMotorLeader.setOpenLoopRampRate(0.1);
         firstStageClimbMotorLeader.setSmartCurrentLimit(40);
@@ -169,11 +164,11 @@ public class Climber
     {
         //TODO set a soft limit of however far the guy is legally allowed to move
         secondStageClimbMotorLeader.restoreFactoryDefaults();
-        secondStageClimbMotorLeader.setInverted(false);
+        secondStageClimbMotorLeader.setInverted(true);
         secondStageClimbMotorLeader.setIdleMode(IdleMode.kBrake); 
     
         secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kReverse, 0.0f); //TODO set a soft limit of however far the guy is legally allowed to move
-        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kReverse, false);
         secondStageClimbMotorLeader.setSoftLimit(SoftLimitDirection.kForward, 0.0f); //TODO set a soft limit of however far the guy is legally allowed to move
         secondStageClimbMotorLeader.enableSoftLimit(SoftLimitDirection.kForward, false);
     
@@ -294,68 +289,68 @@ public class Climber
     }
     public void FCLShutDown()
     {
-        // setFirstStageMotorSpeed(0.0);
+        setFirstStageMotorSpeed(0.0);
         
-        switch(FCLMovementType)
-        {
-        case kOff:
-            /*
-               It should only come into teleop with kOff after auto.
-               It checks the position of the arms and if its greater than 20 
-               that means the climber is floating
-               so it starts to move the arms down.
-            */
-            if(FCLEncoder.getPosition() >= 20.0)
-            {
-                setFirstStageMotorSpeed(-.20);
-                FCLMovementType = MovementType.kReverse;
-            }
-            break;
-        case kReverse:
-            /*
-               You dont't need to set speed here cause this only 
-               checks to see if you need to go back to kOff after you've had your speed set
-               See above
-            */
-            if(FCLEncoder.getPosition() < 1.0 || FCLReverseLimitSwitch.isPressed())
-            {
-                setFirstStageMotorSpeed(0.0);
-                if(AutoDone == true)
-                    FCLMovementType = MovementType.kOff;   
-                else
-                    FCLMovementType = MovementType.kNone;
-            }
-            break;
-        case kClimbing:
-            /*
-                You can only come into shutdown() with kClimbing if the amperge of the motor
-                is greater that a certain amount after calling armDown()
-                It sets the motor to a velocity so that it cancels out the robot falling if not latched
-            */
-            setFirstStageMotorSpeed(-0.20);
-            //Do not change the movement type 
-            break;
-        case kMoving:
-            /*
-                Gets set when any move arm method is called and the amperage is low
-                Since the robot should be climbing of the drivers accord it doesn't
-                put the motor in any reverse velocity
-                Moves the robot to kOff because you're not pressing a button after moving.
-            */
-            setFirstStageMotorSpeed(0.0);
-            if(AutoDone == true)
-                FCLMovementType = MovementType.kOff;
-            else
-                FCLMovementType = MovementType.kNone;
-            break;
-        case kNone:
-            /*
-                Should only come into this if you start in teleop
-                This acts as a defualt shutdown, it does nothing special, just shuts down
-            */
-            setFirstStageMotorSpeed(0.0);
-            break;
-        }
+        // switch(FCLMovementType)
+        // {
+        // case kOff:
+        //     /*
+        //        It should only come into teleop with kOff after auto.
+        //        It checks the position of the arms and if its greater than 20 
+        //        that means the climber is floating
+        //        so it starts to move the arms down.
+        //     */
+        //     if(FCLEncoder.getPosition() >= 20.0)
+        //     {
+        //         setFirstStageMotorSpeed(-.20);
+        //         FCLMovementType = MovementType.kReverse;
+        //     }
+        //     break;
+        // case kReverse:
+        //     /*
+        //        You dont't need to set speed here cause this only 
+        //        checks to see if you need to go back to kOff after you've had your speed set
+        //        See above
+        //     */
+        //     if(FCLEncoder.getPosition() < 1.0 || FCLReverseLimitSwitch.isPressed())
+        //     {
+        //         setFirstStageMotorSpeed(0.0);
+        //         if(AutoDone == true)
+        //             FCLMovementType = MovementType.kOff;   
+        //         else
+        //             FCLMovementType = MovementType.kNone;
+        //     }
+        //     break;
+        // case kClimbing:
+        //     /*
+        //         You can only come into shutdown() with kClimbing if the amperge of the motor
+        //         is greater that a certain amount after calling armDown()
+        //         It sets the motor to a velocity so that it cancels out the robot falling if not latched
+        //     */
+        //     setFirstStageMotorSpeed(-0.20);
+        //     //Do not change the movement type 
+        //     break;
+        // case kMoving:
+        //     /*
+        //         Gets set when any move arm method is called and the amperage is low
+        //         Since the robot should be climbing of the drivers accord it doesn't
+        //         put the motor in any reverse velocity
+        //         Moves the robot to kOff because you're not pressing a button after moving.
+        //     */
+        //     setFirstStageMotorSpeed(0.0);
+        //     if(AutoDone == true)
+        //         FCLMovementType = MovementType.kOff;
+        //     else
+        //         FCLMovementType = MovementType.kNone;
+        //     break;
+        // case kNone:
+        //     /*
+        //         Should only come into this if you start in teleop
+        //         This acts as a defualt shutdown, it does nothing special, just shuts down
+        //     */
+        //     setFirstStageMotorSpeed(0.0);
+        //     break;
+        // }
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         // if(FCLEncoder.getPosition() >= 20.0 && movementType == MovementType.kOff)
         // {
@@ -383,42 +378,43 @@ public class Climber
     
     public void SCLShutDown()
     {
+        setSecondStageMotorSpeed(0.0);
         //For Type context see FCLShutDown()
-        System.out.println(SCLMovementType);
-        switch(SCLMovementType)
-        {
-        case kOff:
-            if(SCLEncoder.getPosition() >= 20.0)
-            {
-                setSecondStageMotorSpeed(-.20);
-                SCLMovementType = MovementType.kReverse;
-            }
-            break;
-        case kReverse:
-            if(SCLEncoder.getPosition() < 1.0 || SCLReverseLimitSwitch.isPressed())
-            {
-                setSecondStageMotorSpeed(0.0);
-                if(AutoDone == true)
-                    SCLMovementType = MovementType.kOff;
-                else
-                    SCLMovementType = MovementType.kNone;
-            }
-            break;
-        case kClimbing:
-            setSecondStageMotorSpeed(-0.20);
-            //Do not change the movement type 
-            break;
-        case kMoving:
-            setSecondStageMotorSpeed(0.0);
-            if(AutoDone == true)
-                SCLMovementType = MovementType.kOff;
-            else
-                SCLMovementType = MovementType.kNone;
-            break;
-        case kNone:
-            setSecondStageMotorSpeed(0.0);
-            break;
-        }
+        // System.out.println("SCL: " + SCLMovementType + "FCL: " + FCLMovementType);
+        // switch(SCLMovementType)
+        // {
+        // case kOff:
+        //     if(SCLEncoder.getPosition() >= 20.0)
+        //     {
+        //         setSecondStageMotorSpeed(-.20);
+        //         SCLMovementType = MovementType.kReverse;
+        //     }
+        //     break;
+        // case kReverse:
+        //     if(SCLEncoder.getPosition() < 1.0 || SCLReverseLimitSwitch.isPressed())
+        //     {
+        //         setSecondStageMotorSpeed(0.0);
+        //         if(AutoDone == true)
+        //             SCLMovementType = MovementType.kOff;
+        //         else
+        //             SCLMovementType = MovementType.kNone;
+        //     }
+        //     break;
+        // case kClimbing:
+        //     setSecondStageMotorSpeed(-0.20);
+        //     //Do not change the movement type 
+        //     break;
+        // case kMoving:
+        //     setSecondStageMotorSpeed(0.0);
+        //     if(AutoDone == true)
+        //         SCLMovementType = MovementType.kOff;
+        //     else
+        //         SCLMovementType = MovementType.kNone;
+        //     break;
+        // case kNone:
+        //     setSecondStageMotorSpeed(0.0);
+        //     break;
+        // }
     }
 
     public void FCLArmUp()
@@ -439,10 +435,12 @@ public class Climber
         //     setFirstStageMotorSpeed(0);
         // }
         // movementType = findMovement();
-        if(FCLMovementType != MovementType.kClimbing)
-        {
-            FCLMovementType = MovementType.kMoving;
-        }
+
+        // if(FCLMovementType != MovementType.kClimbing)
+        // {
+        //     FCLMovementType = MovementType.kMoving;
+        // }
+
         setFirstStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         
@@ -465,11 +463,13 @@ public class Climber
         //     setFirstStageMotorSpeed(-.5);
         //     // setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // }
-        double current = firstStageClimbMotorLeader.getOutputCurrent();
-        if(current > 15.0)
-            FCLMovementType = MovementType.kClimbing;
-        else
-            FCLMovementType = MovementType.kMoving;
+
+        // double current = firstStageClimbMotorLeader.getOutputCurrent();
+        // if(current > 15.0)
+        //     FCLMovementType = MovementType.kClimbing;
+        // else
+        //     FCLMovementType = MovementType.kMoving;
+
         setFirstStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
         // System.out.println("AMP: " + firstStageClimbMotorLeader.getOutputCurrent() + " MODE: " + movementType);
         //^Test value
@@ -489,20 +489,20 @@ public class Climber
 
     public void SCLArmUp()
     {
-        if(SCLMovementType != MovementType.kClimbing)
-        {
-            SCLMovementType = MovementType.kMoving;
-        }
+        // if(SCLMovementType != MovementType.kClimbing)
+        // {
+        //     SCLMovementType = MovementType.kMoving;
+        // }
         setSecondStageMotorSpeed(Constant.CLIMBER_UP_SPEED);
     }
 
     public void SCLArmDown()
     {
-        double current = secondStageClimbMotorLeader.getOutputCurrent();
-        if(current > 15.0)
-            SCLMovementType = MovementType.kClimbing;
-        else
-            SCLMovementType = MovementType.kMoving;
+        // double current = secondStageClimbMotorLeader.getOutputCurrent();
+        // if(current > 20.0)
+        //     SCLMovementType = MovementType.kClimbing;
+        // else
+        //     SCLMovementType =  MovementType.kMoving;
         
         setSecondStageMotorSpeed(-Constant.CLIMBER_DOWN_SPEED);
     }
