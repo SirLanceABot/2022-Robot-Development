@@ -53,7 +53,7 @@ public class AutonomousTabData
 
     public static enum MoveDelay
     {
-        k0(0.0), k1(1.0), k2(2.0), k3(3.0), k4(4.0), k5(5.0);
+        k0(0.0), k1(1.0), k2(2.0), k3(3.0), k4(4.0), k5(5.0), k7(7.0), k8(8.0);
         
         public double value;
 
@@ -75,7 +75,7 @@ public class AutonomousTabData
     //     kUpper, kLower;
     // }
 
-    public StartingLocation startingLocation = StartingLocation.kMiddleRight;
+    public StartingLocation startingLocation = StartingLocation.kMiddleLeft;
     public OrderOfOperations orderOfOperations = OrderOfOperations.kMoveFirst;
     public ShootCargoAmount shootCargoAmount = ShootCargoAmount.k0;
     public ShootDelay shootDelay = ShootDelay.k0;

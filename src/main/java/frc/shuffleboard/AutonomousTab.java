@@ -213,6 +213,8 @@ public class AutonomousTab
         moveDelayBox.addOption("3", AutonomousTabData.MoveDelay.k3);
         moveDelayBox.addOption("4", AutonomousTabData.MoveDelay.k4);
         moveDelayBox.addOption("5", AutonomousTabData.MoveDelay.k5);
+        moveDelayBox.addOption("7", AutonomousTabData.MoveDelay.k7);
+        moveDelayBox.addOption("8", AutonomousTabData.MoveDelay.k8);
 
         //put the widget on the shuffleboard
         autonomousTab.add(moveDelayBox)

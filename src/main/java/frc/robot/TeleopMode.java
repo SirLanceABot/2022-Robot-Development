@@ -317,6 +317,7 @@ public class TeleopMode implements ModeTransition
                     // {
                     //     SHOOTER.prepareShooter(testingRPM, testingShroud);
                     // }
+                    /* OLD COMP CODE
                     if (OPERATOR_CONTROLLER.getAction(OperatorButtonAction.kLowerHub))
                     {
                         SHOOTER.prepareShooter(Shooter.Hub.kLower, 6.5 * FEET_TO_METERS);
@@ -325,6 +326,9 @@ public class TeleopMode implements ModeTransition
                     {
                         SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS);
                     }
+                    */
+
+                    SHOOTER.startDropShot();
                     
                     // System.out.println("PDH READOUT FOR FLYWHEEL: " + PDH.getCurrent(10));
                     // SHOOTER.prepareShooter(Shooter.Hub.kUpper, 6.5 * FEET_TO_METERS * OPERATOR_CONTROLLER.getAction(OperatorAxisAction.kShooterPower));

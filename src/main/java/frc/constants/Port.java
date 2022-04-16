@@ -109,9 +109,10 @@ public final class Port
 
         // private static final double FRONT_LEFT_ENCODER_OFFSET   = -167.255859375; //old encoder value
         private static final double FRONT_LEFT_ENCODER_OFFSET   = -338.730;
-        private static final double FRONT_RIGHT_ENCODER_OFFSET  = -305.947265625;
+        private static final double FRONT_RIGHT_ENCODER_OFFSET  = -287.578;
         private static final double BACK_LEFT_ENCODER_OFFSET    = -348.75;
-        private static final double BACK_RIGHT_ENCODER_OFFSET   = -101.953125;
+        // private static final double BACK_RIGHT_ENCODER_OFFSET   = -101.953125;
+        private static final double BACK_RIGHT_ENCODER_OFFSET   = -108.809; //new swerve module
 
         private static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(Constant.DRIVETRAIN_WHEELBASE_METERS / 2, Constant.DRIVETRAIN_TRACKWIDTH_METERS / 2);
         private static final Translation2d FRONT_RIGHT_LOCATION = new Translation2d(Constant.DRIVETRAIN_WHEELBASE_METERS / 2, -Constant.DRIVETRAIN_TRACKWIDTH_METERS / 2);
