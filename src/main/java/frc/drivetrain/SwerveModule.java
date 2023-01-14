@@ -206,7 +206,7 @@ public class SwerveModule
         // frontLeftEncoder = new CANCoder(Constants.SwerveModule.frontLeft.turnMotorEncoder);
         // System.out.println("setStatusFramePeriod " + turnEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, (int)(steerAdjustPeriod*1000.*.8)));
         CANCoderConfigs.magnetOffsetDegrees = turnEncoderOffset;
-        // System.out.println("configAllSettings " + turnEncoder.configAllSettings(CANCoderConfigs));
+        System.out.println("configAllSettings " + turnEncoder.configAllSettings(CANCoderConfigs));
         // System.out.println(CANCoderConfigs.toString());
     }
 
